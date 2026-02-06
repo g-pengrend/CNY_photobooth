@@ -38,7 +38,7 @@ export const poses = [
     {
         title: "The Wink & Peace",
         description: "Wink with V sign",
-        prompt: "A classic, high-energy idol pose with a playful wink and a V sign close to the face,",
+        prompt: "A classic, high-energy idol pose with a playful wink and a V sign close to the smiling face,",
         image: "./static/images/poses/the-wink-and-peace.png"
     },
     {
@@ -72,10 +72,10 @@ export const clothes = [
     },
     {
         category: "male",
-        title: "Crimson Scholar Daopa (道袍)",
-        description: "Pristine white silk robes paired with a regal scarlet waist sash",
-        prompt: "A white cross-collar Daopa (道袍) robe with subtle cloud-patterned tonal embroidery, cinched at the waist by a wide scarlet Gedai (革带) belt over a matching red pleated under-skirt.",
-        image: "./static/images/clothes/crimson-scholar-daopa.png"
+        title: "Abyssal Phoenix Daopa (道袍)",
+        description: "Midnight silk robes layered with molten gold embroidery and flowing crimson sashes",
+        prompt: "A Xianxia style male immortal, a structured midnight-black silk Daopa (道袍) with heavy gold-thread dragon-scale embroidery. Layered with a dark charcoal translucent outer robe that billows with spiritual energy. Cinched by a wide scarlet leather belt with gold dragon buckles and long, dark red silk ribbons. The fabric features an iridescent oil-slick sheen that transitions from deep black to forest green.",
+        image: "./static/images/clothes/abyssal-phoenix-daopa.png"
     },
     {
         category: "male",
@@ -93,10 +93,10 @@ export const clothes = [
     },
     {
         category: "female",
-        title: "Silken Power Suit",
-        description: "Red blazer with gold buttons",
-        prompt: "A vibrant red double-breasted blazer with gold-dipped buttons and matching wide-leg trousers.",
-        image: "./static/images/clothes/silken-power-suit.png"
+        title: "Moonlit Peony Ruqun (襦裙)",
+        description: "Ethereal silk layers in soft peach and silver with misty floral embroidery",
+        prompt: "Xianxia style female immortal, a multi-layered Ruqun (襦裙) in moonlight silver and soft peach silk. The inner robe is pale vermilion with delicate white peony embroidery, covered by a translucent floor-length outer robe that creates a misty, ethereal glow. Wide 'water sleeves' drape gracefully, finished with iridescent silver piping. A high-waisted silk sash with long, flowing ribbons catches the wind, surrounded by faint floating cherry blossom petals.",
+        image: "./static/images/clothes/moonlit-peony-ruqun.png"
     },
     {
         category: "female",
@@ -135,11 +135,11 @@ export const clothes = [
     },
     {
         category: "unisex",
-        title: "Ink-Wash Pao (袍)",
-        description: "Vivid sunset silk layered with bold indigo brushstrokes and teal accents",
-        prompt: "An oversized, asymmetrical Pao (袍) coat in vibrant Sunset-Orange and Vermilion silk, featuring bold Indigo-black calligraphy brushstrokes. It features a high, stiffened Mandarin collar and a contemporary split-sleeve design that reveals a contrasting Teal silk lining.",
-        image: "./static/images/clothes/ink-wash-pao.png"
-    }
+        title: "Celestial Ink-Mist Pao (袍)",
+        description: "Ethereal white-to-indigo gradient silk with silver-thread mountain landscapes",
+        prompt: "A luxurious, high-collared unisex Pao (袍) crafted from iridescent white silk that fades into a deep indigo gradient at the hem. Delicate silver-thread embroidery depicts misty mountain peaks and pine trees in a traditional Shanshui ink-wash style. The robe features wide, flowing sleeves lined with shimmering silver satin and a structured waist cinched by a braided silk cord with jade tassels.",
+        image: "./static/images/clothes/celestial-ink-mist-pao.png"
+    },
 ];
 
 export const backgrounds = [

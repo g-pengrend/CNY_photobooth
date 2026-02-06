@@ -833,6 +833,11 @@ body::before {
     z-index: 1;
 }
 
+.btn-text-link:hover {
+    color: var(--cny-gold) !important;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
 .btn-icon {
     position: relative;
     z-index: 1;

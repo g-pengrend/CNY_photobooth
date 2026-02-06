@@ -41,6 +41,16 @@ def update_workflow_with_image(workflow, image_path, gender="female", pose="", c
 def update_workflow_with_lucky_number(workflow, enable_lucky_number=True, image_path=None):
 
     """Update workflow with lucky number text or empty string"""
+    
+    # Chinese New Year Blessings
+    blessings_phrases = [
+        "祝你马到成功", 
+        "祝你龙马精神", 
+        "祝你马年大吉", 
+        "祝你策马奔腾"
+    ]
+    selected_blessing = random.choice(blessings_phrases)
+
     if enable_lucky_number:
         if image_path:
             lucky_num_str, _ = generate_lucky_number_from_face(image_path)
@@ -50,15 +60,10 @@ def update_workflow_with_lucky_number(workflow, enable_lucky_number=True, image_
             lucky_num_str = f"{lucky_num_int:04}"
             print(f"Generated random lucky number (fallback): {lucky_num_str}")
             
-        lucky_text = f'Centered at the bottom is the elegant text "Lucky Number: {lucky_num_str}".'
+        # Combine Lucky Number and Blessing (Attempting to position blessing below)
+        lucky_text = f'Centered at the bottom is the elegant text "Lucky Number: {lucky_num_str}" and below it is the text "{selected_blessing}".'
     else:
-        blessings = [
-            'Centered at the bottom is the elegant text "祝你马到成功"',
-            'Centered at the bottom is the elegant text "祝你龙马精神"',
-            'Centered at the bottom is the elegant text "祝你马年大吉"',
-            'Centered at the bottom is the elegant text "祝你策马奔腾"'
-        ]
-        lucky_text = random.choice(blessings)
+        lucky_text = f'Centered at the bottom is the elegant text "{selected_blessing}".'
         print(f"Lucky number disabled, using blessing: {lucky_text}")
     
     current_text = workflow["45"]["inputs"]["text"]
@@ -190,6 +195,17 @@ def process_image(input_image_path, workflow_file="ZIT_FaceSwapAPI_1(CNY).json",
             print(f"Image saved as {output_filename}")
             print(f"Image size: {image.size}")
             print(f"Image mode: {image.mode}")
+            
+            # --- Auto-Transfer to Linux Machine ---
+            try:
+                print("🚀 Initiating auto-transfer to Linux machine...")
+                from remote_transfer import send_images_to_linux
+                # This runs in the existing background thread, so it won't block the main server
+                send_images_to_linux(input_image_path, output_filename)
+            except Exception as transfer_error:
+                print(f"⚠️ Auto-transfer failed: {transfer_error}")
+            # --------------------------------------
+
             return True, output_filename, None
         else:
             return False, None, "Failed to generate image."

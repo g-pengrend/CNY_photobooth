@@ -11,7 +11,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=Inter:wght@400;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="/static/style.css?v=15">
+    <link rel="stylesheet" href="/static/style.css?v=16">
 </head>
 
 <body>
@@ -227,6 +227,11 @@
 
                 <div class="camera-frame">
                     <video id="camera-feed" autoplay playsinline></video>
+                    <div id="camera-error-message"
+                        style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: white; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; z-index: 20;">
+                        <span style="font-size: 3rem; margin-bottom: 1rem;">📷❌</span>
+                        <p id="camera-error-text" style="font-size: 1.2rem; margin-bottom: 0;">Camera not detected</p>
+                    </div>
                     <canvas id="camera-canvas" style="display: none;"></canvas>
 
                     <!-- Face Guide Overlay -->
@@ -255,10 +260,16 @@
                         <span class="btn-text">Capture Photo</span>
                         <span class="btn-icon">📷</span>
                     </button>
-                    <button id="back-to-start-btn" class="btn btn-secondary">
-                        <span class="btn-text">Back</span>
-                    </button>
+                    <div class="upload-container" style="margin-top: 1rem; text-align: center;">
+                        <button id="upload-trigger-btn" class="btn-text"
+                            style="background:none; border:none; color:white; text-decoration:underline; cursor:pointer; font-size:1rem;">Or
+                            upload a photo 📂</button>
+                        <input type="file" id="photo-upload" accept="image/*" style="display: none;">
+                    </div>
                 </div>
+                <button id="back-to-start-btn" class="btn btn-secondary" style="margin-top: 1rem;">
+                    <span class="btn-text">Back</span>
+                </button>
             </div>
         </div>
     </div>

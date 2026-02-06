@@ -81,6 +81,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Upload Photo Handler
+    const uploadTriggerBtn = document.getElementById('upload-trigger-btn');
+    const photoUploadInput = document.getElementById('photo-upload');
+
+    if (uploadTriggerBtn && photoUploadInput) {
+        uploadTriggerBtn.addEventListener('click', () => {
+            photoUploadInput.click();
+        });
+
+        photoUploadInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                const blob = new Blob([file], { type: file.type });
+
+                setLastPhotoBlob(blob);
+                stopCamera();
+
+                displayPreviewImage(blob);
+                showScreen('preview');
+
+                // Reset input
+                photoUploadInput.value = '';
+            }
+        });
+    }
+
     // Confirm Photo button - proceed with processing
     document.getElementById('confirm-photo-btn').addEventListener('click', async () => {
         if (state.lastPhotoBlob) {
@@ -112,58 +138,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Print button - prints only the generated image
     // Print button - triggers server-side printing
-    // Print button - triggers client-side image printing via iframe (borderless attempt)
-    document.getElementById('print-btn').addEventListener('click', () => {
-        const resultImage = document.getElementById('result-image');
-        if (!resultImage || !resultImage.src) return;
+    document.getElementById('print-btn').addEventListener('click', async () => {
+        if (!state.currentJobId) return;
 
-        // Create a hidden iframe for printing
-        let printFrame = document.getElementById('print-frame');
-        if (!printFrame) {
-            printFrame = document.createElement('iframe');
-            printFrame.id = 'print-frame';
-            printFrame.style.position = 'fixed';
-            printFrame.style.right = '0';
-            printFrame.style.bottom = '0';
-            printFrame.style.width = '0';
-            printFrame.style.height = '0';
-            printFrame.style.border = '0';
-            document.body.appendChild(printFrame);
+        const printBtn = document.getElementById('print-btn');
+        const originalText = printBtn.textContent;
+
+        try {
+            printBtn.textContent = 'Sending...';
+            printBtn.disabled = true;
+
+            const response = await fetch(`/api/print/${state.currentJobId}`);
+            const result = await response.json();
+
+            if (response.ok) {
+                printBtn.textContent = 'Sent to Printer!';
+                // Reset button after success
+                setTimeout(() => {
+                    printBtn.textContent = originalText;
+                    printBtn.disabled = false;
+                }, 3000);
+            } else {
+                throw new Error(result.error || 'Print failed');
+            }
+        } catch (error) {
+            console.error('Print Error:', error);
+            alert('Failed to send to printer: ' + error.message);
+            printBtn.textContent = originalText;
+            printBtn.disabled = false;
         }
-
-        const doc = printFrame.contentWindow.document;
-        doc.open();
-        doc.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>CNY Photo</title>
-                <style>
-                    @page {
-                        size: auto;
-                        margin: 0mm;
-                    }
-                    html, body {
-                        width: 100%;
-                        height: 100%;
-                        margin: 0 !important;
-                        padding: 0 !important;
-                        overflow: hidden;
-                    }
-                    img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover; /* Forces image to cover entire area */
-                        display: block;
-                    }
-                </style>
-            </head>
-            <body>
-                <img src="${resultImage.src}" onload="setTimeout(() => { window.print(); }, 500);" />
-            </body>
-            </html>
-        `);
-        doc.close();
     });
 
     // Regenerate button - reprocess the same photo with current selections
