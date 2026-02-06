@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNY Photo Booth 🎊</title>
+    <meta name="description" content="Capture your Chinese New Year moments with our magical photo booth">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css?v=11">
+</head>
+
+<body>
+    <!-- Persistent CNY Decorations (visible on all screens) -->
+    <div class="persistent-decorations">
+        <!-- Lanterns -->
+        <div class="lantern lantern-left"></div>
+        <div class="lantern lantern-right"></div>
+
+        <!-- English Translation Banners -->
+        <div class="english-banner english-banner-left">
+            <span class="english-text">Wishing You Prosperity</span>
+        </div>
+        <div class="english-banner english-banner-right">
+            <span class="english-text">May All Your Wishes Come True</span>
+        </div>
+
+        <!-- Chinese Banners -->
+        <div class="cny-banner banner-left">
+            <div class="banner-content">
+                <span class="banner-char">恭</span>
+                <span class="banner-char">喜</span>
+                <span class="banner-char">发</span>
+                <span class="banner-char">财</span>
+            </div>
+        </div>
+        <div class="cny-banner banner-right">
+            <div class="banner-content">
+                <span class="banner-char">万</span>
+                <span class="banner-char">事</span>
+                <span class="banner-char">如</span>
+                <span class="banner-char">意</span>
+            </div>
+        </div>
+
+        <!-- Floating Huat Characters with CNY decorations -->
+        <div class="floating-huat huat-1">
+            <div class="cny-decoration red-packet">🧧</div>
+            <div class="huat-text">Huat Ah!</div>
+        </div>
+        <div class="floating-huat huat-2">
+            <div class="cny-decoration pineapple">🍍</div>
+            <div class="huat-text">发</div>
+        </div>
+        <div class="floating-huat huat-3">
+            <div class="cny-decoration orange">🍊</div>
+            <div class="huat-text">发</div>
+        </div>
+        <div class="floating-huat huat-4">
+            <div class="cny-decoration firecracker">🧨</div>
+            <div class="huat-text">Huat Ah!</div>
+        </div>
+        <div class="floating-huat huat-5">
+            <div class="cny-decoration gold-ingot">💰</div>
+            <div class="huat-text">Huat Ah!</div>
+        </div>
+        <div class="floating-huat huat-6">
+            <div class="cny-decoration red-packet">🧧</div>
+            <div class="huat-text">发</div>
+        </div>
+        <div class="floating-huat huat-7">
+            <div class="cny-decoration tangerine">🍊</div>
+            <div class="huat-text">Huat Ah!</div>
+        </div>
+        <div class="floating-huat huat-8">
+            <div class="cny-decoration pineapple">🍍</div>
+            <div class="huat-text">发</div>
+        </div>
+
+        <!-- Decorative pattern overlay -->
+        <div class="decorative-pattern"></div>
+    </div>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="content-wrapper">
+            <div class="hero-section">
+                <h1 class="title">
+                    <span class="title-main">新年快乐</span>
+                    <span class="title-sub">SEIT 4D Vision Studio</span>
+                    <span class="title-booth">CNY Photo Booth</span>
+                </h1>
+                <p class="subtitle">Capture the Glow, Steal the Show, and get your CNY Numbers to go! <br><br>Experience
+                    the SEIT magic in Red, Gold, and AI.</p>
+                <button id="start-btn" class="btn btn-primary">
+                    <span class="btn-text">开始 Start</span>
+                    <span class="btn-icon">🎊</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Options Screen -->
+    <div id="options-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="options-container">
+                <h2 class="screen-title">Gender</h2>
+                <p class="options-subtitle">Please select your gender</p>
+
+                <div class="gender-selection">
+                    <button class="gender-option" data-gender="male">
+                        <div class="gender-icon">👨</div>
+                        <div class="gender-label">Male</div>
+                        <div class="gender-description">男性角色</div>
+                    </button>
+
+                    <button class="gender-option" data-gender="female">
+                        <div class="gender-icon">👩</div>
+                        <div class="gender-label">Female</div>
+                        <div class="gender-description">女性角色</div>
+                    </button>
+                </div>
+
+                <button id="back-to-welcome-btn" class="btn btn-secondary">
+                    <span class="btn-text">Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Screen (Lucky Number Toggle) -->
+    <div id="settings-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="options-container">
+                <h2 class="screen-title">Lucky Scientific Analysis</h2>
+                <p class="options-subtitle">Would you like your face analysed scientifically to generate a
+                    <i>*cough*</i> lucky <i>*cough*</i> scientific 4 digit number?
+                </p>
+
+                <div class="gender-selection">
+                    <button class="gender-option lucky-option" data-lucky="true">
+                        <div class="gender-icon">🎲</div>
+                        <div class="gender-label">Yes</div>
+                        <div class="gender-description">Add Lucky Number</div>
+                    </button>
+
+                    <button class="gender-option lucky-option" data-lucky="false">
+                        <div class="gender-icon">🚫</div>
+                        <div class="gender-label">No</div>
+                        <div class="gender-description">No Lucky Number</div>
+                    </button>
+                </div>
+
+                <div class="single-action-container">
+                    <button id="back-to-options-btn" class="btn btn-secondary">
+                        <span class="btn-text">Back</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pose Selection Screen -->
+    <div id="pose-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="options-container">
+                <h2 class="screen-title">Choose Your Pose 🎭</h2>
+                <p class="options-subtitle">Select your preferred idol pose</p>
+
+                <div class="selection-grid pose-grid">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <button id="back-to-gender-btn" class="btn btn-secondary">
+                    <span class="btn-text">Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Clothes Style Selection Screen -->
+    <div id="clothes-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="options-container">
+                <h2 class="screen-title">Choose Your Outfit 👔</h2>
+                <p class="options-subtitle">Select your preferred style</p>
+
+                <div class="selection-grid clothes-grid">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <button id="back-to-pose-btn" class="btn btn-secondary">
+                    <span class="btn-text">Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Selection Screen -->
+    <div id="background-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="options-container">
+                <h2 class="screen-title">Choose Your Setting 🏮</h2>
+                <p class="options-subtitle">Select your preferred background</p>
+
+                <div class="selection-grid background-grid">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <button id="back-to-clothes-btn" class="btn btn-secondary">
+                    <span class="btn-text">Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Screen -->
+    <div id="camera-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="camera-container">
+                <h2 class="screen-title">Take a photo 📸</h2>
+
+                <div class="camera-frame">
+                    <video id="camera-feed" autoplay playsinline></video>
+                    <canvas id="camera-canvas" style="display: none;"></canvas>
+
+                    <!-- Face Guide Overlay -->
+                    <div class="face-guide-overlay">
+                        <div class="guide-frame">
+                            <div class="guide-text guide-text-top">Position your face within the oval</div>
+                            <svg class="face-silhouette" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Orange oval for face positioning -->
+                                <ellipse cx="100" cy="150" rx="85" ry="130" fill="none" stroke="rgba(255, 140, 0, 0.8)"
+                                    stroke-width="4" />
+                            </svg>
+                            <div class="guide-text guide-text-bottom">Smile! 😊</div>
+                        </div>
+                    </div>
+
+                    <div class="frame-corners">
+                        <div class="corner corner-tl"></div>
+                        <div class="corner corner-tr"></div>
+                        <div class="corner corner-bl"></div>
+                        <div class="corner corner-br"></div>
+                    </div>
+                </div>
+
+                <div class="camera-controls">
+                    <button id="capture-btn" class="btn btn-capture">
+                        <span class="btn-text">Capture Photo</span>
+                        <span class="btn-icon">📷</span>
+                    </button>
+                    <button id="back-to-start-btn" class="btn btn-secondary">
+                        <span class="btn-text">Back</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Preview Screen -->
+    <div id="preview-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="preview-container">
+                <h2 class="screen-title">Preview Your Photo 👀</h2>
+                <p class="options-subtitle">This is the photo that will be processed</p>
+
+                <div class="preview-frame">
+                    <img id="preview-image" alt="Photo preview" />
+                </div>
+
+                <div class="preview-actions">
+                    <button id="retake-photo-btn" class="btn btn-secondary">
+                        <span class="btn-text">Retake</span>
+                        <span class="btn-icon">🔄</span>
+                    </button>
+                    <button id="confirm-photo-btn" class="btn btn-primary">
+                        <span class="btn-text">Looks Good!</span>
+                        <span class="btn-icon">✓</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing/Result Screen -->
+    <div id="result-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="result-container">
+                <!-- Loading State -->
+                <div id="loading-state" class="loading-state">
+                    <div id="processing-visuals" class="processing-visuals">
+                        <div class="visual-container">
+                            <img id="processing-source-image" src="" alt="" />
+                            <div id="analytics-overlay" class="analytics-overlay"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-container">
+                        <div class="spinner"></div>
+                        <div class="spinner-glow"></div>
+                    </div>
+                    <h2 class="loading-title">Creating Magic...</h2>
+                    <p id="loading-message" class="loading-message">Processing your photo</p>
+
+                    <button id="view-result-btn" class="btn btn-primary btn-large pulse-btn"
+                        style="display: none; margin-top: 2rem;">
+                        <span class="btn-text">Reveal Result ✨</span>
+                    </button>
+
+                    <!-- Funny Disclaimer -->
+                    <div class="result-disclaimer">
+                        <p class="disclaimer-text">
+                            ⚠️ <strong>Disclaimer:</strong> Our AI is 100% accurate, except when it isn't.
+                            The creator of this product bears no responsibility for any 4D numbers that fail to
+                            manifest
+                            in real life.
+                            If you win, it's the AI; if you did not, it's a "system feature." 😄
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Success State -->
+                <div id="success-state" class="success-state" style="display: none;">
+                    <h2 class="screen-title">Your CNY Masterpiece! 🎉</h2>
+
+                    <div class="result-image-container">
+                        <img id="result-image" alt="Processed photo" />
+                        <div class="image-glow"></div>
+                    </div>
+
+                    <div class="result-actions">
+                        <button id="print-btn" class="btn btn-primary">
+                            <span class="btn-text">Print</span>
+                            <span class="btn-icon">🖨️</span>
+                        </button>
+                        <button id="regenerate-btn" class="btn btn-secondary">
+                            <span class="btn-text">Regenerate</span>
+                            <span class="btn-icon">🔄</span>
+                        </button>
+                        <button id="start-over-btn" class="btn btn-secondary">
+                            <span class="btn-text">Start Over</span>
+                            <span class="btn-icon">🏠</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div id="error-state" class="error-state" style="display: none;">
+                    <div class="error-icon">⚠️</div>
+                    <h2 class="error-title">Oops! Something went wrong</h2>
+                    <p id="error-message" class="error-message"></p>
+                    <button id="retry-error-btn" class="btn btn-primary">
+                        <span class="btn-text">Try Again</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/static/js/app.js?v=13"></script>
+</body>
+
+</html>

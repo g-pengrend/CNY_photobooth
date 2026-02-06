@@ -1,0 +1,15 @@
+1. Static Image Master Template
+
+Use this template to generate the high-resolution source image.
+
+Prompt:
+
+Medium shot of a {gender} charismatic K-pop idol posing for a concept photo, {pose}, dressed in {clothing_theme}. The setting is {background_theme}. The image features a modern graphic design overlay: a translucent frosted-glass border at the top and bottom of the frame. Integrated into these borders is stylized typography including the Chinese characters "新年快乐" and the English text "Happy Lunar New Year". Centered at the bottom, the prompt includes the elegant text "Your lucky number is: {lucky_num}". High-key cinematic lighting, vibrant CNY color palette, 8k resolution.
+
+2. Animation Transition Template
+
+Use this template for the Video-to-Video or Image-to-Video morphing process.
+
+Prompt:
+
+A seamless magical morph. The {gender}’s face remains clear, steady, and constant as their dressing {structure_rhythm} into the {clothing_theme} without obscuring their features. The expression is calm and consistent as hair sweeps. The face stays in sharp focus while the environment and attire shift smoothly. High-quality vfx, locked-on face, seamless transition.
