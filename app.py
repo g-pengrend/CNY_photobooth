@@ -180,6 +180,32 @@ def download_image(job_id):
     return send_file(output_file, mimetype='image/png', as_attachment=True, download_name='cny_photo.png')
 
 
+
+@app.route('/api/print/<job_id>', methods=['GET'])
+def print_image(job_id):
+    """Trigger print dialog on the server for the processed image"""
+    if job_id not in jobs:
+        return jsonify({'error': 'Job not found'}), 404
+    
+    job = jobs[job_id]
+    if job['status'] != 'completed':
+        return jsonify({'error': 'Image not ready'}), 400
+    
+    output_file = job.get('output_file')
+    if not output_file or not os.path.exists(output_file):
+        return jsonify({'error': 'Output file not found'}), 404
+    
+    try:
+        abs_path = os.path.abspath(output_file)
+        print(f"Printing file: {abs_path}")
+        # 'print' verb works on Windows to open the default print dialog/action
+        os.startfile(abs_path, "print")
+        return jsonify({'status': 'sent_to_printer', 'message': 'Print job initiated on server'}), 200
+    except Exception as e:
+        print(f"Print error: {e}")
+        return jsonify({'error': f"Failed to print: {str(e)}"}), 500
+
+
 if __name__ == '__main__':
     print("🎊 CNY Photo Booth Server Starting...")
     print("📸 Open your browser to: http://localhost:5000")

@@ -111,50 +111,59 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Print button - prints only the generated image
+    // Print button - triggers server-side printing
+    // Print button - triggers client-side image printing via iframe (borderless attempt)
     document.getElementById('print-btn').addEventListener('click', () => {
         const resultImage = document.getElementById('result-image');
-        if (resultImage && resultImage.src) {
-            // Create a new window with only the image
-            const printWindow = window.open('', '_blank');
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Print CNY Photo</title>
-                    <style>
-                        body {
-                            margin: 0;
-                            padding: 0;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            min-height: 100vh;
-                        }
-                        img {
-                            max-width: 100%;
-                            max-height: 100vh;
-                            width: auto;
-                            height: auto;
-                        }
-                        @media print {
-                            body {
-                                margin: 0;
-                            }
-                            img {
-                                max-width: 100%;
-                                height: auto;
-                                page-break-inside: avoid;
-                            }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <img src="${resultImage.src}" alt="CNY Photo" onload="window.print(); window.close();" />
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
+        if (!resultImage || !resultImage.src) return;
+
+        // Create a hidden iframe for printing
+        let printFrame = document.getElementById('print-frame');
+        if (!printFrame) {
+            printFrame = document.createElement('iframe');
+            printFrame.id = 'print-frame';
+            printFrame.style.position = 'fixed';
+            printFrame.style.right = '0';
+            printFrame.style.bottom = '0';
+            printFrame.style.width = '0';
+            printFrame.style.height = '0';
+            printFrame.style.border = '0';
+            document.body.appendChild(printFrame);
         }
+
+        const doc = printFrame.contentWindow.document;
+        doc.open();
+        doc.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>CNY Photo</title>
+                <style>
+                    @page {
+                        size: auto;
+                        margin: 0mm;
+                    }
+                    html, body {
+                        width: 100%;
+                        height: 100%;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        overflow: hidden;
+                    }
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover; /* Forces image to cover entire area */
+                        display: block;
+                    }
+                </style>
+            </head>
+            <body>
+                <img src="${resultImage.src}" onload="setTimeout(() => { window.print(); }, 500);" />
+            </body>
+            </html>
+        `);
+        doc.close();
     });
 
     // Regenerate button - reprocess the same photo with current selections
