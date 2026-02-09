@@ -3,23 +3,62 @@ import numpy as np
 import os
 import sys
 
+# Try importing MediaPipe for robust detection
+try:
+    import mediapipe as mp
+    MEDIAPIPE_AVAILABLE = True
+except ImportError:
+    MEDIAPIPE_AVAILABLE = False
+    print("⚠️ MediaPipe not found. Smart cropping might use fallback.")
+
 class FaceFramer:
     def __init__(self):
-        self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+        if MEDIAPIPE_AVAILABLE:
+            self.mp_face_detection = mp.solutions.face_detection
+            self.face_detection = self.mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence=0.5)
+        else:
+            # Fallback to Haar Cascade
+            self.face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
     def detect_face(self, img):
         """
         Detects the largest face in the image.
         Returns (x, y, w, h) or None if no face found.
         """
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
-        
-        if len(faces) == 0:
-            return None
-        
-        # Return largest face
-        return max(faces, key=lambda f: f[2] * f[3])
+        if MEDIAPIPE_AVAILABLE:
+            # MediaPipe expects RGB
+            img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            results = self.face_detection.process(img_rgb)
+            
+            if not results.detections:
+                return None
+                
+            h_img, w_img, _ = img.shape
+            
+            # Format results into a list of (x, y, w, h)
+            faces = []
+            for detection in results.detections:
+                bboxC = detection.location_data.relative_bounding_box
+                x = int(bboxC.xmin * w_img)
+                y = int(bboxC.ymin * h_img)
+                w = int(bboxC.width * w_img)
+                h = int(bboxC.height * h_img)
+                faces.append((x, y, w, h))
+            
+            if not faces:
+                return None
+            return max(faces, key=lambda f: f[2] * f[3])
+        else:
+            # Fallback Haar Cascade
+            if len(img.shape) == 3:
+                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            else:
+                gray = img
+            faces = self.face_cascade.detectMultiScale(gray, 1.1, 4)
+            
+            if len(faces) == 0:
+                return None
+            return max(faces, key=lambda f: f[2] * f[3])
 
     def get_face_metrics(self, img):
         """
@@ -32,9 +71,6 @@ class FaceFramer:
         fx, fy, fw, fh = face
         h_img, w_img = img.shape[:2]
         
-        # Check aspect ratio of the face itself (optional, but good for debugging)
-        # We focus on the relation to the frame.
-        
         metrics = {
             'width_ratio': fw / w_img,       # Face width relative to Image Width
             'height_ratio': fh / h_img,      # Face height relative to Image Height
@@ -44,14 +80,17 @@ class FaceFramer:
         }
         return metrics
 
-    def crop_to_match(self, target_img_path, reference_metrics):
+    def crop_to_match(self, target_img_path, reference_metrics, zoom=1.0):
         """
-        Crops/Pads the target image so the face matches the reference metrics.
+        Crops the target image to match reference composition EXACTLY (Zoom=1.0).
+        Constrains crop to image boundaries to avoid padding/black borders.
         """
         img = cv2.imread(target_img_path)
         if img is None:
             print(f"Error: Could not read {target_img_path}")
             return None
+
+        h_img, w_img = img.shape[:2]
 
         face = self.detect_face(img)
         if face is None:
@@ -59,103 +98,67 @@ class FaceFramer:
             return None
 
         fx, fy, fw, fh = face
-        
-        # 1. Calculate Desired Crop Dimensions based on the Face Size
-        # Target: CropWidth should be such that fw / CropWidth = RefWidthRatio
-        # So: CropWidth = fw / RefWidthRatio
-        
-        target_w = int(fw / reference_metrics['width_ratio'])
-        target_h = int(fh / reference_metrics['height_ratio'])
-        
-        # Ideally, we also want to respect the total aspect ratio of the reference
-        # If the reference calculation led to different W/H ratios (e.g. face changed shape), 
-        # we might need to compromise. 
-        # For now, let's strictly enforce the computed required frame size to match face coverage.
-        
-        # 2. Calculate Desired Crop Position
-        # We want the face center to be at 'rel_center_x' * target_w in the new image.
-        
         face_cx = fx + fw/2
         face_cy = fy + fh/2
+
+        # 1. Target Crop Dimensions (Ideal)
+        # Based on Reference Face-to-Image Ratio * Zoom (1.0 = Exact Match)
+        target_w = int((fw / reference_metrics['width_ratio']) * zoom)
+        target_h = int(target_w / reference_metrics['aspect_ratio'])
         
-        # crop_x (top-left) should be:
+        # 2. Constrain to Image Boundaries (No Padding)
+        if target_w > w_img:
+            target_w = w_img
+            target_h = int(target_w / reference_metrics['aspect_ratio'])
+            
+        if target_h > h_img:
+            target_h = h_img
+            target_w = int(target_h * reference_metrics['aspect_ratio'])
+            
+        # 3. Calculate Top-Left Position (Centering on Face Target)
         crop_x = int(face_cx - (target_w * reference_metrics['rel_center_x']))
         crop_y = int(face_cy - (target_h * reference_metrics['rel_center_y']))
         
-        # 3. Handle Padding (if crop is outside image boundaries)
-        # We use a canvas approach.
+        # 4. Clamp Position to Stay Inside Image
+        crop_x = max(0, min(crop_x, w_img - target_w))
+        crop_y = max(0, min(crop_y, h_img - target_h))
         
-        # Create a blank canvas (black or mean color)
-        # You can change borderMode to replicate or constant
-        canvas = np.zeros((target_h, target_w, 3), dtype=np.uint8)
-        
-        # Calculate intersection
-        src_x1 = max(0, crop_x)
-        src_y1 = max(0, crop_y)
-        src_x2 = min(img.shape[1], crop_x + target_w)
-        src_y2 = min(img.shape[0], crop_y + target_h)
-        
-        dst_x1 = max(0, -crop_x)
-        dst_y1 = max(0, -crop_y)
-        dst_x2 = dst_x1 + (src_x2 - src_x1)
-        dst_y2 = dst_y1 + (src_y2 - src_y1)
-        
-        if src_x2 > src_x1 and src_y2 > src_y1:
-            try:
-                canvas[dst_y1:dst_y2, dst_x1:dst_x2] = img[src_y1:src_y2, src_x1:src_x2]
-            except Exception as e:
-                print(f"Error cropping: {e}")
-                
-        return canvas
+        # 5. Crop
+        crop_img = img[crop_y:crop_y+target_h, crop_x:crop_x+target_w]
+        return crop_img
 
-def main():
-    framer = FaceFramer()
-    
-    # --- Configuration ---
-    # Update these paths to your actual files
-    
-    # 1. The Reference Image (The one that "works well")
-    ref_path = r"bg2.jpeg" # Using relative for demo, user should ensure path
+def perform_smart_crop(target_path, ref_path="bg2.jpeg"):
+    """
+    Attempts to crop the target image to match the reference framing.
+    Overwrites target_path with the cropped result if successful.
+    """
+    print(f"✂️ Attempting smart crop on {target_path}...")
     if not os.path.exists(ref_path):
-        # Fallback for the user to edit
-        ref_path = "bg2.jpeg"
+        print(f"⚠️ Reference image not found at {ref_path}. Skipping smart crop.")
+        return False
 
-    # 2. The Target Image (Webcam photo to fix)
-    target_path = r"greg.jpg"
-    if not os.path.exists(target_path):
-        target_path = "greg.jpg"
-
-    output_path = "crossed_img.jpg"
-
-    print(f"Reference: {ref_path}")
-    print(f"Target: {target_path}")
-
-    # --- Processing ---
     try:
-        # Load Reference
+        framer = FaceFramer()
+        
+        # 1. Analyze Reference
         ref_img = cv2.imread(ref_path)
         if ref_img is None:
-            print("Please set a valid reference image path in the script.")
-            return
-
-        print("Analyzing Reference Image...")
-        metrics = framer.get_face_metrics(ref_img)
-        print(f"Reference Metrics: {metrics}")
-        
-        print("Processing Target Image...")
-        result = framer.crop_to_match(target_path, metrics)
-        
-        if result is not None:
-            cv2.imwrite(output_path, result)
-            print(f"Successfully saved cropped image to: {os.path.abspath(output_path)}")
+            print("⚠️ Could not read reference image.")
+            return False
             
-            # Optional: Show if running locally and gui is prompt (commented out for agent execution)
-            # cv2.imshow("Result", result)
-            # cv2.waitKey(0)
-            # cv2.destroyAllWindows()
+        metrics = framer.get_face_metrics(ref_img)
+        
+        # 2. Crop Target (Zoom=1.0 for exact composition match)
+        cropped_img = framer.crop_to_match(target_path, metrics, zoom=1.0)
+        
+        if cropped_img is not None:
+            cv2.imwrite(target_path, cropped_img)
+            print("✅ Smart crop successful! Overwrote target image.")
+            return True
+        else:
+            print("⚠️ Smart crop failed (detection or calc error). Using original.")
+            return False
             
     except Exception as e:
-        print(f"An error occurred: {e}")
-
-if __name__ == "__main__":
-    main()
+        print(f"❌ Smart crop exception: {e}")
+        return False

@@ -1,10 +1,13 @@
 import requests
 import os
 
+from match_framing import perform_smart_crop
+
 # Configuration
 # Replace this with the actual IP of your Linux machine
 # For local testing, we use localhost
 LINUX_RECEIVER_URL = "http://127.0.0.1:5001/receive_workflow_data" 
+REFERENCE_IMAGE_PATH = "bg2.jpeg"
 
 def send_images_to_linux(original_image_path, generated_image_path):
     """
@@ -21,6 +24,15 @@ def send_images_to_linux(original_image_path, generated_image_path):
     if not os.path.exists(generated_image_path):
         print(f"Error: Generated file not found at {generated_image_path}")
         return False
+
+    # --- Pre-processing: Smart Crop ---
+    # Crop the original image locally before sending to ensure consistent framing
+    if os.path.exists(REFERENCE_IMAGE_PATH):
+        print(f"Applying smart crop to {original_image_path}...")
+        perform_smart_crop(original_image_path, REFERENCE_IMAGE_PATH)
+    else:
+        print(f"⚠️ Reference image {REFERENCE_IMAGE_PATH} not found. Skipping local crop.")
+    # ----------------------------------
 
     print(f"Preparing to send files to {LINUX_RECEIVER_URL}...")
     
