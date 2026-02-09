@@ -3,7 +3,8 @@ import os
 
 # Configuration
 # Replace this with the actual IP of your Linux machine
-LINUX_RECEIVER_URL = "http://192.168.1.XXX:5001/receive_workflow_data" 
+# For local testing, we use localhost
+LINUX_RECEIVER_URL = "http://127.0.0.1:5001/receive_workflow_data" 
 
 def send_images_to_linux(original_image_path, generated_image_path):
     """

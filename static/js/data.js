@@ -32,7 +32,7 @@ export const poses = [
     {
         title: "The Gentle Gaze",
         description: "Soft expression, hands behind back",
-        prompt: "Hands clasped behind the back, leaning slightly into the frame with a soft, inviting expression,",
+        prompt: "Hands clasped behind the back, facing forward and leaning slightly into the frame with a soft, inviting expression,",
         image: "./static/images/poses/the-gentle-gaze.png"
     },
     {

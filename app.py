@@ -206,6 +206,46 @@ def print_image(job_id):
         return jsonify({'error': f"Failed to print: {str(e)}"}), 500
 
 
+@app.route('/api/transfer/<job_id>', methods=['POST'])
+def transfer_images(job_id):
+    """Trigger transfer of original and generated images to the Linux machine"""
+    if job_id not in jobs:
+        return jsonify({'error': 'Job not found'}), 404
+    
+    job = jobs[job_id]
+    if job['status'] != 'completed':
+        return jsonify({'error': 'Image processing not completed'}), 400
+    
+    input_file = job.get('input_file')
+    output_file = job.get('output_file')
+    
+    if not input_file or not os.path.exists(input_file):
+        return jsonify({'error': 'Original input file not found'}), 404
+        
+    if not output_file or not os.path.exists(output_file):
+        return jsonify({'error': 'Generated output file not found'}), 404
+        
+    try:
+        from remote_transfer import send_images_to_linux
+        
+        # Run transfer in background to avoid blocking response
+        def transfer_task():
+            success = send_images_to_linux(input_file, output_file)
+            if success:
+                print(f"✅ Background transfer for job {job_id} successful")
+            else:
+                print(f"❌ Background transfer for job {job_id} failed")
+
+        thread = threading.Thread(target=transfer_task)
+        thread.start()
+        
+        return jsonify({'status': 'transfer_initiated', 'message': 'Transfer to Linux machine started'}), 200
+        
+    except Exception as e:
+        print(f"Transfer error: {e}")
+        return jsonify({'error': f"Failed to initiate transfer: {str(e)}"}), 500
+
+
 if __name__ == '__main__':
     print("🎊 CNY Photo Booth Server Starting...")
     print("📸 Open your browser to: http://localhost:5000")

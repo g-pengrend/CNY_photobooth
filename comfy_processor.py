@@ -196,15 +196,7 @@ def process_image(input_image_path, workflow_file="ZIT_FaceSwapAPI_1(CNY).json",
             print(f"Image size: {image.size}")
             print(f"Image mode: {image.mode}")
             
-            # --- Auto-Transfer to Linux Machine ---
-            try:
-                print("🚀 Initiating auto-transfer to Linux machine...")
-                from remote_transfer import send_images_to_linux
-                # This runs in the existing background thread, so it won't block the main server
-                send_images_to_linux(input_image_path, output_filename)
-            except Exception as transfer_error:
-                print(f"⚠️ Auto-transfer failed: {transfer_error}")
-            # --------------------------------------
+
 
             return True, output_filename, None
         else:

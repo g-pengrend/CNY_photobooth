@@ -189,6 +189,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Animate button - trigger transfer to Linux
+    document.getElementById('animate-btn').addEventListener('click', async () => {
+        if (!state.currentJobId) return;
+
+        const animateBtn = document.getElementById('animate-btn');
+        const originalText = animateBtn.innerHTML;
+
+        try {
+            animateBtn.innerHTML = '<span class="btn-text">Sending...</span>';
+            animateBtn.disabled = true;
+
+            const response = await fetch(`/api/transfer/${state.currentJobId}`, { method: 'POST' });
+            const result = await response.json();
+
+            if (response.ok) {
+                animateBtn.innerHTML = '<span class="btn-text">Sent to Linux! 🚀</span>';
+                // Reset button after success
+                setTimeout(() => {
+                    animateBtn.innerHTML = originalText;
+                    animateBtn.disabled = false;
+                }, 3000);
+            } else {
+                throw new Error(result.error || 'Transfer failed');
+            }
+        } catch (error) {
+            console.error('Transfer Error:', error);
+            alert('Failed to send to Linux: ' + error.message);
+            animateBtn.innerHTML = originalText;
+            animateBtn.disabled = false;
+        }
+    });
+
     // Start Over button - return to welcome screen
     document.getElementById('start-over-btn').addEventListener('click', () => {
         resetState();
