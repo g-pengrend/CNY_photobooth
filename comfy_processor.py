@@ -33,8 +33,8 @@ def update_workflow_with_image(workflow, image_path, gender="female", pose="", c
     workflow["45"]["inputs"]["text"] = current_text
     
     # Update gender detection fields (lines 144, 145)
-    workflow["57"]["inputs"]["detect_gender_input"] = gender
-    workflow["57"]["inputs"]["detect_gender_source"] = gender
+    workflow["57"]["inputs"]["detect_gender_input"] = "no"
+    workflow["57"]["inputs"]["detect_gender_source"] = "no"
     
     return workflow
 
