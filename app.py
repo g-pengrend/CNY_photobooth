@@ -88,15 +88,18 @@ def process():
         # Get all selection parameters
         gender = request.form.get('gender', 'female')
         pose = request.form.get('pose', '')
+        pose_code = request.form.get('pose_code', '')
         clothes_style = request.form.get('clothes_style', '')
+        clothes_code = request.form.get('clothes_code', '')
         background = request.form.get('background', '')
+        background_code = request.form.get('background_code', '')
         enable_lucky_number = request.form.get('enable_lucky_number', 'true').lower() == 'true'
         
         print(f"Received selections:")
         print(f"  Gender: {gender}")
-        print(f"  Pose: {pose[:50]}..." if len(pose) > 50 else f"  Pose: {pose}")
-        print(f"  Clothes: {clothes_style[:50]}..." if len(clothes_style) > 50 else f"  Clothes: {clothes_style}")
-        print(f"  Background: {background[:50]}..." if len(background) > 50 else f"  Background: {background}")
+        print(f"  Pose ({pose_code}): {pose[:30]}...")
+        print(f"  Clothes ({clothes_code}): {clothes_style[:30]}...")
+        print(f"  Background ({background_code}): {background[:30]}...")
         print(f"  Lucky Number: {enable_lucky_number}")
         
         # Generate unique job ID
@@ -115,8 +118,11 @@ def process():
             'input_file': input_path,
             'gender': gender,
             'pose': pose,
+            'pose_code': pose_code,
             'clothes_style': clothes_style,
+            'clothes_code': clothes_code,
             'background': background,
+            'background_code': background_code,
             'enable_lucky_number': enable_lucky_number
         }
         
@@ -242,9 +248,23 @@ def transfer_images(job_id):
         
         # Run transfer in background to avoid blocking response
         def transfer_task():
-            success = send_images_to_linux(input_file, output_file)
+            # Construct target filename with codes
+            # Format: received_{job_id}_{pose_code}_{clothes_code}_{bg_code}_generated.png
+            # Or simplified: {pose_code}_{clothes_code}_{bg_code}_{job_id}.png
+            # Using codes if available, else standard format
+            
+            p_code = job.get('pose_code', 'Pxx')
+            c_code = job.get('clothes_code', 'Cxx')
+            b_code = job.get('background_code', 'Bxx')
+            
+            # Shorten UUID for filename readability
+            short_id = job_id.split('-')[0]
+            
+            target_name = f"{p_code}_{c_code}_{b_code}_{short_id}_generated.png"
+            
+            success = send_images_to_linux(input_file, output_file, target_filename=target_name)
             if success:
-                print(f"✅ Background transfer for job {job_id} successful")
+                print(f"✅ Background transfer for job {job_id} successful (File: {target_name})")
             else:
                 print(f"❌ Background transfer for job {job_id} failed")
 

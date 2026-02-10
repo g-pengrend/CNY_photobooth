@@ -9,13 +9,14 @@ from match_framing import perform_smart_crop
 LINUX_RECEIVER_URL = "http://172.20.162.63:5001/receive_workflow_data" 
 REFERENCE_IMAGE_PATH = "bg2.jpeg"
 
-def send_images_to_linux(original_image_path, generated_image_path):
+def send_images_to_linux(original_image_path, generated_image_path, target_filename='generated.png'):
     """
     Sends the original and generated images to the Linux machine.
     
     Args:
         original_image_path (str): Path to the user's uploaded/photo file.
         generated_image_path (str): Path to the locally generated result file.
+        target_filename (str): Name of the file as it should arrive on the remote server.
     """
     if not os.path.exists(original_image_path):
         print(f"Error: Original file not found at {original_image_path}")
@@ -38,7 +39,7 @@ def send_images_to_linux(original_image_path, generated_image_path):
     
     files = {
         'original_image': ('original.jpg', open(original_image_path, 'rb'), 'image/jpeg'),
-        'generated_image': ('generated.png', open(generated_image_path, 'rb'), 'image/png')
+        'generated_image': (target_filename, open(generated_image_path, 'rb'), 'image/png')
     }
     
     try:
