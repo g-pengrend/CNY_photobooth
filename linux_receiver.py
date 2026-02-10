@@ -7,6 +7,7 @@ import threading
 import urllib.request
 import urllib.error
 import io
+import socket
 import qrcode
 from flask import Flask, request, jsonify, render_template, send_from_directory, send_file
 from werkzeug.utils import secure_filename
@@ -89,6 +90,36 @@ def find_video_in_outputs(outputs):
                 return f"{sub}/{fname}" if sub else fname
                 
     return None
+
+# --- Cloudflare Tunnel Monitor ---
+def monitor_tunnel_log():
+    global PUBLIC_URL
+    import time, re, os
+    
+    log_file = "tunnel.log"
+    print("🔍 Starting Cloudflare Tunnel monitor...")
+    
+    while True:
+        try:
+            if os.path.exists(log_file):
+                with open(log_file, 'r') as f:
+                    content = f.read()
+                    # Pattern for: https://<random>.trycloudflare.com
+                    match = re.search(r"https://[a-zA-Z0-9-]+\.trycloudflare\.com", content)
+                    if match:
+                        found_url = match.group(0)
+                        if found_url != PUBLIC_URL:
+                            PUBLIC_URL = found_url
+                            print(f"🌍 Auto-detected Cloudflare URL: {PUBLIC_URL}")
+            # Check every 5 seconds
+            time.sleep(5)
+        except Exception as e:
+            print(f"⚠️ Error reading tunnel log: {e}")
+            time.sleep(10)
+
+# Start monitor thread
+tunnel_thread = threading.Thread(target=monitor_tunnel_log, daemon=True)
+tunnel_thread.start()
 
 # --- Background Status Checker ---
 def check_comfy_status():
@@ -268,11 +299,25 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
         print(f"❌ Error preparing workflow: {e}")
         return False
 
+# --- Helper to get Local IP ---
+def get_local_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # Doesn't have to be reachable
+        s.connect(('10.255.255.255', 1)) 
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
 # --- Flask Routes ---
 
 @app.route('/')
 def index():
-    return render_template('receiver_index.html')
+    local_ip = get_local_ip()
+    return render_template('receiver_index.html', local_ip=local_ip)
 
 @app.route('/health', methods=['GET'])
 def health():
