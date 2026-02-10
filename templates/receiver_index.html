@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNY Photobooth Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f0f13;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent: #ff4d4d;
+            /* CNY Red */
+            --text-primary: #ffffff;
+            --text-secondary: #aaaaaa;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-weight: 600;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+
+        .card-image-container {
+            width: 100%;
+            aspect-ratio: 368/608;
+            /* Based on workflow setup of 368x608 */
+            background-color: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ccc;
+        }
+
+        .status-dot.pending {
+            background-color: #f39c12;
+            animation: pulse 1s infinite;
+        }
+
+        .status-dot.completed {
+            background-color: #2ecc71;
+        }
+
+        .status-dot.failed {
+            background-color: #e74c3c;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: #1e1e24;
+            padding: 20px;
+            border-radius: 16px;
+            max-width: 98%;
+            /* Allowed width for horizontal content */
+            width: auto;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: row;
+            /* Horizontal alignment */
+            align-items: flex-start;
+            /* Align to top */
+            gap: 20px;
+            justify-content: center;
+            overflow: auto;
+            position: relative;
+            border: 1px solid var(--card-border);
+            flex-wrap: nowrap;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .media-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .media-wrapper h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .media-display {
+            height: 70vh;
+            width: auto;
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            object-fit: contain;
+        }
+
+        .timestamp {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--accent);
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .qr-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .qr-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Settings Button -->
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000; cursor: pointer;" onclick="openSettings()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+            stroke="rgba(255,255,255,0.7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
+        </svg>
+    </div>
+
+    <h1>✨ CNY Photobooth Moments ✨</h1>
+
+    <div id="gallery" class="gallery-grid">
+        <!-- Cards will be injected here via JS -->
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal" onclick="if(event.target===this) this.style.display='none'">
+        <div class="modal-content" style="flex-direction: column; width: 400px; max-height: auto;">
+            <h2 style="margin-top:0;">Configuration</h2>
+            <div style="width: 100%; margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 5px; color: #aaa;">Cloudflare Public URL</label>
+                <input type="text" id="publicUrlInput" placeholder="https://....trycloudflare.com"
+                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444; background: #222; color: white;">
+                <p style="font-size: 0.8rem; color: #777;">Run:
+                    <code>cloudflared tunnel --url http://localhost:5001</code>
+                </p>
+            </div>
+            <button onclick="saveSettings()"
+                style="background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">Save
+                Configuration</button>
+        </div>
+    </div>
+
+    <!-- Modal for viewing -->
+    <div id="viewModal" class="modal" onclick="closeModal(event)">
+        <!-- Updated Flex Layout: Row direction for 3 columns -->
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+
+            <div class="media-wrapper">
+                <h3>Generated Target</h3>
+                <img id="modalGenerated" class="media-display" src="" alt="Target Photo">
+            </div>
+
+            <div class="media-wrapper">
+                <h3>Final Video</h3>
+                <div id="videoContainer"
+                    style="position: relative; width: 368px; height: 608px; display: flex; align-items: center; justify-content: center; background: #000; border-radius: 8px;">
+                    <video id="modalVideo" class="media-display" controls autoplay loop
+                        style="width: 100%; height: 100%; display: none;">
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div id="modalLoading" class="spinner" style="display: none;"></div>
+                    <div id="modalPendingText" style="color: #aaa; font-size: 0.9rem; display: none;">Processing
+                        Video...</div>
+                </div>
+            </div>
+
+            <!-- QR Code Section (New Column) -->
+            <div class="media-wrapper" style="justify-content: center; height: 608px;">
+                <div
+                    style="text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%;">
+                    <button class="qr-btn" onclick="toggleQR()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            style="margin-right: 5px;">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <rect x="7" y="7" width="3" height="3"></rect>
+                            <rect x="14" y="7" width="3" height="3"></rect>
+                            <rect x="7" y="14" width="3" height="3"></rect>
+                            <rect x="14" y="14" width="3" height="3"></rect>
+                        </svg>
+                        Download to Mobile
+                    </button>
+                    <div id="qrContainer"
+                        style="display: none; margin-top: 20px; background: white; padding: 15px; border-radius: 12px; width: 200px;">
+                        <img id="qrImage" src="" alt="QR Code" style="width: 100%; display: block;">
+                        <p style="color: black; margin: 10px 0 0 0; font-weight: 600;">Scan to Download</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let jobs = [];
+        const gallery = document.getElementById('gallery');
+        const modal = document.getElementById('viewModal');
+        // const modalOriginal = document.getElementById('modalOriginal'); // Not needed
+        const modalGenerated = document.getElementById('modalGenerated');
+        const modalVideo = document.getElementById('modalVideo');
+        const modalLoading = document.getElementById('modalLoading');
+        const modalPendingText = document.getElementById('modalPendingText');
+        const qrContainer = document.getElementById('qrContainer');
+        const qrImage = document.getElementById('qrImage');
+
+        let currentOpenJobId = null;
+
+        async function fetchJobs() {
+            try {
+                const response = await fetch('/api/jobs');
+                const newJobs = await response.json();
+
+                // Simple diff check to avoid unnecessary re-renders if nothing changed
+                if (JSON.stringify(newJobs) !== JSON.stringify(jobs)) {
+                    jobs = newJobs;
+                    renderGallery();
+
+                    // Update modal if open
+                    if (currentOpenJobId) {
+                        const openJob = jobs.find(j => j.id === currentOpenJobId);
+                        if (openJob) updateModalContent(openJob);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching jobs:', error);
+            }
+        }
+
+        function renderGallery() {
+            gallery.innerHTML = '';
+            // Render latest first
+            [...jobs].reverse().forEach(job => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => openModal(job);
+
+                const statusColor = job.status === 'completed' ? 'completed' : (job.status === 'failed' ? 'failed' : 'pending');
+                const statusText = job.status.charAt(0).toUpperCase() + job.status.slice(1);
+
+                // Use generated image as thumbnail
+                const thumbUrl = `/uploads/${job.generated_filename}`;
+
+                card.innerHTML = `
+                    <div class="card-image-container">
+                        <img src="${thumbUrl}" alt="Generation ${job.id}" class="card-image">
+                        ${job.status === 'pending' ? '<div class="spinner"></div>' : ''}
+                    </div>
+                    <div class="status-badge">
+                        <div class="status-dot ${statusColor}"></div>
+                        <span>${statusText}</span>
+                    </div>
+                    <div class="card-overlay">
+                        <div class="timestamp">${new Date(job.timestamp * 1000).toLocaleTimeString()}</div>
+                    </div>
+                `;
+                gallery.appendChild(card);
+            });
+        }
+
+        function openModal(job) {
+            currentOpenJobId = job.id;
+            // Reset QR
+            qrContainer.style.display = 'none';
+            qrImage.src = '';
+
+            // Hide button initially
+            document.querySelector('.qr-btn').style.display = 'none';
+
+            updateModalContent(job);
+            modal.style.display = 'flex';
+        }
+
+        // --- QR Logic ---
+        function toggleQR() {
+            if (qrContainer.style.display === 'block') {
+                qrContainer.style.display = 'none';
+            } else {
+                fetch('/api/settings')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.public_url.includes('localhost') || data.public_url.includes('127.0.0.1')) {
+                            alert("⚠️  Cloudflare Public URL Not Configured!\n\nPlease enter the Cloudflare Tunnel URL to enable mobile downloads.");
+                            openSettings(); // Open the settings modal directly
+                            return;
+                        }
+                        // Fetch fresh QR with current settings
+                        qrImage.src = `/api/qr/${currentOpenJobId}?t=${Date.now()}`;
+                        qrContainer.style.display = 'block';
+                    });
+            }
+        }
+
+        function updateModalContent(job) {
+            // modalOriginal.src = `/uploads/${job.original_filename}`; // Logic hidden
+            modalGenerated.src = `/uploads/${job.generated_filename}`;
+            const qrBtn = document.querySelector('.qr-btn');
+
+            if (job.status === 'completed' && job.video_filename) {
+                modalVideo.src = `/videos/${job.video_filename}`;
+                modalVideo.style.display = 'block';
+                modalLoading.style.display = 'none';
+                modalPendingText.style.display = 'none';
+                modalVideo.load();
+                modalVideo.play().catch(e => console.log("Autoplay prevented"));
+
+                // Show Download Button only when video is ready
+                qrBtn.style.display = 'inline-flex';
+            } else {
+                modalVideo.style.display = 'none';
+                modalVideo.pause();
+                modalLoading.style.display = 'block';
+                modalPendingText.style.display = 'block';
+
+                // Hide Download Button while processing
+                qrBtn.style.display = 'none';
+            }
+        }
+
+        function closeModal(event) {
+            if (event && event.target !== modal && event.target !== document.querySelector('.modal-close')) return;
+            modal.style.display = 'none';
+            modalVideo.pause();
+            currentOpenJobId = null;
+        }
+
+        // --- Settings Logic ---
+        function openSettings() {
+            document.getElementById('settingsModal').style.display = 'flex';
+            fetch('/api/settings').then(res => res.json()).then(data => {
+                document.getElementById('publicUrlInput').value = data.public_url;
+            });
+        }
+
+        function saveSettings() {
+            const url = document.getElementById('publicUrlInput').value;
+            fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ public_url: url })
+            }).then(res => res.json()).then(data => {
+                alert('Configuration Saved!');
+                document.getElementById('settingsModal').style.display = 'none';
+            });
+        }
+
+        // Poll every 2 seconds
+        setInterval(fetchJobs, 2000);
+        fetchJobs(); // Initial load
+
+    </script>
+</body>
+
+</html>
