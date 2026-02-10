@@ -61,6 +61,72 @@ document.addEventListener('DOMContentLoaded', () => {
         showScreen('background');
     });
 
+    // --- Network Settings Modal Logic ---
+    const settingsBtn = document.getElementById('settings-trigger-btn');
+    const settingsModal = document.getElementById('network-config-modal');
+    const saveNetworkBtn = document.getElementById('save-network-btn');
+    const cancelNetworkBtn = document.getElementById('cancel-network-btn');
+    const linuxUrlInput = document.getElementById('linux-url-input');
+
+    if (settingsBtn && settingsModal) {
+        // Open Modal
+        settingsBtn.addEventListener('click', async () => {
+            settingsModal.style.display = 'block';
+            try {
+                const res = await fetch('/api/settings/linux-url');
+                const data = await res.json();
+                if (data.url) {
+                    // Simplify for display: remove http:// and endpoint path
+                    let displayUrl = data.url.replace(/^https?:\/\//, '').replace(/\/receive_workflow_data\/?$/, '');
+                    linuxUrlInput.value = displayUrl;
+                }
+            } catch (e) {
+                console.error("Failed to fetch current URL", e);
+            }
+        });
+
+        // Close Modal
+        cancelNetworkBtn.addEventListener('click', () => {
+            settingsModal.style.display = 'none';
+        });
+
+        // Save URL
+        saveNetworkBtn.addEventListener('click', async () => {
+            let inputVal = linuxUrlInput.value.trim();
+            if (!inputVal) return;
+
+            // Auto-format URL
+            // 1. Ensure protocol
+            if (!inputVal.startsWith('http://') && !inputVal.startsWith('https://')) {
+                inputVal = 'http://' + inputVal;
+            }
+            // 2. Ensure endpoint path
+            if (!inputVal.includes('/receive_workflow_data')) {
+                // Remove trailing slash if present then append path
+                inputVal = inputVal.replace(/\/+$/, '') + '/receive_workflow_data';
+            }
+
+            try {
+                const res = await fetch('/api/settings/linux-url', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: inputVal })
+                });
+
+                if (res.ok) {
+                    alert("Linux Receiver URL updated successfully! ✅");
+                    settingsModal.style.display = 'none';
+                } else {
+                    alert("Failed to update URL ❌");
+                }
+            } catch (e) {
+                console.error("Error saving URL", e);
+                alert("Error saving URL");
+            }
+        });
+    }
+    // ------------------------------------
+
     // Camera Capture
     document.getElementById('capture-btn').addEventListener('click', async () => {
         try {

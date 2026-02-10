@@ -16,6 +16,10 @@ CORS(app)
 jobs = {}
 
 # Configuration
+from remote_transfer import LINUX_RECEIVER_URL as DEFAULT_LINUX_URL
+CURRENT_LINUX_URL = DEFAULT_LINUX_URL
+
+# Configuration
 UPLOAD_FOLDER = 'uploads'
 OUTPUT_FOLDER = 'outputs'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -262,7 +266,7 @@ def transfer_images(job_id):
             
             target_name = f"{p_code}_{c_code}_{b_code}_{short_id}_generated.png"
             
-            success = send_images_to_linux(input_file, output_file, target_filename=target_name)
+            success = send_images_to_linux(input_file, output_file, target_filename=target_name, receiver_url=CURRENT_LINUX_URL)
             if success:
                 print(f"✅ Background transfer for job {job_id} successful (File: {target_name})")
             else:
@@ -276,6 +280,21 @@ def transfer_images(job_id):
     except Exception as e:
         print(f"Transfer error: {e}")
         return jsonify({'error': f"Failed to initiate transfer: {str(e)}"}), 500
+
+
+@app.route('/api/settings/linux-url', methods=['GET', 'POST'])
+def manage_linux_url():
+    global CURRENT_LINUX_URL
+    if request.method == 'POST':
+        data = request.json
+        new_url = data.get('url')
+        if new_url:
+            CURRENT_LINUX_URL = new_url
+            print(f"Update Linux Receiver URL to: {CURRENT_LINUX_URL}")
+            return jsonify({'status': 'updated', 'url': CURRENT_LINUX_URL})
+        return jsonify({'error': 'No URL provided'}), 400
+    
+    return jsonify({'url': CURRENT_LINUX_URL})
 
 
 if __name__ == '__main__':

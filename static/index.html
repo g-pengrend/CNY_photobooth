@@ -100,6 +100,30 @@
                     <span class="btn-text">开始 Start</span>
                     <span class="btn-icon">🎊</span>
                 </button>
+
+                <!-- Settings Button (Small Gear Icon) -->
+                <button id="settings-trigger-btn"
+                    style="background: none; border: none; font-size: 1.5rem; cursor: pointer; opacity: 0.5; margin-top: 1rem;"
+                    title="Network Settings">
+                    ⚙️
+                </button>
+
+                <!-- Network Config Modal (Hidden by default) -->
+                <div id="network-config-modal"
+                    style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 0, 0, 0.95); padding: 2rem; border-radius: 1rem; border: 2px solid #D4AF37; z-index: 1000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); text-align: center; color: #D4AF37;">
+                    <h3 style="margin-bottom: 1rem; font-family: 'Noto Sans SC', sans-serif;">Linux Receiver
+                        Configuration</h3>
+                    <p style="margin-bottom: 1rem; font-size: 0.9rem; color: #ccc;">Enter IP:Port (e.g.
+                        172.20.162.63:5001)</p>
+                    <input type="text" id="linux-url-input" placeholder="172.20.162.63:5001"
+                        style="width: 300px; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid #D4AF37; background: #330000; color: white; margin-bottom: 1rem;">
+                    <br>
+                    <button id="save-network-btn" class="btn btn-primary"
+                        style="padding: 0.5rem 1rem; font-size: 1rem;">Save</button>
+                    <button id="cancel-network-btn" class="btn btn-secondary"
+                        style="padding: 0.5rem 1rem; font-size: 1rem; margin-left: 0.5rem;">Cancel</button>
+                </div>
+
             </div>
         </div>
     </div>

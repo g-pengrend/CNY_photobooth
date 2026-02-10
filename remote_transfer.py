@@ -9,7 +9,7 @@ from match_framing import perform_smart_crop
 LINUX_RECEIVER_URL = "http://172.20.162.63:5001/receive_workflow_data" 
 REFERENCE_IMAGE_PATH = "bg2.jpeg"
 
-def send_images_to_linux(original_image_path, generated_image_path, target_filename='generated.png'):
+def send_images_to_linux(original_image_path, generated_image_path, target_filename='generated.png', receiver_url=None):
     """
     Sends the original and generated images to the Linux machine.
     
@@ -17,6 +17,7 @@ def send_images_to_linux(original_image_path, generated_image_path, target_filen
         original_image_path (str): Path to the user's uploaded/photo file.
         generated_image_path (str): Path to the locally generated result file.
         target_filename (str): Name of the file as it should arrive on the remote server.
+        receiver_url (str): The URL of the Linux receiver. Defaults to LINUX_RECEIVER_URL if None.
     """
     if not os.path.exists(original_image_path):
         print(f"Error: Original file not found at {original_image_path}")
@@ -35,7 +36,8 @@ def send_images_to_linux(original_image_path, generated_image_path, target_filen
         print(f"⚠️ Reference image {REFERENCE_IMAGE_PATH} not found. Skipping local crop.")
     # ----------------------------------
 
-    print(f"Preparing to send files to {LINUX_RECEIVER_URL}...")
+    url_to_use = receiver_url if receiver_url else LINUX_RECEIVER_URL
+    print(f"Preparing to send files to {url_to_use}...")
     
     files = {
         'original_image': ('original.jpg', open(original_image_path, 'rb'), 'image/jpeg'),
@@ -43,7 +45,7 @@ def send_images_to_linux(original_image_path, generated_image_path, target_filen
     }
     
     try:
-        response = requests.post(LINUX_RECEIVER_URL, files=files, timeout=30)
+        response = requests.post(url_to_use, files=files, timeout=30)
         
         if response.status_code == 200:
             print("✅ Successfully sent images to Linux machine.")
