@@ -1146,7 +1146,7 @@ body::before {
     left: 0;
     right: 0;
     bottom: 0;
-    pointer-events: none;
+    display: none;
 }
 
 .corner {
@@ -1203,58 +1203,47 @@ body::before {
 }
 
 .guide-frame {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 90%;
-    height: 90%;
-    padding: var(--spacing-md);
+    position: relative;
+    width: 33.333%;
+    height: 100%;
+    margin: 0 auto;
+    border: 3px solid var(--cny-gold);
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
 }
 
-.face-silhouette {
-    flex: 1;
-    height: auto;
-    width: auto;
-    max-width: 100%;
-    min-height: 0;
-    filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.6));
-    animation: pulse-guide 2s ease-in-out infinite;
+.guide-text {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 400px;
+    color: var(--cny-gold);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(139, 0, 0, 0.8);
+    border: 2px solid var(--cny-gold);
+    border-radius: 50px;
+    backdrop-filter: blur(8px);
+    z-index: 20;
+    animation: pulse-guide 2s infinite;
 }
 
 @keyframes pulse-guide {
 
     0%,
     100% {
-        opacity: 0.6;
-        transform: scale(1);
+        transform: translateX(-50%) scale(1);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
     }
 
     50% {
-        opacity: 0.9;
-        transform: scale(1.02);
+        transform: translateX(-50%) scale(1.05);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
     }
-}
-
-.guide-text {
-    color: var(--gold);
-    font-size: 1.25rem;
-    font-weight: 600;
-    text-align: center;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 10px;
-    backdrop-filter: blur(8px);
-}
-
-.guide-text-top {
-    margin-bottom: var(--spacing-sm);
-}
-
-.guide-text-bottom {
-    margin-top: var(--spacing-sm);
-    font-size: 1.5rem;
 }
 
 .camera-controls {

@@ -9,12 +9,12 @@ echo ========================================================
 echo.
 
 echo Starting ComfyUI Server...
-start "ComfyUI Server" cmd /k "call conda activate comfyui && cd /d C:\Users\Brandon\Documents\comfy\ComfyUI && python main.py"
+start "ComfyUI Server" cmd /k "call C:\Users\Brandon\anaconda3\Scripts\activate.bat C:\Users\Brandon\anaconda3\envs\comfyui && cd /d C:\Users\Brandon\Documents\comfy\ComfyUI && python main.py"
 
 timeout /t 5 /nobreak >nul
 
 echo Starting CNY Photo Booth App...
-start "CNY Photo Booth App" cmd /k "call conda activate comfyui && cd /d C:\Users\Brandon\Desktop\Projects\CNY_photobooth && python app.py"
+start "CNY Photo Booth App" cmd /k "call C:\Users\Brandon\anaconda3\Scripts\activate.bat C:\Users\Brandon\anaconda3\envs\comfyui && cd /d C:\Users\Brandon\Desktop\Projects\CNY_photobooth && python app.py"
 
 timeout /t 2 /nobreak >nul
 echo Opening Browser...

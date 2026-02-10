@@ -129,24 +129,11 @@ function capturePhoto() {
 
     // The camera frame is displayed with a 3:4 aspect ratio (width:height)
     // We need to capture what's visible in that frame
-    const frameAspectRatio = 3 / 4; // width / height
-    const videoAspectRatio = videoWidth / videoHeight;
-
-    let cropWidth, cropHeight, cropX, cropY;
-
-    if (videoAspectRatio > frameAspectRatio) {
-        // Video is wider than frame - crop sides
-        cropHeight = videoHeight;
-        cropWidth = cropHeight * frameAspectRatio;
-        cropX = (videoWidth - cropWidth) / 2;
-        cropY = 0;
-    } else {
-        // Video is taller than frame - crop top/bottom
-        cropWidth = videoWidth;
-        cropHeight = cropWidth / frameAspectRatio;
-        cropX = 0;
-        cropY = (videoHeight - cropHeight) / 2;
-    }
+    // Capture the middle 1/3 of the camera feed, covering the full vertical space
+    const cropWidth = Math.floor(videoWidth / 3);
+    const cropHeight = videoHeight;
+    const cropX = Math.floor((videoWidth - cropWidth) / 2);
+    const cropY = 0;
 
     // Set canvas to the cropped dimensions
     canvas.width = cropWidth;
