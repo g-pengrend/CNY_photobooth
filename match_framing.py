@@ -151,8 +151,8 @@ def perform_smart_crop(target_path, ref_path="bg2.jpeg"):
         # 2. Crop Target
         # Zoom > 1.0 zooms out (wider frame)
         # Zoom < 1.0 zooms in (tighter frame)
-        # User requested reducing from ~70% to ~65% face size -> ~1.08 factor
-        cropped_img = framer.crop_to_match(target_path, metrics, zoom=1.08)
+        # User requested reducing from ~70% to ~55% face size -> ~1.25 factor
+        cropped_img = framer.crop_to_match(target_path, metrics, zoom=1.25)
         
         if cropped_img is not None:
             cv2.imwrite(target_path, cropped_img)
