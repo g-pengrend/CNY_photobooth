@@ -20,46 +20,46 @@ const states = {
 
 export function renderSelections() {
     renderGrid('pose-grid', poses, (item) => `
-        <button class="selection-card" data-pose="${escapeHtml(item.prompt)}">
+        <button class="selection-card" data-pose="${escapeHtml(item.prompt)}" data-code="${item.code}">
             <div class="card-content-wrapper">
-                <div class="card-text">
-                    <div class="card-title">${item.title}</div>
-                    <div class="card-description">${item.description}</div>
-                </div>
                 <div class="card-thumbnail" onclick="event.stopPropagation(); expandImage('${item.image}')">
                     <img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'">
                     <div class="expand-icon">🔍</div>
+                </div>
+                <div class="card-text">
+                    <div class="card-title">${item.title}</div>
+                    <div class="card-description">${item.description}</div>
                 </div>
             </div>
         </button>
     `);
 
     renderGrid('clothes-grid', clothes, (item) => `
-        <button class="selection-card" data-clothes="${escapeHtml(item.prompt)}">
+        <button class="selection-card" data-clothes="${escapeHtml(item.prompt)}" data-code="${item.code}">
             <span class="category-badge ${item.category}">${capitalize(item.category)}</span>
             <div class="card-content-wrapper">
-                <div class="card-text">
-                    <div class="card-title">${item.title}</div>
-                    <div class="card-description">${item.description}</div>
-                </div>
                 <div class="card-thumbnail" onclick="event.stopPropagation(); expandImage('${item.image}')">
                     <img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'">
                     <div class="expand-icon">🔍</div>
+                </div>
+                <div class="card-text">
+                    <div class="card-title">${item.title}</div>
+                    <div class="card-description">${item.description}</div>
                 </div>
             </div>
         </button>
     `);
 
     renderGrid('background-grid', backgrounds, (item) => `
-        <button class="selection-card" data-background="${escapeHtml(item.prompt)}">
+        <button class="selection-card" data-background="${escapeHtml(item.prompt)}" data-code="${item.code}">
             <div class="card-content-wrapper">
-                <div class="card-text">
-                    <div class="card-title">${item.title}</div>
-                    <div class="card-description">${item.description}</div>
-                </div>
                 <div class="card-thumbnail" onclick="event.stopPropagation(); expandImage('${item.image}')">
                     <img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'">
                     <div class="expand-icon">🔍</div>
+                </div>
+                <div class="card-text">
+                    <div class="card-title">${item.title}</div>
+                    <div class="card-description">${item.description}</div>
                 </div>
             </div>
         </button>

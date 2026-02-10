@@ -110,6 +110,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Confirm Photo button - proceed with processing
     document.getElementById('confirm-photo-btn').addEventListener('click', async () => {
         if (state.lastPhotoBlob) {
+            // Reset buttons first
+            const animateBtn = document.getElementById('animate-btn');
+            if (animateBtn) {
+                animateBtn.innerHTML = '<span class="btn-text">Animate!</span><span class="btn-icon">🎬</span>';
+                animateBtn.disabled = false;
+            }
+            const printBtn = document.getElementById('print-btn');
+            if (printBtn) {
+                printBtn.innerHTML = '<span class="btn-text">Print</span><span class="btn-icon">🖨️</span>';
+                printBtn.disabled = false;
+            }
+
             try {
                 // Show result screen with loading state
                 showScreen('result');
@@ -154,10 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 printBtn.textContent = 'Sent to Printer!';
                 // Reset button after success
-                setTimeout(() => {
-                    printBtn.textContent = originalText;
-                    printBtn.disabled = false;
-                }, 3000);
+                // setTimeout(() => {
+                //     printBtn.textContent = originalText;
+                //     printBtn.disabled = false;
+                // }, 3000);
             } else {
                 throw new Error(result.error || 'Print failed');
             }
@@ -172,6 +184,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Regenerate button - reprocess the same photo with current selections
     document.getElementById('regenerate-btn').addEventListener('click', async () => {
         if (state.lastPhotoBlob) {
+            // Reset buttons first
+            const animateBtn = document.getElementById('animate-btn');
+            if (animateBtn) {
+                animateBtn.innerHTML = '<span class="btn-text">Animate!</span><span class="btn-icon">🎬</span>';
+                animateBtn.disabled = false;
+            }
+            const printBtn = document.getElementById('print-btn');
+            if (printBtn) {
+                printBtn.innerHTML = '<span class="btn-text">Print</span><span class="btn-icon">🖨️</span>';
+                printBtn.disabled = false;
+            }
+
             // Show result screen with loading state
             showScreen('result');
             showResultState('loading');
@@ -206,10 +230,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 animateBtn.innerHTML = '<span class="btn-text">Sent to Linux! 🚀</span>';
                 // Reset button after success
-                setTimeout(() => {
-                    animateBtn.innerHTML = originalText;
-                    animateBtn.disabled = false;
-                }, 3000);
+                // setTimeout(() => {
+                //     animateBtn.innerHTML = originalText;
+                //     animateBtn.disabled = false;
+                // }, 3000);
+                animateBtn.innerHTML = '<span class="btn-text">View Animation (Next Screen)</span>';
             } else {
                 throw new Error(result.error || 'Transfer failed');
             }
@@ -291,8 +316,8 @@ document.addEventListener('DOMContentLoaded', () => {
         poseGrid.addEventListener('click', (e) => {
             const button = e.target.closest('.selection-card');
             if (button) {
-                // Update selected pose
                 state.selections.pose = button.dataset.pose;
+                state.selections.poseCode = button.dataset.code;
 
                 // Update UI to show selection
                 poseGrid.querySelectorAll('.selection-card').forEach(btn => {
@@ -300,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 button.classList.add('selected');
 
-                console.log('Selected pose:', state.selections.pose);
+                console.log('Selected pose:', state.selections.pose, 'Code:', state.selections.poseCode);
 
                 // Proceed to clothes screen
                 setTimeout(() => showScreen('clothes'), 300);
@@ -318,8 +343,8 @@ document.addEventListener('DOMContentLoaded', () => {
         clothesGrid.addEventListener('click', (e) => {
             const button = e.target.closest('.selection-card');
             if (button) {
-                // Update selected clothes style
                 state.selections.clothesStyle = button.dataset.clothes;
+                state.selections.clothesCode = button.dataset.code;
 
                 // Update UI to show selection
                 clothesGrid.querySelectorAll('.selection-card').forEach(btn => {
@@ -327,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 button.classList.add('selected');
 
-                console.log('Selected clothes:', state.selections.clothesStyle);
+                console.log('Selected clothes:', state.selections.clothesStyle, 'Code:', state.selections.clothesCode);
 
                 // Proceed to background screen
                 setTimeout(() => showScreen('background'), 300);
@@ -345,8 +370,8 @@ document.addEventListener('DOMContentLoaded', () => {
         backgroundGrid.addEventListener('click', (e) => {
             const button = e.target.closest('.selection-card');
             if (button) {
-                // Update selected background
                 state.selections.background = button.dataset.background;
+                state.selections.backgroundCode = button.dataset.code;
 
                 // Update UI to show selection
                 backgroundGrid.querySelectorAll('.selection-card').forEach(btn => {
@@ -354,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 button.classList.add('selected');
 
-                console.log('Selected background:', state.selections.background);
+                console.log('Selected background:', state.selections.background, 'Code:', state.selections.backgroundCode);
 
                 // Proceed to camera screen
                 setTimeout(async () => {

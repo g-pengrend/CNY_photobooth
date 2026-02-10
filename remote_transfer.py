@@ -6,7 +6,7 @@ from match_framing import perform_smart_crop
 # Configuration
 # Replace this with the actual IP of your Linux machine
 # For local testing, we use localhost
-LINUX_RECEIVER_URL = "http://127.0.0.1:5001/receive_workflow_data" 
+LINUX_RECEIVER_URL = "http://172.20.162.63:5001/receive_workflow_data" 
 REFERENCE_IMAGE_PATH = "bg2.jpeg"
 
 def send_images_to_linux(original_image_path, generated_image_path):

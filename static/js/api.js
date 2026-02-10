@@ -3,8 +3,11 @@ export async function uploadAndProcess(photoBlob, selections) {
     formData.append('image', photoBlob, 'photo.jpg');
     formData.append('gender', selections.gender || 'female');
     formData.append('pose', selections.pose || '');
+    formData.append('pose_code', selections.poseCode || '');
     formData.append('clothes_style', selections.clothesStyle || '');
+    formData.append('clothes_code', selections.clothesCode || '');
     formData.append('background', selections.background || '');
+    formData.append('background_code', selections.backgroundCode || '');
     formData.append('enable_lucky_number', selections.enableLuckyNumber ? 'true' : 'false');
 
     try {

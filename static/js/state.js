@@ -5,8 +5,11 @@ export const state = {
     selections: {
         gender: null,
         pose: null,
+        poseCode: null,
         clothesStyle: null,
+        clothesCode: null,
         background: null,
+        backgroundCode: null,
         enableLuckyNumber: true  // Default to enabled
     }
 };
@@ -17,10 +20,28 @@ export function resetState() {
     state.selections = {
         gender: null,
         pose: null,
+        poseCode: null,
         clothesStyle: null,
+        clothesCode: null,
         background: null,
+        backgroundCode: null,
         enableLuckyNumber: true
     };
+
+    // Reset buttons
+    const animateBtn = document.getElementById('animate-btn');
+    if (animateBtn) {
+        animateBtn.innerHTML = '<span class="btn-text">Animate!</span><span class="btn-icon">🎬</span>';
+        animateBtn.disabled = false;
+        console.log("Animate button reset");
+    }
+
+    const printBtn = document.getElementById('print-btn');
+    if (printBtn) {
+        printBtn.innerHTML = '<span class="btn-text">Print</span><span class="btn-icon">🖨️</span>';
+        printBtn.disabled = false;
+        console.log("Print button reset");
+    }
 }
 
 export function setCameraStream(stream) {

@@ -195,15 +195,27 @@ def print_image(job_id):
     if not output_file or not os.path.exists(output_file):
         return jsonify({'error': 'Output file not found'}), 404
     
-    try:
-        abs_path = os.path.abspath(output_file)
-        print(f"Printing file: {abs_path}")
-        # 'print' verb works on Windows to open the default print dialog/action
-        os.startfile(abs_path, "print")
-        return jsonify({'status': 'sent_to_printer', 'message': 'Print job initiated on server'}), 200
-    except Exception as e:
-        print(f"Print error: {e}")
-        return jsonify({'error': f"Failed to print: {str(e)}"}), 500
+    abs_path = os.path.abspath(output_file)
+
+    def run_print_job(path):
+        try:
+            print(f"Printing file: {path}")
+            os.startfile(path, "print")
+        except Exception as e:
+            print(f"Print error with 'print' verb: {e}")
+            try:
+                # Fallback: Open the file so user can print manually
+                print(f"Falling back to opening file: {path}")
+                os.startfile(path)
+            except Exception as e2:
+                print(f"Fallback open failed: {e2}")
+
+    # Run in background thread to avoid blocking response
+    thread = threading.Thread(target=run_print_job, args=(abs_path,))
+    thread.daemon = True
+    thread.start()
+    
+    return jsonify({'status': 'sent_to_printer', 'message': 'Print job initiated'}), 200
 
 
 @app.route('/api/transfer/<job_id>', methods=['POST'])
