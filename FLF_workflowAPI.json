@@ -1,7 +1,7 @@
 {
   "6": {
     "inputs": {
-      "text": "A seamless magical morph. The subject’s face remains clear, steady, and constant as the clothes condense into an oversized red denim jacket worn over a black silk turtleneck. Soft red and black light streams around the clothes and body, shaping the layered clothes without covering the features. The expression remains calm and focused as the hair shifts into a sleek tied-back style. The face stays locked in sharp focus while the clothing and environment transition smoothly. High-quality VFX, locked-on face, seamless transition, cinematic refinement.\n",
+      "text": "A seamless magical morph. The subject’s face remains clear, steady, and constant as the clothes condense into a \"style_type\". \"lighting\" light streams around the clothes and body, shaping the layered clothes without covering the features. The expression remains calm and focused as the scene pulls back to reveal the full outfit and the background. The face stays locked in sharp focus while the clothing and environment transition smoothly. High-quality VFX, Bloom & Glow VFX, Bioluminescenece VFX, Chromatic Abberation VFX, seamless transition.",
       "clip": [
         "38",
         0
@@ -111,6 +111,7 @@
     "inputs": {
       "add_noise": "enable",
       "noise_seed": 794526381513853,
+      "control_after_generate": "fixed",
       "steps": 4,
       "cfg": 1,
       "sampler_name": "euler",
@@ -204,7 +205,7 @@
   "67": {
     "inputs": {
       "width": 368,
-      "height": 480,
+      "height": 608,
       "length": 81,
       "batch_size": 1,
       "positive": [
@@ -251,7 +252,7 @@
     "inputs": {
       "resize_type": "scale dimensions",
       "resize_type.width": 368,
-      "resize_type.height": 480,
+      "resize_type.height": 608,
       "resize_type.crop": "center",
       "scale_method": "area",
       "input": [
@@ -268,7 +269,7 @@
     "inputs": {
       "resize_type": "scale dimensions",
       "resize_type.width": 368,
-      "resize_type.height": 480,
+      "resize_type.height": 608,
       "resize_type.crop": "center",
       "scale_method": "area",
       "input": [
