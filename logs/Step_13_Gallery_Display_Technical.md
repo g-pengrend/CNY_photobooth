@@ -12,11 +12,16 @@ The Receiver also serves a public-facing gallery on a large screen, showing real
 
 ## 3. Development Journey
 
-### Gallery Grid (Ref: Code Analysis)
-- **Structure**: CSS Grid layout (`.gallery-grid`) to display cards.
-- **Modal Interaction**: Clicking a card opens a detailed modal view.
-- **Auto-Update**: JavaScript polling ensures that as soon as ComfyUI finishes a video, the gallery updates without requiring a page refresh.
+### Gallery Grid & Auto-Update
+- **Structure**: CSS Grid layout (`.gallery-grid`) handles the visual display of status cards mapping to the jobs dictionary.
+- **Diff-based Polling**: The frontend uses `setInterval` to fetch `/api/jobs` every 2 seconds. To prevent the UI from flickering, it performs a stringified JSON comparison and only re-renders the gallery and the open modal when an actual state change is detected.
 
-### Video Playback
-- **Implementation**: HTML5 `<video>` tag with `autoplay`, `loop`, and `muted` attributes.
-- **Optimization**: Videos are only loaded when status is 'completed' to save bandwidth and processing power.
+### Interactive Modal Interface
+- **Layout Adjustments**: The detailed view was upgraded to a wide, horizontally scrolling modal layout displaying the Generated Target side-by-side with the Final Video.
+- **Dynamic Elements**: 
+  - The video container seamlessly swaps between a CSS loading spinner (`.spinner`) and the actual HTML5 `<video>` element once the job hits the 'completed' state.
+  - A conditional QR Code button appears inside the modal only when the video successfully finishes.
+
+### Admin Configuration
+- **Settings Modal**: Added a hidden 'Settings' icon (gear) in the top-right corner mapped to `/api/settings`. 
+- **URL Override**: This allows the photobooth operator to manually inject or override the Cloudflare `trycloudflare.com` URL if the backend `tunnel.log` automated parsing fails.

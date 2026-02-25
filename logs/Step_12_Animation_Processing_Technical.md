@@ -1,31 +1,38 @@
 # Step 12: Animation Processing (Linux Receiver) - Technical Journey
 
 ## 1. Overview
-This step occurs on a separate Linux machine. It handles the computationally expensive video generation using a specific ComfyUI workflow.
+The animation phase transitions the project from static latent space to Temporal Latent Space. This process is offloaded to a dedicated Linux render node equipped with a high-performance GPU to handle the heavy computational demands of the Wan2.1/2.2 14B video foundation model.
 
-## 2. Technical Implementation Details
-- **Receiver App**: `linux_receiver.py` (Flask) listens on port 5001.
-- **Workflow**: `FLF_workflowAPI.json` defines the video generation pipeline.
-- **Integration**:
-  - Receives original and generated images via POST request.
-  - Injects images into workflow nodes (Node 106 & 107).
-  - Injects specific prompts based on the filename code (e.g., `C01` -> particular lighting/style).
-  - Queues the workflow to the local ComfyUI instance.
+## 2. Technical Infrastructure & Pipeline
+The animation is governed by a Flask-based middleware that bridges the primary application and the ComfyUI backend.
+- **Receiver Architecture**: `linux_receiver.py` (Flask) operates as a listener on port 5001, facilitating a distributed rendering network.
+- **The "First-Last Frame" (FLF) Logic**: The workflow utilizes the `WanFirstLastFrameToVideo` node (Node 67). This node acts as the temporal anchor, ensuring the generated video provides a seamless "morph" between the user's original photo (Source) and the AI-generated CNY portrait (Target).
+- **Prompt Synthesis (UMT5-XXL)**: Node 38 loads the `umt5_xxl` CLIP model. The receiver dynamically injects style-specific keywords into Node 6, replacing `style_type` and `lighting` variables to ensure the VFX (e.g., Bioluminescence, Chromatic Aberration) align with the specific CNY aesthetic selected by the user.
 
-## 3. Development Journey (From Logs)
+## 3. The Dual-Expert Sampling Strategy
+A key technical highlight of this workflow is the specialized "handoff" between two distinct Diffusion experts to maximize fidelity within a low step count.
+### Phase 1: High-Noise Expert (Node 57)
+- **Model**: `wan2.2_i2v_high_noise_14B_fp8`
+- **Function**: Responsible for the global motion and physical consistency of the "magical morph."
+- **Schedule**: Operates on a `ModelSamplingSD3` shift of `5`, prioritizing structural stability over 4 steps.
 
-### Receiver Setup (Ref: `Part6`)
-- **Requirement**: "Send the generated image and the uploaded image to another computer... linux-based arm64".
-- **Implementation**: Created `linux_receiver.py` to act as a dedicated render node.
+### Phase 2: Low-Noise Expert (Node 58)
+- **Model**: `wan2.2_i2v_low_noise_14B_fp8`
+- **Function**: Takes the "leftover noise" from Node 57 and performs high-frequency refinement. It sharpens facial features, clothing textures, and lighting effects to ensure the video matches the 8k quality of the static portrait.
+- **Schedule**: Operates on a `ModelSamplingSD3` shift of `5`, prioritizing structural stability over 4 steps.
 
-### Workflow Automation (Ref: `Part6`)
-- **Node Injection**:
-  - Identified specific input nodes in `FLF_workflowAPI.json`.
-  - **Error Handling**: Added checks for "API Format". ComfyUI workflows saved in "Web Format" lack the strict ID structure needed for API manipulation. The script now warns if expected nodes (106, 107) are missing.
-- **Prompt Logic**:
-  - Implemented logic to parse the incoming filename (e.g., `job_123_C01.jpg`).
-  - Maps codes (e.g., `C01`) to specific text prompts for lighting and style to ensure the video matches the photo's aesthetic.
+### Final Decoding
+- **Model**: `wan_2.1_vae` (Node 39)
+- **Function**: Translates the 81-frame latent sequence into a high-definition RGB video stream at 16 FPS.
 
-### Seed Management (Ref: `Part6`)
-- **Decision**: Removed random seed generation for `linux_receiver.py`.
-- **Reason**: The video generation workflow (`FLF`) relies on specific seeds to maintain temporal consistency or specific effects, so the script was updated to use the fixed seed from the JSON instead of ensuring randomness like the initial image generation.
+## 4. Development & Implementation Journey
+
+### Asynchronous Job Orchestration
+- **Challenge**: The video generation takes significant time, and ComfyUI operates asynchronously.
+- **Solution**: Developed a thread-safe `JOBS` dictionary and a background Status Checker Thread. This thread polls the ComfyUI `/history` API, monitoring for the presence of the unique `video_prefix` (injected into Node 61) to signal job completion and trigger the final WebSocket transmission.
+
+### Technical Safeguards
+- **API-First Validation**: The script includes a validation layer to ensure the workflow is in "API Format." This prevents runtime failures caused by the lack of fixed node IDs found in standard Web-saved JSONs.
+- **Deterministic Seed Management**: Unlike the image generation phase, the FLF animation uses fixed seeds. This ensures temporal consistency across the 81 frames, preventing "flicker" or sudden structural shifts during the transition.
+- **Automated Resizing**: To optimize VRAM usage on the 14B model, Nodes 97 and 98 automatically scale incoming Base64 data to `368x608`, ensuring the aspect ratio remains consistent with the $f8$ latent grid. (This resolution takes 50s-60s to generate a 5s video.)
+
