@@ -4,9 +4,11 @@ The Bottleneck of Combined Workflows
 The whole concept of why we even passed the initial generated image to a separate machine was due to the whole pipeline slowing down drastically from image generation all the way through video generation.
 Observation: I was initially unable to understand why this was happening. When I ran the image generation separately over hundreds of iterations, I reached a point where the full image workflow could be completed within around 15 seconds. Running hundreds of iterations for the FLF workflow, the video generation could achieve 60s-120s. Both workflows exhibited a "warm-up" period before achieving these peak speeds.
 The Issue: When I ran everything together in a single environment, the total generation time spiked to 120s–240s reliably. The expected baseline speeds were no longer achievable, and the generation pipeline experienced severe slowdowns.
+
 Analyzing the Root Cause (Model Throttling & VRAM)
 This led me down a path to analyze the logs to see what exactly was going on.
 VRAM Limitations: I realized I had an issue of the models somehow loading and unloading, partial loading, partial unloading... some sort of model throttling was happening due to insufficient VRAM (24GB on a RTX4090).
+
 Model Swapping: To compensate, the workaround done in the backend is to constantly unload the image models to free up space to load the video models in order for the next steps to be completed, and vice versa. This constant swapping destroyed inference times.
 The "Warm-Up" Phenomenon: Finding the Efficient Path
 Upon further discovery, I tried to understand more details about why models need some warm-up time:
@@ -27,8 +29,10 @@ The Three Pillars of Output Fidelity
 Starting Image Composition (Spatial Anchoring): I discovered that the physical layout, how close the subject is or how much facial space covers the frame, is the "anchor" for the entire video. If the framing is off, the model loses its sense of Spatial Anchoring, leading to distorted limbs or "melting" backgrounds. The model needs a clear structural template to know exactly which pixels to animate and which to keep still.
 Text Prompt Structure (Semantic Sensitivity): I found the model is incredibly sensitive to the "grammar" of my instructions. This is due to Semantic Sensitivity in the T5-XXL encoder. The actual sentence structure and word order act as a roadmap; a "Bioluminescent" tag at the start of a sentence behaves differently than one at the end. I had to learn the "linguistic logic" of the model to ensure that style effects didn't bleed into areas they weren't supposed to.
 Sampler Seed (Latent Determinism): Finally, the specific noise seed isn't just a random number, it's the core concept behind the motion. Some seeds are "calm", while others are "chaotic". By finding and fixing a "good" seed, I tapped into Latent Determinism, ensuring the model follows a predictable path from raw noise to a structured morph every single time.
+
 Reducing Variability: Building a "Zero-Variance" Pipeline
 Once I identified these variables, I realized that for a reliable photobooth, I couldn't leave them to chance. I had to transition from "hoping for a good result" to "engineering a guaranteed one" by securing these variables:
+
 Standardizing the Anchor: To solve image consistency, I moved away from "random poses". I realized I either needed to guide the user strictly or use Computer Vision techniques in the backend. By automatically detecting the face and cropping the image to a standardized ratio before it hits the workflow, I provide the model with a perfect "Spatial Anchor" every time.
 Locking the Trajectory: I kept a record of "good seeds" that consistently produced smooth motion. By fixing the seed, I removed the "lottery" aspect of AI generation, forcing the model to operate within a proven, stable noise space.
 Dynamic Prompt Templates: With the image and seed locked in, I discovered I could treat the prompt like a code template. As long as I kept a rigid sentence structure, I could dynamically swap variables (like background or clothing) based on user UI selections. This "Semantic Injection" allows for infinite variety without the risk of the video breaking.
