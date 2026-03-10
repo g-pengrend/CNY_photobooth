@@ -11,13 +11,12 @@ import socket
 import qrcode
 from flask import Flask, request, jsonify, render_template, send_from_directory, send_file
 from werkzeug.utils import secure_filename
+from config import COMFY_OUTPUT_DIR, COMFY_SERVER_ADDRESS, print_config
 
 # --- Configuration ---
 LISTEN_PORT = 5001
-COMFY_SERVER_ADDRESS = "127.0.0.1:8188"
 UPLOAD_FOLDER = 'remote_received_files'
 OUTPUT_FOLDER = 'remote_outputs'
-COMFY_OUTPUT_DIR = '/home/ai-cc/Documents/projects/ComfyUI/output'
 
 # Global Settings
 PUBLIC_URL = "http://localhost:5001" 
@@ -422,5 +421,6 @@ def get_qr_code(job_id):
     return send_file(img_io, mimetype='image/png')
 
 if __name__ == '__main__':
+    print_config()
     print(f"🐧 Linux Receiver listening on 0.0.0.0:{LISTEN_PORT}")
     app.run(host='0.0.0.0', port=LISTEN_PORT)

@@ -16,8 +16,8 @@ CORS(app)
 jobs = {}
 
 # Configuration
-from remote_transfer import LINUX_RECEIVER_URL as DEFAULT_LINUX_URL
-CURRENT_LINUX_URL = DEFAULT_LINUX_URL
+from config import LINUX_RECEIVER_URL, print_config
+CURRENT_LINUX_URL = LINUX_RECEIVER_URL
 
 # Configuration
 UPLOAD_FOLDER = 'uploads'
@@ -299,6 +299,7 @@ def manage_linux_url():
 
 if __name__ == '__main__':
     print("🎊 CNY Photo Booth Server Starting...")
+    print_config()
     print("📸 Open your browser to: http://localhost:5000")
     print("⚠️  NOTE: If accessing from another device (e.g., http://192.168.x.x:5000),")
     print("    camera access will be BLOCKED by browsers unless you use HTTPS.")
