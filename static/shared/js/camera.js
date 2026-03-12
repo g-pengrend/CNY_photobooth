@@ -1,5 +1,4 @@
 import { state, setCameraStream } from './state.js';
-import { showScreen } from './ui.js';
 
 export async function initCamera(retryCount = 0) {
     const maxRetries = 3;

@@ -1,10 +1,15 @@
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 import os
+import sys
 import uuid
 import threading
 from datetime import datetime
 import base64
+
+# Fix Windows console encoding for Chinese/Unicode characters
+sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 from comfy_processor import process_image
 from face_analysis import generate_lucky_number_from_face
 
@@ -74,9 +79,21 @@ def process_image_async(job_id, input_path, gender='female', pose='', clothes_st
 
 
 @app.route('/')
-def index():
-    """Serve the main HTML page"""
-    return render_template('index.html')
+def landing():
+    """Serve the neutral VTON landing page"""
+    return send_from_directory('static', 'landing.html')
+
+
+@app.route('/cny')
+def cny_theme():
+    """Serve the CNY Photo Booth experience"""
+    return send_from_directory('static/themes/cny', 'index.html')
+
+
+@app.route('/hariraya')
+def hariraya_theme():
+    """Serve the Hari Raya experience (placeholder)"""
+    return send_from_directory('static/themes/hariraya', 'index.html')
 
 
 @app.route('/api/process', methods=['POST'])
@@ -268,9 +285,9 @@ def transfer_images(job_id):
             
             success = send_images_to_linux(input_file, output_file, target_filename=target_name, receiver_url=CURRENT_LINUX_URL)
             if success:
-                print(f"✅ Background transfer for job {job_id} successful (File: {target_name})")
+                print(f"[OK] Background transfer for job {job_id} successful (File: {target_name})")
             else:
-                print(f"❌ Background transfer for job {job_id} failed")
+                print(f"[FAIL] Background transfer for job {job_id} failed")
 
         thread = threading.Thread(target=transfer_task)
         thread.start()
@@ -298,11 +315,11 @@ def manage_linux_url():
 
 
 if __name__ == '__main__':
-    print("🎊 CNY Photo Booth Server Starting...")
+    print("SEIT 4D Vision Studio - Starting...")
     print_config()
-    print("📸 Open your browser to: http://localhost:5000")
-    print("⚠️  NOTE: If accessing from another device (e.g., http://192.168.x.x:5000),")
-    print("    camera access will be BLOCKED by browsers unless you use HTTPS.")
-    print("    Solution: Use 'chrome://flags/#unsafely-treat-insecure-origin-as-secure'")
-    print("🚀 Make sure ComfyUI is running on 127.0.0.1:8188")
+    print("Open your browser to: http://localhost:5000")
+    print("NOTE: If accessing from another device (e.g., http://192.168.x.x:5000),")
+    print("  camera access will be BLOCKED by browsers unless you use HTTPS.")
+    print("  Solution: Use 'chrome://flags/#unsafely-treat-insecure-origin-as-secure'")
+    print("Make sure ComfyUI is running on 127.0.0.1:8188")
     app.run(debug=True, host='0.0.0.0', port=5000)

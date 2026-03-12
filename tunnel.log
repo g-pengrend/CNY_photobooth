@@ -1,23 +1,37 @@
-2026-02-10T07:31:19Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
-2026-02-10T07:31:19Z INF Requesting new quick Tunnel on trycloudflare.com...
-2026-02-10T07:31:24Z INF +--------------------------------------------------------------------------------------------+
-2026-02-10T07:31:24Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
-2026-02-10T07:31:24Z INF |  https://optimal-mass-accent-equipped.trycloudflare.com                                    |
-2026-02-10T07:31:24Z INF +--------------------------------------------------------------------------------------------+
-2026-02-10T07:31:24Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp /etc/cloudflared /usr/local/etc/cloudflared]
-2026-02-10T07:31:24Z INF Version 2026.2.0 (Checksum 03c5d58e283f521d752dc4436014eb341092edf076eb1095953ab82debe54a8e)
-2026-02-10T07:31:24Z INF GOOS: linux, GOVersion: go1.24.13, GoArch: arm64
-2026-02-10T07:31:24Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5001]
-2026-02-10T07:31:24Z INF cloudflared will not automatically update if installed by a package manager.
-2026-02-10T07:31:24Z INF Generated Connector ID: b37bda9f-06c9-4b9e-8ad7-cfda4aa514e3
-2026-02-10T07:31:24Z INF Initial protocol quic
-2026-02-10T07:31:24Z INF ICMP proxy will use 172.20.162.63 as source for IPv4
-2026-02-10T07:31:24Z INF ICMP proxy will use fe80::2f7b:4bda:8894:df52 in zone wlP9s9 as source for IPv6
-2026-02-10T07:31:24Z WRN The user running cloudflared process has a GID (group ID) that is not within ping_group_range. You might need to add that user to a group within that range, or instead update the range to encompass a group the user is already in by modifying /proc/sys/net/ipv4/ping_group_range. Otherwise cloudflared will not be able to ping this network error="Group ID 1000 is not between ping group 1 to 0"
-2026-02-10T07:31:24Z WRN ICMP proxy feature is disabled error="cannot create ICMPv4 proxy: Group ID 1000 is not between ping group 1 to 0 nor ICMPv6 proxy: socket: permission denied"
-2026-02-10T07:31:24Z INF ICMP proxy will use 172.20.162.63 as source for IPv4
-2026-02-10T07:31:24Z INF ICMP proxy will use fe80::2f7b:4bda:8894:df52 in zone wlP9s9 as source for IPv6
-2026-02-10T07:31:24Z INF Starting metrics server on 127.0.0.1:20241/metrics
-2026-02-10T07:31:24Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.192.57
-2026/02/10 15:31:24 failed to sufficiently increase receive buffer size (was: 208 kiB, wanted: 7168 kiB, got: 416 kiB). See https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes for details.
-2026-02-10T07:31:25Z INF Registered tunnel connection connIndex=0 connection=9504f707-7b03-4742-9428-ef5d7007a02b event=0 ip=198.41.192.57 location=sin06 protocol=quic
+2026-03-10T02:53:40Z INF Thank you for trying Cloudflare Tunnel. Doing so, without a Cloudflare account, is a quick way to experiment and try it out. However, be aware that these account-less Tunnels have no uptime guarantee, are subject to the Cloudflare Online Services Terms of Use (https://www.cloudflare.com/website-terms/), and Cloudflare reserves the right to investigate your use of Tunnels for violations of such terms. If you intend to use Tunnels in production you should use a pre-created named tunnel by following: https://developers.cloudflare.com/cloudflare-one/connections/connect-apps
+2026-03-10T02:53:40Z INF Requesting new quick Tunnel on trycloudflare.com...
+2026-03-10T02:53:46Z INF +--------------------------------------------------------------------------------------------+
+2026-03-10T02:53:46Z INF |  Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):  |
+2026-03-10T02:53:46Z INF |  https://aid-papers-prot-peas.trycloudflare.com                                            |
+2026-03-10T02:53:46Z INF +--------------------------------------------------------------------------------------------+
+2026-03-10T02:53:46Z INF Cannot determine default configuration path. No file [config.yml config.yaml] in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp]
+2026-03-10T02:53:46Z INF Version 2025.8.1 (Checksum b5d598b00cc3a28cabc5812d9f762819334614bae452db4e7f23eefe7b081556)
+2026-03-10T02:53:46Z INF GOOS: windows, GOVersion: go1.24.2, GoArch: amd64
+2026-03-10T02:53:46Z INF Settings: map[ha-connections:1 protocol:quic url:http://localhost:5001]
+2026-03-10T02:53:46Z INF cloudflared will not automatically update on Windows systems.
+2026-03-10T02:53:46Z INF Generated Connector ID: 66f1b4bd-affd-4d0f-b4f4-78c68e0a041d
+2026-03-10T02:53:46Z INF Initial protocol quic
+2026-03-10T02:53:46Z INF ICMP proxy will use 172.20.148.34 as source for IPv4
+2026-03-10T02:53:46Z INF ICMP proxy will use fe80::a76d:af96:c082:6806 in zone Wi-Fi as source for IPv6
+2026-03-10T02:53:46Z ERR Cannot determine default origin certificate path. No file cert.pem in [~/.cloudflared ~/.cloudflare-warp ~/cloudflare-warp]. You need to specify the origin certificate path by specifying the origincert option in the configuration file, or set TUNNEL_ORIGIN_CERT environment variable originCertPath=
+2026-03-10T02:53:46Z INF cloudflared does not support loading the system root certificate pool on Windows. Please use --origin-ca-pool <PATH> to specify the path to the certificate pool
+2026-03-10T02:53:46Z INF ICMP proxy will use 172.20.148.34 as source for IPv4
+2026-03-10T02:53:46Z INF Tunnel connection curve preferences: [X25519MLKEM768 CurveP256] connIndex=0 event=0 ip=198.41.200.33
+2026-03-10T02:53:46Z INF ICMP proxy will use fe80::a76d:af96:c082:6806 in zone Wi-Fi as source for IPv6
+2026-03-10T02:53:46Z INF Starting metrics server on 127.0.0.1:20241/metrics
+2026-03-10T02:53:46Z INF Registered tunnel connection connIndex=0 connection=9fe4bddb-2ce5-419d-91ac-446b88d2d957 event=0 ip=198.41.200.33 location=sin13 protocol=quic
+2026-03-10T02:57:31Z ERR  error="stream 9 canceled by remote with error code 0" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5001
+2026-03-10T02:57:31Z ERR Request failed error="stream 9 canceled by remote with error code 0" connIndex=0 dest=https://aid-papers-prot-peas.trycloudflare.com/videos/video/job_1773111356_9633_00001_.mp4 event=0 ip=198.41.200.33 type=http
+2026-03-10T02:57:32Z ERR  error="stream 25 canceled by remote with error code 0" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5001
+2026-03-10T02:57:32Z ERR Request failed error="stream 25 canceled by remote with error code 0" connIndex=0 dest=https://aid-papers-prot-peas.trycloudflare.com/videos/video/job_1773111356_9633_00001_.mp4 event=0 ip=198.41.200.33 type=http
+2026-03-10T02:57:33Z ERR  error="stream 29 canceled by remote with error code 0" connIndex=0 event=1 ingressRule=0 originService=http://localhost:5001
+2026-03-10T02:57:33Z ERR Request failed error="stream 29 canceled by remote with error code 0" connIndex=0 dest=https://aid-papers-prot-peas.trycloudflare.com/videos/video/job_1773111356_9633_00001_.mp4 event=0 ip=198.41.200.33 type=http
+2026-03-11T01:55:43Z INF Initiating graceful shutdown due to signal terminated ...
+2026-03-11T01:55:43Z ERR failed to run the datagram handler error="Application error 0x0 (remote)" connIndex=0 event=0 ip=198.41.200.33
+2026-03-11T01:55:43Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.33
+2026-03-11T01:55:43Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.200.33
+2026-03-11T01:55:43Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.200.33
+2026-03-11T01:55:43Z ERR Connection terminated connIndex=0
+2026-03-11T01:55:43Z ERR no more connections active and exiting
+2026-03-11T01:55:43Z INF Tunnel server stopped
+2026-03-11T01:55:43Z INF Metrics server stopped

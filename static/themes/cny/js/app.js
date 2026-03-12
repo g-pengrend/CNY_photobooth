@@ -1,4 +1,4 @@
-import { state, resetState, setLastPhotoBlob, setCurrentJobId } from './state.js';
+import { state, resetState, setLastPhotoBlob, setCurrentJobId } from '/static/shared/js/state.js';
 import {
     showScreen,
     showResultState,
@@ -11,8 +11,8 @@ import {
     updateAnalytics,
     showRevealButton
 } from './ui.js';
-import { initCamera, stopCamera, capturePhoto } from './camera.js';
-import { uploadAndProcess, checkStatus } from './api.js';
+import { initCamera, stopCamera, capturePhoto } from '/static/shared/js/camera.js';
+import { uploadAndProcess, checkStatus } from '/static/shared/js/api.js';
 
 // Poll Status Logic
 function pollStatus(jobId) {
@@ -114,10 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (res.ok) {
-                    alert("Linux Receiver URL updated successfully! ✅");
+                    alert("Linux Receiver URL updated successfully!");
                     settingsModal.style.display = 'none';
                 } else {
-                    alert("Failed to update URL ❌");
+                    alert("Failed to update URL");
                 }
             } catch (e) {
                 console.error("Error saving URL", e);
@@ -214,7 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
         await initCamera();
     });
 
-    // Print button - prints only the generated image
     // Print button - triggers server-side printing
     document.getElementById('print-btn').addEventListener('click', async () => {
         if (!state.currentJobId) return;
@@ -231,11 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 printBtn.textContent = 'Sent to Printer!';
-                // Reset button after success
-                // setTimeout(() => {
-                //     printBtn.textContent = originalText;
-                //     printBtn.disabled = false;
-                // }, 3000);
             } else {
                 throw new Error(result.error || 'Print failed');
             }
@@ -294,12 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const result = await response.json();
 
             if (response.ok) {
-                animateBtn.innerHTML = '<span class="btn-text">Sent to Linux! 🚀</span>';
-                // Reset button after success
-                // setTimeout(() => {
-                //     animateBtn.innerHTML = originalText;
-                //     animateBtn.disabled = false;
-                // }, 3000);
+                animateBtn.innerHTML = '<span class="btn-text">Sent! 🚀</span>';
                 animateBtn.innerHTML = '<span class="btn-text">View Animation (Next Screen)</span>';
             } else {
                 throw new Error(result.error || 'Transfer failed');
