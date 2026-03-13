@@ -147,348 +147,102 @@ body::before {
     pointer-events: none;
 }
 
-/* Lanterns */
-.lantern {
+/* Raya Archway & Drapes */
+.raya-archway {
     position: absolute;
-    width: 80px;
-    height: 120px;
-    background: var(--gradient-primary);
-    border-radius: 0 0 40px 40px;
-    top: -20px;
-    box-shadow:
-        0 0 20px rgba(220, 20, 60, 0.5),
-        inset 0 -10px 20px rgba(0, 0, 0, 0.3);
-    animation: swing 3s ease-in-out infinite;
-    z-index: 1;
-}
-
-.lantern::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 10px;
-    background: var(--cny-gold);
-    border-radius: 5px;
-}
-
-.lantern::after {
-    content: '福';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: var(--cny-gold);
-    font-size: 2rem;
-    font-weight: 900;
-    font-family: 'Noto Sans SC', sans-serif;
-}
-
-.lantern-left {
-    left: 10%;
-    animation-delay: 0s;
-}
-
-.lantern-right {
-    right: 10%;
-    animation-delay: 1.5s;
-}
-
-@keyframes swing {
-
-    0%,
-    100% {
-        transform: rotate(-3deg);
-    }
-
-    50% {
-        transform: rotate(3deg);
-    }
-}
-
-/* CNY Greeting Banners */
-.cny-banner {
-    position: absolute;
-    top: 250px;
-    width: 100px;
-    height: 60%;
-    background: linear-gradient(180deg,
-            var(--cny-deep-red) 0%,
-            var(--cny-red) 30%,
-            var(--cny-red) 70%,
-            var(--cny-deep-red) 100%);
-    border: 3px solid var(--cny-gold);
-    border-radius: 10px;
-    box-shadow:
-        0 10px 40px rgba(0, 0, 0, 0.5),
-        0 0 30px rgba(255, 215, 0, 0.3),
-        inset 0 0 30px rgba(0, 0, 0, 0.3);
-    z-index: 3;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 350px;
+    background: radial-gradient(circle at 50% -50%, rgba(26, 77, 46, 0.4) 0%, transparent 80%),
+                radial-gradient(ellipse at 50% 0%, rgba(214, 158, 46, 0.15) 0%, transparent 70%);
+    border-bottom: 2px solid rgba(214, 158, 46, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    z-index: 2;
     overflow: hidden;
 }
 
-.cny-banner::before {
+.raya-archway::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -10%;
+    right: -10%;
+    height: 200%;
+    border: 4px solid rgba(214, 158, 46, 0.15);
+    border-radius: 50%;
+    box-shadow: inset 0 0 50px rgba(214, 158, 46, 0.1);
+    pointer-events: none;
+}
+
+.raya-archway::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(255, 215, 0, 0.1) 50%,
-            transparent 100%);
-    animation: shimmer 3s ease-in-out infinite;
+    background: 
+        linear-gradient(90deg, transparent 48%, rgba(214, 158, 46, 0.2) 50%, transparent 52%);
+    background-size: 15% 100%;
+    opacity: 0.3;
 }
 
-@keyframes shimmer {
-
-    0%,
-    100% {
-        transform: translateX(-100%);
-    }
-
-    50% {
-        transform: translateX(100%);
-    }
+/* Hanging Ketupat */
+.ketupat {
+    position: absolute;
+    top: -20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--cny-gold) 25%, var(--cny-red) 25%, var(--cny-red) 50%, var(--cny-gold) 50%, var(--cny-gold) 75%, var(--cny-red) 75%);
+    background-size: 20px 20px;
+    transform: rotate(45deg);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    animation: swing 4s ease-in-out infinite alternate;
+    z-index: 3;
 }
 
-.cny-banner::after {
+.ketupat::before {
     content: '';
     position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    border: 2px solid rgba(255, 215, 0, 0.3);
-    border-radius: 5px;
-    pointer-events: none;
+    top: -40px;
+    left: 50%;
+    width: 2px;
+    height: 40px;
+    background: var(--cny-gold);
+    transform: translateX(-50%) rotate(-45deg);
 }
 
-.banner-left {
-    left: 7.5%;
-    animation: float-left 4s ease-in-out infinite;
-}
-
-.banner-right {
-    right: 7.5%;
-    animation: float-right 4s ease-in-out infinite;
-}
-
-@keyframes float-left {
-
-    0%,
-    100% {
-        transform: translateY(0) rotate(-1deg);
-    }
-
-    50% {
-        transform: translateY(-15px) rotate(1deg);
-    }
-}
-
-@keyframes float-right {
-
-    0%,
-    100% {
-        transform: translateY(0) rotate(1deg);
-    }
-
-    50% {
-        transform: translateY(-15px) rotate(-1deg);
-    }
-}
-
-.banner-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 20px 0;
-    gap: 15px;
-    position: relative;
-    z-index: 1;
-}
-
-.banner-char {
-    font-family: 'Noto Sans SC', serif;
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: var(--cny-gold);
-    text-shadow:
-        0 0 10px rgba(255, 215, 0, 0.8),
-        0 2px 4px rgba(0, 0, 0, 0.8),
-        0 0 20px rgba(255, 215, 0, 0.4);
-    writing-mode: vertical-rl;
-    animation: glow-char 2s ease-in-out infinite;
-    animation-delay: calc(var(--char-index, 0) * 0.2s);
-}
-
-.banner-char:nth-child(1) {
-    --char-index: 0;
-}
-
-.banner-char:nth-child(2) {
-    --char-index: 1;
-}
-
-.banner-char:nth-child(3) {
-    --char-index: 2;
-}
-
-.banner-char:nth-child(4) {
-    --char-index: 3;
-}
-
-@keyframes glow-char {
-
-    0%,
-    100% {
-        text-shadow:
-            0 0 10px rgba(255, 215, 0, 0.8),
-            0 2px 4px rgba(0, 0, 0, 0.8),
-            0 0 20px rgba(255, 215, 0, 0.4);
-    }
-
-    50% {
-        text-shadow:
-            0 0 20px rgba(255, 215, 0, 1),
-            0 2px 4px rgba(0, 0, 0, 0.8),
-            0 0 30px rgba(255, 215, 0, 0.6);
-    }
-}
-
-/* English Translation Banners */
-.english-banner {
-    position: absolute;
-    top: 140px;
-    width: 200px;
-    padding: 10px 16px;
-    background: linear-gradient(135deg,
-            rgba(139, 0, 0, 0.9) 0%,
-            rgba(220, 20, 60, 0.95) 50%,
-            rgba(139, 0, 0, 0.9) 100%);
-    border: 2px solid rgba(255, 215, 0, 0.6);
-    border-radius: 0 0 50px 50px;
-    backdrop-filter: blur(10px);
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.6),
-        0 0 25px rgba(255, 215, 0, 0.4),
-        inset 0 -5px 15px rgba(0, 0, 0, 0.4);
-    z-index: 4;
-    overflow: hidden;
-    transform-origin: top center;
-}
-
-.english-banner::before {
+.ketupat::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(255, 215, 0, 0.2) 50%,
-            transparent 100%);
-    animation: shimmer-horizontal 4s ease-in-out infinite;
+    bottom: -15px;
+    left: 50%;
+    width: 10px;
+    height: 20px;
+    background: var(--cny-gold);
+    transform: translateX(-50%) rotate(-45deg);
+    border-radius: 2px;
 }
 
-.english-banner::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 10%;
-    right: 10%;
-    height: 2px;
-    background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(255, 215, 0, 0.6) 50%,
-            transparent 100%);
+.ketupat-left {
+    left: 15%;
+    animation-delay: 0s;
 }
 
-@keyframes shimmer-horizontal {
-
-    0%,
-    100% {
-        left: -100%;
-    }
-
-    50% {
-        left: 100%;
-    }
+.ketupat-right {
+    right: 15%;
+    animation-delay: 1.5s;
 }
 
-.english-banner-left {
-    left: 5%;
-    animation: sway-left 3s ease-in-out infinite;
+@keyframes swing {
+    0% { transform: rotate(35deg); }
+    100% { transform: rotate(55deg); }
 }
 
-.english-banner-right {
-    right: 5%;
-    animation: sway-right 3s ease-in-out infinite;
-}
+/* Removed CNY Vertical Banners */
 
-@keyframes sway-left {
-
-    0%,
-    100% {
-        transform: rotate(-2deg) translateY(0);
-    }
-
-    50% {
-        transform: rotate(2deg) translateY(-5px);
-    }
-}
-
-@keyframes sway-right {
-
-    0%,
-    100% {
-        transform: rotate(2deg) translateY(0);
-    }
-
-    50% {
-        transform: rotate(-2deg) translateY(-5px);
-    }
-}
-
-.english-text {
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--cny-gold);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    text-shadow:
-        0 0 8px rgba(255, 215, 0, 0.6),
-        0 2px 4px rgba(0, 0, 0, 0.9);
-    position: relative;
-    z-index: 1;
-    display: block;
-    text-align: center;
-    line-height: 1.4;
-    animation: glow-text-subtle 3s ease-in-out infinite;
-}
-
-@keyframes glow-text-subtle {
-
-    0%,
-    100% {
-        text-shadow:
-            0 0 8px rgba(255, 215, 0, 0.6),
-            0 2px 4px rgba(0, 0, 0, 0.9);
-    }
-
-    50% {
-        text-shadow:
-            0 0 15px rgba(255, 215, 0, 0.9),
-            0 2px 4px rgba(0, 0, 0, 0.9);
-    }
-}
+/* Removed English Banners */
 
 /* Hero Section */
 .hero-section {
@@ -590,8 +344,8 @@ body::before {
     font-weight: 400;
 }
 
-/* Floating Huat Characters with CNY Decorations */
-.floating-huat {
+/* Floating Raya Elements with Decorations */
+.floating-raya {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -602,7 +356,7 @@ body::before {
     animation: float-up 8s ease-in-out infinite;
 }
 
-.huat-text {
+.raya-text {
     font-size: 2.5rem;
     font-weight: 900;
     color: var(--cny-gold);
@@ -610,7 +364,7 @@ body::before {
     text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
 }
 
-.cny-decoration {
+.raya-decoration {
     font-size: 3rem;
     opacity: 0.3;
     filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4));
@@ -618,13 +372,10 @@ body::before {
 }
 
 @keyframes float-up {
-
-    0%,
-    100% {
+    0%, 100% {
         transform: translateY(0);
         opacity: 0.8;
     }
-
     50% {
         transform: translateY(-30px);
         opacity: 1;
@@ -632,105 +383,31 @@ body::before {
 }
 
 @keyframes rotate-decoration {
-
-    0%,
-    100% {
+    0%, 100% {
         transform: rotate(-5deg);
     }
-
     50% {
         transform: rotate(5deg);
     }
 }
 
-/* Position each Huat character - mixed across both sides */
-.huat-1 {
-    top: 15%;
-    left: 25%;
-    animation-duration: 7s;
-    animation-delay: 0s;
-}
-
-.huat-1 .huat-text {
-    font-size: 2.5rem;
-}
-
-.huat-2 {
-    top: 25%;
-    right: 28%;
-    animation-duration: 9s;
-    animation-delay: 1s;
-}
-
-.huat-2 .huat-text {
-    font-size: 2rem;
-}
-
-.huat-3 {
-    top: 45%;
-    right: 22%;
-    animation-duration: 8s;
-    animation-delay: 2s;
-}
-
-.huat-3 .huat-text {
-    font-size: 3rem;
-}
-
-.huat-4 {
-    top: 60%;
-    left: 30%;
-    animation-duration: 7.5s;
-    animation-delay: 0.5s;
-}
-
-.huat-4 .huat-text {
-    font-size: 2.2rem;
-}
-
-.huat-5 {
-    top: 75%;
-    right: 28%;
-    animation-duration: 8.5s;
-    animation-delay: 1.5s;
-}
-
-.huat-5 .huat-text {
-    font-size: 2.8rem;
-}
-
-.huat-6 {
-    top: 35%;
-    left: 24%;
-    animation-duration: 9.5s;
-    animation-delay: 2.5s;
-}
-
-.huat-6 .huat-text {
-    font-size: 2.3rem;
-}
-
-.huat-7 {
-    top: 55%;
-    right: 32%;
-    animation-duration: 7.8s;
-    animation-delay: 3s;
-}
-
-.huat-7 .huat-text {
-    font-size: 2.6rem;
-}
-
-.huat-8 {
-    top: 80%;
-    left: 26%;
-    animation-duration: 8.2s;
-    animation-delay: 1.8s;
-}
-
-.huat-8 .huat-text {
-    font-size: 2.4rem;
-}
+/* Position each Raya character */
+.raya-1 { top: 15%; left: 25%; animation-duration: 7s; animation-delay: 0s; }
+.raya-1 .raya-text { font-size: 2.5rem; }
+.raya-2 { top: 25%; right: 28%; animation-duration: 9s; animation-delay: 1s; }
+.raya-2 .raya-text { font-size: 2rem; }
+.raya-3 { top: 45%; right: 22%; animation-duration: 8s; animation-delay: 2s; }
+.raya-3 .raya-text { font-size: 3rem; }
+.raya-4 { top: 60%; left: 30%; animation-duration: 7.5s; animation-delay: 0.5s; }
+.raya-4 .raya-text { font-size: 2.2rem; }
+.raya-5 { top: 75%; right: 28%; animation-duration: 8.5s; animation-delay: 1.5s; }
+.raya-5 .raya-text { font-size: 2.8rem; }
+.raya-6 { top: 35%; left: 24%; animation-duration: 9.5s; animation-delay: 2.5s; }
+.raya-6 .raya-text { font-size: 2.3rem; }
+.raya-7 { top: 55%; right: 32%; animation-duration: 7.8s; animation-delay: 3s; }
+.raya-7 .raya-text { font-size: 2.6rem; }
+.raya-8 { top: 80%; left: 26%; animation-duration: 8.2s; animation-delay: 1.8s; }
+.raya-8 .raya-text { font-size: 2.4rem; }
 
 
 /* Buttons */

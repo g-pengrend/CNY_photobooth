@@ -10,11 +10,13 @@
     --text-primary: #f0f0f5;
     --text-secondary: #8a8a9a;
     --text-muted: #555566;
-    --accent-gradient: linear-gradient(135deg, #a78bfa, #60a5fa, #34d399);
+    --accent-gradient: linear-gradient(135deg, #e53e3e, #38a169, #9f7aea);
     --cny-red: #e53e3e;
     --cny-gold: #d69e2e;
     --hariraya-green: #38a169;
     --hariraya-gold: #d69e2e;
+    --deepavali-purple: #9f7aea;
+    --deepavali-orange: #ed8936;
 }
 
 * {
@@ -51,7 +53,7 @@ body {
 .orb-1 {
     width: 600px;
     height: 600px;
-    background: #a78bfa;
+    background: var(--cny-red);
     top: -200px;
     left: -100px;
     animation: float-1 20s ease-in-out infinite;
@@ -60,7 +62,7 @@ body {
 .orb-2 {
     width: 500px;
     height: 500px;
-    background: #60a5fa;
+    background: var(--hariraya-green);
     bottom: -150px;
     right: -100px;
     animation: float-2 25s ease-in-out infinite;
@@ -69,7 +71,7 @@ body {
 .orb-3 {
     width: 400px;
     height: 400px;
-    background: #34d399;
+    background: var(--deepavali-purple);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -197,7 +199,7 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     gap: 28px;
     width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
 }
 
 /* Theme Card */
@@ -241,6 +243,11 @@ body {
     box-shadow: inset 0 0 60px rgba(56, 161, 105, 0.08);
 }
 
+.deepavali-glow {
+    background: linear-gradient(135deg, rgba(159, 122, 234, 0.15), rgba(237, 137, 54, 0.1));
+    box-shadow: inset 0 0 60px rgba(159, 122, 234, 0.08);
+}
+
 .card-inner {
     position: relative;
     z-index: 1;
@@ -267,6 +274,10 @@ body {
 
 #hariraya-card:hover .card-inner {
     border-color: rgba(56, 161, 105, 0.4);
+}
+
+#deepavali-card:hover .card-inner {
+    border-color: rgba(159, 122, 234, 0.4);
 }
 
 .card-badge {
@@ -346,6 +357,10 @@ body {
 
 #hariraya-card:hover .card-cta {
     color: #68d391;
+}
+
+#deepavali-card:hover .card-cta {
+    color: #b794f4;
 }
 
 .card-cta svg {
