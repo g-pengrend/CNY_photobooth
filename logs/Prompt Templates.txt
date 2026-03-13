@@ -5,6 +5,23 @@ Use this template to generate the high-resolution source image.
 Prompt:
 
 Medium shot of a {gender} charismatic K-pop idol posing for a concept photo, {pose}, dressed in {clothing_theme}. The setting is {background_theme}. The image features a modern graphic design overlay: a translucent frosted-glass border at the top and bottom of the frame. Integrated into these borders is stylized typography including the Chinese characters "新年快乐" and the English text "Happy Lunar New Year". Centered at the bottom, the prompt includes the elegant text "Your lucky number is: {lucky_num}". High-key cinematic lighting, vibrant CNY color palette, 8k resolution.
+---
+background template:
+
+A professional studio asset of a background environment, featuring 
+
+A massive, ancient ginkgo tree with glowing yellow leaves, surrounded by stone statues of zodiac animals that emit a soft, protective light.
+
+Wide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition
+
+----
+poses template:
+A high-quality 3D Chibi-style character asset with a large head and small, rounded body.
+
+Facing the camera with a captivating smile, one arm extended forward with the index finger pointing directly at the viewer,
+
+Soft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.
+----
 
 2. Animation Transition Template
 

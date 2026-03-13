@@ -4,265 +4,380 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hari Raya Aidilfitri — Virtual Try-On</title>
-    <meta name="description" content="Celebrate Hari Raya with our AI-powered virtual try-on experience">
+    <title>Hari Raya Photo Booth ✨</title>
+    <meta name="description" content="Capture your Hari Raya moments with our magical photo booth">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;600;700&display=swap"
         rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #0a0f0a;
-            --green-primary: #38a169;
-            --green-light: #68d391;
-            --green-dark: #276749;
-            --gold-primary: #d69e2e;
-            --gold-light: #ecc94b;
-            --text-primary: #f0f5f0;
-            --text-secondary: #8a9a8a;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Background pattern */
-        .bg-pattern {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .bg-pattern::before {
-            content: '';
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(56, 161, 105, 0.08), transparent 60%);
-            top: -200px;
-            right: -200px;
-            animation: pulse-green 8s ease-in-out infinite;
-        }
-
-        .bg-pattern::after {
-            content: '';
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(214, 158, 46, 0.06), transparent 60%);
-            bottom: -150px;
-            left: -150px;
-            animation: pulse-gold 10s ease-in-out infinite;
-        }
-
-        @keyframes pulse-green {
-            0%, 100% { opacity: 0.6; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.1); }
-        }
-
-        @keyframes pulse-gold {
-            0%, 100% { opacity: 0.5; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.15); }
-        }
-
-        /* Stars / geometric dots */
-        .stars {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .star {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: var(--gold-primary);
-            border-radius: 50%;
-            opacity: 0;
-            animation: twinkle 4s ease-in-out infinite;
-        }
-
-        .star:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
-        .star:nth-child(2) { top: 25%; left: 85%; animation-delay: 1s; }
-        .star:nth-child(3) { top: 60%; left: 20%; animation-delay: 2s; }
-        .star:nth-child(4) { top: 75%; left: 70%; animation-delay: 0.5s; }
-        .star:nth-child(5) { top: 40%; left: 90%; animation-delay: 1.5s; }
-        .star:nth-child(6) { top: 85%; left: 45%; animation-delay: 3s; }
-        .star:nth-child(7) { top: 10%; left: 55%; animation-delay: 2.5s; }
-        .star:nth-child(8) { top: 50%; left: 5%; animation-delay: 0.8s; }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 0.6; transform: scale(1.2); }
-        }
-
-        /* Main content */
-        .container {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            padding: 40px 24px;
-            max-width: 600px;
-        }
-
-        .crescent-icon {
-            font-size: 5rem;
-            margin-bottom: 24px;
-            display: inline-block;
-            animation: gentle-rock 4s ease-in-out infinite;
-            filter: drop-shadow(0 0 20px rgba(214, 158, 46, 0.3));
-        }
-
-        @keyframes gentle-rock {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
-
-        h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 8px;
-            line-height: 1.1;
-        }
-
-        .highlight {
-            background: linear-gradient(135deg, var(--green-light), var(--gold-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .arabic-text {
-            font-size: 1.4rem;
-            color: var(--gold-primary);
-            margin: 12px 0 24px;
-            font-weight: 300;
-            letter-spacing: 2px;
-        }
-
-        .description {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            line-height: 1.7;
-            margin-bottom: 40px;
-            font-weight: 300;
-        }
-
-        .status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(214, 158, 46, 0.1);
-            border: 1px solid rgba(214, 158, 46, 0.2);
-            padding: 10px 24px;
-            border-radius: 100px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--gold-light);
-            margin-bottom: 28px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--gold-primary);
-            animation: blink 2s ease-in-out infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 400;
-            padding: 12px 24px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.3s ease;
-        }
-
-        .back-link:hover {
-            color: var(--text-primary);
-            border-color: rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.04);
-            gap: 12px;
-        }
-
-        .back-link svg {
-            transition: transform 0.3s ease;
-        }
-
-        .back-link:hover svg {
-            transform: translateX(-3px);
-        }
-    </style>
+    <link rel="stylesheet" href="/static/themes/hariraya/style.css?v=1">
 </head>
 
 <body>
-    <div class="bg-pattern"></div>
+    <!-- Persistent Decorations (visible on all screens) -->
+    <div class="persistent-decorations">
+        <!-- Lanterns / Crescents -->
+        <div class="lantern lantern-left" style="background: none; font-size: 4rem; filter: drop-shadow(0 0 10px rgba(214,158,46,0.5));">🌙</div>
+        <div class="lantern lantern-right" style="background: none; font-size: 4rem; filter: drop-shadow(0 0 10px rgba(214,158,46,0.5));">✨</div>
 
-    <div class="stars">
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-        <div class="star"></div>
-    </div>
-
-    <div class="container">
-        <div class="crescent-icon">🌙</div>
-
-        <h1>Hari Raya <span class="highlight">Aidilfitri</span></h1>
-        <p class="arabic-text">Selamat Hari Raya</p>
-
-        <div class="status-pill">
-            <span class="status-dot"></span>
-            Coming Soon
+        <!-- English Translation Banners -->
+        <div class="english-banner english-banner-left">
+            <span class="english-text">Selamat Hari Raya</span>
+        </div>
+        <div class="english-banner english-banner-right">
+            <span class="english-text">Maaf Zahir & Batin</span>
         </div>
 
-        <p class="description">
-            We're crafting a beautiful virtual try-on experience for Hari Raya.
-            Try on elegant Baju Kurung, Baju Melayu, and more — all powered by AI.
-            Stay tuned!
-        </p>
+        <!-- Chinese Banners (Hidden/Replaced for Hari Raya context if needed, reused classes to keep css structure) -->
+        <div class="cny-banner banner-left">
+            <div class="banner-content">
+                <span class="banner-char" style="font-size: 1.5rem">A</span>
+                <span class="banner-char" style="font-size: 1.5rem">I</span>
+                <span class="banner-char" style="font-size: 1.5rem">D</span>
+                <span class="banner-char" style="font-size: 1.5rem">I</span>
+                <span class="banner-char" style="font-size: 1.5rem">L</span>
+                <span class="banner-char" style="font-size: 1.5rem">F</span>
+                <span class="banner-char" style="font-size: 1.5rem">I</span>
+                <span class="banner-char" style="font-size: 1.5rem">T</span>
+                <span class="banner-char" style="font-size: 1.5rem">R</span>
+                <span class="banner-char" style="font-size: 1.5rem">I</span>
+            </div>
+        </div>
+        <div class="cny-banner banner-right">
+            <div class="banner-content">
+                <span class="banner-char" style="font-size: 1.5rem">S</span>
+                <span class="banner-char" style="font-size: 1.5rem">Y</span>
+                <span class="banner-char" style="font-size: 1.5rem">A</span>
+                <span class="banner-char" style="font-size: 1.5rem">W</span>
+                <span class="banner-char" style="font-size: 1.5rem">A</span>
+                <span class="banner-char" style="font-size: 1.5rem">L</span>
+            </div>
+        </div>
 
-        <a href="/" class="back-link">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-            Back to Home
-        </a>
+        <!-- Floating Huat Characters with decorations -->
+        <div class="floating-huat huat-1">
+            <div class="cny-decoration red-packet">🌟</div>
+            <div class="huat-text">Syawal!</div>
+        </div>
+        <div class="floating-huat huat-2">
+            <div class="cny-decoration pineapple">🕌</div>
+            <div class="huat-text">Raya</div>
+        </div>
+        <div class="floating-huat huat-3">
+            <div class="cny-decoration orange">🌙</div>
+            <div class="huat-text">Maaf</div>
+        </div>
+        <div class="floating-huat huat-4">
+            <div class="cny-decoration firecracker">✨</div>
+            <div class="huat-text">Syawal!</div>
+        </div>
+        <div class="floating-huat huat-5">
+            <div class="cny-decoration gold-ingot">🕌</div>
+            <div class="huat-text">Raya</div>
+        </div>
+        <div class="floating-huat huat-6">
+            <div class="cny-decoration red-packet">🌟</div>
+            <div class="huat-text">Raya</div>
+        </div>
+        <div class="floating-huat huat-7">
+            <div class="cny-decoration tangerine">🌙</div>
+            <div class="huat-text">Syawal!</div>
+        </div>
+        <div class="floating-huat huat-8">
+            <div class="cny-decoration pineapple">🕌</div>
+            <div class="huat-text">Maaf</div>
+        </div>
+
+        <!-- Decorative pattern overlay -->
+        <div class="decorative-pattern"></div>
     </div>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="content-wrapper">
+            <div class="hero-section">
+                <h1 class="title">
+                    <span class="title-main">Selamat Hari Raya</span>
+                    <span class="title-sub">SEIT 4D Vision Studio</span>
+                    <span class="title-booth">Hari Raya Virtual Try-On</span>
+                </h1>
+                <p class="subtitle">Capture the joy and elegantly try on our festive outfits inside a gorgeous photo booth.<br><br>Experience
+                    the SEIT magic in Green, Gold, and AI.</p>
+                <button id="start-btn" class="btn btn-primary">
+                    <span class="btn-text">Mula Start</span>
+                    <span class="btn-icon">✨</span>
+                </button>
+
+                <a href="/"
+                    style="display: flex; justify-content: center; align-items: center; gap: 6px; color: #D4AF37; text-decoration: none; font-size: 0.9rem; margin-top: 1.5rem; opacity: 0.6; transition: opacity 0.3s, color 0.3s; font-family: 'Outfit', 'Inter', sans-serif;"
+                    onmouseover="this.style.opacity='1'; this.style.color='#FFD700'"
+                    onmouseout="this.style.opacity='0.6'; this.style.color='#D4AF37'">
+                    ← Kembali ke Laman Utama | Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Gear (fixed top-right, admin only) -->
+    <button id="settings-trigger-btn"
+        style="position: fixed; top: 16px; right: 16px; z-index: 100; background: none; border: none; font-size: 1.2rem; cursor: pointer; opacity: 0.25; transition: opacity 0.3s; padding: 8px;"
+        title="Network Settings" onmouseover="this.style.opacity='0.7'"
+        onmouseout="this.style.opacity='0.75'">⚙️</button>
+
+    <!-- Network Config Modal (Hidden by default) -->
+    <div id="network-config-modal"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(20, 0, 0, 0.95); padding: 2rem; border-radius: 1rem; border: 2px solid #D4AF37; z-index: 1000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); text-align: center; color: #D4AF37;">
+        <h3 style="margin-bottom: 1rem; font-family: 'Outfit', sans-serif;">Linux Receiver
+            Configuration</h3>
+        <p style="margin-bottom: 1rem; font-size: 0.9rem; color: #ccc;">Enter IP:Port (e.g.
+            172.20.162.63:5001)</p>
+        <input type="text" id="linux-url-input" placeholder="172.20.162.63:5001"
+            style="width: 300px; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid #D4AF37; background: #330000; color: white; margin-bottom: 1rem;">
+        <br>
+        <button id="save-network-btn" class="btn btn-primary"
+            style="padding: 0.5rem 1rem; font-size: 1rem;">Save</button>
+        <button id="cancel-network-btn" class="btn btn-secondary"
+            style="padding: 0.5rem 1rem; font-size: 1rem; margin-left: 0.5rem;">Cancel</button>
+    </div>
+
+    <!-- Options Screen -->
+    <div id="options-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="options-container">
+                <h2 class="screen-title">Gender</h2>
+                <p class="options-subtitle">Please select your gender</p>
+
+                <div class="gender-selection">
+                    <button class="gender-option" data-gender="male">
+                        <div class="gender-icon">👨</div>
+                        <div class="gender-text-wrapper">
+                            <div class="gender-label">Male</div>
+                            <div class="gender-description">Lelaki</div>
+                        </div>
+                    </button>
+
+                    <button class="gender-option" data-gender="female">
+                        <div class="gender-icon">👩</div>
+                        <div class="gender-text-wrapper">
+                            <div class="gender-label">Female</div>
+                            <div class="gender-description">Perempuan</div>
+                        </div>
+                    </button>
+                </div>
+
+                <button id="back-to-welcome-btn" class="btn btn-secondary">
+                    <span class="btn-text">Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pose Selection Screen -->
+    <div id="pose-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="options-container">
+                <h2 class="screen-title">Choose Your Pose 🎭</h2>
+                <p class="options-subtitle">Select your preferred idyllic pose</p>
+
+                <div class="selection-grid pose-grid">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <button id="back-to-gender-btn" class="btn btn-secondary">
+                    <span class="btn-text">Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Clothes Style Selection Screen -->
+    <div id="clothes-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="options-container">
+                <h2 class="screen-title">Choose Your Outfit 👔</h2>
+                <p class="options-subtitle">Select your preferred style</p>
+
+                <div class="selection-grid clothes-grid">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <button id="back-to-pose-btn" class="btn btn-secondary">
+                    <span class="btn-text">Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Selection Screen -->
+    <div id="background-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="options-container">
+                <h2 class="screen-title">Choose Your Setting 🕌</h2>
+                <p class="options-subtitle">Select your preferred background</p>
+
+                <div class="selection-grid background-grid">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <button id="back-to-clothes-btn" class="btn btn-secondary">
+                    <span class="btn-text">Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Screen -->
+    <div id="camera-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="camera-container">
+                <h2 class="screen-title">Take a photo 📸</h2>
+
+                <div class="camera-frame">
+                    <video id="camera-feed" autoplay playsinline></video>
+                    <div id="camera-error-message"
+                        style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: white; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; z-index: 20;">
+                        <span style="font-size: 3rem; margin-bottom: 1rem;">📷❌</span>
+                        <p id="camera-error-text" style="font-size: 1.2rem; margin-bottom: 0;">Camera not detected</p>
+                    </div>
+                    <canvas id="camera-canvas" style="display: none;"></canvas>
+
+                    <!-- Face Guide Overlay -->
+                    <div class="face-guide-overlay">
+                        <div class="guide-text">Please stand as close as possible</div>
+                        <div class="guide-frame"></div>
+                    </div>
+
+                    <div class="frame-corners">
+                        <div class="corner corner-tl"></div>
+                        <div class="corner corner-tr"></div>
+                        <div class="corner corner-bl"></div>
+                        <div class="corner corner-br"></div>
+                    </div>
+                </div>
+
+                <div class="camera-controls">
+                    <button id="capture-btn" class="btn btn-capture">
+                        <span class="btn-text">Capture Photo</span>
+                        <span class="btn-icon">📷</span>
+                    </button>
+                    <div class="upload-container" style="margin-top: 1rem; text-align: center;">
+                        <button id="upload-trigger-btn" class="btn-text"
+                            style="background:none; border:none; color:white; text-decoration:underline; cursor:pointer; font-size:1rem;">Or
+                            upload a photo 📂</button>
+                        <input type="file" id="photo-upload" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                <button id="back-to-start-btn" class="btn btn-secondary" style="margin-top: 1rem;">
+                    <span class="btn-text">Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Preview Screen -->
+    <div id="preview-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="preview-container">
+                <h2 class="screen-title">Preview Your Photo 👀</h2>
+                <p class="options-subtitle">This is the photo that will be processed</p>
+
+                <div class="preview-frame">
+                    <img id="preview-image" alt="Photo preview" />
+                </div>
+
+                <div class="preview-actions">
+                    <button id="retake-photo-btn" class="btn btn-secondary">
+                        <span class="btn-text">Retake</span>
+                        <span class="btn-icon">🔄</span>
+                    </button>
+                    <button id="confirm-photo-btn" class="btn btn-primary">
+                        <span class="btn-text">Looks Good!</span>
+                        <span class="btn-icon">✓</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing/Result Screen -->
+    <div id="result-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="result-container">
+                <!-- Loading State -->
+                <div id="loading-state" class="loading-state">
+                    <div id="processing-visuals" class="processing-visuals">
+                        <div class="visual-container">
+                            <img id="processing-source-image" src="" alt="" />
+                            <div id="analytics-overlay" class="analytics-overlay"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-container">
+                        <div class="spinner"></div>
+                        <div class="spinner-glow"></div>
+                    </div>
+                    <h2 class="loading-title">Creating Magic...</h2>
+                    <p id="loading-message" class="loading-message">Processing your photo</p>
+
+                    <button id="view-result-btn" class="btn btn-primary btn-large pulse-btn"
+                        style="display: none; margin-top: 2rem;">
+                        <span class="btn-text">Reveal Result ✨</span>
+                    </button>
+
+                    <!-- Funny Disclaimer -->
+                    <div class="result-disclaimer">
+                        <p class="disclaimer-text">
+                            ⚠️ <strong>Disclaimer:</strong> Our AI brings out your festive charm, but any actual Raya packets collected are solely the result of your own charisma and networking skills! 😄
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Success State -->
+                <div id="success-state" class="success-state" style="display: none;">
+                    <h2 class="screen-title">Your Hari Raya Masterpiece! ✨</h2>
+
+                    <div class="result-image-container">
+                        <img id="result-image" alt="Processed photo" />
+                        <div class="image-glow"></div>
+                    </div>
+
+                    <div class="result-actions">
+                        <button id="print-btn" class="btn btn-primary">
+                            <span class="btn-text">Print</span>
+                            <span class="btn-icon">🖨️</span>
+                        </button>
+                        <button id="regenerate-btn" class="btn btn-secondary">
+                            <span class="btn-text">Regenerate</span>
+                            <span class="btn-icon">🔄</span>
+                        </button>
+                        <button id="animate-btn" class="btn btn-primary"
+                            style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #8B0000;">
+                            <span class="btn-text">Animate!</span>
+                            <span class="btn-icon">🎬</span>
+                        </button>
+                        <button id="start-over-btn" class="btn btn-secondary">
+                            <span class="btn-text">Start Over</span>
+                            <span class="btn-icon">🏠</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error State -->
+                <div id="error-state" class="error-state" style="display: none;">
+                    <div class="error-icon">⚠️</div>
+                    <h2 class="error-title">Oops! Something went wrong</h2>
+                    <p id="error-message" class="error-message"></p>
+                    <button id="retry-error-btn" class="btn btn-primary">
+                        <span class="btn-text">Try Again</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/static/themes/hariraya/js/app.js?v=2"></script>
 </body>
 
 </html>
