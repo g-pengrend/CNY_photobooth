@@ -22,12 +22,12 @@ gnome-terminal --title="ComfyUI Server" -- bash -c "export DEPLOY_MODE=remote; s
 
 # 2. Start Linux Receiver (Flask App)
 echo "Starting Linux Receiver..."
-gnome-terminal --title="Linux Receiver" -- bash -c "export DEPLOY_MODE=remote; source '$CONDA_PROFILE'; conda activate comfyui; cd '$PROJECT_DIR'; python linux_receiver.py; exec bash"
+gnome-terminal --title="Linux Receiver" -- bash -c "export DEPLOY_MODE=remote; source '$CONDA_PROFILE'; conda activate comfyui; cd '$PROJECT_DIR/dgx_photobooth'; python linux_receiver.py; exec bash"
 
 # 3. Start Cloudflare Tunnel
 echo "Starting Cloudflare Tunnel..."
-rm -f "$TUNNEL_LOG"
-gnome-terminal --title="Cloudflare Tunnel" -- bash -c "cd '$PROJECT_DIR' && cloudflared tunnel --url $CLOUDFLARE_URL 2>&1 | tee tunnel.log; exec bash"
+rm -f "$PROJECT_DIR/dgx_photobooth/tunnel.log"
+gnome-terminal --title="Cloudflare Tunnel" -- bash -c "cd '$PROJECT_DIR/dgx_photobooth' && cloudflared tunnel --url $CLOUDFLARE_URL 2>&1 | tee tunnel.log; exec bash"
 
 echo "All systems initiated in REMOTE mode."
 echo "Tunnel log: $TUNNEL_LOG"

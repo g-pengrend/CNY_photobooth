@@ -1,0 +1,78 @@
+import requests
+import os
+
+from match_framing import perform_smart_crop
+from config import LINUX_RECEIVER_URL
+
+def send_images_to_linux(original_image_path, generated_image_path, target_filename='generated.png', receiver_url=None, theme='cny', reference_image_path=None):
+    """
+    Sends the original and generated images to the Linux machine.
+    
+    Args:
+        original_image_path (str): Path to the user's uploaded/photo file.
+        generated_image_path (str): Path to the locally generated result file.
+        target_filename (str): Name of the file as it should arrive on the remote server.
+        receiver_url (str): The URL of the Linux receiver. Defaults to LINUX_RECEIVER_URL if None.
+        theme (str): The selected theme to inform the receiver of which workflow to execute.
+    """
+    if not os.path.exists(original_image_path):
+        print(f"Error: Original file not found at {original_image_path}")
+        return False
+        
+    if not os.path.exists(generated_image_path):
+        print(f"Error: Generated file not found at {generated_image_path}")
+        return False
+
+    # --- Pre-processing: Smart Crop ---
+    # Crop the original image locally before sending to ensure consistent framing
+    if reference_image_path and os.path.exists(reference_image_path):
+        print(f"Applying smart crop to {original_image_path} against {reference_image_path}...")
+        perform_smart_crop(original_image_path, reference_image_path)
+    else:
+        print(f"⚠️ Reference image {reference_image_path} not found or not provided. Skipping local crop.")
+    # ----------------------------------
+
+    url_to_use = receiver_url if receiver_url else LINUX_RECEIVER_URL
+    print(f"Preparing to send files to {url_to_use}...")
+    
+    files = {
+        'original_image': ('original.jpg', open(original_image_path, 'rb'), 'image/jpeg'),
+        'generated_image': (target_filename, open(generated_image_path, 'rb'), 'image/png')
+    }
+    
+    try:
+        data = {'theme': theme}
+        response = requests.post(url_to_use, files=files, data=data, timeout=30)
+        
+        if response.status_code == 200:
+            print("✅ Successfully sent images to Linux machine.")
+            print("Response:", response.json())
+            return True
+        else:
+            print(f"❌ Failed to send. Status Code: {response.status_code}")
+            print("Response:", response.text)
+            return False
+            
+    except requests.exceptions.ConnectionError:
+        print(f"❌ Connection Error: Could not connect to {url_to_use}")
+        print("   - Check if the Linux script is running.")
+        print("   - Check if the IP address is correct.")
+        print("   - Check firewall settings.")
+        return False
+    except Exception as e:
+        print(f"❌ Error sending files: {e}")
+        return False
+    finally:
+        # Close file handles
+        files['original_image'][1].close()
+        files['generated_image'][1].close()
+
+if __name__ == "__main__":
+    # Test execution
+    # Create dummy files for testing if they don't exist
+    if not os.path.exists("test_orig.jpg"):
+        with open("test_orig.jpg", "w") as f: f.write("dummy")
+    if not os.path.exists("test_gen.png"):
+        with open("test_gen.png", "w") as f: f.write("dummy")
+        
+    send_images_to_linux("test_orig.jpg", "test_gen.png")

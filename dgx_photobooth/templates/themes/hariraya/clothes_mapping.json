@@ -1,0 +1,38 @@
+{
+    "C01": {
+        "desc": "premium matte-finish satin",
+        "lighting": "Emerald Green and Gold"
+    },
+    "C02": {
+        "desc": "textured silk-linen tunic",
+        "lighting": "Matte Silk and Pearl"
+    },
+    "C03": {
+        "desc": "majestic full-set gold Songket Bunga Tabur",
+        "lighting": "Royal Yellow and Gold"
+    },
+    "C04": {
+        "desc": "asymmetrical iridescent silk with 3D geometric textures",
+        "lighting": "Midnight Blue and Silver"
+    },
+    "C05": {
+        "desc": "floral jacquard brocade and metallic emerald songket",
+        "lighting": "Champagne Gold and Emerald"
+    },
+    "C06": {
+        "desc": "structured crepe-silk and a crystal-embellished bawal hijab",
+        "lighting": "Dusty Lavender and Crystal"
+    },
+    "C07": {
+        "desc": "full-set royal yellow songket with a diamond-encrusted crown and ornate gold kerongsang",
+        "lighting": "Royal Yellow and Diamonds"
+    },
+    "C08": {
+        "desc": "structured Duchess satin and a signature heritage pearl",
+        "lighting": "Midnight Teal and Pearl"
+    },
+    "C09": {
+        "desc": "intricate Swiss Voile and hand-drawn Batik",
+        "lighting": "Turquoise and Antique Gold"
+    }
+}
