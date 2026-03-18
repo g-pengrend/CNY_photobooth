@@ -41,10 +41,6 @@ def process_image_async(job_id, input_path, theme='cny', gender='female', pose='
     
         try:
              # Run face analysis first for the visualizer
-             # We run it regardless of enable_lucky_number if we want to show stats,
-             # but let's stick to only if enabled or always? Let's do always for the "cool factor" unless it crashes.
-             # But wait, generated lucky number is only used if enabled.
-             # Let's run it.
              _, measurements = generate_lucky_number_from_face(input_path, theme=theme)
              if measurements:
                  jobs[job_id]['analytics'] = measurements
@@ -97,6 +93,12 @@ def cny_theme():
 def hariraya_theme():
     """Serve the Hari Raya experience (placeholder)"""
     return send_from_directory(os.path.join(app.static_folder, 'themes', 'hariraya'), 'index.html')
+
+
+@app.route('/deepavali')
+def deepavali_theme():
+    """Serve the Deepavali experience (preview)"""
+    return send_from_directory(os.path.join(app.static_folder, 'themes', 'deepavali'), 'index.html')
 
 
 @app.route('/api/process', methods=['POST'])
@@ -277,20 +279,11 @@ def transfer_images(job_id):
         # Run transfer in background to avoid blocking response
         def transfer_task():
             # Construct target filename with codes
-            # Format: received_{job_id}_{pose_code}_{clothes_code}_{bg_code}_generated.png
-            # Or simplified: {pose_code}_{clothes_code}_{bg_code}_{job_id}.png
-            # Using codes if available, else standard format
-            
             p_code = job.get('pose_code', 'Pxx')
             c_code = job.get('clothes_code', 'Cxx')
             b_code = job.get('background_code', 'Bxx')
-            
-            # Shorten UUID for filename readability
             short_id = job_id.split('-')[0]
-            
             target_name = f"{p_code}_{c_code}_{b_code}_{short_id}_generated.png"
-            
-            # Use bg2.jpeg consistently for face size metrics as requested
             ref_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bg2.jpeg")
             
             success = send_images_to_linux(
