@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEIT 4D Vision Studio — Virtual Try-On</title>
-    <meta name="description" content="AI-powered virtual try-on experience for festive celebrations">
+    <title>SEIT 4D Vision Studio — Festive Virtual Try-On</title>
+    <meta name="description" content="AI-powered festive virtual try-on experience">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
@@ -14,21 +14,25 @@
 </head>
 
 <body>
-    <div class="page-wrapper">
-        <!-- Ambient Background -->
-        <div class="ambient-bg">
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-            <div class="orb orb-3"></div>
-        </div>
+    <!-- Ambient Background (Moved outside for better rendering) -->
+    <div class="ambient-bg">
+        <div class="sparkles"></div>
+    </div>
 
+    <div class="page-wrapper">
         <!-- Header -->
         <header class="header">
-            <div class="logo-section">
-                <div class="logo-mark">4D</div>
-                <div class="logo-text">
-                    <span class="logo-title">SEIT Vision Studio</span>
-                    <span class="logo-subtitle">Virtual Try-On Experience</span>
+            <div class="header-glass">
+                <div class="logo-section">
+                    <div class="logo-mark">4D</div>
+                    <div class="logo-text-group">
+                        <span class="logo-title">SEIT Vision Studio</span>
+                        <span class="logo-subtitle">Festive Virtual Try-On</span>
+                    </div>
+                </div>
+                <div class="header-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Studio Online</span>
                 </div>
             </div>
         </header>
@@ -36,30 +40,32 @@
         <!-- Main Content -->
         <main class="main-content">
             <div class="hero-text">
-                <h1>Choose Your <span class="gradient-text">Experience</span></h1>
-                <p class="hero-description">Step into an AI-powered photobooth. Select a theme, strike a pose, and
-                    watch yourself transform.</p>
+                <h1>Step Into The <span class="gradient-text">Festivities</span></h1>
+                <p class="hero-description">Experience the magic of AI transformation. Choose a celebration, strike a
+                    pose, and watch your festive look come to life.</p>
             </div>
 
             <div class="theme-grid">
                 <!-- CNY Theme Card -->
                 <a href="/cny" class="theme-card" id="cny-card">
-                    <div class="card-glow cny-glow"></div>
+                    <div class="card-image-wrap">
+                        <img src="/static/landing/cny_card_bg.png" alt="CNY Experience" class="card-bg">
+                        <div class="card-overlay"></div>
+                    </div>
                     <div class="card-inner">
-                        <div class="card-badge">Available Now</div>
+                        <div class="card-badge">Lunar Prosperity</div>
                         <div class="card-icon">🏮</div>
                         <h2 class="card-title">Chinese New Year</h2>
-                        <p class="card-description">Transform into an idol in traditional CNY attire with
-                            mystical backgrounds and celestial outfits.</p>
+                        <p class="card-description">Transform into an idol in traditional CNY attire with mystical
+                            blossoms and celestial outfits.</p>
                         <div class="card-tags">
                             <span class="tag">9 Poses</span>
                             <span class="tag">12 Outfits</span>
-                            <span class="tag">10 Backgrounds</span>
                         </div>
                         <div class="card-cta">
-                            <span>Enter Experience</span>
+                            <span>Start Celebration</span>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
+                                stroke-width="2.5">
                                 <path d="M5 12h14M12 5l7 7-7 7" />
                             </svg>
                         </div>
@@ -68,22 +74,24 @@
 
                 <!-- Hari Raya Theme Card -->
                 <a href="/hariraya" class="theme-card" id="hariraya-card">
-                    <div class="card-glow hariraya-glow"></div>
+                    <div class="card-image-wrap">
+                        <img src="/static/landing/hariraya_card_bg.png" alt="Hari Raya Experience" class="card-bg">
+                        <div class="card-overlay"></div>
+                    </div>
                     <div class="card-inner">
-                        <div class="card-badge">Available Now</div>
+                        <div class="card-badge">Aidilfitri Spirit</div>
                         <div class="card-icon">🌙</div>
                         <h2 class="card-title">Hari Raya Aidilfitri</h2>
-                        <p class="card-description">Celebrate the spirit of Hari Raya with elegant Baju Kurung,
-                            Baju Melayu, and festive settings.</p>
+                        <p class="card-description">Celebrate with elegant Baju Kurung, Baju Melayu, and festive
+                            settings under the crescent moon.</p>
                         <div class="card-tags">
                             <span class="tag">5 Poses</span>
                             <span class="tag">9 Outfits</span>
-                            <span class="tag">5 Backgrounds</span>
                         </div>
                         <div class="card-cta">
-                            <span>Enter Experience</span>
+                            <span>Enter Pavilion</span>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
+                                stroke-width="2.5">
                                 <path d="M5 12h14M12 5l7 7-7 7" />
                             </svg>
                         </div>
@@ -92,19 +100,23 @@
 
                 <!-- Deepavali Theme Card -->
                 <a href="#" class="theme-card" id="deepavali-card">
-                    <div class="card-glow deepavali-glow"></div>
+                    <div class="card-image-wrap">
+                        <img src="/static/landing/deepavali_card_bg.png" alt="Deepavali Experience" class="card-bg">
+                        <div class="card-overlay"></div>
+                    </div>
                     <div class="card-inner">
-                        <div class="card-badge coming-soon">Coming Soon</div>
+                        <div class="card-badge coming-soon">Festival of Lights</div>
                         <div class="card-icon">🪔</div>
                         <h2 class="card-title">Deepavali</h2>
-                        <p class="card-description">Experience the festival of lights with vibrant traditional wear and radiant festive settings.</p>
+                        <p class="card-description">Illuminate your presence with vibrant traditional wear and the
+                            radiant glow of oil lamps.</p>
                         <div class="card-tags">
-                            <span class="tag">TBD</span>
+                            <span class="tag">Coming Soon</span>
                         </div>
                         <div class="card-cta">
-                            <span>Preview</span>
+                            <span>Sneak Peek</span>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
+                                stroke-width="2.5">
                                 <path d="M5 12h14M12 5l7 7-7 7" />
                             </svg>
                         </div>

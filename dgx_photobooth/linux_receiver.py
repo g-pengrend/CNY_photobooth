@@ -210,11 +210,11 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
                 if "6" in workflow and "inputs" in workflow["6"]:
                     text = workflow["6"]["inputs"]["text"]
                     
-                    if "style_type" in text:
-                        text = text.replace("style_type", style_desc)
+                    if '"style_type"' in text:
+                        text = text.replace('"style_type"', style_desc)
                     
-                    if "lighting" in text:
-                        text = text.replace("lighting", lighting_desc)
+                    if '"lighting"' in text:
+                        text = text.replace('"lighting"', lighting_desc)
                         
                     workflow["6"]["inputs"]["text"] = text
                     print("  - Injected style & lighting description into Node #6")

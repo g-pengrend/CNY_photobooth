@@ -17,7 +17,7 @@ export const poses = [
         code: "P03",
         title: "Festive Bunga Api Sparkle",
         description: "A candid, joyful moment with a playful turn and a glistening sparkler, celebrating the high-festo eve",
-        prompt: "Facing the camera while turned slightly to the side (45 degrees), holding a small bunga api (sparkler) in one hand, looking back at the camera with a bright, celebratory smile,",
+        prompt: "Facing the camera, holding a small bunga api (sparkler) in one hand, with a bright, happy smile,",
         image: "/static/themes/hariraya/images/poses/holding-bunga-api.png"
     },
     {

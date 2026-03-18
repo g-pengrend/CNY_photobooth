@@ -26,10 +26,10 @@ def update_workflow_with_image(workflow, image_path, gender="female", pose="", c
     
     # Update prompt text with all variables
     current_text = workflow["45"]["inputs"]["text"]
-    current_text = current_text.replace("gender", gender)
-    current_text = current_text.replace("pose", pose)
-    current_text = current_text.replace("clothes_style", clothes_style)
-    current_text = current_text.replace("background", background)
+    current_text = current_text.replace('"gender"', gender)
+    current_text = current_text.replace('"pose"', pose)
+    current_text = current_text.replace('"clothes_style"', clothes_style)
+    current_text = current_text.replace('"background"', background)
     workflow["45"]["inputs"]["text"] = current_text
     
     # Update gender detection fields (lines 144, 145)
