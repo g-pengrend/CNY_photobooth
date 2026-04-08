@@ -205,6 +205,14 @@
             <div class="camera-container">
                 <h2 class="screen-title">Take a photo 📸</h2>
 
+                <!-- Top Capture Button for accessibility -->
+                <div class="camera-controls top-controls" style="margin-bottom: 1.5rem;">
+                    <button id="capture-btn-top" class="btn btn-capture">
+                        <span class="btn-text">Capture Photo</span>
+                        <span class="btn-icon">📷</span>
+                    </button>
+                </div>
+
                 <div class="camera-frame">
                     <video id="camera-feed" autoplay playsinline></video>
                     <div id="camera-error-message"

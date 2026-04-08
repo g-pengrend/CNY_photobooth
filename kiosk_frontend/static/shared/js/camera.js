@@ -6,9 +6,10 @@ export async function initCamera(retryCount = 0) {
     try {
         // Reset UI state
         const errorEl = document.getElementById('camera-error-message');
-        const captureBtn = document.getElementById('capture-btn');
+        // Show capture buttons
+        const captureBtns = document.querySelectorAll('.btn-capture');
+        captureBtns.forEach(btn => btn.style.display = '');
         if (errorEl) errorEl.style.display = 'none';
-        if (captureBtn) captureBtn.style.display = '';
 
         // First, ensure any existing streams are stopped
         stopCamera();
@@ -81,14 +82,15 @@ export async function initCamera(retryCount = 0) {
         // Display error in the camera frame instead of redirecting
         const errorEl = document.getElementById('camera-error-message');
         const errorText = document.getElementById('camera-error-text');
-        const captureBtn = document.getElementById('capture-btn');
-
+        
         if (errorEl) {
             errorEl.style.display = 'flex';
             if (errorText) errorText.textContent = errorMessage;
         }
 
-        if (captureBtn) captureBtn.style.display = 'none';
+        // Hide capture buttons
+        const captureBtns = document.querySelectorAll('.btn-capture');
+        captureBtns.forEach(btn => btn.style.display = 'none');
     }
 }
 

@@ -3,7 +3,7 @@ export const poses = [
         code: "P01",
         title: "Confident Heritage Pose",
         description: "A powerful, structured stance with one hand on the waist, projecting royal authority and elegance",
-        prompt: "Facing the camera with one hand resting firmly on the waist, the other hand resting naturally at the side. Chin slightly up, projecting confidence,",
+        prompt: "Facing the camera with one hand resting firmly on the waist, the other hand resting naturally at the side. Chin slightly up, projecting a smiling confidence,",
         image: "/static/themes/hariraya/images/poses/confident-gaze.png"
     },
     {

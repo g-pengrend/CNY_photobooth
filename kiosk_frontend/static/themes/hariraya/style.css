@@ -1345,12 +1345,13 @@ body::before {
     }
 
     /* Face guide adjustments for mobile */
-    .face-silhouette {
-        width: 80%;
+    .guide-frame {
+        width: 75%;
     }
 
     .guide-text {
         font-size: 0.85rem;
+        width: 90%;
     }
 
     .guide-text-bottom {
@@ -1365,6 +1366,17 @@ body::before {
     #preview-image,
     #result-image {
         max-height: 45vh;
+    }
+}
+
+@media (orientation: portrait) {
+    .guide-frame {
+        width: 70%;
+    }
+    
+    .guide-text {
+        width: 85%;
+        font-size: 1.2rem;
     }
 }
 

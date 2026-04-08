@@ -127,23 +127,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // ------------------------------------
 
-    // Camera Capture
-    document.getElementById('capture-btn').addEventListener('click', async () => {
-        try {
-            // Capture photo
-            const photoBlob = await capturePhoto();
-            setLastPhotoBlob(photoBlob);
+    // Camera Capture (Both top and bottom buttons)
+    ['capture-btn', 'capture-btn-top'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('click', async () => {
+                try {
+                    // Capture photo
+                    const photoBlob = await capturePhoto();
+                    setLastPhotoBlob(photoBlob);
 
-            // Stop camera
-            stopCamera();
+                    // Stop camera
+                    stopCamera();
 
-            // Show preview screen with captured photo
-            displayPreviewImage(photoBlob);
-            showScreen('preview');
+                    // Show preview screen with captured photo
+                    displayPreviewImage(photoBlob);
+                    showScreen('preview');
 
-        } catch (error) {
-            console.error('Error capturing photo:', error);
-            displayError('Failed to capture photo');
+                } catch (error) {
+                    console.error('Error capturing photo:', error);
+                    displayError('Failed to capture photo');
+                }
+            });
         }
     });
 
