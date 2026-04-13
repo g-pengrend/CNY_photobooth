@@ -190,7 +190,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const printBtn = document.getElementById('print-btn');
             if (printBtn) {
                 printBtn.innerHTML = '<span class="btn-text">Print</span><span class="btn-icon">🖨️</span>';
-                printBtn.disabled = false;
+                printBtn.disabled = true;
+                printBtn.style.opacity = '0.5';
+            }
+            const transferPrintBtn = document.getElementById('transfer-print-btn');
+            if (transferPrintBtn) {
+                transferPrintBtn.innerHTML = '<span class="btn-text">Send for Printing</span><span class="btn-icon">🖨️</span>';
+                transferPrintBtn.disabled = false;
+                transferPrintBtn.style.background = '';
+                transferPrintBtn.style.color = '';
+                transferPrintBtn.style.border = '';
             }
 
             try {
@@ -219,32 +228,47 @@ document.addEventListener('DOMContentLoaded', () => {
         await initCamera();
     });
 
-    // Print button - triggers server-side printing
-    document.getElementById('print-btn').addEventListener('click', async () => {
-        if (!state.currentJobId) return;
+    // Print button - triggers server-side printing (GREYED OUT)
+    const printBtnElement = document.getElementById('print-btn');
+    if (printBtnElement) {
+        printBtnElement.disabled = true;
+        printBtnElement.style.opacity = '0.5';
+        printBtnElement.style.cursor = 'not-allowed';
+        printBtnElement.style.pointerEvents = 'none';
+    }
 
-        const printBtn = document.getElementById('print-btn');
-        const originalText = printBtn.textContent;
+    // Send for Printing (Transfer Only)
+    const transferPrintBtn = document.getElementById('transfer-print-btn');
+    if (transferPrintBtn) {
+        transferPrintBtn.addEventListener('click', async () => {
+            if (!state.currentJobId) return;
 
-        try {
-            printBtn.textContent = 'Sending...';
-            printBtn.disabled = true;
+            const btn = document.getElementById('transfer-print-btn');
+            const originalContent = btn.innerHTML;
 
-            const response = await fetch(`/api/print/${state.currentJobId}`);
-            const result = await response.json();
+            try {
+                btn.innerHTML = '<span class="btn-text">Sending...</span>';
+                btn.disabled = true;
 
-            if (response.ok) {
-                printBtn.textContent = 'Sent to Printer!';
-            } else {
-                throw new Error(result.error || 'Print failed');
+                const response = await fetch(`/api/transfer_print_only/${state.currentJobId}`, { method: 'POST' });
+                const result = await response.json();
+
+                if (response.ok) {
+                    btn.innerHTML = '<span class="btn-text">View photobooth to print</span>';
+                    btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                    btn.style.color = '#D4AF37';
+                    btn.style.border = '1px solid #D4AF37';
+                } else {
+                    throw new Error(result.error || 'Transfer failed');
+                }
+            } catch (error) {
+                console.error('Transfer Error:', error);
+                alert('Failed to send for printing: ' + error.message);
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
             }
-        } catch (error) {
-            console.error('Print Error:', error);
-            alert('Failed to send to printer: ' + error.message);
-            printBtn.textContent = originalText;
-            printBtn.disabled = false;
-        }
-    });
+        });
+    }
 
     // Regenerate button - reprocess the same photo with current selections
     document.getElementById('regenerate-btn').addEventListener('click', async () => {
@@ -294,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 animateBtn.innerHTML = '<span class="btn-text">Sent! 🚀</span>';
-                animateBtn.innerHTML = '<span class="btn-text">View Animation (Next Screen)</span>';
+                animateBtn.innerHTML = '<span class="btn-text">View Animation in Photobooth</span>';
             } else {
                 throw new Error(result.error || 'Transfer failed');
             }

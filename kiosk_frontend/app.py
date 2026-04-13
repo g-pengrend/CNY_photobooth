@@ -309,6 +309,67 @@ def transfer_images(job_id):
         return jsonify({'error': f"Failed to initiate transfer: {str(e)}"}), 500
 
 
+@app.route('/api/transfer_print_only/<job_id>', methods=['POST'])
+def transfer_print_only(job_id):
+    """Trigger transfer of images to Linux for printing ONLY (no animation)"""
+    if job_id not in jobs:
+        return jsonify({'error': 'Job not found'}), 404
+    
+    job = jobs[job_id]
+    if job['status'] != 'completed':
+        return jsonify({'error': 'Image processing not completed'}), 400
+    
+    input_file = job.get('input_file')
+    output_file = job.get('output_file')
+    
+    if not input_file or not os.path.exists(input_file):
+        return jsonify({'error': 'Original input file not found'}), 404
+        
+    if not output_file or not os.path.exists(output_file):
+        return jsonify({'error': 'Generated output file not found'}), 404
+        
+    theme = job.get('theme', 'cny')
+        
+    try:
+        from remote_transfer import send_images_to_linux
+        
+        # Modify URL for print only endpoint
+        # LINUX_RECEIVER_URL is http://ip:5001/receive_workflow_data
+        # We want http://ip:5001/api/receive_print_only
+        print_url = CURRENT_LINUX_URL.replace('/receive_workflow_data', '/api/receive_print_only')
+        
+        # Run transfer in background
+        def transfer_task():
+            p_code = job.get('pose_code', 'Pxx')
+            c_code = job.get('clothes_code', 'Cxx')
+            b_code = job.get('background_code', 'Bxx')
+            short_id = job_id.split('-')[0]
+            target_name = f"PRINT_{p_code}_{c_code}_{b_code}_{short_id}.png"
+            ref_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bg2.jpeg")
+            
+            success = send_images_to_linux(
+                input_file, 
+                output_file, 
+                target_filename=target_name, 
+                receiver_url=print_url, 
+                theme=theme,
+                reference_image_path=ref_path
+            )
+            if success:
+                print(f"[OK] Print-only transfer for job {job_id} successful")
+            else:
+                print(f"[FAIL] Print-only transfer for job {job_id} failed")
+
+        thread = threading.Thread(target=transfer_task)
+        thread.start()
+        
+        return jsonify({'status': 'transfer_initiated', 'message': 'Transfer for printing started'}), 200
+        
+    except Exception as e:
+        print(f"Transfer error: {e}")
+        return jsonify({'error': f"Failed to initiate transfer: {str(e)}"}), 500
+
+
 @app.route('/api/settings/linux-url', methods=['GET', 'POST'])
 def manage_linux_url():
     global CURRENT_LINUX_URL

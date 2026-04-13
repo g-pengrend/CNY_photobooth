@@ -11,6 +11,8 @@ import socket
 import qrcode
 from flask import Flask, request, jsonify, render_template, send_from_directory, send_file
 from werkzeug.utils import secure_filename
+import platform
+import subprocess
 from config import COMFY_OUTPUT_DIR, COMFY_SERVER_ADDRESS, print_config
 
 # --- Configuration ---
@@ -351,6 +353,53 @@ def receive_workflow_data():
         "message": "Images received and workflow started"
     }), 200
 
+@app.route('/api/receive_print_only', methods=['POST'])
+def receive_print_only():
+    if 'original_image' not in request.files or 'generated_image' not in request.files:
+        return jsonify({"error": "Missing image files"}), 400
+
+    original_file = request.files['original_image']
+    generated_file = request.files['generated_image']
+    
+    timestamp = int(time.time())
+    orig_f = secure_filename(original_file.filename)
+    gen_f = secure_filename(generated_file.filename)
+    
+    orig_filename = f"received_{timestamp}_orig_{orig_f}"
+    gen_filename = f"received_{timestamp}_gen_{gen_f}"
+    
+    orig_path = os.path.join(UPLOAD_FOLDER, orig_filename)
+    gen_path = os.path.join(UPLOAD_FOLDER, gen_filename)
+    
+    original_file.save(orig_path)
+    generated_file.save(gen_path)
+    
+    theme = request.form.get('theme', 'cny')
+    
+    print(f"Files received (Print Only): {orig_filename}, {gen_filename}, Theme: {theme}")
+    
+    # We create a job entry so it shows up in the gallery, but status is 'completed' (for video) or we just mark it as 'photo_only'
+    # Actually, the gallery shows 'pending'/'completed' based on video_filename.
+    # To make it show up in the gallery as a static image, we can just add it to JOBS with status 'completed' and no video.
+    
+    new_job = {
+        "id": f"print_{timestamp}_{random.randint(1000,9999)}",
+        "status": "completed",
+        "original_filename": orig_filename,
+        "generated_filename": gen_filename,
+        "video_filename": None,
+        "timestamp": time.time(),
+        "print_only": True
+    }
+    
+    with JOBS_LOCK:
+        JOBS.append(new_job)
+
+    return jsonify({
+        "status": "received",
+        "message": "Images received for printing"
+    }), 200
+
 # --- QR Code & Mobile View Logic ---
 
 @app.route('/mobile/view/<job_id>')
@@ -390,6 +439,50 @@ def get_qr_code(job_id):
     img_io.seek(0)
     
     return send_file(img_io, mimetype='image/png')
+
+@app.route('/api/print/<job_id>')
+def print_image(job_id):
+    """Trigger printing for a specific job's generated image"""
+    target_job = None
+    with JOBS_LOCK:
+        for job in JOBS:
+            if job['id'] == job_id:
+                target_job = job
+                break
+    
+    if not target_job:
+        return jsonify({"error": "Job not found"}), 404
+        
+    gen_filename = target_job.get('generated_filename')
+    if not gen_filename:
+        return jsonify({"error": "Generated image not found in job"}), 404
+        
+    image_path = os.path.join(UPLOAD_FOLDER, gen_filename)
+    if not os.path.exists(image_path):
+        return jsonify({"error": f"Image file not found: {gen_filename}"}), 404
+        
+    def run_print_task(path):
+        try:
+            current_os = platform.system()
+            print(f"🖨️ Printing [{current_os}]: {path}")
+            
+            if current_os == "Windows":
+                # Windows 'print' verb
+                os.startfile(path, "print")
+            else:
+                # Linux 'lp' command
+                # Note: You may need to specify a printer with -d <printer_name>
+                subprocess.run(['lp', path], check=True)
+                
+            print(f"✅ Print job sent for: {path}")
+        except Exception as e:
+            print(f"❌ Print failed: {e}")
+
+    # Run in background thread
+    thread = threading.Thread(target=run_print_task, args=(image_path,), daemon=True)
+    thread.start()
+    
+    return jsonify({"status": "success", "message": "Print job initiated"})
 
 if __name__ == '__main__':
     print_config()

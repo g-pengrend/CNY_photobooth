@@ -323,13 +323,17 @@
                     </div>
 
                     <div class="result-actions">
-                        <button id="print-btn" class="btn btn-primary">
+                        <button id="print-btn" class="btn btn-primary" disabled style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
                             <span class="btn-text">Print</span>
                             <span class="btn-icon">🖨️</span>
                         </button>
                         <button id="regenerate-btn" class="btn btn-secondary">
                             <span class="btn-text">Regenerate</span>
                             <span class="btn-icon">🔄</span>
+                        </button>
+                        <button id="transfer-print-btn" class="btn btn-primary" style="background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%); color: #8B0000; border: 2px solid #8B0000;">
+                            <span class="btn-text">Send for Printing</span>
+                            <span class="btn-icon">🖨️</span>
                         </button>
                         <button id="animate-btn" class="btn btn-primary"
                             style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #8B0000;">

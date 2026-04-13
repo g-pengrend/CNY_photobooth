@@ -265,6 +265,40 @@
             background: rgba(255, 255, 255, 0.2);
             border-color: white;
         }
+
+        .print-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            font-weight: 600;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .print-btn:active {
+            transform: translateY(0);
+        }
+
+        .print-btn svg {
+            margin-right: 8px;
+        }
+
+        .print-btn.loading {
+            opacity: 0.7;
+            cursor: wait;
+        }
     </style>
 </head>
 
@@ -355,6 +389,20 @@
                         style="display: none; margin-top: 20px; background: white; padding: 15px; border-radius: 12px; width: 200px;">
                         <img id="qrImage" src="" alt="QR Code" style="width: 100%; display: block;">
                         <p style="color: black; margin: 10px 0 0 0; font-weight: 600;">Scan to Download</p>
+                    </div>
+
+                    <!-- Print Section -->
+                    <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                        <button id="printBtn" class="print-btn" onclick="printImage()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                <rect x="6" y="14" width="12" height="8"></rect>
+                            </svg>
+                            Print Photo
+                        </button>
+                        <p style="font-size: 0.7rem; color: #777;">Sends to local printer</p>
                     </div>
                 </div>
             </div>
@@ -478,11 +526,57 @@
             } else {
                 modalVideo.style.display = 'none';
                 modalVideo.pause();
-                modalLoading.style.display = 'block';
-                modalPendingText.style.display = 'block';
+                
+                if (job.print_only) {
+                    modalLoading.style.display = 'none';
+                    modalPendingText.style.display = 'block';
+                    modalPendingText.innerHTML = "Photo Only (No Animation)";
+                } else {
+                    modalLoading.style.display = 'block';
+                    modalPendingText.style.display = 'block';
+                    modalPendingText.innerHTML = "Video is Rendering...";
+                }
 
-                // Hide Download Button while processing
-                qrBtn.style.display = 'none';
+                // Show QR Button for print only jobs as well (to download the photo)
+                if (job.print_only) {
+                    qrBtn.style.display = 'inline-flex';
+                } else {
+                    // Hide if waiting for video
+                    qrBtn.style.display = 'none';
+                }
+            }
+        }
+
+        async function printImage() {
+            if (!currentOpenJobId) return;
+
+            const btn = document.getElementById('printBtn');
+            const originalContent = btn.innerHTML;
+
+            try {
+                btn.classList.add('loading');
+                btn.disabled = true;
+                btn.innerHTML = 'Sending...';
+
+                const response = await fetch(`/api/print/${currentOpenJobId}`);
+                const result = await response.json();
+
+                if (response.ok) {
+                    btn.innerHTML = '✅ Sent!';
+                    setTimeout(() => {
+                        btn.innerHTML = originalContent;
+                        btn.classList.remove('loading');
+                        btn.disabled = false;
+                    }, 3000);
+                } else {
+                    throw new Error(result.error || 'Print failed');
+                }
+            } catch (error) {
+                console.error('Print Error:', error);
+                alert('Print Error: ' + error.message);
+                btn.innerHTML = originalContent;
+                btn.classList.remove('loading');
+                btn.disabled = false;
             }
         }
 
