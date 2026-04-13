@@ -353,7 +353,7 @@ def receive_workflow_data():
         "message": "Images received and workflow started"
     }), 200
 
-@app.route('/api/receive_print_only', methods=['POST'])
+@app.route('/receive_print_only', methods=['POST'])
 def receive_print_only():
     if 'original_image' not in request.files or 'generated_image' not in request.files:
         return jsonify({"error": "Missing image files"}), 400

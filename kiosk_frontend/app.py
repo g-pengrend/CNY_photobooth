@@ -333,10 +333,12 @@ def transfer_print_only(job_id):
     try:
         from remote_transfer import send_images_to_linux
         
-        # Modify URL for print only endpoint
-        # LINUX_RECEIVER_URL is http://ip:5001/receive_workflow_data
-        # We want http://ip:5001/api/receive_print_only
-        print_url = CURRENT_LINUX_URL.replace('/receive_workflow_data', '/api/receive_print_only')
+        # Robust URL construction for the print-only endpoint
+        # Handle cases where CURRENT_LINUX_URL might or might not have a trailing slash
+        base_linux_url = CURRENT_LINUX_URL.split('/receive_workflow_data')[0].rstrip('/')
+        print_url = f"{base_linux_url}/receive_print_only"
+        
+        print(f"Transferring for print only to: {print_url}")
         
         # Run transfer in background
         def transfer_task():
@@ -347,6 +349,7 @@ def transfer_print_only(job_id):
             target_name = f"PRINT_{p_code}_{c_code}_{b_code}_{short_id}.png"
             ref_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bg2.jpeg")
             
+            print(f"Starting print-only background transfer for {job_id}...")
             success = send_images_to_linux(
                 input_file, 
                 output_file, 
@@ -356,9 +359,9 @@ def transfer_print_only(job_id):
                 reference_image_path=ref_path
             )
             if success:
-                print(f"[OK] Print-only transfer for job {job_id} successful")
+                print(f"✅ [OK] Print-only transfer successful for {job_id}")
             else:
-                print(f"[FAIL] Print-only transfer for job {job_id} failed")
+                print(f"❌ [FAIL] Print-only transfer failed for {job_id}")
 
         thread = threading.Thread(target=transfer_task)
         thread.start()
