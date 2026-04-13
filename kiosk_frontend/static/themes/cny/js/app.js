@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Reset buttons first
             const animateBtn = document.getElementById('animate-btn');
             if (animateBtn) {
-                animateBtn.innerHTML = '<span class="btn-text">Animate!</span><span class="btn-icon">🎬</span>';
+                animateBtn.innerHTML = '<span class="btn-text">Print & Animate</span><span class="btn-icon">🎬</span>';
                 animateBtn.disabled = false;
             }
             const printBtn = document.getElementById('print-btn');
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const transferPrintBtn = document.getElementById('transfer-print-btn');
             if (transferPrintBtn) {
-                transferPrintBtn.innerHTML = '<span class="btn-text">Send for Printing</span><span class="btn-icon">🖨️</span>';
+                transferPrintBtn.innerHTML = '<span class="btn-text">Print Only</span><span class="btn-icon">🖨️</span>';
                 transferPrintBtn.disabled = false;
                 transferPrintBtn.style.background = '';
                 transferPrintBtn.style.color = '';
@@ -274,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Reset buttons first
             const animateBtn = document.getElementById('animate-btn');
             if (animateBtn) {
-                animateBtn.innerHTML = '<span class="btn-text">Animate!</span><span class="btn-icon">🎬</span>';
+                animateBtn.innerHTML = '<span class="btn-text">Print & Animate</span><span class="btn-icon">🎬</span>';
                 animateBtn.disabled = false;
             }
             const printBtn = document.getElementById('print-btn');
@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const transferPrintBtn = document.getElementById('transfer-print-btn');
             if (transferPrintBtn) {
-                transferPrintBtn.innerHTML = '<span class="btn-text">Send for Printing</span><span class="btn-icon">🖨️</span>';
+                transferPrintBtn.innerHTML = '<span class="btn-text">Print Only</span><span class="btn-icon">🖨️</span>';
                 transferPrintBtn.disabled = false;
                 transferPrintBtn.style.background = '';
                 transferPrintBtn.style.color = '';
