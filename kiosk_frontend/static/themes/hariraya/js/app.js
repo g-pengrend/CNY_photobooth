@@ -30,9 +30,7 @@ function pollStatus(jobId) {
 
             if (status.status === 'completed') {
                 clearInterval(pollInterval);
-                showRevealButton(() => {
-                    displaySuccessImage(status.image);
-                });
+                displaySuccessImage(status.image);
             } else if (status.status === 'failed') {
                 clearInterval(pollInterval);
                 displayError(status.error || 'Processing failed');
@@ -189,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const printBtn = document.getElementById('print-btn');
             if (printBtn) {
-                printBtn.innerHTML = '<span class="btn-text">Print</span><span class="btn-icon">🖨️</span>';
+                printBtn.innerHTML = '<span class="btn-text">TBC</span><span class="btn-icon"></span>';
                 printBtn.disabled = true;
                 printBtn.style.opacity = '0.5';
             }
@@ -281,8 +279,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const printBtn = document.getElementById('print-btn');
             if (printBtn) {
-                printBtn.innerHTML = '<span class="btn-text">Print</span><span class="btn-icon">🖨️</span>';
-                printBtn.disabled = false;
+                printBtn.innerHTML = '<span class="btn-text">TBC</span><span class="btn-icon"></span>';
+                printBtn.disabled = true;
+                printBtn.style.opacity = '0.5';
+            }
+            const transferPrintBtn = document.getElementById('transfer-print-btn');
+            if (transferPrintBtn) {
+                transferPrintBtn.innerHTML = '<span class="btn-text">Send for Printing</span><span class="btn-icon">🖨️</span>';
+                transferPrintBtn.disabled = false;
+                transferPrintBtn.style.background = '';
+                transferPrintBtn.style.color = '';
+                transferPrintBtn.style.border = '';
             }
 
             // Show result screen with loading state

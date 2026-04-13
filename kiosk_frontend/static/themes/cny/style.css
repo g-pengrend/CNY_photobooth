@@ -869,8 +869,9 @@ body::before {
 
 .result-actions .btn {
     flex: 1;
-    min-width: 150px;
-    max-width: 200px;
+    min-width: 160px;
+    max-width: 280px;
+    padding: 1rem 1.5rem;
 }
 
 .gender-selection {
@@ -1686,6 +1687,25 @@ body::before {
     .guide-text {
         width: 85%;
         font-size: 1.2rem;
+    }
+
+    .result-actions, .camera-controls, .preview-actions {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: var(--spacing-sm);
+    }
+
+    .result-actions .btn, .camera-controls .btn, .preview-actions .btn {
+        width: 100% !important;
+        max-width: 450px !important;
+        min-width: unset !important;
+        padding: 1.2rem 1rem !important;
+        font-size: 1.2rem !important;
+    }
+    
+    .result-disclaimer {
+        padding: var(--spacing-md);
+        margin: var(--spacing-md) auto;
     }
 }
 
