@@ -464,19 +464,34 @@ def print_image(job_id):
     def run_print_task(path):
         try:
             current_os = platform.system()
-            print(f"🖨️ Printing [{current_os}]: {path}")
+            print(f"🖨️  Initiating print job [{current_os}]: {path}")
             
             if current_os == "Windows":
-                # Windows 'print' verb
                 os.startfile(path, "print")
+                print(f"✅ Windows print verb called for: {path}")
             else:
-                # Linux 'lp' command
-                # Note: You may need to specify a printer with -d <printer_name>
-                subprocess.run(['lp', path], check=True)
+                # Linux: Try lp first, then lpr as fallback
+                # Targeting G500USB specifically
+                print(f"🔍 Attempting to print to G500USB...")
                 
-            print(f"✅ Print job sent for: {path}")
+                # We use capture_output to see why it might be failing
+                cmd = ['lp', '-d', 'G500USB', path]
+                result = subprocess.run(cmd, capture_output=True, text=True)
+                
+                if result.returncode == 0:
+                    print(f"✅ Print job successfully queued: {result.stdout.strip()}")
+                else:
+                    print(f"⚠️  'lp' failed, trying 'lpr' fallback...")
+                    result_lpr = subprocess.run(['lpr', '-P', 'G500USB', path], capture_output=True, text=True)
+                    if result_lpr.returncode == 0:
+                        print(f"✅ Print job sent via lpr fallback.")
+                    else:
+                        print(f"❌ Both lp and lpr failed.")
+                        print(f"   lp error: {result.stderr.strip()}")
+                        print(f"   lpr error: {result_lpr.stderr.strip()}")
+                
         except Exception as e:
-            print(f"❌ Print failed: {e}")
+            print(f"❌ Print logic exception: {e}")
 
     # Run in background thread
     thread = threading.Thread(target=run_print_task, args=(image_path,), daemon=True)
