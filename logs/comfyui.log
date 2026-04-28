@@ -1,0 +1,168 @@
+comfy-aimdo failed to load: /home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/comfy_aimdo/aimdo.so: cannot open shared object file: No such file or directory
+NOTE: comfy-aimdo is currently only support for Nvidia GPUs
+[ComfyUI-Manager] Using uv as Python module for pip operations.
+Using Python 3.13.11 environment at: /home/ai-cc/miniconda3/envs/comfyui
+[START] Security scan
+[DONE] Security scan
+** ComfyUI startup time: 2026-04-16 15:07:51.640
+** Platform: Linux
+** Python version: 3.13.11 | packaged by Anaconda, Inc. | (main, Dec 10 2025, 21:29:12) [GCC 14.3.0]
+** Python executable: /home/ai-cc/miniconda3/envs/comfyui/bin/python
+** ComfyUI Path: /home/ai-cc/Documents/projects/ComfyUI
+** ComfyUI Base Folder Path: /home/ai-cc/Documents/projects/ComfyUI
+** User directory: /home/ai-cc/Documents/projects/ComfyUI/user
+** ComfyUI-Manager config path: /home/ai-cc/Documents/projects/ComfyUI/user/__manager/config.ini
+** Log path: /home/ai-cc/Documents/projects/ComfyUI/user/comfyui.log
+Using Python 3.13.11 environment at: /home/ai-cc/miniconda3/envs/comfyui
+Using Python 3.13.11 environment at: /home/ai-cc/miniconda3/envs/comfyui
+[PRE] ComfyUI-Manager
+
+Prestartup times for custom nodes:
+   0.0 seconds: /home/ai-cc/Documents/projects/ComfyUI/custom_nodes/rgthree-comfy
+   0.0 seconds: /home/ai-cc/Documents/projects/ComfyUI/custom_nodes/comfyui-easy-use
+
+Found comfy_kitchen backend triton: {'available': True, 'disabled': True, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8']}
+Found comfy_kitchen backend eager: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_mxfp8', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_mxfp8', 'scaled_mm_nvfp4']}
+Found comfy_kitchen backend cuda: {'available': True, 'disabled': False, 'unavailable_reason': None, 'capabilities': ['apply_rope', 'apply_rope1', 'dequantize_nvfp4', 'dequantize_per_tensor_fp8', 'quantize_mxfp8', 'quantize_nvfp4', 'quantize_per_tensor_fp8', 'scaled_mm_nvfp4']}
+Checkpoint files will always be loaded safely.
+/home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/torch/cuda/__init__.py:435: UserWarning: 
+    Found GPU0 NVIDIA GB10 which is of cuda capability 12.1.
+    Minimum and Maximum cuda capability supported by this version of PyTorch is
+    (8.0) - (12.0)
+    
+  queued_call()
+Total VRAM 122503 MB, total RAM 122503 MB
+pytorch version: 2.10.0+cu130
+Set vram state to: NORMAL_VRAM
+Device: cuda:0 NVIDIA GB10 : cudaMallocAsync
+Using async weight offloading with 2 streams
+Enabled pinned memory 110252.0
+Using pytorch attention
+No working comfy-aimdo install detected. DynamicVRAM support disabled. Falling back to legacy ModelPatcher. VRAM estimates may be unreliable especially on Windows
+Python version: 3.13.11 | packaged by Anaconda, Inc. | (main, Dec 10 2025, 21:29:12) [GCC 14.3.0]
+ComfyUI version: 0.19.1
+comfy-aimdo version: 0.2.12
+comfy-kitchen version: 0.2.8
+ComfyUI frontend version: 1.42.11
+[Prompt Server] web root: /home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/comfyui_frontend_package/static
+Asset seeder disabled
+[START] ComfyUI-Manager
+[ComfyUI-Manager] network_mode: public
+[ComfyUI-Manager] The matrix sharing feature has been disabled because the `matrix-nio` dependency is not installed.
+	To use this feature, please run the following command:
+	/home/ai-cc/miniconda3/envs/comfyui/bin/python -m pip install matrix-nio
+
+[34m[ComfyUI-Easy-Use] server: [0mv1.3.6 [92mLoaded[0m
+[34m[ComfyUI-Easy-Use] web root: [0m/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/comfyui-easy-use/web_version/v2 [92mLoaded[0m
+Traceback (most recent call last):
+  File "/home/ai-cc/Documents/projects/ComfyUI/nodes.py", line 2227, in load_custom_node
+    module_spec.loader.exec_module(module)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 1023, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/comfyui-reactor/__init__.py", line 23, in <module>
+    from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/comfyui-reactor/nodes.py", line 17, in <module>
+    from insightface.app.common import Face
+  File "/home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/insightface/__init__.py", line 16, in <module>
+    from . import model_zoo
+  File "/home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/insightface/model_zoo/__init__.py", line 1, in <module>
+    from .model_zoo import get_model
+  File "/home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/insightface/model_zoo/model_zoo.py", line 11, in <module>
+    from .arcface_onnx import *
+  File "/home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/insightface/model_zoo/arcface_onnx.py", line 10, in <module>
+    import onnx
+  File "/home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/onnx/__init__.py", line 131, in <module>
+    from onnx import (
+    ...<12 lines>...
+    )
+  File "/home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/onnx/compose.py", line 8, in <module>
+    from onnx import (
+    ...<7 lines>...
+    )
+  File "/home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/onnx/helper.py", line 21, in <module>
+    from onnx import _mapping, defs, subbyte
+  File "/home/ai-cc/miniconda3/envs/comfyui/lib/python3.13/site-packages/onnx/_mapping.py", line 104, in <module>
+    np.dtype(ml_dtypes.float4_e2m1fn),
+             ^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'ml_dtypes' has no attribute 'float4_e2m1fn'. Did you mean: 'float8_e4m3fn'?
+
+Cannot import /home/ai-cc/Documents/projects/ComfyUI/custom_nodes/comfyui-reactor module for custom nodes: module 'ml_dtypes' has no attribute 'float4_e2m1fn'
+======================================== ComfyUI-nunchaku Initialization ========================================
+Nunchaku version: Package 'nunchaku' not found.
+ComfyUI-nunchaku version: 1.0.1
+ComfyUI-nunchaku 1.0.1 is not compatible with nunchaku Package 'nunchaku' not found.. Please update nunchaku to a supported version in ['v1.0.0'].
+Node `NunchakuFluxDiTLoader` import failed:
+Traceback (most recent call last):
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/__init__.py", line 31, in <module>
+    from .nodes.models.flux import NunchakuFluxDiTLoader
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/nodes/models/flux.py", line 18, in <module>
+    from nunchaku import NunchakuFluxTransformer2dModel
+ModuleNotFoundError: No module named 'nunchaku'
+Node `NunchakuQwenImageDiTLoader` import failed:
+Traceback (most recent call last):
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/__init__.py", line 38, in <module>
+    from .nodes.models.qwenimage import NunchakuQwenImageDiTLoader
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/nodes/models/qwenimage.py", line 14, in <module>
+    from nunchaku.utils import check_hardware_compatibility, get_gpu_memory, get_precision_from_quantization_config
+ModuleNotFoundError: No module named 'nunchaku'
+Nodes `NunchakuFluxLoraLoader` and `NunchakuFluxLoraStack` import failed:
+Traceback (most recent call last):
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/__init__.py", line 45, in <module>
+    from .nodes.lora.flux import NunchakuFluxLoraLoader, NunchakuFluxLoraStack
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/nodes/lora/flux.py", line 12, in <module>
+    from nunchaku.lora.flux import to_diffusers
+ModuleNotFoundError: No module named 'nunchaku'
+Nodes `NunchakuTextEncoderLoader` and `NunchakuTextEncoderLoaderV2` import failed:
+Traceback (most recent call last):
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/__init__.py", line 54, in <module>
+    from .nodes.models.text_encoder import NunchakuTextEncoderLoader, NunchakuTextEncoderLoaderV2
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/nodes/models/text_encoder.py", line 17, in <module>
+    from nunchaku import NunchakuT5EncoderModel
+ModuleNotFoundError: No module named 'nunchaku'
+Nodes `NunchakuPulidApply`,`NunchakuPulidLoader`, `NunchakuPuLIDLoaderV2` and `NunchakuFluxPuLIDApplyV2` import failed:
+Traceback (most recent call last):
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/__init__.py", line 69, in <module>
+    from .nodes.models.pulid import (
+    ...<4 lines>...
+    )
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/nodes/models/pulid.py", line 21, in <module>
+    from nunchaku.models.pulid.pulid_forward import pulid_forward
+ModuleNotFoundError: No module named 'nunchaku'
+Nodes `NunchakuFluxIPAdapterApply` and `NunchakuIPAdapterLoader` import failed:
+Traceback (most recent call last):
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/__init__.py", line 86, in <module>
+    from .nodes.models.ipadapter import NunchakuFluxIPAdapterApply, NunchakuIPAdapterLoader
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/nodes/models/ipadapter.py", line 14, in <module>
+    from nunchaku.models.ip_adapter.diffusers_adapters import apply_IPA_on_pipe
+ModuleNotFoundError: No module named 'nunchaku'
+Node `NunchakuModelMerger` import failed:
+Traceback (most recent call last):
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/__init__.py", line 94, in <module>
+    from .nodes.tools.merge_safetensors import NunchakuModelMerger
+  File "/home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku/nodes/tools/merge_safetensors.py", line 11, in <module>
+    from nunchaku.merge_safetensors import merge_safetensors
+ModuleNotFoundError: No module named 'nunchaku'
+=================================================================================================================
+
+[92m[rgthree-comfy] Loaded 48 fantastic nodes. 🎉[0m
+
+[33m[rgthree-comfy] ComfyUI's new Node 2.0 rendering may be incompatible with some rgthree-comfy nodes and features, breaking some rendering as well as losing the ability to access a node's properties (a vital part of many nodes). It also appears to run MUCH more slowly spiking CPU usage and causing jankiness and unresponsiveness, especially with large workflows. Personally I am not planning to use the new Nodes 2.0 and, unfortunately, am not able to invest the time to investigate and overhaul rgthree-comfy where needed. If you have issues when Nodes 2.0 is enabled, I'd urge you to switch it off as well and join me in hoping ComfyUI is not planning to deprecate the existing, stable canvas rendering all together.
+[0m
+
+Import times for custom nodes:
+   0.0 seconds: /home/ai-cc/Documents/projects/ComfyUI/custom_nodes/websocket_image_save.py
+   0.0 seconds: /home/ai-cc/Documents/projects/ComfyUI/custom_nodes/rgthree-comfy
+   0.0 seconds (IMPORT FAILED): /home/ai-cc/Documents/projects/ComfyUI/custom_nodes/comfyui-reactor
+   0.0 seconds: /home/ai-cc/Documents/projects/ComfyUI/custom_nodes/ComfyUI-nunchaku
+   0.6 seconds: /home/ai-cc/Documents/projects/ComfyUI/custom_nodes/comfyui-easy-use
+
+Context impl SQLiteImpl.
+Will assume non-transactional DDL.
+Starting server
+
+To see the GUI go to: http://127.0.0.1:8188
+FETCH ComfyRegistry Data [DONE]
+[ComfyUI-Manager] default cache updated: https://api.comfy.org/nodes
+FETCH DATA from: /home/ai-cc/Documents/projects/ComfyUI/user/__manager/cache/1514988643_custom-node-list.json [DONE]
+[ComfyUI-Manager] All startup tasks have been completed.
