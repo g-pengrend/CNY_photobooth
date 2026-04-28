@@ -12,6 +12,22 @@ import os
 import platform
 
 # ============================================================
+# UTILITIES
+# ============================================================
+def get_local_ip():
+    """Returns the local IP address of this machine."""
+    import socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('10.255.255.255', 1)) 
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
+# ============================================================
 # DEPLOYMENT MODE 
 # ============================================================
 # 'local'  → Everything on one Windows machine (testing)
@@ -38,7 +54,9 @@ PROFILES = {
     },
     "remote": {
         # Receiver runs on the DGX / Linux machine
-        "LINUX_RECEIVER_URL": "http://172.20.162.63:5001/receive_workflow_data",
+        # NOTE: This IP is used by the WINDOWS Kiosk to find the Linux machine.
+        # You can override this by setting the RECEIVER_IP environment variable.
+        "LINUX_RECEIVER_URL": f"http://{os.environ.get('RECEIVER_IP', '172.20.162.63')}:5001/receive_workflow_data",
         
         # ComfyUI output on Linux
         "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output",
@@ -72,10 +90,22 @@ COMFY_SERVER_ADDRESS = _cfg["COMFY_SERVER_ADDRESS"]
 
 def print_config():
     """Print active configuration (call at startup for visibility)."""
+    current_ip = get_local_ip()
+    is_linux = platform.system() == "Linux"
+    
     print(f"{'='*50}")
     print(f"  [CONFIG] DEPLOY_MODE: {DEPLOY_MODE.upper()}")
     print(f"     Platform:         {platform.system()}")
-    print(f"     Receiver URL:     {LINUX_RECEIVER_URL}")
+    
+    if is_linux and DEPLOY_MODE == "remote":
+        # On the receiver side, show the ACTUAL local IP detected
+        print(f"     Receiver IP:      {current_ip}")
+        print(f"     Status:           Awaiting data on port 5001")
+    else:
+        # On Windows or Local mode, show the configured Target URL
+        print(f"     Target Receiver:  {LINUX_RECEIVER_URL}")
+        
     print(f"     ComfyUI Output:   {COMFY_OUTPUT_DIR}")
     print(f"     ComfyUI Server:   {COMFY_SERVER_ADDRESS}")
     print(f"{'='*50}")
+

@@ -13,7 +13,7 @@ from flask import Flask, request, jsonify, render_template, send_from_directory,
 from werkzeug.utils import secure_filename
 import platform
 import subprocess
-from config import COMFY_OUTPUT_DIR, COMFY_SERVER_ADDRESS, print_config
+from config import COMFY_OUTPUT_DIR, COMFY_SERVER_ADDRESS, print_config, get_local_ip
 
 # --- Configuration ---
 LISTEN_PORT = 5001
@@ -269,18 +269,7 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
         print(f"❌ Error preparing workflow: {e}")
         return False
 
-# --- Helper to get Local IP ---
-def get_local_ip():
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # Doesn't have to be reachable
-        s.connect(('10.255.255.255', 1)) 
-        IP = s.getsockname()[0]
-    except Exception:
-        IP = '127.0.0.1'
-    finally:
-        s.close()
-    return IP
+# get_local_ip is now imported from config.py
 
 # --- Flask Routes ---
 

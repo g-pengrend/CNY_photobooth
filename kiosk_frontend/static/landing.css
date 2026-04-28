@@ -458,6 +458,113 @@ body {
     letter-spacing: 0.5px;
 }
 
+/* Settings Gear & Modal */
+#settings-trigger-btn {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: all 0.3s ease;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+#settings-trigger-btn:hover {
+    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+}
+
+#network-config-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(10, 10, 15, 0.95);
+    padding: 3rem;
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 2000;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    color: #fff;
+    width: 90%;
+    max-width: 500px;
+}
+
+#network-config-modal h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+#network-config-modal p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+#linux-url-input {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+    text-align: center;
+    font-family: inherit;
+}
+
+#linux-url-input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-btn {
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.modal-btn-primary {
+    background: #fff;
+    color: #000;
+}
+
+.modal-btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.modal-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .page-wrapper {

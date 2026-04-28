@@ -130,6 +130,89 @@
             <p>SEIT 4D Vision Studio &mdash; Powered by AI</p>
         </footer>
     </div>
+    <!-- Settings Gear (Top Right) -->
+    <button id="settings-trigger-btn" title="System Settings">⚙️</button>
+
+    <!-- Network Config Modal -->
+    <div id="network-config-modal">
+        <h3>System Configuration</h3>
+        <p>Set the Linux Receiver IP address and port.</p>
+        <input type="text" id="linux-url-input" placeholder="172.20.162.63:5001">
+        <div class="modal-actions">
+            <button id="cancel-network-btn" class="modal-btn modal-btn-secondary">Cancel</button>
+            <button id="save-network-btn" class="modal-btn modal-btn-primary">Save Changes</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const settingsBtn = document.getElementById('settings-trigger-btn');
+            const settingsModal = document.getElementById('network-config-modal');
+            const saveNetworkBtn = document.getElementById('save-network-btn');
+            const cancelNetworkBtn = document.getElementById('cancel-network-btn');
+            const linuxUrlInput = document.getElementById('linux-url-input');
+
+            // Open Modal
+            settingsBtn.addEventListener('click', async () => {
+                settingsModal.style.display = 'block';
+                try {
+                    const res = await fetch('/api/settings/linux-url');
+                    const data = await res.json();
+                    if (data.url) {
+                        // Simplify for display: remove http:// and endpoint path
+                        let displayUrl = data.url.replace(/^https?:\/\//, '').replace(/\/receive_workflow_data\/?$/, '');
+                        linuxUrlInput.value = displayUrl;
+                    }
+                } catch (e) {
+                    console.error("Failed to fetch current URL", e);
+                }
+            });
+
+            // Close Modal
+            cancelNetworkBtn.addEventListener('click', () => {
+                settingsModal.style.display = 'none';
+            });
+
+            // Save URL
+            saveNetworkBtn.addEventListener('click', async () => {
+                let inputVal = linuxUrlInput.value.trim();
+                if (!inputVal) return;
+
+                // Auto-format URL
+                if (!inputVal.startsWith('http://') && !inputVal.startsWith('https://')) {
+                    inputVal = 'http://' + inputVal;
+                }
+                if (!inputVal.includes('/receive_workflow_data')) {
+                    inputVal = inputVal.replace(/\/+$/, '') + '/receive_workflow_data';
+                }
+
+                try {
+                    const res = await fetch('/api/settings/linux-url', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: inputVal })
+                    });
+
+                    if (res.ok) {
+                        alert("Linux Receiver URL updated successfully!");
+                        settingsModal.style.display = 'none';
+                    } else {
+                        alert("Failed to update URL");
+                    }
+                } catch (e) {
+                    console.error("Error saving URL", e);
+                    alert("Error saving URL");
+                }
+            });
+
+            // Close on click outside
+            window.addEventListener('click', (e) => {
+                if (e.target === settingsModal) {
+                    settingsModal.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
