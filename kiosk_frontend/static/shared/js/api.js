@@ -1,7 +1,8 @@
 export async function uploadAndProcess(photoBlob, selections) {
     const formData = new FormData();
     const themeMatch = window.location.pathname.match(/\/([^\/]+)/);
-    const apiTheme = (themeMatch && themeMatch[1] === 'hariraya') ? 'hariraya' : 'cny';
+    const validThemes = ['cny', 'hariraya', 'uits', 'deepavali'];
+    const apiTheme = (themeMatch && validThemes.includes(themeMatch[1])) ? themeMatch[1] : 'cny';
     
     formData.append('theme', selections.theme || apiTheme);
     formData.append('image', photoBlob, 'photo.jpg');

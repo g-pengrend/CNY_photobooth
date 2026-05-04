@@ -193,9 +193,7 @@ def get_pure_facial_number(frame, theme="cny"):
     visual_data_uri = f"data:image/jpeg;base64,{visual_b64}"
     
     # Create measurements dict
-    if theme == "hariraya":
-        measurements = {}
-    else:
+    if theme == "cny":
         measurements = {
             "Symmetry Index": f"{int((1 - min(1, (lr_asymmetry + tb_asymmetry))) * 100)}%",
             "Texture Complexity": f"{texture_complexity:.2f}",
@@ -205,6 +203,8 @@ def get_pure_facial_number(frame, theme="cny"):
             "Harmonic Resonance": f"{abs(angular_momentum):.2f}",
             "visual_data_uri": visual_data_uri
         }
+    else:
+        measurements = {}
 
     return f"{lucky_number:04d}", gradient_map, face_crop, measurements
 

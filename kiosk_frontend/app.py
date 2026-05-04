@@ -101,6 +101,12 @@ def deepavali_theme():
     return send_from_directory(os.path.join(app.static_folder, 'themes', 'deepavali'), 'index.html')
 
 
+@app.route('/uits')
+def uits_theme():
+    """Serve the UITS (Black & Gold Gala) experience"""
+    return send_from_directory(os.path.join(app.static_folder, 'themes', 'uits'), 'index.html')
+
+
 @app.route('/api/process', methods=['POST'])
 def process():
     """Handle image upload and start processing"""

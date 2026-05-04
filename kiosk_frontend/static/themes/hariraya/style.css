@@ -1325,24 +1325,26 @@ body::before {
         margin: 0 auto;
     }
 
-    /* Stack selection grids on mobile */
+    /* Stack selection grids on mobile & enlarge texts for readability */
     .clothes-grid,
     .pose-grid,
     .background-grid {
         grid-template-columns: 1fr;
-        gap: var(--spacing-md);
+        gap: 1.5rem;
     }
 
     .selection-card {
-        padding: var(--spacing-md);
+        padding: 1.5rem;
+        min-height: 180px;
     }
 
     .card-title {
-        font-size: 1rem;
+        font-size: 1.6rem;
     }
 
     .card-description {
-        font-size: 0.85rem;
+        font-size: 1.15rem;
+        line-height: 1.4;
     }
 
     /* Face guide adjustments for mobile */
@@ -1392,6 +1394,33 @@ body::before {
         min-width: unset !important;
         padding: 1.2rem 1rem !important;
         font-size: 1.2rem !important;
+    }
+
+    /* Stack selection grids explicitly on large portrait kiosks */
+    .clothes-grid,
+    .pose-grid,
+    .background-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .selection-card {
+        padding: 2rem;
+        min-height: 200px;
+    }
+
+    .card-title {
+        font-size: 1.8rem;
+    }
+
+    .card-description {
+        font-size: 1.3rem;
+        line-height: 1.4;
+    }
+
+    .category-badge {
+        font-size: 1.1rem;
+        padding: 8px 16px;
     }
 }
 

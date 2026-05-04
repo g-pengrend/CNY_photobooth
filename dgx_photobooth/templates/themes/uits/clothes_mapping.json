@@ -1,0 +1,22 @@
+{
+    "C01": {
+        "desc": "midnight-black silk with heavy gold-thread dragon-scale embroidery",
+        "lighting": "Midnight Blue and Gold"
+    },
+    "C02": {
+        "desc": "deep vermilion robe layered under a black iron chest plate",
+        "lighting": "Vermillion and Steel Grey"
+    },
+    "C03": {
+        "desc": "contemporary knee-length dress crafted from metallic gold floral brocade",
+        "lighting": "Warm Gold and Soft Red"
+    },
+    "C04": {
+        "desc": "multi-layered dress in moonlight silver and soft peach silk",
+        "lighting": "Silver and Peach"
+    },
+    "C05": {
+        "desc": "short, structured shoulder cape in crimson velvet with gold floral embroidery",
+        "lighting": "Crimson and Pink"
+    }
+}
