@@ -40,10 +40,32 @@ export const poses = [
         description: "Forward-pointing with captivating smile",
         prompt: "Facing the camera with a captivating smile, one arm extended forward with the index finger pointing directly at the viewer,",
         image: "/static/themes/uits/images/poses/charismatic-pointing.png"
-    }
+    },
+    {
+        code: "P07",
+        title: "Hands On Hip",
+        description: "Smiling and hands by the hip",
+        prompt: "Smiling and hands by the hip looking at the camera",
+        image: "/static/themes/uits/images/poses/smiling-hands-by-the-hip.png"
+    },
+    {
+        code: "P08",
+        title: "Confident Side Arm Pose",
+        description: "A powerful, structured stance with one hand on the waist",
+        prompt: "Facing the camera with one hand resting firmly on the waist, the other hand resting naturally at the side. Chin slightly up, projecting a smiling confidence,",
+        image: "/static/themes/uits/images/poses/confident-gaze.png"
+    },
+    {
+        code: "P09",
+        title: "Composed Festive Grace",
+        description: "A relaxed yet professional posture with lightly folded arms",
+        prompt: "Facing forward, looking at the camera, with a mesmerizing smile and a confident gaze, lightly folding arms,",
+        image: "/static/themes/uits/images/poses/confident-arm-fold.png"
+    },
 ];
 
 export const clothes = [
+    // Chinese Theme
     {
         category: "male",
         code: "C01",
@@ -84,6 +106,142 @@ export const clothes = [
         prompt: "A short, structured shoulder cape in crimson velvet with gold floral embroidery, worn over a simple sleek pink and gold dress featuring a woven peony jacquard pattern and metallic cloud-motif (祥云) accents throughout the fabric.",
         image: "/static/themes/uits/images/clothes/peony-jacquard-dress.png"
     },
+
+    // Malay Theme
+    {
+        category: "male",
+        code: "C06",
+        title: "Midnight Neo-Sampin",
+        description: "Asymmetrical iridescent silk with 3D geometric textures and a carbon-fiber style songket",
+        prompt: "An avant-garde modern Malay ensemble featuring an asymmetrical long-line tunic in iridescent midnight-blue silk. The fabric has a 3D geometric laser-cut texture that catches the light. Paired with ultra-slim black tailored trousers. A New Age Sampin wrapped around the waist is made of silver-on-black geometric carbon-fiber songket,",
+        image: "/static/themes/uits/images/clothes/midnight-blue-newage-ensemble.png"
+    },
+    {
+        category: "male",
+        code: "C07",
+        title: "Emerald Valentino Cekak Musang",
+        description: "Premium matte-finish dull satin paired with a gold-threaded Songket Sampin and traditional velvet Songkok",
+        prompt: "A high-end Baju Melayu Cekak Musang in premium Valentino dull satin, featuring a stiff high collar with five gold jeweled studs (butang). The fabric has a subtle, elegant matte sheen with soft, realistic folds. Paired a hand-woven gold-threaded Songket Sampin wrapped neatly around the waist. A traditional black velvet Songkok is worn on the head,",
+        image: "/static/themes/uits/images/clothes/premium-baju-melayu-cekak-musang.png"
+    },
+    {
+        category: "female",
+        code: "C08",
+        title: "Peranakan Phoenix Kebaya",
+        description: "Intricate Swiss Voile with vibrant free-motion embroidery, antique gold brooches, and hand-drawn Batik",
+        prompt: "A breathtakingly intricate Peranakan Nyonya Kebaya crafted from sheer, turquoise Swiss Voile. The sharply tailored tunic is completely adorned with dense, vibrant free-motion embroidery in multicolored silk threads, featuring elaborate peony and phoenix motifs. The edges of the V-neckline, front opening, and scalloped hem exhibit intricate Kerawang cut-out lacework. It is fastened by a set of three antique gold connected brooches set with intan diamond accents. Paired with a contrasting, rich brown hand-drawn Batik Lasem skirt featuring classic Parang patterns,",
+        image: "/static/themes/uits/images/clothes/turqoise-swiss-voile-nyonya-kebaya.png"
+    },
+    {
+        category: "female",
+        code: "C09",
+        title: "Champagne Emerald Kebaya",
+        description: "Floral jacquard brocade with a triple-tiered gold brooch and metallic emerald songket",
+        prompt: "A sophisticated Modern Kebaya Labuh in Champagne Gold floral jacquard brocade. The long, open-front tunic features a scalloped traditional embroidery border along the edges. It is fastened by a magnificent gold triple-tiered brooch. Paired with a contrasting deep emerald Songket skirt with gold metallic weave. The hijab is a soft chiffon silk shawl draped gracefully in a flowy style,",
+        image: "/static/themes/uits/images/clothes/champagne-gold-kabaya-labuh.png"
+    },
+
+    // Indian Theme
+    {
+        category: "female",
+        code: "C10",
+        title: "Deep Royal Purple Anarkali Gown",
+        description: "Deep royal purple Anarkali gown with full-length flowy skirt, paired with a long sheer dupatta",
+        prompt: "Deep royal purple Anarkali gown with full-length flowy skirt, paired with a long sheer dupatta draped to one side. The bodice is heavily embroidered with intricate gold threadwork, floral and geometric patterns, and embellished borders. The sleeves are full-length with matching gold embroidery at the cuffs. The dupatta features a wide ornate gold embroidered border with delicate motifs scattered across the fabric.",
+        image: "/static/themes/uits/images/clothes/indian-purple-dress.png"
+    },
+    {
+        category: "female",
+        code: "C11",
+        title: "Royal Blue Saree",
+        description: "Royal blue silk saree, richly woven with intricate gold zari patterns",
+        prompt: "Royal blue silk saree, richly woven with intricate gold zari patterns, features traditional Indian motifs including floral medallions, paisley elements, and geometric lattice designs across the entire fabric. The pallu is heavily decorated with dense gold brocade work and ornate symmetrical patterns.",
+        image: "/static/themes/uits/images/clothes/indian-blue-dress.png"
+    },
+    {
+        category: "male",
+        code: "C12",
+        title: "Tiffany Blue Sherwani with mandarin collar",
+        description: "Rich tiffany blue sherwani outfit with a mandarin collar",
+        prompt: "Regal Tiffany blue silk sherwani, mandarin collar, heavily embroidered with metallic floral patterns on chest and hem. Structured tailored fit, ornate buttons, paired with slim white churidars.",
+        image: "/static/themes/uits/images/clothes/male-indian-blue.png"
+    },
+    {
+        category: "male",
+        code: "C13",
+        title: "Traditional rich royal purple kurta with a mandarin collar",
+        description: "Traditional rich royal purple kurta with a mandarin collar paired with white dhoti-style pants with soft gathered drape",
+        prompt: "Traditional rich royal purple kurta with a mandarin collar, straight knee-length silhouette, fine silver embroidery with small repeated motifs across the fabric, heavily embroidered placket and neckline with intricate detailing, smooth silk or cotton-silk blend fabric with a soft sheen, full sleeves with clean cuffs, paired with white dhoti-style pants with soft gathered drape, minimal yet elegant ethnic wear, refined festive style, high detail textile texture.",
+        image: "/static/themes/uits/images/clothes/male-indian-purple.png"
+    },
+
+    // Retro Theme
+    {
+        category: "female",
+        code: "C14",
+        title: "Retro Pink Halter Dress",
+        description: "Vintage halter dress fitted bodice with White lapel collar flared A-line skirt",
+        prompt: "A vintage-inspired halter dress, sleeveless, fitted bodice with white lapel collar, button details on the front, flared A-line skirt, elegant and feminine silhouette, smooth fabric texture, bright pink dress.",
+        image: "/static/themes/uits/images/clothes/pink-retro-dress.png"
+    },
+    {
+        category: "female",
+        code: "C15",
+        title: "Retro Blue White Stripe Dress",
+        description: "Vintage sleeveless dress light blue and white striped with chevron stripe pattern",
+        prompt: "Vintage-inspired sleeveless dress, light blue and white striped fabric, fitted bodice with chevron stripe pattern, thin white shoulder straps, high waist with a white belt, flared A-line skirt with soft pleats, 3/4-length, structured yet flowy fabric, subtle sheen.",
+        image: "/static/themes/uits/images/clothes/blue-retro-dress.png"
+    },
+    {
+        category: "male",
+        code: "C16",
+        title: "Retro Men Outfit with suspenders",
+        description: "Retro Shirt Rollup with Suspenders and slim tapered fit grey pant",
+        prompt: "Men white casual button-up shirt with open collar and rolled 3/4 sleeves, tailored high-waisted grey trousers with a slim tapered fit, brown leather suspenders, clean structured fabric, minimal wrinkles, elegant and modern style",
+        image: "/static/themes/uits/images/clothes/male-retro-suspender.png"
+    },
+    {
+        category: "male",
+        code: "C17",
+        title: "Retro men's knitted outfit",
+        description: "Men retro short sleeve knit polo with ribbed collar with beige pants",
+        prompt: "Men retro short sleeve knit polo with ribbed collar and sleeve cuffs in beige, vertical stripe pattern in cream, beige, dusty pink, red, and dark brown tones, soft knitted fabric texture, slightly fitted silhouette, paired with beige tailored trousers, clean minimal styling, modern vintage aesthetic",
+        image: "/static/themes/uits/images/clothes/male-retro-knitted.png"
+    },
+
+    // Formal Theme
+    {
+        category: "female",
+        code: "C18",
+        title: "Black and Cream Wrap Dress",
+        description: "Elegant sleeveless evening gown featuring a bold bicolor geometric wrap design in black and champagne cream",
+        prompt: "Elegant sleeveless evening gown featuring a bold bicolor geometric wrap design in black and champagne cream. V-neckline with structured shoulder straps, fitted bodice, and a crisscross draped silhouette. Smooth satin-finish fabric with a subtle sheen. Sophisticated, modern formal attire.",
+        image: "/static/themes/uits/images/clothes/black-cream-wrap-dress.png"
+    },
+    {
+        category: "female",
+        code: "C19",
+        title: "Gold and Blue Evening Gown",
+        description: "Evening gown with a sleek champagne-gold satin skirt and a bodice overlaid with delicate, light modern lace with blue and bronze sequins",
+        prompt: "Evening gown featuring a sleek champagne-gold satin skirt. The bodice is overlaid with delicate, light modern lace with blue and bronze sequins covering the chest, shoulders, and high neckline for a refined illusion effect.",
+        image: "/static/themes/uits/images/clothes/gold-and-blue-evening-gown.png"
+    },
+    {
+        category: "male",
+        code: "C20",
+        title: "Midnight Blue Tuxedo",
+        description: "A modern, tailored 3-piece tuxedo in deep midnight blue wool",
+        prompt: "A modern, tailored 3-piece tuxedo in deep midnight blue wool. Features a single-breasted jacket with a sleek black satin shawl lapel, a matching slim-cut waistcoat, and flat-front trousers. Pared with a crisp white dress shirt and a black silk bow tie.",
+        image: "/static/themes/uits/images/clothes/midnight-blue-tuxedo.png"
+    },
+    {
+        category: "male",
+        code: "C21",
+        title: "Black Suit with White Dress Shirt and black necktie",
+        description: "A modern, slim-fit black suit with a slight sheen",
+        prompt: "A modern, slim-fit black suit in premium wool with a slight sheen. Features a two-button jacket with narrow notch lapels and matching tailored trousers. Paired with a crisp, high-thread-count white dress shirt and a slim black silk necktie.",
+        image: "/static/themes/uits/images/clothes/black-suit-white-shirt.png"
+    }
 ];
 
 export const backgrounds = [

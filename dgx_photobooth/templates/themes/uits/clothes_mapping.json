@@ -18,5 +18,69 @@
     "C05": {
         "desc": "short, structured shoulder cape in crimson velvet with gold floral embroidery",
         "lighting": "Crimson and Pink"
+    },
+    "C06": {
+        "desc": "asymmetrical iridescent silk with 3D geometric textures",
+        "lighting": "Midnight Blue and Silver"
+    },
+    "C07": {
+        "desc": "premium matte-finish satin",
+        "lighting": "Emerald Green and Gold"
+    },
+    "C08": {
+        "desc": "intricate Swiss Voile and hand-drawn Batik",
+        "lighting": "Turquoise and Antique Gold"
+    },
+    "C09": {
+        "desc": "floral jacquard brocade and metallic emerald songket",
+        "lighting": "Champagne Gold and Emerald"
+    },
+    "C10": {
+        "desc": "deep royal purple Anarkali gown with full-length flowy skirt, paired with a long sheer dupatta",
+        "lighting": "Purple and Gold"
+    },
+    "C11": {
+        "desc": "royal blue silk saree, richly woven with intricate gold zari patterns, features traditional Indian motifs including floral medallions, paisley elements, and geometric lattice designs across the entire fabric",
+        "lighting": "Royal Blue and Gold"
+    },
+    "C12": {
+        "desc": "rich tiffany blue sherwani outfit with a mandarin collar",
+        "lighting": "Tiffany Blue and White"
+    },
+    "C13": {
+        "desc": "Traditional rich royal purple kurta with a mandarin collar paired with white dhoti-style pants",
+        "lighting": "Purple and White"
+    },
+    "C14": {
+        "desc": "vintage-inspired bright pink halter dress, sleeveless, fitted bodice with white lapel collar, button details on the front, flared A-line skirt",
+        "lighting": "Pink and White"
+    },
+    "C15": {
+        "desc": "vintage-inspired light blue and white striped sleeveless dress with chevron stripe pattern, fitted bodice, high waist with white belt",
+        "lighting": "Blue and White"
+    },
+    "C16": {
+        "desc": "Men white casual button-up shirt with open collar and rolled 3/4 sleeves, tailored high-waisted grey trousers with a slim tapered fit, brown leather suspenders",
+        "lighting": "Silver and White"
+    },
+    "C17": {
+        "desc": "Men retro short sleeve knit polo with ribbed collar and sleeve cuffs in beige, vertical stripe pattern in cream, beige, dusty pink, red, and dark brown tones, soft knitted fabric texture",
+        "lighting": "Beige and Warm Earth Tones"
+    },
+    "C18": {
+        "desc": "Elegant sleeveless evening gown featuring a bold bicolor geometric wrap design in black and champagne cream",
+        "lighting": "Golden and Cream"
+    },
+    "C19": {
+        "desc": "Evening gown featuring a sleek champagne-gold satin skirt. The bodice is overlaid with delicate, light modern lace with blue and bronze sequins",
+        "lighting": "Golden and Blue"
+    },
+    "C20": {
+        "desc": "A modern, tailored 3-piece tuxedo in deep midnight blue wool with a black satin shawl lapel, a matching slim-cut waistcoat, and flat-front trousers",
+        "lighting": "Blue and golden"
+    },
+    "C21": {
+        "desc": "A modern, slim-fit black suit in premium wool with a slight sheen. Features a two-button jacket with narrow notch lapels and matching tailored trousers",
+        "lighting": "white and Silver"
     }
 }
