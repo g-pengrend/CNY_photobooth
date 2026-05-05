@@ -6,6 +6,6 @@ MBEDIT-Phroot-LTX-i2v_FFLF_wf_vrs10.png
 /remote_received_files
 /kiosk_frontend/outputs
 /dgx_photobooth/remote_received_files
-dgx_photobooth/__pycache__/config.cpython-312.pyc
 dgx_photobooth/tunnel.log
-kiosk_frontend/__pycache__/config.cpython-312.pyc
+__pycache__/
+*.pyc
