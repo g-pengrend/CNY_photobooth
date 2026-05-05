@@ -254,10 +254,10 @@ export const backgrounds = [
     },
     {
         code: "B02",
-        title: "The Opulent Candlelit Ballroom",
-        description: "Opulent ballroom with crystal chandeliers and warm candlelight",
-        prompt: "An opulent, candlelit ballroom with dark, polished wood floors and a crystal chandelier. Soft, warm light from the candles and fixtures casts a glow on intricate gold molding and damask wallpaper. The air is slightly hazy, adding to the romantic and sophisticated atmosphere.",
-        image: "/static/themes/uits/images/backgrounds/the-opulent-candlelit-ballroom.png"
+        title: "The Grand Emerald Ballroom",
+        description: "A grand ballroom with rich emerald green velvet-textured walls",
+        prompt: "A grand ballroom featuring rich emerald green velvet-textured walls and dark mahogany flooring. Subtle, dim lighting from wall sconces creates deep shadows, while the ceiling molding is a matte charcoal gray.",
+        image: "/static/themes/uits/images/backgrounds/the-grand-emerald-ballroom.png"
     },
     {
         code: "B03",
@@ -268,10 +268,10 @@ export const backgrounds = [
     },
     {
         code: "B04",
-        title: "The Jade Emperor's Garden",
-        description: "Crystalline pond with gold-leaf trees",
-        prompt: "A courtyard featuring a frozen, crystalline koi pond and trees with leaves made of thin, translucent gold foil that chime in the wind.",
-        image: "/static/themes/uits/images/backgrounds/the-jade-emperors-garden.png"
+        title: "The Winter Courtyard",
+        description: "A minimalist winter courtyard at twilight with a frozen, jet-black obsidian pond",
+        prompt: "A minimalist winter western-style courtyard at twilight with a frozen, jet-black obsidian pond. The surrounding trees are crafted from hand-blown frosted glass and crystalline silver, catching the moonlight. The ground is a dark, wet slate that reflects the deep indigo sky.",
+        image: "/static/themes/uits/images/backgrounds/the-winter-courtyard.png"
     },
     {
         code: "B05",
@@ -298,7 +298,7 @@ export const backgrounds = [
         code: "B08",
         title: "The Ethereal Moonlit Blossom Forest",
         description: "Dreamy cherry blossom forest with glowing petals and floating spirit-lights",
-        prompt: "A moonlit forest of cherry blossom trees with luminous, pale-pink petals that glow from within. The ground is a soft carpet of fallen blossoms, and small, floating spirit-lights (will-o'-the-wisps) drift between the branches. A soft-focus, dreamy background with a deep indigo sky and a giant, silver full moon",
+        prompt: "A moonlit forest of cherry blossom trees with luminous, pale-pink petals that glow from within. The ground is a soft carpet of fallen blossoms, and small, floating spirit-lights (will-o'-the-wisps) drift between the branches. A soft-focus, dreamy background with a deep indigo sky and a giant, silver full moon.",
         image: "/static/themes/uits/images/backgrounds/the-ethereal-moonlit-blossom-forest.png"
     },
     {

@@ -35,7 +35,7 @@ export function renderSelections() {
     `);
 
     renderGrid('clothes-grid', clothes, (item) => `
-        <button class="selection-card" data-clothes="${escapeHtml(item.prompt)}" data-code="${item.code}">
+        <button class="selection-card" data-clothes="${escapeHtml(item.prompt)}" data-code="${item.code}" data-category="${item.category}">
             <span class="category-badge ${item.category}">${capitalize(item.category)}</span>
             <div class="card-content-wrapper">
                 <div class="card-thumbnail" onclick="event.stopPropagation(); expandImage('${item.image}')">

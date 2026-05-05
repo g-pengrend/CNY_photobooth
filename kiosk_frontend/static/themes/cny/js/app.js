@@ -302,6 +302,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             console.log('Selected gender:', state.selections.gender);
 
+            // Update clothes filter based on selection
+            const toggle = document.getElementById('gender-filter-toggle');
+            if (toggle) toggle.checked = true; // Default to checked
+            updateClothesFilter();
+
             // Proceed to settings screen
             showScreen('settings');
         });
@@ -360,6 +365,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Clothes Selection Handlers (Event Delegation)
+    function updateClothesFilter() {
+        const clothesGrid = document.querySelector('.clothes-grid');
+        const toggle = document.getElementById('gender-filter-toggle');
+        if (!clothesGrid || !toggle) return;
+        
+        clothesGrid.classList.remove('filter-male', 'filter-female');
+        if (toggle.checked && state.selections.gender) {
+            clothesGrid.classList.add(`filter-${state.selections.gender}`);
+        }
+    }
+
+    const genderToggle = document.getElementById('gender-filter-toggle');
+    if (genderToggle) {
+        genderToggle.addEventListener('change', updateClothesFilter);
+    }
+
     document.getElementById('back-to-pose-btn').addEventListener('click', () => {
         showScreen('pose');
     });
