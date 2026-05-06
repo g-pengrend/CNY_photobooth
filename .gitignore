@@ -9,3 +9,4 @@ MBEDIT-Phroot-LTX-i2v_FFLF_wf_vrs10.png
 dgx_photobooth/tunnel.log
 __pycache__/
 *.pyc
+*tunnel.log
