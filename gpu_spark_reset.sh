@@ -7,7 +7,9 @@ pkill -9 python
 pkill -9 cloudflared
 
 # Shutdown MPS
-echo quit | nvidia-cuda-mps-control 2>/dev/null
+# Use timeout to prevent hanging if the daemon is totally locked
+timeout 3s bash -c "echo quit | nvidia-cuda-mps-control 2>/dev/null"
+echo "Note: You may be prompted for your password to kill the GPU daemon."
 sudo pkill -9 nvidia-cuda-mps
 sudo rm -rf /tmp/nvidia-mps /tmp/nvidia-log
 
