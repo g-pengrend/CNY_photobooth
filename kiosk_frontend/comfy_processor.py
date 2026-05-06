@@ -24,9 +24,13 @@ def update_workflow_with_image(workflow, image_path, gender="female", pose="", c
     base64_image = encode_image_to_base64(image_path)
     workflow["65"]["inputs"]["base64_data"] = base64_image
     
+    # New logic for gender_style
+    gender_style = "executive leading man" if gender.lower() == "male" else "charismatic k-pop idol"
+
     # Update prompt text with all variables
     current_text = workflow["45"]["inputs"]["text"]
     current_text = current_text.replace('"gender"', gender)
+    current_text = current_text.replace('"gender_style"', gender_style)
     current_text = current_text.replace('"pose"', pose)
     current_text = current_text.replace('"clothes_style"', clothes_style)
     current_text = current_text.replace('"background"', background)
@@ -171,9 +175,13 @@ def process_image(input_image_path, theme="cny", gender="female", pose="", cloth
         # Update the workflow with the input image and all selections
         workflow = update_workflow_with_image(workflow, input_image_path, gender, pose, clothes_style, background)
         workflow = update_workflow_with_lucky_number(workflow, enable_lucky_number, input_image_path)
+        
+        # Calculate gender_style for logging
+        gender_style = "manly asian built model" if gender.lower() == "male" else "charismatic k-pop idol"
+        
         print(f"Workflow updated with:")
         print(f"  - Input image")
-        print(f"  - Gender: {gender}")
+        print(f"  - Gender: {gender} ({gender_style})")
         print(f"  - Pose: {pose[:50]}..." if len(pose) > 50 else f"  - Pose: {pose}")
         print(f"  - Clothes: {clothes_style[:50]}..." if len(clothes_style) > 50 else f"  - Clothes: {clothes_style}")
         print(f"  - Background: {background[:50]}..." if len(background) > 50 else f"  - Background: {background}")
