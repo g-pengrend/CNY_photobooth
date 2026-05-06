@@ -18,7 +18,11 @@ cleanup() {
     echo "  CLEANING UP & RESETTING GPU TO DEFAULT"
     echo "=========================================="
     tmux kill-session -t $SESSION 2>/dev/null
-    echo quit | nvidia-cuda-mps-control 2>/dev/null
+    
+    # Use timeout to prevent hanging if the daemon is unresponsive
+    timeout 3s bash -c "echo quit | nvidia-cuda-mps-control 2>/dev/null"
+    
+    echo "Note: You may be prompted for your password to kill the GPU daemon."
     sudo pkill -9 nvidia-cuda-mps
     sudo rm -rf /tmp/nvidia-mps /tmp/nvidia-log
     sudo nvidia-smi -i 0 -c DEFAULT
