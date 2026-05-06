@@ -109,6 +109,20 @@ def uits_theme():
     return send_from_directory(os.path.join(app.static_folder, 'themes', 'uits'), 'index.html')
 
 
+@app.route('/api/uits/samples')
+def list_uits_samples():
+    """List images in the UITS samples directory"""
+    samples_dir = os.path.join(app.static_folder, 'themes', 'uits', 'images', 'samples')
+    if not os.path.exists(samples_dir):
+        return jsonify([])
+    
+    # Supported image extensions
+    valid_extensions = ('.png', '.jpg', '.jpeg', '.webp')
+    images = [f for f in os.listdir(samples_dir) if f.lower().endswith(valid_extensions)]
+    # Return full paths relative to static
+    return jsonify([f"/static/themes/uits/images/samples/{img}" for img in images])
+
+
 @app.route('/api/process', methods=['POST'])
 def process():
     """Handle image upload and start processing"""

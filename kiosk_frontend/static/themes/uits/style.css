@@ -110,6 +110,90 @@ body::before {
     will-change: transform, opacity;
 }
 
+/* Rolling Film Strip Styles */
+.film-strip-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-5deg); /* Slight tilt for aesthetic */
+    width: 150vw; /* Wider than screen to allow for rotation and movement */
+    height: 100vh;
+    overflow: hidden;
+    z-index: 2;
+    opacity: 0.25; /* Subtle background effect */
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+    filter: grayscale(0.5) contrast(1.2);
+}
+
+.film-strip-row {
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+}
+
+.film-strip-track {
+    display: flex;
+    gap: 30px;
+    white-space: nowrap;
+    padding: 10px 0;
+}
+
+.row-left .film-strip-track {
+    animation: roll-left 60s linear infinite;
+}
+
+.row-right .film-strip-track {
+    animation: roll-right 60s linear infinite;
+}
+
+@keyframes roll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes roll-right {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+}
+
+.film-item {
+    width: 280px;
+    height: 400px;
+    flex-shrink: 0;
+    background: #000;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Film Sprocket Holes Effect */
+.film-item::before, .film-item::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background-image: radial-gradient(circle, #222 30%, transparent 40%);
+    background-size: 30px 30px;
+    z-index: 2;
+}
+
+.film-item::before { top: 5px; }
+.film-item::after { bottom: 5px; }
+
+.film-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
 @keyframes pulse-glow {
 
     0%,

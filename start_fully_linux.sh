@@ -46,7 +46,7 @@ mkdir -p /tmp/nvidia-mps /tmp/nvidia-log
 # No sudo needed for mkdir if we just cleaned it, but let's be safe
 sudo chown -R $USER:$USER /tmp/nvidia-mps /tmp/nvidia-log
 
-sudo nvidia-smi -i 0 -c EXCLUSIVE_PROCESS
+sudo nvidia-smi -i 0 -c DEFAULT
 
 export CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps
 export CUDA_MPS_LOG_DIRECTORY=/tmp/nvidia-log
@@ -55,12 +55,11 @@ nvidia-cuda-mps-control -d
 echo "Waking up Blackwell GB10 Handshake..."
 source "$CONDA_PROFILE"
 conda activate comfy_spark
-# Force the server to spawn
-python -c "import torch; torch.cuda.init()" 2>/dev/null
-
 COUNTER=0
 until ps aux | grep -v grep | grep -q "nvidia-cuda-mps-server" || [ $COUNTER -eq 15 ]; do
   echo "Waiting for Blackwell handshake... ($((COUNTER*2))s)"
+  # Force the server to spawn by poking the GPU
+  python -c "import torch; torch.cuda.init()" 2>/dev/null || true
   sleep 2
   ((COUNTER++))
 done

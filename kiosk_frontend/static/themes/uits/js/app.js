@@ -43,8 +43,56 @@ function pollStatus(jobId) {
     }, 2000); // Poll every 2 seconds
 }
 
-// Event Handlers
+// Core Navigation
 document.addEventListener('DOMContentLoaded', () => {
+
+    // Initialize Rolling Film
+    async function initRollingFilm() {
+        try {
+            const response = await fetch('/api/uits/samples');
+            let images = await response.json();
+
+            // Fallback to clothes images if samples folder is empty
+            if (images.length === 0) {
+                images = [
+                    '/static/themes/uits/images/clothes/abyssal-phoenix-daopa.png',
+                    '/static/themes/uits/images/clothes/midnight-blue-tuxedo.png',
+                    '/static/themes/uits/images/clothes/golden-radiance-qipao.png',
+                    '/static/themes/uits/images/clothes/premium-baju-melayu-cekak-musang.png',
+                    '/static/themes/uits/images/clothes/black-cream-wrap-dress.png',
+                    '/static/themes/uits/images/clothes/male-indian-blue.png',
+                    '/static/themes/uits/images/clothes/gold-and-blue-evening-gown.png',
+                    '/static/themes/uits/images/clothes/midnight-blue-newage-ensemble.png'
+                ];
+            }
+
+            const leftTrack = document.getElementById('film-track-left');
+            const rightTrack = document.getElementById('film-track-right');
+
+            if (!leftTrack || !rightTrack) return;
+
+            // Split images between tracks
+            const half = Math.ceil(images.length / 2);
+            const leftImages = images.slice(0, half);
+            const rightImages = images.slice(half);
+
+            const createFilmItem = (src) => {
+                const div = document.createElement('div');
+                div.className = 'film-item';
+                div.innerHTML = `<img src="${src}" alt="Sample" onerror="this.parentElement.style.display='none'">`;
+                return div;
+            };
+
+            // Populate Tracks (Original + Duplicate for seamless loop)
+            [...leftImages, ...leftImages].forEach(src => leftTrack.appendChild(createFilmItem(src)));
+            [...rightImages, ...rightImages].forEach(src => rightTrack.appendChild(createFilmItem(src)));
+
+        } catch (error) {
+            console.error('Error initializing rolling film:', error);
+        }
+    }
+
+    initRollingFilm();
 
     // Render Dynamic Content
     renderSelections();
