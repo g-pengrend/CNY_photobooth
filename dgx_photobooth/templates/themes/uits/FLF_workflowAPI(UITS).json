@@ -1,311 +1,4 @@
 {
-  "6": {
-    "inputs": {
-      "text": "A seamless magical morph. The subject’s face remains clear, steady, and constant as the clothes condense into a \"style_type\". \"lighting\" light streams around the clothes and body, shaping the layered clothes without covering the features. The expression remains calm and focused as the scene pulls back to reveal the full outfit and the background. The face stays locked in sharp focus while the clothing and environment transition smoothly. High-quality VFX, Bloom & Glow VFX, Bioluminescenece VFX, Chromatic Abberation VFX, seamless transition.",
-      "clip": [
-        "38",
-        0
-      ]
-    },
-    "class_type": "CLIPTextEncode",
-    "_meta": {
-      "title": "CLIP Text Encode (Positive Prompt)"
-    }
-  },
-  "7": {
-    "inputs": {
-      "text": "angry, unhappy, sad, bored, static, cross-fade, dissolve, blurry, jittery",
-      "clip": [
-        "38",
-        0
-      ]
-    },
-    "class_type": "CLIPTextEncode",
-    "_meta": {
-      "title": "CLIP Text Encode (Negative Prompt)"
-    }
-  },
-  "8": {
-    "inputs": {
-      "samples": [
-        "58",
-        0
-      ],
-      "vae": [
-        "39",
-        0
-      ]
-    },
-    "class_type": "VAEDecode",
-    "_meta": {
-      "title": "VAE Decode"
-    }
-  },
-  "37": {
-    "inputs": {
-      "unet_name": "wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors",
-      "weight_dtype": "default"
-    },
-    "class_type": "UNETLoader",
-    "_meta": {
-      "title": "Load Diffusion Model"
-    }
-  },
-  "38": {
-    "inputs": {
-      "clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
-      "type": "wan",
-      "device": "default"
-    },
-    "class_type": "CLIPLoader",
-    "_meta": {
-      "title": "Load CLIP"
-    }
-  },
-  "39": {
-    "inputs": {
-      "vae_name": "wan_2.1_vae.safetensors"
-    },
-    "class_type": "VAELoader",
-    "_meta": {
-      "title": "Load VAE"
-    }
-  },
-  "54": {
-    "inputs": {
-      "shift": 5,
-      "model": [
-        "105",
-        0
-      ]
-    },
-    "class_type": "ModelSamplingSD3",
-    "_meta": {
-      "title": "ModelSamplingSD3"
-    }
-  },
-  "55": {
-    "inputs": {
-      "shift": 5,
-      "model": [
-        "92",
-        0
-      ]
-    },
-    "class_type": "ModelSamplingSD3",
-    "_meta": {
-      "title": "ModelSamplingSD3"
-    }
-  },
-  "56": {
-    "inputs": {
-      "unet_name": "wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors",
-      "weight_dtype": "default"
-    },
-    "class_type": "UNETLoader",
-    "_meta": {
-      "title": "Load Diffusion Model"
-    }
-  },
-  "57": {
-    "inputs": {
-      "add_noise": "enable",
-      "noise_seed": 794526381513853,
-      "control_after_generate": "fixed",
-      "steps": 4,
-      "cfg": 1,
-      "sampler_name": "euler",
-      "scheduler": "simple",
-      "start_at_step": 0,
-      "end_at_step": 2,
-      "return_with_leftover_noise": "enable",
-      "model": [
-        "54",
-        0
-      ],
-      "positive": [
-        "67",
-        0
-      ],
-      "negative": [
-        "67",
-        1
-      ],
-      "latent_image": [
-        "67",
-        2
-      ]
-    },
-    "class_type": "KSamplerAdvanced",
-    "_meta": {
-      "title": "KSampler (Advanced)"
-    }
-  },
-  "58": {
-    "inputs": {
-      "add_noise": "disable",
-      "noise_seed": 0,
-      "steps": 4,
-      "cfg": 1,
-      "sampler_name": "euler",
-      "scheduler": "simple",
-      "start_at_step": 2,
-      "end_at_step": 10000,
-      "return_with_leftover_noise": "disable",
-      "model": [
-        "55",
-        0
-      ],
-      "positive": [
-        "67",
-        0
-      ],
-      "negative": [
-        "67",
-        1
-      ],
-      "latent_image": [
-        "57",
-        0
-      ]
-    },
-    "class_type": "KSamplerAdvanced",
-    "_meta": {
-      "title": "KSampler (Advanced)"
-    }
-  },
-  "60": {
-    "inputs": {
-      "fps": 16,
-      "images": [
-        "8",
-        0
-      ]
-    },
-    "class_type": "CreateVideo",
-    "_meta": {
-      "title": "Create Video"
-    }
-  },
-  "61": {
-    "inputs": {
-      "filename_prefix": "video/ComfyUI",
-      "format": "auto",
-      "codec": "auto",
-      "video": [
-        "60",
-        0
-      ]
-    },
-    "class_type": "SaveVideo",
-    "_meta": {
-      "title": "Save Video"
-    }
-  },
-  "67": {
-    "inputs": {
-      "width": 368,
-      "height": 608,
-      "length": 81,
-      "batch_size": 1,
-      "positive": [
-        "6",
-        0
-      ],
-      "negative": [
-        "7",
-        0
-      ],
-      "vae": [
-        "39",
-        0
-      ],
-      "start_image": [
-        "97",
-        0
-      ],
-      "end_image": [
-        "98",
-        0
-      ]
-    },
-    "class_type": "WanFirstLastFrameToVideo",
-    "_meta": {
-      "title": "WanFirstLastFrameToVideo"
-    }
-  },
-  "92": {
-    "inputs": {
-      "lora_name": "wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors",
-      "strength_model": 1,
-      "model": [
-        "56",
-        0
-      ]
-    },
-    "class_type": "LoraLoaderModelOnly",
-    "_meta": {
-      "title": "LoraLoaderModelOnly"
-    }
-  },
-  "97": {
-    "inputs": {
-      "resize_type": "scale dimensions",
-      "resize_type.width": 368,
-      "resize_type.height": 608,
-      "resize_type.crop": "center",
-      "scale_method": "area",
-      "input": [
-        "106",
-        0
-      ]
-    },
-    "class_type": "ResizeImageMaskNode",
-    "_meta": {
-      "title": "Resize Image/Mask"
-    }
-  },
-  "98": {
-    "inputs": {
-      "resize_type": "scale dimensions",
-      "resize_type.width": 368,
-      "resize_type.height": 608,
-      "resize_type.crop": "center",
-      "scale_method": "area",
-      "input": [
-        "107",
-        0
-      ]
-    },
-    "class_type": "ResizeImageMaskNode",
-    "_meta": {
-      "title": "Resize Image/Mask"
-    }
-  },
-  "105": {
-    "inputs": {
-      "lora_01": "None",
-      "strength_01": 1,
-      "lora_02": "wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors",
-      "strength_02": 1,
-      "lora_03": "None",
-      "strength_03": 1,
-      "lora_04": "None",
-      "strength_04": 1,
-      "model": [
-        "37",
-        0
-      ],
-      "clip": [
-        "38",
-        0
-      ]
-    },
-    "class_type": "Lora Loader Stack (rgthree)",
-    "_meta": {
-      "title": "Lora Loader Stack (rgthree)"
-    }
-  },
   "106": {
     "inputs": {
       "base64_data": "",
@@ -326,6 +19,224 @@
     "class_type": "easy loadImageBase64",
     "_meta": {
       "title": "Load Image (Base64)"
+    }
+  },
+  "108": {
+    "inputs": {
+      "shift": 8,
+      "model": [
+        "111",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "109": {
+    "inputs": {
+      "value": 81
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Number of Frames"
+    }
+  },
+  "110": {
+    "inputs": {
+      "samples": [
+        "120",
+        0
+      ],
+      "vae": [
+        "111",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "111": {
+    "inputs": {
+      "ckpt_name": "wan2.2-rapid-mega-aio-v11.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "112": {
+    "inputs": {
+      "num_frames": [
+        "109",
+        0
+      ],
+      "empty_frame_level": 0.5,
+      "start_index": 0,
+      "end_index": -1,
+      "start_image": [
+        "117",
+        0
+      ],
+      "end_image": [
+        "119",
+        0
+      ]
+    },
+    "class_type": "WanVideoVACEStartToEndFrame",
+    "_meta": {
+      "title": "Bypass for T2V, use for I2V"
+    }
+  },
+  "113": {
+    "inputs": {
+      "frame_rate": 16,
+      "loop_count": 0,
+      "filename_prefix": "video/AIO",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": true,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "110",
+        0
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "114": {
+    "inputs": {
+      "text": "A seamless magical morph. The subject's face remains clear, steady, and constant as the clothes condense into a \"style_type\". \"lighting\" light streams around the clothes and body, shaping the layered clothes without covering the features. The expression remains calm and focused as the scene pulls back to reveal the full outfit and the background. The face stays locked in sharp focus while the clothing and environment transition smoothly. High-quality VFX, Bloom & Glow VFX, Bioluminescenece VFX, Chromatic Abberation VFX, seamless transition.",
+      "clip": [
+        "111",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "115": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "111",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Negative Prompt (leave blank cuz 1 CFG)"
+    }
+  },
+  "116": {
+    "inputs": {
+      "width": 368,
+      "height": 560,
+      "length": [
+        "109",
+        0
+      ],
+      "batch_size": 1,
+      "strength": 1,
+      "positive": [
+        "114",
+        0
+      ],
+      "negative": [
+        "115",
+        0
+      ],
+      "vae": [
+        "111",
+        2
+      ],
+      "control_video": [
+        "112",
+        0
+      ],
+      "control_masks": [
+        "112",
+        1
+      ]
+    },
+    "class_type": "WanVaceToVideo",
+    "_meta": {
+      "title": "T2V=Strength 0, I2V=Strength 1"
+    }
+  },
+  "117": {
+    "inputs": {
+      "measurement": "pixels",
+      "width": 368,
+      "height": 560,
+      "fit": "crop",
+      "method": "lanczos",
+      "image": [
+        "106",
+        0
+      ]
+    },
+    "class_type": "Image Resize (rgthree)",
+    "_meta": {
+      "title": "Image Resize (rgthree)"
+    }
+  },
+  "119": {
+    "inputs": {
+      "measurement": "pixels",
+      "width": 368,
+      "height": 560,
+      "fit": "contain",
+      "method": "lanczos",
+      "image": [
+        "107",
+        0
+      ]
+    },
+    "class_type": "Image Resize (rgthree)",
+    "_meta": {
+      "title": "Image Resize (rgthree)"
+    }
+  },
+  "120": {
+    "inputs": {
+      "seed": 631630737059556,
+      "steps": 4,
+      "cfg": 1,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "beta",
+      "denoise": 1,
+      "model": [
+        "108",
+        0
+      ],
+      "positive": [
+        "116",
+        0
+      ],
+      "negative": [
+        "116",
+        1
+      ],
+      "latent_image": [
+        "116",
+        2
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
     }
   }
 }

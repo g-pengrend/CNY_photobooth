@@ -35,7 +35,8 @@ def get_local_ip():
 #
 # Priority: Environment variable > hardcoded default below
 # ============================================================
-DEPLOY_MODE = os.environ.get("DEPLOY_MODE", "local").strip().lower()
+_default_mode = "remote" if platform.system() == "Linux" else "local"
+DEPLOY_MODE = os.environ.get("DEPLOY_MODE", _default_mode).strip().lower()
 
 
 # ============================================================
@@ -46,11 +47,11 @@ PROFILES = {
         # Receiver runs on the same machine
         "LINUX_RECEIVER_URL": "http://localhost:5001/receive_workflow_data",
         
-        # ComfyUI output on Windows
-        "COMFY_OUTPUT_DIR": "C:/Users/Brandon/Documents/comfy/ComfyUI/output",
+        # ComfyUI output
+        "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output" if platform.system() == "Linux" else "C:/Users/Brandon/Documents/comfy/ComfyUI/output",
 
         # ComfyUI API address (same machine)
-        "COMFY_SERVER_ADDRESS": "127.0.0.1:8188",
+        "COMFY_SERVER_ADDRESS": "127.0.0.1:8189",
     },
     "remote": {
         # Receiver runs on the DGX / Linux machine
@@ -62,7 +63,7 @@ PROFILES = {
         "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output",
 
         # ComfyUI API address (same machine as receiver)
-        "COMFY_SERVER_ADDRESS": "127.0.0.1:8188",
+        "COMFY_SERVER_ADDRESS": "127.0.0.1:8189",
     },
 }
 

@@ -1,7 +1,7 @@
 {
   "39": {
     "inputs": {
-      "clip_name": "qwen_3_4b.safetensors",
+      "clip_name": "qwen3_4b_fp8_scaled.safetensors",
       "type": "lumina2",
       "device": "default"
     },
@@ -21,8 +21,8 @@
   },
   "41": {
     "inputs": {
-      "width": 1088,
-      "height": 1632,
+      "width": 832,
+      "height": 1248,
       "batch_size": 1
     },
     "class_type": "EmptySD3LatentImage",
@@ -90,7 +90,7 @@
   },
   "45": {
     "inputs": {
-      "text": "Extreme Close up shot of a \"gender\" charismatic K-pop idol with \"pose\" for a concept photo, dressed in \"clothes_style\". The setting is \"background\". The image features a modern graphic overlay with a translucent frosted-glass border forming a frame. At the top-center apex, an exquisite gold-leaf \"Union of ITE Training Staff\" insignia is rendered in fluid, hand-drawn script. Centered directly below the name, the years \"1976 – 2026\" are elegantly etched in a smaller, minimalist gold serif font. Crowning the entire arrangement is the title \"50th Anniversary\" in a bold, luminous calligraphy. The typography is softly backlit with a warm amber glow, seamlessly integrated into the sweeping, neo-classical architecture of the ornate borders for a regal finish. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, 8k resolution, sophisticated depth of field.",
+      "text": "Close up shot of a \"gender\" charismatic K-pop idol with \"pose\" for a concept photo, dressed in \"clothes_style\". The setting is \"background\". The image features a modern graphic overlay with a translucent frosted-glass border forming a frame. At the top-center apex and above the head, an exquisite gold-leaf \"Union of ITE Training Staff\" insignia is rendered in fluid, hand-drawn script. Centered directly below the name, the years \"1976 – 2026\" are elegantly etched in a smaller, minimalist gold serif font. Crowning the entire arrangement is the title \"50th Anniversary\" in a bold, luminous calligraphy. The typography is softly backlit with a warm amber glow, seamlessly integrated into the sweeping, neo-classical architecture of the ornate borders for a regal finish. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, 8k resolution, sophisticated depth of field.",
       "clip": [
         "39",
         0
@@ -103,7 +103,7 @@
   },
   "46": {
     "inputs": {
-      "unet_name": "z_image_turbo_bf16.safetensors",
+      "unet_name": "zImageTurboFP8Kijai_fp8ScaledE4m3fn.safetensors",
       "weight_dtype": "default"
     },
     "class_type": "UNETLoader",

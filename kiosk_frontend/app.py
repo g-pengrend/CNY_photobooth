@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, jsonify, send_file, send_from
 from flask_cors import CORS
 import os
 import sys
+import platform
+import subprocess
 import uuid
 import threading
 from datetime import datetime
@@ -239,16 +241,20 @@ def print_image(job_id):
 
     def run_print_job(path):
         try:
-            print(f"Printing file: {path}")
-            os.startfile(path, "print")
+            current_os = platform.system()
+            print(f"Printing file [{current_os}]: {path}")
+            
+            if current_os == "Windows":
+                os.startfile(path, "print")
+            else:
+                # Linux fallback
+                cmd = ['lp', path]
+                result = subprocess.run(cmd, capture_output=True, text=True)
+                if result.returncode != 0:
+                    print(f"lp failed: {result.stderr}, trying lpr...")
+                    subprocess.run(['lpr', path], capture_output=True, text=True)
         except Exception as e:
-            print(f"Print error with 'print' verb: {e}")
-            try:
-                # Fallback: Open the file so user can print manually
-                print(f"Falling back to opening file: {path}")
-                os.startfile(path)
-            except Exception as e2:
-                print(f"Fallback open failed: {e2}")
+            print(f"Print error: {e}")
 
     # Run in background thread to avoid blocking response
     thread = threading.Thread(target=run_print_job, args=(abs_path,))

@@ -210,18 +210,20 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
                 print(f"    -> Desc: '{style_desc}'")
                 print(f"    -> Lighting: '{lighting_desc}'")
                 
-                # Node 6: FLF Prompt
-                if "6" in workflow and "inputs" in workflow["6"]:
-                    text = workflow["6"]["inputs"]["text"]
-                    
-                    if '"style_type"' in text:
-                        text = text.replace('"style_type"', style_desc)
-                    
-                    if '"lighting"' in text:
-                        text = text.replace('"lighting"', lighting_desc)
-                        
-                    workflow["6"]["inputs"]["text"] = text
-                    print("  - Injected style & lighting description into Node #6")
+                # Dynamically find the prompt node containing placeholders
+                injected = False
+                for node_id, node_data in workflow.items():
+                    if node_data.get("class_type") == "CLIPTextEncode" and "inputs" in node_data and "text" in node_data["inputs"]:
+                        text = node_data["inputs"]["text"]
+                        if '"style_type"' in text or '"lighting"' in text:
+                            text = text.replace('"style_type"', style_desc)
+                            text = text.replace('"lighting"', lighting_desc)
+                            workflow[node_id]["inputs"]["text"] = text
+                            print(f"  - Injected style & lighting description into Node #{node_id}")
+                            injected = True
+                
+                if not injected:
+                    print("  - No Style placeholders found in any CLIPTextEncode node.")
         else:
             print("  - No Style Code (C01-C12) found in filename. Using default prompt.")
 
@@ -233,15 +235,22 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
         if "107" in workflow and "inputs" in workflow["107"]:
             workflow["107"]["inputs"]["base64_data"] = generated_b64
 
-        # EXPICITLY USE NODE 61 AS REQUESTED
+        # Dynamically find the Video save node
         job_uid = f"{int(time.time())}_{random.randint(1000,9999)}"
         video_prefix = f"video/job_{job_uid}"
         
-        if "61" in workflow and "inputs" in workflow["61"]:
-            print(f"  - Updating Node #61 (SaveVideo) with prefix: {video_prefix}")
-            workflow["61"]["inputs"]["filename_prefix"] = video_prefix
-        else:
-             print("⚠️ Warning: Node #61 not found in workflow. Video tracking will fail.")
+        video_node_found = False
+        for node_id, node_data in workflow.items():
+            class_type = node_data.get("class_type", "")
+            if class_type in ["VHS_VideoCombine", "SaveVideo", "SaveAnimatedWEBP"]:
+                if "inputs" in node_data:
+                    print(f"  - Updating Node #{node_id} ({class_type}) with prefix: {video_prefix}")
+                    workflow[node_id]["inputs"]["filename_prefix"] = video_prefix
+                    video_node_found = True
+                    break
+                    
+        if not video_node_found:
+             print("⚠️ Warning: No video save node found in workflow. Video tracking will fail.")
             
         print("  - Queuing workflow to ComfyUI...")
         response = queue_prompt(workflow)
