@@ -148,7 +148,7 @@ if (typeof document !== 'undefined') {
                 <div class="watermark-separator"></div>
                 <img src="/static/shared/images/logos/seit.avif" alt="SEIT" onerror="this.style.display='none'">
                 <div class="watermark-separator"></div>
-                <img src="/static/shared/images/logos/ite-cc.jpg" alt="ITE College Central" onerror="this.style.display='none'">
+                <img src="/static/shared/images/logos/ite-cc.avif" alt="ITE College Central" onerror="this.style.display='none'">
             </div>
         `;
 
