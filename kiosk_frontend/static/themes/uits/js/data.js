@@ -197,7 +197,7 @@ export const clothes = [
         code: "C16",
         title: "Retro Men Outfit with suspenders",
         description: "Retro Shirt Rollup with Suspenders and slim tapered fit grey pant",
-        prompt: "Men white casual button-up shirt with open collar and rolled 3/4 sleeves, tailored high-waisted grey trousers with a slim tapered fit, brown leather suspenders, clean structured fabric, minimal wrinkles, elegant and modern style",
+        prompt: "white casual button-up shirt with open collar and rolled 3/4 sleeves, tailored high-waisted grey trousers with a slim tapered fit, brown leather suspenders, clean structured fabric, minimal wrinkles, elegant and modern style",
         image: "/static/themes/uits/images/clothes/male-retro-suspender.png"
     },
     {
@@ -205,7 +205,7 @@ export const clothes = [
         code: "C17",
         title: "Retro men's knitted outfit",
         description: "Men retro short sleeve knit polo with ribbed collar with beige pants",
-        prompt: "Men retro short sleeve knit polo with ribbed collar and sleeve cuffs in beige, vertical stripe pattern in cream, beige, dusty pink, red, and dark brown tones, soft knitted fabric texture, slightly fitted silhouette, paired with beige tailored trousers, clean minimal styling, modern vintage aesthetic",
+        prompt: "retro short sleeve knit polo with ribbed collar and sleeve cuffs in beige, vertical stripe pattern in cream, beige, dusty pink, red, and dark brown tones, soft knitted fabric texture, slightly fitted silhouette, paired with beige tailored trousers, clean minimal styling, modern vintage aesthetic",
         image: "/static/themes/uits/images/clothes/male-retro-knitted.png"
     },
 
@@ -231,7 +231,7 @@ export const clothes = [
         code: "C20",
         title: "Midnight Blue Tuxedo",
         description: "A modern, tailored 3-piece tuxedo in deep midnight blue wool",
-        prompt: "A modern, tailored 3-piece tuxedo in deep midnight blue wool. Features a single-breasted jacket with a sleek black satin shawl lapel, a matching slim-cut waistcoat, and flat-front trousers. Pared with a crisp white dress shirt and a black silk bow tie.",
+        prompt: "a modern, tailored 3-piece tuxedo in deep midnight blue wool. Features a single-breasted jacket with a sleek black satin shawl lapel, a matching slim-cut waistcoat, and flat-front trousers. Pared with a crisp white dress shirt and a black silk bow tie.",
         image: "/static/themes/uits/images/clothes/midnight-blue-tuxedo.png"
     },
     {
@@ -239,7 +239,7 @@ export const clothes = [
         code: "C21",
         title: "Black Suit with White Dress Shirt and black necktie",
         description: "A modern, slim-fit black suit with a slight sheen",
-        prompt: "A modern, slim-fit black suit in premium wool with a slight sheen. Features a two-button jacket with narrow notch lapels and matching tailored trousers. Paired with a crisp, high-thread-count white dress shirt and a slim black silk necktie.",
+        prompt: "a modern, slim-fit black suit in premium wool with a slight sheen. Features a two-button jacket with narrow notch lapels and matching tailored trousers. Paired with a crisp, high-thread-count white dress shirt and a slim black silk necktie.",
         image: "/static/themes/uits/images/clothes/black-suit-white-shirt.png"
     }
 ];
@@ -291,7 +291,7 @@ export const backgrounds = [
         code: "B07",
         title: "The Electric Pulse Dance Floor",
         description: "High-energy dance floor with pulsing LED patterns and laser beams",
-        prompt: "A dynamic, multi-colored LED dance floor that pulses in a pattern of magenta, electric blue, and gold. The background is a blur of swirling lights and laser beams that cut through the darkness, creating a high-energy, party atmosphere. Abstract, futuristic geometric shapes reflect the lights, adding depth and a modern touch.",
+        prompt: "A dynamic, multi-colored LED dance floor that pulses in a pattern of magenta, electric blue, and gold. The scene is a blur of swirling lights and laser beams that cut through the darkness, creating a high-energy, party atmosphere. Abstract, futuristic geometric shapes reflect the lights, adding depth and a modern touch.",
         image: "/static/themes/uits/images/backgrounds/the-electric-pulse-dance-floor.png"
     },
     {

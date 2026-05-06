@@ -197,7 +197,7 @@
       "measurement": "pixels",
       "width": 368,
       "height": 560,
-      "fit": "contain",
+      "fit": "crop",
       "method": "lanczos",
       "image": [
         "107",
@@ -211,7 +211,7 @@
   },
   "120": {
     "inputs": {
-      "seed": 631630737059556,
+      "seed": 528083404879334,
       "steps": 4,
       "cfg": 1,
       "sampler_name": "euler_ancestral",

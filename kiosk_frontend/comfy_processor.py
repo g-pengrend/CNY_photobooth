@@ -177,7 +177,7 @@ def process_image(input_image_path, theme="cny", gender="female", pose="", cloth
         workflow = update_workflow_with_lucky_number(workflow, enable_lucky_number, input_image_path)
         
         # Calculate gender_style for logging
-        gender_style = "manly asian built model" if gender.lower() == "male" else "charismatic k-pop idol"
+        gender_style = "with fit asian built" if gender.lower() == "male" else "charismatic k-pop idol"
         
         print(f"Workflow updated with:")
         print(f"  - Input image")
