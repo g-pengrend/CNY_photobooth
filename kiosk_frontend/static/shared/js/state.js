@@ -82,10 +82,11 @@ if (typeof document !== 'undefined') {
                 font-family: 'Inter', sans-serif;
             }
             .watermark-text {
-                font-size: 0.8rem;
+                font-size: 1rem;
                 line-height: 1.3;
                 text-align: right;
                 opacity: 0.85;
+                max-width: 300px; /* Limits width so it wraps naturally if needed */
             }
             .watermark-logos {
                 display: flex;
@@ -141,7 +142,7 @@ if (typeof document !== 'undefined') {
 
         watermark.innerHTML = `
             <div class="watermark-text">
-                Developed by Staff and Students in<br><strong>ITE CC - Higher Nitec in AI Applications</strong>
+                Developed by Staff and Students in <strong>ITE CC - Higher Nitec in AI Applications</strong>
             </div>
             <div class="watermark-logos">
                 <img src="/static/shared/images/logos/ai-cc.png" alt="AI Applications" onerror="this.style.display='none'">
