@@ -1,86 +1,86 @@
 {
     "C01": {
         "desc": "midnight-black silk with heavy gold-thread dragon-scale embroidery",
-        "lighting": "Midnight Blue and Gold"
+        "lighting": "Midnight Blue and Golden"
     },
     "C02": {
         "desc": "deep vermilion robe layered under a black iron chest plate",
-        "lighting": "Vermillion and Steel Grey"
+        "lighting": "Vermillion and Golden"
     },
     "C03": {
         "desc": "contemporary knee-length dress crafted from metallic gold floral brocade",
-        "lighting": "Warm Gold and Soft Red"
+        "lighting": "Warm Golden and Soft Red"
     },
     "C04": {
         "desc": "multi-layered dress in moonlight silver and soft peach silk",
-        "lighting": "Silver and Peach"
+        "lighting": "Silver and Golden"
     },
     "C05": {
         "desc": "short, structured shoulder cape in crimson velvet with gold floral embroidery",
-        "lighting": "Crimson and Pink"
+        "lighting": "Pink and Golden"
     },
     "C06": {
         "desc": "asymmetrical iridescent silk with 3D geometric textures",
-        "lighting": "Midnight Blue and Silver"
+        "lighting": "Silver and Golden"
     },
     "C07": {
         "desc": "premium matte-finish satin",
-        "lighting": "Emerald Green and Gold"
+        "lighting": "Emerald and Golden"
     },
     "C08": {
         "desc": "intricate Swiss Voile and hand-drawn Batik",
-        "lighting": "Turquoise and Antique Gold"
+        "lighting": "Turquoise and Golden"
     },
     "C09": {
         "desc": "floral jacquard brocade and metallic emerald songket",
-        "lighting": "Champagne Gold and Emerald"
+        "lighting": "Golden and Emerald"
     },
     "C10": {
-        "desc": "deep royal purple Anarkali gown with full-length flowy skirt, paired with a long sheer dupatta",
-        "lighting": "Purple and Gold"
+        "desc": "royal purple Anarkali gown with sheer dupatta",
+        "lighting": "Amethyst and Golden"
     },
     "C11": {
-        "desc": "royal blue silk saree, richly woven with intricate gold zari patterns, features traditional Indian motifs including floral medallions, paisley elements, and geometric lattice designs across the entire fabric",
-        "lighting": "Royal Blue and Gold"
+        "desc": "royal blue silk saree with intricate gold zari",
+        "lighting": "Royal Blue and Golden"
     },
     "C12": {
-        "desc": "rich tiffany blue sherwani outfit with a mandarin collar",
-        "lighting": "Tiffany Blue and White"
+        "desc": "tiffany blue sherwani with mandarin collar",
+        "lighting": "Tiffany Blue and Golden"
     },
     "C13": {
-        "desc": "Traditional rich royal purple kurta with a mandarin collar paired with white dhoti-style pants",
-        "lighting": "Purple and White"
+        "desc": "royal purple kurta and white dhoti pants",
+        "lighting": "Amethys and Golden"
     },
     "C14": {
-        "desc": "vintage-inspired bright pink halter dress, sleeveless, fitted bodice with white lapel collar, button details on the front, flared A-line skirt",
-        "lighting": "Pink and White"
+        "desc": "vintage pink halter dress with white lapel",
+        "lighting": "Pink and Golden"
     },
     "C15": {
-        "desc": "vintage-inspired light blue and white striped sleeveless dress with chevron stripe pattern, fitted bodice, high waist with white belt",
-        "lighting": "Blue and White"
+        "desc": "vintage blue and white striped dress with white belt",
+        "lighting": "White and Golden"
     },
     "C16": {
-        "desc": "Men white casual button-up shirt with open collar and rolled 3/4 sleeves, tailored high-waisted grey trousers with a slim tapered fit, brown leather suspenders",
-        "lighting": "Silver and White"
+        "desc": "white casual shirt and grey trousers with leather suspenders",
+        "lighting": "Silver and Golden"
     },
     "C17": {
-        "desc": "Men retro short sleeve knit polo with ribbed collar and sleeve cuffs in beige, vertical stripe pattern in cream, beige, dusty pink, red, and dark brown tones, soft knitted fabric texture",
-        "lighting": "Beige and Warm Earth Tones"
+        "desc": "retro multi-tone striped knit polo in beige",
+        "lighting": "Silver and Golden"
     },
     "C18": {
-        "desc": "Elegant sleeveless evening gown featuring a bold bicolor geometric wrap design in black and champagne cream",
+        "desc": "sleeveless geometric wrap gown in black and champagne",
         "lighting": "Golden and Cream"
     },
     "C19": {
-        "desc": "Evening gown featuring a sleek champagne-gold satin skirt. The bodice is overlaid with delicate, light modern lace with blue and bronze sequins",
-        "lighting": "Golden and Blue"
+        "desc": "champagne-gold satin gown with blue and bronze sequined bodice",
+        "lighting": "Golden and sliver"
     },
     "C20": {
-        "desc": "A modern, tailored 3-piece tuxedo in deep midnight blue wool with a black satin shawl lapel, a matching slim-cut waistcoat, and flat-front trousers",
-        "lighting": "Blue and golden"
+        "desc": "midnight blue wool tuxedo with black satin shawl lapel",
+        "lighting": "Blue and Golden"
     },
     "C21": {
-        "desc": "A modern, slim-fit black suit in premium wool with a slight sheen. Features a two-button jacket with narrow notch lapels and matching tailored trousers",
-        "lighting": "white and Silver"
+        "desc": "slim-fit black wool suit with narrow notch lapels",
+        "lighting": "Silver and Golden"
     }
 }

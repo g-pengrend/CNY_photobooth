@@ -35,10 +35,13 @@ JOBS = []  # List of dicts
 JOBS_LOCK = threading.Lock()
 
 # --- ComfyUI Helper Functions ---
-def queue_prompt(prompt):
-    p = {"prompt": prompt}
-    data = json.dumps(p).encode('utf-8')
-    req = urllib.request.Request(f"http://{COMFY_SERVER_ADDRESS}/prompt", data=data)
+def queue_prompt(prompt, workflow=None):
+    payload = {"prompt": prompt}
+    if workflow:
+        payload["extra_data"] = {"extra_pnginfo": {"workflow": workflow}}
+        
+    data = json.dumps(payload).encode('utf-8')
+    req = urllib.request.Request(f"http://{COMFY_SERVER_ADDRESS}/prompt", data=data, headers={'Content-Type': 'application/json'})
     try:
         with urllib.request.urlopen(req) as response:
             return json.loads(response.read())
@@ -252,8 +255,8 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
         if not video_node_found:
              print("⚠️ Warning: No video save node found in workflow. Video tracking will fail.")
             
-        print("  - Queuing workflow to ComfyUI...")
-        response = queue_prompt(workflow)
+        print("  - Queuing workflow to ComfyUI (with metadata)...")
+        response = queue_prompt(workflow, workflow)
         
         if response and 'prompt_id' in response:
             prompt_id = response['prompt_id']

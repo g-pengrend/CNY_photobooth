@@ -74,8 +74,12 @@ def update_workflow_with_lucky_number(workflow, enable_lucky_number=True, image_
     workflow["45"]["inputs"]["text"] = current_text.replace('"lucky_num"', lucky_text)
     return workflow
 
-def queue_prompt(prompt):
-    data = json.dumps({"prompt": prompt}).encode('utf-8')
+def queue_prompt(prompt, workflow=None):
+    payload = {"prompt": prompt}
+    if workflow:
+        payload["extra_data"] = {"extra_pnginfo": {"workflow": workflow}}
+        
+    data = json.dumps(payload).encode('utf-8')
     req = urllib.request.Request(f"http://{server_address}/prompt", data=data, headers={'Content-Type': 'application/json'})
     try:
         with urllib.request.urlopen(req) as response:
@@ -177,7 +181,7 @@ def process_image(input_image_path, theme="cny", gender="female", pose="", cloth
         workflow = update_workflow_with_lucky_number(workflow, enable_lucky_number, input_image_path)
         
         # Calculate gender_style for logging
-        gender_style = "with fit asian built" if gender.lower() == "male" else "charismatic k-pop idol"
+        gender_style = "asian, fit and charismatic" if gender.lower() == "male" else "charismatic k-pop idol"
         
         print(f"Workflow updated with:")
         print(f"  - Input image")
@@ -188,7 +192,7 @@ def process_image(input_image_path, theme="cny", gender="female", pose="", cloth
         print(f"  - Lucky number")
 
         # Generate image
-        response = queue_prompt(workflow)
+        response = queue_prompt(workflow, workflow)
         prompt_id = response['prompt_id']
         print(f"Prompt queued with ID: {prompt_id}")
 
