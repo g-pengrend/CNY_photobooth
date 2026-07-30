@@ -162,6 +162,8 @@ def process_image(input_image_path, theme="cny", gender="female", pose="", cloth
             workflow_file = os.path.join(base_dir, "static", "themes", "hariraya", "ZIT_FaceSwapAPI(HR).json")
         elif theme == "uits":
             workflow_file = os.path.join(base_dir, "static", "themes", "uits", "ZIT_FaceSwapAPI(uits).json")
+        elif theme == "ndp2026":
+            workflow_file = os.path.join(base_dir, "static", "themes", "ndp2026", "ZIT_FaceSwapAPI(ndp2026).json")
         else:
             workflow_file = os.path.join(base_dir, "static", "themes", "cny", "ZIT_FaceSwapAPI(CNY).json")
 

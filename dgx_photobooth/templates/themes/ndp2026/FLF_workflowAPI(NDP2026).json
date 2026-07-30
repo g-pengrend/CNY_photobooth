@@ -1,0 +1,242 @@
+{
+  "106": {
+    "inputs": {
+      "base64_data": "",
+      "image_output": "Preview",
+      "save_prefix": "ComfyUI"
+    },
+    "class_type": "easy loadImageBase64",
+    "_meta": {
+      "title": "Load Image (Base64)"
+    }
+  },
+  "107": {
+    "inputs": {
+      "base64_data": "",
+      "image_output": "Preview",
+      "save_prefix": "ComfyUI"
+    },
+    "class_type": "easy loadImageBase64",
+    "_meta": {
+      "title": "Load Image (Base64)"
+    }
+  },
+  "108": {
+    "inputs": {
+      "shift": 8,
+      "model": [
+        "111",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "109": {
+    "inputs": {
+      "value": 81
+    },
+    "class_type": "PrimitiveInt",
+    "_meta": {
+      "title": "Number of Frames"
+    }
+  },
+  "110": {
+    "inputs": {
+      "samples": [
+        "120",
+        0
+      ],
+      "vae": [
+        "111",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "111": {
+    "inputs": {
+      "ckpt_name": "wan2.2-rapid-mega-aio-v11.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "112": {
+    "inputs": {
+      "num_frames": [
+        "109",
+        0
+      ],
+      "empty_frame_level": 0.5,
+      "start_index": 0,
+      "end_index": -1,
+      "start_image": [
+        "117",
+        0
+      ],
+      "end_image": [
+        "119",
+        0
+      ]
+    },
+    "class_type": "WanVideoVACEStartToEndFrame",
+    "_meta": {
+      "title": "Bypass for T2V, use for I2V"
+    }
+  },
+  "113": {
+    "inputs": {
+      "frame_rate": 16,
+      "loop_count": 0,
+      "filename_prefix": "video/AIO",
+      "format": "video/h264-mp4",
+      "pix_fmt": "yuv420p",
+      "crf": 19,
+      "save_metadata": true,
+      "trim_to_audio": false,
+      "pingpong": false,
+      "save_output": true,
+      "images": [
+        "110",
+        0
+      ]
+    },
+    "class_type": "VHS_VideoCombine",
+    "_meta": {
+      "title": "Video Combine 🎥🅥🅗🅢"
+    }
+  },
+  "114": {
+    "inputs": {
+      "text": "A seamless magical morph. The subject's face remains clear, steady, and constant as the clothes condense into a \"style_type\". \"lighting\" light streams around the clothes and body, shaping the layered clothes without covering the facial features. The expression remains calm and focused as the scene pulls back to reveal the full outfit and the background. The face stays locked in sharp focus while the clothing and environment transition smoothly. High-quality VFX, Bloom & Glow VFX, Bioluminescenece VFX, Chromatic Abberation VFX, seamless transition.",
+      "clip": [
+        "111",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "115": {
+    "inputs": {
+      "text": "",
+      "clip": [
+        "111",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Negative Prompt (leave blank cuz 1 CFG)"
+    }
+  },
+  "116": {
+    "inputs": {
+      "width": 368,
+      "height": 560,
+      "length": [
+        "109",
+        0
+      ],
+      "batch_size": 1,
+      "strength": 1,
+      "positive": [
+        "114",
+        0
+      ],
+      "negative": [
+        "115",
+        0
+      ],
+      "vae": [
+        "111",
+        2
+      ],
+      "control_video": [
+        "112",
+        0
+      ],
+      "control_masks": [
+        "112",
+        1
+      ]
+    },
+    "class_type": "WanVaceToVideo",
+    "_meta": {
+      "title": "T2V=Strength 0, I2V=Strength 1"
+    }
+  },
+  "117": {
+    "inputs": {
+      "measurement": "pixels",
+      "width": 368,
+      "height": 560,
+      "fit": "crop",
+      "method": "lanczos",
+      "image": [
+        "106",
+        0
+      ]
+    },
+    "class_type": "Image Resize (rgthree)",
+    "_meta": {
+      "title": "Image Resize (rgthree)"
+    }
+  },
+  "119": {
+    "inputs": {
+      "measurement": "pixels",
+      "width": 368,
+      "height": 560,
+      "fit": "crop",
+      "method": "lanczos",
+      "image": [
+        "107",
+        0
+      ]
+    },
+    "class_type": "Image Resize (rgthree)",
+    "_meta": {
+      "title": "Image Resize (rgthree)"
+    }
+  },
+  "120": {
+    "inputs": {
+      "seed": 528083404879334,
+      "steps": 4,
+      "cfg": 1,
+      "sampler_name": "euler_ancestral",
+      "scheduler": "beta",
+      "denoise": 1,
+      "model": [
+        "108",
+        0
+      ],
+      "positive": [
+        "116",
+        0
+      ],
+      "negative": [
+        "116",
+        1
+      ],
+      "latent_image": [
+        "116",
+        2
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  }
+}

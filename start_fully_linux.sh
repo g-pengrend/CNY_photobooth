@@ -10,6 +10,20 @@ SESSION="photobooth"
 
 export DEPLOY_MODE=local
 
+# --- CONDA ENVIRONMENT CHECK ---
+if [ -f "$CONDA_PROFILE" ]; then
+    source "$CONDA_PROFILE"
+    if ! conda info --envs | grep -q "comfy_spark"; then
+        echo "ERROR: Conda environment 'comfy_spark' not found."
+        echo "Please create it or update the environment name in the script."
+        exit 1
+    fi
+else
+    echo "ERROR: Conda profile not found at $CONDA_PROFILE"
+    exit 1
+fi
+
+
 # --- AUTOMATIC RESET ON EXIT ---
 # This function runs if the script is interrupted or finishes
 cleanup() {
@@ -53,8 +67,13 @@ export CUDA_MPS_LOG_DIRECTORY=/tmp/nvidia-log
 nvidia-cuda-mps-control -d
 
 echo "Waking up Blackwell GB10 Handshake..."
-source "$CONDA_PROFILE"
+# Ensure conda environment is active for the main script
 conda activate comfy_spark
+if [ "$CONDA_DEFAULT_ENV" != "comfy_spark" ]; then
+    echo "ERROR: Failed to activate conda environment 'comfy_spark'."
+    exit 1
+fi
+
 COUNTER=0
 until ps aux | grep -v grep | grep -q "nvidia-cuda-mps-server" || [ $COUNTER -eq 15 ]; do
   echo "Waiting for Blackwell handshake... ($((COUNTER*2))s)"

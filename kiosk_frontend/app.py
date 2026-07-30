@@ -109,6 +109,12 @@ def uits_theme():
     return send_from_directory(os.path.join(app.static_folder, 'themes', 'uits'), 'index.html')
 
 
+@app.route('/ndp2026')
+def ndp2026_theme():
+    """Serve the NDP 2026 experience"""
+    return send_from_directory(os.path.join(app.static_folder, 'themes', 'ndp2026'), 'index.html')
+
+
 @app.route('/api/uits/samples')
 def list_uits_samples():
     """List images in the UITS samples directory"""
@@ -121,6 +127,18 @@ def list_uits_samples():
     images = [f for f in os.listdir(samples_dir) if f.lower().endswith(valid_extensions)]
     # Return full paths relative to static
     return jsonify([f"/static/themes/uits/images/samples/{img}" for img in images])
+
+
+@app.route('/api/ndp2026/samples')
+def list_ndp2026_samples():
+    """List images in the NDP 2026 samples directory"""
+    samples_dir = os.path.join(app.static_folder, 'themes', 'ndp2026', 'images', 'samples')
+    if not os.path.exists(samples_dir):
+        return jsonify([])
+    
+    valid_extensions = ('.png', '.jpg', '.jpeg', '.webp')
+    images = [f for f in os.listdir(samples_dir) if f.lower().endswith(valid_extensions)]
+    return jsonify([f"/static/themes/ndp2026/images/samples/{img}" for img in images])
 
 
 @app.route('/api/process', methods=['POST'])

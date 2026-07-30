@@ -178,6 +178,8 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
         workflow_file = os.path.join(base_dir, "templates", "themes", "hariraya", "FLF_workflowAPI(HR).json")
     elif theme == "uits":
         workflow_file = os.path.join(base_dir, "templates", "themes", "uits", "FLF_workflowAPI(UITS).json")
+    elif theme == "ndp2026":
+        workflow_file = os.path.join(base_dir, "templates", "themes", "ndp2026", "FLF_workflowAPI(NDP2026).json")
     else:
         workflow_file = os.path.join(base_dir, "templates", "themes", "cny", "FLF_workflowAPI(CNY).json")
         
