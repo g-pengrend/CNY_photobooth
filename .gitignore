@@ -10,3 +10,5 @@ dgx_photobooth/tunnel.log
 __pycache__/
 *.pyc
 *tunnel.log
+dgx_photobooth/tunnel.log
+*.pyc

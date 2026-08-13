@@ -97,7 +97,7 @@ def get_image(prompt_id):
     print(f"Waiting for image data for prompt ID: {prompt_id}")
     execution_complete = False
     start_time = time.time()
-    timeout = 60  # 60 second timeout
+    timeout = 240  # 240 second (4 minute) timeout to allow for first-run model loading
     
     while True:
         # Check for timeout
