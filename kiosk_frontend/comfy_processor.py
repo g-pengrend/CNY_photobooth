@@ -9,7 +9,8 @@ import websocket
 from face_analysis import generate_lucky_number_from_face
 
 # Configuration
-server_address = "127.0.0.1:8188"
+from config import COMFY_SERVER_ADDRESS
+server_address = COMFY_SERVER_ADDRESS
 
 def load_workflow(filename):
     with open(filename, 'r', encoding='utf-8') as file:

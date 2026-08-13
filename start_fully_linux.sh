@@ -96,13 +96,13 @@ tmux new-session -d -s $SESSION -n "Servers"
 
 # Pane 0: ComfyUI Image (Priority 0)
 tmux select-pane -t $SESSION -T "ComfyUI Image (Port 8188)"
-tmux send-keys -t $SESSION "export CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps; export CUDA_MPS_CLIENT_PRIORITY=0; source '$CONDA_PROFILE'; conda activate comfy_spark; cd '$COMFY_DIR'; python main.py --cuda-malloc --gpu-only --fp8_e4m3fn-unet --port 8188" C-m
+tmux send-keys -t $SESSION "export CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps; export CUDA_MPS_CLIENT_PRIORITY=0; source '$CONDA_PROFILE'; conda activate comfy_spark; cd '$COMFY_DIR'; python main.py --cuda-malloc --gpu-only --fp8_e4m3fn-unet --port 8188 --listen" C-m
 
 # Pane 1: ComfyUI Video (Priority 1)
 tmux split-window -t $SESSION
 tmux select-layout -t $SESSION tiled
 tmux select-pane -t $SESSION -T "ComfyUI Video (Port 8189)"
-tmux send-keys -t $SESSION "sleep 2; export CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps; export CUDA_MPS_CLIENT_PRIORITY=1; source '$CONDA_PROFILE'; conda activate comfy_spark; cd '$COMFY_DIR'; python main.py --cuda-malloc --gpu-only --port 8189" C-m
+tmux send-keys -t $SESSION "sleep 2; export CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps; export CUDA_MPS_CLIENT_PRIORITY=1; source '$CONDA_PROFILE'; conda activate comfy_spark; cd '$COMFY_DIR'; python main.py --cuda-malloc --gpu-only --port 8189 --listen" C-m
 
 # Pane 2: Kiosk
 tmux split-window -t $SESSION

@@ -22,6 +22,26 @@ import platform
 _default_mode = "remote" if platform.system() == "Linux" else "local"
 DEPLOY_MODE = os.environ.get("DEPLOY_MODE", _default_mode).strip().lower()
 
+# Dynamic resolution of remote receiver host/IP
+cached_host = None
+cache_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".receiver_address")
+if not os.path.exists(cache_file):
+    cache_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".receiver_address")
+
+if os.path.exists(cache_file):
+    try:
+        with open(cache_file, "r") as f:
+            cached_host = f.read().strip()
+    except Exception:
+        pass
+
+env_ip = os.environ.get("RECEIVER_IP")
+env_host = os.environ.get("RECEIVER_HOST")
+raw_host = env_ip or env_host or cached_host or "breadnbiscuit"
+
+# Clean all whitespaces, tabs, newlines, and carriage returns
+RECEIVER_HOST = "".join(raw_host.split()).strip()
+
 
 # ============================================================
 # DEPLOYMENT PROFILES
@@ -39,13 +59,23 @@ PROFILES = {
     },
     "remote": {
         # Receiver runs on the DGX / Linux machine
-        "LINUX_RECEIVER_URL": "http://172.20.162.63:5001/receive_workflow_data",
+        "LINUX_RECEIVER_URL": f"http://{RECEIVER_HOST}:5001/receive_workflow_data",
         
         # ComfyUI output on Linux
         "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output",
 
         # ComfyUI API address (same machine as receiver)
-        "COMFY_SERVER_ADDRESS": "127.0.0.1:8188",
+        "COMFY_SERVER_ADDRESS": f"{RECEIVER_HOST}:8188",
+    },
+    "hybrid": {
+        # Receiver runs on the local Windows PC (localhost)
+        "LINUX_RECEIVER_URL": "http://localhost:5001/receive_workflow_data",
+        
+        # ComfyUI output on Linux
+        "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output",
+
+        # ComfyUI API address (remote Linux machine)
+        "COMFY_SERVER_ADDRESS": f"{RECEIVER_HOST}:8188",
     },
 }
 
@@ -79,4 +109,9 @@ def print_config():
     print(f"     Receiver URL:     {LINUX_RECEIVER_URL}")
     print(f"     ComfyUI Output:   {COMFY_OUTPUT_DIR}")
     print(f"     ComfyUI Server:   {COMFY_SERVER_ADDRESS}")
+    if DEPLOY_MODE == "remote":
+        print(f"  --------------------------------------------------")
+        print(f"  NOTE: Connected to remote Tailscale/Host: '{RECEIVER_HOST}'")
+        print(f"  If your servers are running elsewhere, make sure to")
+        print(f"  change it in your environment or start script.")
     print(f"{'='*50}")

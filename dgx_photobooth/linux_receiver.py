@@ -322,8 +322,36 @@ def serve_uploads(filename):
 
 @app.route('/videos/<path:filename>')
 def serve_videos(filename):
-    # This serves from the ComfyUI output directory
-    return send_from_directory(COMFY_OUTPUT_DIR, filename)
+    # This serves from the ComfyUI output directory if it exists locally
+    if os.path.exists(COMFY_OUTPUT_DIR):
+        return send_from_directory(COMFY_OUTPUT_DIR, filename)
+    
+    # Fallback: Stream/Proxy the file from the remote ComfyUI server
+    # ComfyUI serves output files via /view?filename=...&subfolder=...&type=output
+    subfolder = ""
+    actual_filename = filename
+    
+    # Normalize path separators
+    normalized_path = filename.replace('\\', '/')
+    if '/' in normalized_path:
+        parts = normalized_path.split('/')
+        subfolder = '/'.join(parts[:-1])
+        actual_filename = parts[-1]
+        
+    comfy_view_url = f"http://{COMFY_SERVER_ADDRESS}/view?filename={actual_filename}&subfolder={subfolder}&type=output"
+    print(f"🔗 [Proxy] Streaming video from remote ComfyUI: {comfy_view_url}")
+    
+    try:
+        req = urllib.request.urlopen(comfy_view_url)
+        from flask import Response
+        return Response(
+            req.read(),
+            status=req.status,
+            headers=dict(req.headers)
+        )
+    except Exception as e:
+        print(f"❌ [Proxy] Error streaming remote video: {e}")
+        return f"Video not found on remote ComfyUI: {e}", 404
 
 @app.route('/receive_workflow_data', methods=['POST'])
 def receive_workflow_data():

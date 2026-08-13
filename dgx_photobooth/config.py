@@ -28,13 +28,28 @@ def get_local_ip():
     return IP
 
 # ============================================================
-# DEPLOYMENT MODE 
+# DEPLOYMENT MODE & RESOLUTION
 # ============================================================
-# 'local'  → Everything on one Windows machine (testing)
-# 'remote' → Photo booth on Windows, receiver on Linux/DGX
-#
-# Priority: Environment variable > hardcoded default below
-# ============================================================
+# Dynamic resolution of remote receiver host/IP
+cached_host = None
+cache_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".receiver_address")
+if not os.path.exists(cache_file):
+    cache_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".receiver_address")
+
+if os.path.exists(cache_file):
+    try:
+        with open(cache_file, "r") as f:
+            cached_host = f.read().strip()
+    except Exception:
+        pass
+
+env_ip = os.environ.get("RECEIVER_IP")
+env_host = os.environ.get("RECEIVER_HOST")
+raw_host = env_ip or env_host or cached_host or "breadnbiscuit"
+
+# Clean all whitespaces, tabs, newlines, and carriage returns
+RECEIVER_HOST = "".join(raw_host.split()).strip()
+
 _default_mode = "remote" if platform.system() == "Linux" else "local"
 DEPLOY_MODE = os.environ.get("DEPLOY_MODE", _default_mode).strip().lower()
 
@@ -64,6 +79,16 @@ PROFILES = {
 
         # ComfyUI API address (same machine as receiver)
         "COMFY_SERVER_ADDRESS": "127.0.0.1:8189",
+    },
+    "hybrid": {
+        # Receiver runs on local Windows machine
+        "LINUX_RECEIVER_URL": "http://localhost:5001/receive_workflow_data",
+        
+        # ComfyUI output on Linux
+        "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output",
+
+        # ComfyUI API address (remote Linux machine)
+        "COMFY_SERVER_ADDRESS": f"{RECEIVER_HOST}:8189",
     },
 }
 

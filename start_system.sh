@@ -18,7 +18,7 @@ echo "Starting CNY Photobooth System..."
 
 # 1. Start ComfyUI Server
 echo "Starting ComfyUI..."
-gnome-terminal --title="ComfyUI Server" -- bash -c "export DEPLOY_MODE=remote; source '$CONDA_PROFILE'; conda activate comfyui; cd '$COMFY_DIR'; python main.py --enable-manager; exec bash"
+gnome-terminal --title="ComfyUI Server" -- bash -c "export DEPLOY_MODE=remote; source '$CONDA_PROFILE'; conda activate comfyui; cd '$COMFY_DIR'; python main.py --enable-manager --listen; exec bash"
 
 # 2. Start Linux Receiver (Flask App)
 echo "Starting Linux Receiver..."
