@@ -20,3 +20,12 @@
 2026-08-13T06:35:52Z INF ICMP proxy will use fe80::a76d:af96:c082:6806 in zone Wi-Fi as source for IPv6
 2026-08-13T06:35:52Z INF Starting metrics server on 127.0.0.1:20241/metrics
 2026-08-13T06:35:52Z INF Registered tunnel connection connIndex=0 connection=0b0b2c65-bec1-4c39-acda-4545008b0d11 event=0 ip=198.41.192.27 location=sin16 protocol=quic
+2026-08-13T06:52:40Z INF Initiating graceful shutdown due to signal interrupt ...
+2026-08-13T06:52:40Z ERR failed to run the datagram handler error="context canceled" connIndex=0 event=0 ip=198.41.192.27
+2026-08-13T06:52:40Z ERR failed to serve tunnel connection error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.27
+2026-08-13T06:52:40Z ERR Serve tunnel error error="accept stream listener encountered a failure while serving" connIndex=0 event=0 ip=198.41.192.27
+2026-08-13T06:52:40Z INF Retrying connection in up to 1s connIndex=0 event=0 ip=198.41.192.27
+2026-08-13T06:52:40Z ERR Connection terminated connIndex=0
+2026-08-13T06:52:40Z ERR no more connections active and exiting
+2026-08-13T06:52:40Z INF Tunnel server stopped
+2026-08-13T06:52:40Z INF Metrics server stopped

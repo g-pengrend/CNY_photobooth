@@ -1,0 +1,12 @@
+# CNY Photobooth - Client Dependencies
+# Suitable for Windows Host PC or macOS (M1/M2/M3) client
+
+Flask>=3.0.0
+Flask-Cors>=4.0.0
+requests>=2.31.0
+websocket-client>=1.7.0
+Pillow>=10.2.0
+opencv-python>=4.9.0.80
+numpy>=1.26.0
+mediapipe>=0.10.11
+qrcode>=7.4.2

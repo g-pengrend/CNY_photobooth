@@ -1,0 +1,7 @@
+# CNY Photobooth - Server Receiver Dependencies
+# Suitable for the remote Linux Server (e.g. breadnbiscuit) 
+# (Note: ComfyUI has its own separate environment and requirements)
+
+Flask>=3.0.0
+Pillow>=10.2.0
+qrcode>=7.4.2

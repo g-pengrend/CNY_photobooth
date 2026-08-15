@@ -1,0 +1,20 @@
+# CNY Photobooth - Full Project Dependencies
+# Covers both Kiosk Frontend and the Linux Receiver
+#
+# NOTE ON COMFYUI SETUP:
+# ComfyUI is required to run the image & video generation backend on the server side.
+# It must be installed separately as it has its own extensive dependencies (PyTorch,
+# torchvision, transformers, diffusers, etc.) which should be managed in a dedicated
+# environment (e.g. Conda environment named 'comfyui' or 'comfy_spark').
+#
+# Core project dependencies:
+
+Flask>=3.0.0
+Flask-Cors>=4.0.0
+requests>=2.31.0
+websocket-client>=1.7.0
+Pillow>=10.2.0
+opencv-python>=4.9.0.80
+numpy>=1.26.0
+mediapipe>=0.10.11
+qrcode>=7.4.2
