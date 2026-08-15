@@ -12,3 +12,4 @@ __pycache__/
 *tunnel.log
 dgx_photobooth/tunnel.log
 *.pyc
+.DS_Store

@@ -1,15 +1,23 @@
 #!/bin/bash
 
-echo ========================================================
-echo   CNY Photobooth - Kiosk Client Mode (Hybrid Unix)
-echo   This PC will run:
-echo     - Kiosk Frontend (port 5000)
-echo     - Local Receiver (port 5001) for local printing
-echo     - Cloudflare Tunnel (for mobile QR codes)
-echo
-echo   All ComfyUI processing will run on the remote machine.
-echo ========================================================
-echo
+# Determine OS and set Frontend Port (macOS uses port 5000 for AirPlay Receiver, so default to 5005 on macOS)
+if [ "$(uname)" = "Darwin" ]; then
+    FRONTEND_PORT="${FRONTEND_PORT:-5005}"
+else
+    FRONTEND_PORT="${FRONTEND_PORT:-5000}"
+fi
+
+# Fix: Wrapped text in quotes to safely print parentheses () and preserve alignment
+echo "========================================================"
+echo "  CNY Photobooth - Kiosk Client Mode (Hybrid Unix)"
+echo "  This PC will run:"
+echo "    - Kiosk Frontend (port $FRONTEND_PORT)"
+echo "    - Local Receiver (port 5001) for local printing"
+echo "    - Cloudflare Tunnel (for mobile QR codes)"
+echo ""
+echo "  All ComfyUI processing will run on the remote machine."
+echo "========================================================"
+echo ""
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CACHE_FILE="$SCRIPT_DIR/.receiver_address"
@@ -26,7 +34,7 @@ fi
 echo "The current configured remote backend host is: $DEFAULT_HOST"
 echo "To use a different host or IP (e.g. Tailscale IP), type it below."
 echo "Otherwise, press ENTER to keep [$DEFAULT_HOST]."
-echo
+echo ""
 read -p "Remote Host/IP: " USER_INPUT
 
 if [ ! -z "$USER_INPUT" ]; then
@@ -38,15 +46,28 @@ fi
 # Save to cache
 echo "$REMOTE_HOST" > "$CACHE_FILE"
 
-echo
-echo ========================================================
-echo   Connecting Kiosk to Remote Backend: $REMOTE_HOST
-echo   Make sure Tailscale is connected and remote backend is running!
-echo ========================================================
-echo
+echo ""
+echo "========================================================"
+echo "  Connecting Kiosk to Remote Backend: $REMOTE_HOST"
+echo "  Make sure Tailscale is connected and remote backend is running!"
+echo "========================================================"
+echo ""
 
 export DEPLOY_MODE=hybrid
 export RECEIVER_IP="$REMOTE_HOST"
+
+# Improvement: Moved cleanup trap upwards so background workers are caught if stopped mid-boot
+cleanup() {
+    echo ""
+    echo "Stopping all background processes..."
+    kill $FRONTEND_PID 2>/dev/null
+    kill $RECEIVER_PID 2>/dev/null
+    if [ ! -z "$TUNNEL_PID" ]; then
+        kill $TUNNEL_PID 2>/dev/null
+    fi
+    exit 0
+}
+trap cleanup INT TERM
 
 # Try activating conda environments if available
 if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
@@ -63,15 +84,15 @@ if ! command -v python &> /dev/null && command -v python3 &> /dev/null; then
     PYTHON_CMD="python3"
 fi
 
-echo "1. Starting Frontend server (port 5000)..."
-cd "$SCRIPT_DIR/kiosk_frontend"
-$PYTHON_CMD app.py &
+echo "1. Starting Frontend server (port $FRONTEND_PORT)..."
+cd "$SCRIPT_DIR/kiosk_frontend" || { echo "❌ Error: kiosk_frontend folder missing"; exit 1; }
+$PYTHON_CMD -c "from app import app, print_config; print_config(); app.run(debug=True, host='0.0.0.0', port=$FRONTEND_PORT, use_reloader=False)" &
 FRONTEND_PID=$!
 
 sleep 2
 
 echo "2. Starting Local Receiver (port 5001)..."
-cd "$SCRIPT_DIR/dgx_photobooth"
+cd "$SCRIPT_DIR/dgx_photobooth" || { echo "❌ Error: dgx_photobooth folder missing"; exit 1; }
 $PYTHON_CMD linux_receiver.py &
 RECEIVER_PID=$!
 
@@ -88,31 +109,19 @@ else
 fi
 
 sleep 3
-echo "Opening Kiosk Browser (http://localhost:5000)..."
+echo "Opening Kiosk Browser (http://localhost:$FRONTEND_PORT)..."
 if command -v xdg-open &> /dev/null; then
-    xdg-open http://localhost:5000 &
+    xdg-open "http://localhost:$FRONTEND_PORT" &
 elif command -v open &> /dev/null; then
-    open http://localhost:5000 &
+    open "http://localhost:$FRONTEND_PORT" &
 fi
 
 echo "======================================================="
 echo "  CNY Photobooth Client is running!"
-echo "  - Kiosk Frontend: http://localhost:5000"
+echo "  - Kiosk Frontend: http://localhost:$FRONTEND_PORT"
 echo "  - Gallery & Printing: http://localhost:5001"
 echo "======================================================="
 echo "Press Ctrl+C to stop all servers."
-
-# Trap Ctrl+C to clean up all background processes
-cleanup() {
-    echo "Stopping all processes..."
-    kill $FRONTEND_PID 2>/dev/null
-    kill $RECEIVER_PID 2>/dev/null
-    if [ ! -z "$TUNNEL_PID" ]; then
-        kill $TUNNEL_PID 2>/dev/null
-    fi
-    exit 0
-}
-trap cleanup INT TERM
 
 # Wait for the main processes
 wait $FRONTEND_PID $RECEIVER_PID
