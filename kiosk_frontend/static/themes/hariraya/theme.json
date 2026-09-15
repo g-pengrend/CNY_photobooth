@@ -1,0 +1,82 @@
+{
+  "title": "Hari Raya Aidilfitri",
+  "subtitle": "Salam Lebaran Celebration",
+  "badge": "Aidilfitri",
+  "icon": "🌙",
+  "description": "Celebrate with elegant Baju Kurung, Baju Melayu, and festive settings under the crescent moon.",
+  "cta": "Enter Pavilion",
+  "status": "live",
+  "cardBackground": "/static/landing/hariraya_card_bg.png",
+  "features": {
+    "luckyNumber": false,
+    "filmStrip": false,
+    "genderFilter": true
+  },
+  "background": {
+    "type": "particles",
+    "floatingIcons": [
+      "🌙",
+      "⭐",
+      "✨",
+      "🕌"
+    ],
+    "filmStrip": false
+  },
+  "style": {
+    "fontFamily": "'Outfit', 'Inter', sans-serif",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;600;700&display=swap",
+    "colors": {
+      "background": "#021A10",
+      "text": "#F5F5DC",
+      "primary": "#0B4627",
+      "accent": "#EEDD82",
+      "accentGlow": "rgba(238, 221, 130, 0.25)",
+      "surface": "rgba(255, 255, 255, 0.05)",
+      "surfaceBorder": "rgba(238, 221, 130, 0.3)"
+    },
+    "gradients": {
+      "radialBackground": "radial-gradient(circle at 50% 50%, rgba(11, 70, 39, 0.35) 0%, transparent 70%)",
+      "primaryButton": "linear-gradient(135deg, #0B4627 0%, #177245 50%, #EEDD82 100%)"
+    }
+  },
+  "waitingExperience": {
+    "title": "Creating Magic...",
+    "subtitle": "Processing your photo",
+    "sequence": [
+      {
+        "text": "Selamat Hari Raya!",
+        "color": "#eedd82",
+        "size": "1.4rem",
+        "delay": 500
+      },
+      {
+        "text": "Maaf Zahir dan Batin",
+        "color": "#FFFFFF",
+        "size": "1.1rem",
+        "delay": 2500
+      },
+      {
+        "text": "Weaving your festive songket...",
+        "opacity": 0.8,
+        "delay": 5000
+      },
+      {
+        "text": "Preparing traditional Kuih Raya...",
+        "opacity": 0.8,
+        "delay": 8000
+      },
+      {
+        "text": "Lighting the oil lamps...",
+        "opacity": 0.8,
+        "delay": 11000
+      },
+      {
+        "text": "Getting ready to celebrate!",
+        "opacity": 0.8,
+        "delay": 13500
+      }
+    ],
+    "completionMessage": "Calculations Complete! Ready to manifest."
+  },
+  "slug": "hariraya"
+}

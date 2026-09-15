@@ -1,0 +1,83 @@
+{
+  "title": "CNY Photo Booth",
+  "subtitle": "SEIT 4D Vision Studio",
+  "badge": "Lunar Prosperity",
+  "icon": "🏮",
+  "description": "Capture the Glow, Steal the Show, and get your CNY Numbers to go! Experience the SEIT magic in Red, Gold, and AI.",
+  "cta": "开始 Start",
+  "status": "live",
+  "cardBackground": "/static/landing/cny_card_bg.png",
+  "features": {
+    "luckyNumber": true,
+    "filmStrip": false,
+    "genderFilter": true
+  },
+  "background": {
+    "type": "particles",
+    "floatingIcons": [
+      "🧧",
+      "🏮",
+      "💰",
+      "🍊",
+      "🍍"
+    ],
+    "filmStrip": false
+  },
+  "style": {
+    "fontFamily": "'Inter', 'Noto Sans SC', sans-serif",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=Inter:wght@400;600;700&display=swap",
+    "colors": {
+      "background": "#0F0306",
+      "text": "#FFFFFF",
+      "primary": "#8B0000",
+      "accent": "#D4AF37",
+      "accentGlow": "rgba(212, 175, 55, 0.25)",
+      "surface": "rgba(255, 255, 255, 0.05)",
+      "surfaceBorder": "rgba(212, 175, 55, 0.3)"
+    },
+    "gradients": {
+      "radialBackground": "radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.15) 0%, transparent 70%)",
+      "primaryButton": "linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #FFDF00 100%)"
+    }
+  },
+  "waitingExperience": {
+    "title": "Creating Magic...",
+    "subtitle": "Processing your photo",
+    "sequence": [
+      {
+        "text": "Analyzing facial geometry...",
+        "color": "#FFD700",
+        "size": "1.3rem",
+        "delay": 500
+      },
+      {
+        "text": "Calculating your prosperity metrics...",
+        "color": "#FFF8DC",
+        "size": "1.1rem",
+        "delay": 2500
+      },
+      {
+        "text": "Synthesizing festive silk textures...",
+        "opacity": 0.8,
+        "delay": 5000
+      },
+      {
+        "text": "Aligning your auspicious lucky numbers...",
+        "opacity": 0.8,
+        "delay": 8500
+      },
+      {
+        "text": "Infusing celebratory golden aura...",
+        "opacity": 0.8,
+        "delay": 11500
+      },
+      {
+        "text": "Ready to welcome prosperity!",
+        "opacity": 0.8,
+        "delay": 14000
+      }
+    ],
+    "completionMessage": "Calculations Complete! Ready to manifest."
+  },
+  "slug": "cny"
+}

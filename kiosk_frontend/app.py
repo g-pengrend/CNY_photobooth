@@ -8,6 +8,7 @@ import uuid
 import threading
 from datetime import datetime
 import base64
+import json
 
 # Fix Windows console encoding for Chinese/Unicode characters
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -85,60 +86,79 @@ def landing():
     return send_from_directory(app.static_folder, 'landing.html')
 
 
-@app.route('/cny')
-def cny_theme():
-    """Serve the CNY Photo Booth experience"""
-    return send_from_directory(os.path.join(app.static_folder, 'themes', 'cny'), 'index.html')
+RESERVED_SLUGS = {'api', 'static', 'admin', 'uploads', 'outputs'}
 
 
-@app.route('/hariraya')
-def hariraya_theme():
-    """Serve the Hari Raya experience (placeholder)"""
-    return send_from_directory(os.path.join(app.static_folder, 'themes', 'hariraya'), 'index.html')
+@app.route('/api/themes')
+def list_themes():
+    """List all available themes with their metadata for landing page and studio."""
+    themes_dir = os.path.join(app.static_folder, 'themes')
+    theme_list = []
+    if os.path.exists(themes_dir):
+        for slug in os.listdir(themes_dir):
+            if slug.startswith('.') or slug in RESERVED_SLUGS:
+                continue
+            theme_json_path = os.path.join(themes_dir, slug, 'theme.json')
+            if os.path.exists(theme_json_path):
+                try:
+                    with open(theme_json_path, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                        data['slug'] = slug
+                        theme_list.append(data)
+                except Exception as e:
+                    print(f"Error reading {theme_json_path}: {e}")
+    return jsonify(theme_list)
 
 
-@app.route('/deepavali')
-def deepavali_theme():
-    """Serve the Deepavali experience (preview)"""
-    return send_from_directory(os.path.join(app.static_folder, 'themes', 'deepavali'), 'index.html')
+@app.route('/api/theme/<theme_slug>')
+def get_theme_config(theme_slug):
+    """Serve theme.json for a given theme."""
+    theme_file = os.path.join(app.static_folder, 'themes', theme_slug, 'theme.json')
+    if os.path.exists(theme_file):
+        return send_file(theme_file, mimetype='application/json')
+    return jsonify({"error": "Theme config not found"}), 404
 
 
-@app.route('/uits')
-def uits_theme():
-    """Serve the UITS (Black & Gold Gala) experience"""
-    return send_from_directory(os.path.join(app.static_folder, 'themes', 'uits'), 'index.html')
+@app.route('/api/theme/<theme_slug>/data')
+def get_theme_data(theme_slug):
+    """Serve data.json for a given theme."""
+    data_file = os.path.join(app.static_folder, 'themes', theme_slug, 'data.json')
+    if os.path.exists(data_file):
+        return send_file(data_file, mimetype='application/json')
+    return jsonify({"poses": [], "clothes": [], "backgrounds": []}), 404
 
 
-@app.route('/ndp2026')
-def ndp2026_theme():
-    """Serve the NDP 2026 experience"""
-    return send_from_directory(os.path.join(app.static_folder, 'themes', 'ndp2026'), 'index.html')
-
-
-@app.route('/api/uits/samples')
-def list_uits_samples():
-    """List images in the UITS samples directory"""
-    samples_dir = os.path.join(app.static_folder, 'themes', 'uits', 'images', 'samples')
+@app.route('/api/theme/<theme_slug>/samples')
+@app.route('/api/<theme_slug>/samples')
+def list_theme_samples(theme_slug):
+    """Generic sample image lister for any theme's film strip."""
+    samples_dir = os.path.join(app.static_folder, 'themes', theme_slug, 'images', 'samples')
     if not os.path.exists(samples_dir):
         return jsonify([])
-    
-    # Supported image extensions
-    valid_extensions = ('.png', '.jpg', '.jpeg', '.webp')
-    images = [f for f in os.listdir(samples_dir) if f.lower().endswith(valid_extensions)]
-    # Return full paths relative to static
-    return jsonify([f"/static/themes/uits/images/samples/{img}" for img in images])
+    valid_ext = ('.png', '.jpg', '.jpeg', '.webp')
+    images = [f for f in os.listdir(samples_dir) if f.lower().endswith(valid_ext)]
+    return jsonify([f"/static/themes/{theme_slug}/images/samples/{img}" for img in images])
 
 
-@app.route('/api/ndp2026/samples')
-def list_ndp2026_samples():
-    """List images in the NDP 2026 samples directory"""
-    samples_dir = os.path.join(app.static_folder, 'themes', 'ndp2026', 'images', 'samples')
-    if not os.path.exists(samples_dir):
-        return jsonify([])
-    
-    valid_extensions = ('.png', '.jpg', '.jpeg', '.webp')
-    images = [f for f in os.listdir(samples_dir) if f.lower().endswith(valid_extensions)]
-    return jsonify([f"/static/themes/ndp2026/images/samples/{img}" for img in images])
+@app.route('/<theme_slug>')
+def serve_theme(theme_slug):
+    """Serve the Universal Engine for modern themes, with fallback to legacy index.html."""
+    if theme_slug in RESERVED_SLUGS:
+        return "Not Found", 404
+        
+    theme_dir = os.path.join(app.static_folder, 'themes', theme_slug)
+    if not os.path.exists(theme_dir):
+        return "Theme Not Found", 404
+        
+    # If theme.json exists, serve the Universal Engine
+    if os.path.exists(os.path.join(theme_dir, 'theme.json')):
+        return send_from_directory(os.path.join(app.static_folder, 'engine'), 'kiosk.html')
+        
+    # Fallback to legacy index.html if not yet migrated
+    if os.path.exists(os.path.join(theme_dir, 'index.html')):
+        return send_from_directory(theme_dir, 'index.html')
+        
+    return "Theme Template Not Found", 404
 
 
 @app.route('/api/process', methods=['POST'])
@@ -427,9 +447,101 @@ def manage_linux_url():
             CURRENT_LINUX_URL = new_url
             print(f"Update Linux Receiver URL to: {CURRENT_LINUX_URL}")
             return jsonify({'status': 'updated', 'url': CURRENT_LINUX_URL})
-        return jsonify({'error': 'No URL provided'}), 400
-    
-    return jsonify({'url': CURRENT_LINUX_URL})
+# ============================================================
+# THEME STUDIO ADMIN ROUTES
+# ============================================================
+from workflow_inspector import inspect_kiosk_workflow, inspect_video_workflow
+
+@app.route('/admin')
+def admin_panel():
+    """Serve the Theme Studio Admin SPA."""
+    admin_dir = os.path.join(app.static_folder, 'admin')
+    return send_from_directory(admin_dir, 'index.html')
+
+
+@app.route('/api/admin/workflow/inspect', methods=['POST'])
+def admin_inspect_workflow():
+    """Analyze an uploaded ComfyUI API workflow dictionary and return node bindings."""
+    try:
+        data = request.json or {}
+        workflow = data.get('workflow', {})
+        bindings = inspect_kiosk_workflow(workflow)
+        return jsonify({
+            'status': 'success',
+            'bindings': bindings
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+
+@app.route('/api/admin/theme/save', methods=['POST'])
+def admin_save_theme():
+    """Save or update a theme package: theme.json, data.json, bindings.json, and workflow."""
+    try:
+        payload = request.json or {}
+        theme_cfg = payload.get('theme', {})
+        asset_data = payload.get('data', {})
+        bindings = payload.get('bindings')
+        workflow = payload.get('workflow')
+
+        slug = theme_cfg.get('slug', '').strip().lower()
+        if not slug or slug in RESERVED_SLUGS:
+            return jsonify({'error': f'Invalid slug: "{slug}"'}), 400
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        theme_dir = os.path.join(base_dir, 'static', 'themes', slug)
+        dgx_theme_dir = os.path.join(base_dir, '..', 'dgx_photobooth', 'templates', 'themes', slug)
+
+        # Create subdirectories
+        for subdir in ['images/clothes', 'images/poses', 'images/backgrounds', 'images/samples']:
+            os.makedirs(os.path.join(theme_dir, subdir), exist_ok=True)
+        os.makedirs(dgx_theme_dir, exist_ok=True)
+
+        # 1. Save theme.json
+        theme_json_path = os.path.join(theme_dir, 'theme.json')
+        with open(theme_json_path, 'w', encoding='utf-8') as f:
+            json.dump(theme_cfg, f, indent=2, ensure_ascii=False)
+
+        # 2. Save data.json
+        data_json_path = os.path.join(theme_dir, 'data.json')
+        with open(data_json_path, 'w', encoding='utf-8') as f:
+            json.dump(asset_data, f, indent=2, ensure_ascii=False)
+
+        # 3. Save bindings.json if present
+        if bindings:
+            bindings_path = os.path.join(theme_dir, 'bindings.json')
+            with open(bindings_path, 'w', encoding='utf-8') as f:
+                json.dump(bindings, f, indent=2)
+
+        # 4. Save workflow_kiosk.json if uploaded
+        if workflow:
+            wf_path = os.path.join(theme_dir, 'workflow_kiosk.json')
+            with open(wf_path, 'w', encoding='utf-8') as f:
+                json.dump(workflow, f, indent=2)
+
+        # 5. Sync DGX receiver clothes_mapping.json for backwards compatibility
+        dgx_mapping = {}
+        for item in asset_data.get('clothes', []):
+            code = item.get('code')
+            if code:
+                dgx_mapping[code] = {
+                    'desc': item.get('mapping_desc') or item.get('description', ''),
+                    'lighting': item.get('lighting', 'Warm cinematic lighting')
+                }
+        dgx_mapping_path = os.path.join(dgx_theme_dir, 'clothes_mapping.json')
+        with open(dgx_mapping_path, 'w', encoding='utf-8') as f:
+            json.dump(dgx_mapping, f, indent=2, ensure_ascii=False)
+
+        print(f"✅ [Studio] Successfully saved theme package for: '{slug}'")
+        return jsonify({
+            'status': 'success',
+            'slug': slug,
+            'message': f'Theme "{theme_cfg.get("title")}" published successfully'
+        }), 200
+
+    except Exception as e:
+        print(f"❌ [Studio] Error saving theme: {e}")
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':

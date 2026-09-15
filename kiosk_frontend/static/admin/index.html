@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photobooth Theme Studio 🎨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/admin/admin.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="studio-header">
+        <div class="studio-brand">
+            <span class="studio-logo">🎨</span>
+            <div>
+                <span class="studio-title">Theme Studio</span>
+                <span class="studio-tag">V2 Modular</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button id="view-live-btn" class="admin-btn admin-btn-secondary" title="Open Theme in Kiosk">
+                👁️ View Live
+            </button>
+            <button id="new-theme-btn" class="admin-btn admin-btn-secondary">
+                ➕ New Theme
+            </button>
+            <button id="save-publish-btn" class="admin-btn admin-btn-primary">
+                🚀 Save & Publish Live
+            </button>
+            <a href="/" class="admin-btn admin-btn-secondary" style="text-decoration:none;">
+                ← Exit to Booth
+            </a>
+        </div>
+    </header>
+
+    <!-- Studio Body -->
+    <div class="studio-container">
+        <!-- Sidebar: Themes Browser -->
+        <aside class="studio-sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-heading">Themes Catalog</span>
+            </div>
+            <div id="sidebar-theme-list" class="theme-list">
+                <!-- Theme list populated dynamically -->
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="studio-main">
+            <!-- Tabs Bar -->
+            <nav class="tabs-bar">
+                <button class="tab-btn active" data-tab="branding">
+                    <span>✨</span> Identity & Style
+                </button>
+                <button class="tab-btn" data-tab="workflow">
+                    <span>⚡</span> ComfyUI Workflow
+                </button>
+                <button class="tab-btn" data-tab="assets">
+                    <span>👘</span> Asset Manager
+                </button>
+                <button class="tab-btn" data-tab="publish">
+                    <span>🚀</span> Review & Publish
+                </button>
+            </nav>
+
+            <!-- Active Theme Header Banner -->
+            <div style="padding: 1.5rem 2rem 0; display: flex; justify-content: space-between; align-items: center;">
+                <h2 id="current-theme-heading" style="font-size: 1.6rem; font-weight: 700; letter-spacing: -0.01em;">
+                    Theme Editor
+                </h2>
+            </div>
+
+            <!-- Tab 1: Branding & Atmosphere -->
+            <section id="tab-branding" class="tab-content active">
+                <!-- Basic Info -->
+                <div class="form-section">
+                    <h3 class="section-title">🏷️ Basic Identity</h3>
+                    <p class="section-desc">Define the slug, title, and marketing copy for the landing page and booth.</p>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="inp-slug">Theme Slug (URL Identifier)</label>
+                            <input id="inp-slug" type="text" placeholder="e.g. gala2026">
+                        </div>
+                        <div class="form-group">
+                            <label for="inp-title">Display Title</label>
+                            <input id="inp-title" type="text" placeholder="e.g. Jubilee Gala 2026">
+                        </div>
+                        <div class="form-group">
+                            <label for="inp-subtitle">Subtitle / Venue</label>
+                            <input id="inp-subtitle" type="text" placeholder="e.g. Grand Ballroom Edition">
+                        </div>
+                        <div class="form-group">
+                            <label for="inp-badge">Badge Label</label>
+                            <input id="inp-badge" type="text" placeholder="e.g. Golden Jubilee">
+                        </div>
+                        <div class="form-group">
+                            <label for="inp-icon">Emoji / Icon</label>
+                            <input id="inp-icon" type="text" placeholder="e.g. ✨">
+                        </div>
+                        <div class="form-group">
+                            <label for="inp-cta">Start Button Text</label>
+                            <input id="inp-cta" type="text" placeholder="e.g. Start Experience">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="inp-desc">Description / Sub-header</label>
+                            <textarea id="inp-desc" placeholder="Experience the magical celebration in AI."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colors & Typography -->
+                <div class="form-section">
+                    <h3 class="section-title">🎨 Color Palette & Typography</h3>
+                    <p class="section-desc">These CSS tokens dynamically style all backgrounds, glow effects, borders, and buttons.</p>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Background Color</label>
+                            <div class="color-picker-group">
+                                <input id="inp-color-bg" type="color" value="#0c0d14">
+                                <span style="font-size: 0.9rem; font-family: monospace;">Deep Background</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Accent / Highlight Color</label>
+                            <div class="color-picker-group">
+                                <input id="inp-color-accent" type="color" value="#d4af37">
+                                <span style="font-size: 0.9rem; font-family: monospace;">Brand Accent</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Text Color</label>
+                            <div class="color-picker-group">
+                                <input id="inp-color-text" type="color" value="#ffffff">
+                                <span style="font-size: 0.9rem; font-family: monospace;">Main Text</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Primary Button / Card Color</label>
+                            <div class="color-picker-group">
+                                <input id="inp-color-primary" type="color" value="#181926">
+                                <span style="font-size: 0.9rem; font-family: monospace;">Surface Tone</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inp-font">Font Family</label>
+                            <input id="inp-font" type="text" value="'Outfit', sans-serif">
+                        </div>
+                        <div class="form-group">
+                            <label for="inp-google-font">Google Font URL (Optional)</label>
+                            <input id="inp-google-font" type="text" placeholder="https://fonts.googleapis.com/css2?...">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Atmosphere & Features -->
+                <div class="form-section">
+                    <h3 class="section-title">🌌 Atmosphere & Ambient Effects</h3>
+                    <p class="section-desc">Configure floating particle icons, film strips, and feature steps.</p>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="sel-bg-type">Background Visual Preset</label>
+                            <select id="sel-bg-type">
+                                <option value="particles">Floating Particle Icons</option>
+                                <option value="minimal">Minimal Clean Glow</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inp-floating-icons">Floating Icons (comma-separated)</label>
+                            <input id="inp-floating-icons" type="text" value="✨, ✦, ⭐, ✧">
+                        </div>
+                        <div class="form-group full-width" style="display: flex; gap: 2rem; margin-top: 0.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input id="chk-film-strip" type="checkbox">
+                                <span>Enable Rolling Film Strip on Welcome Screen</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input id="chk-lucky-number" type="checkbox">
+                                <span>Enable Lucky Number / Auspicious Numbers Screen</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input id="chk-gender-filter" type="checkbox" checked>
+                                <span>Enable Gender Filter Tabs on Clothes</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Waiting Screen Sequence -->
+                <div class="form-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <h3 class="section-title">⏳ Waiting Screen Manifestation Sequence</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button id="ai-generate-phrases-btn" type="button" class="admin-btn admin-btn-accent">
+                                ✨ AI Auto-Generate 5 Phrases
+                            </button>
+                            <button id="add-waiting-msg-btn" type="button" class="admin-btn admin-btn-secondary">
+                                ➕ Add Step
+                            </button>
+                        </div>
+                    </div>
+                    <p class="section-desc">These messages fade in sequentially on the kiosk screen while ComfyUI generates the image.</p>
+                    <div id="waiting-sequence-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 2: ComfyUI Workflows -->
+            <section id="tab-workflow" class="tab-content">
+                <div class="form-section">
+                    <h3 class="section-title">⚡ ComfyUI API Workflow</h3>
+                    <p class="section-desc">Drop your exported ComfyUI API JSON workflow. The system auto-introspects node topology.</p>
+
+                    <div id="workflow-dropzone" class="dropzone">
+                        <div class="dropzone-icon">📁</div>
+                        <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 0.3rem;">
+                            Drop your ComfyUI workflow API JSON here
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">
+                            or click to browse from your computer
+                        </div>
+                        <input id="workflow-file-input" type="file" accept=".json" style="display: none;">
+                    </div>
+
+                    <!-- Auto-Inspection Results -->
+                    <div id="workflow-inspection-card" class="bindings-card" style="display: none;">
+                        <!-- Injected dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 3: Asset Manager -->
+            <section id="tab-assets" class="tab-content">
+                <!-- Sub-nav for assets -->
+                <div style="display: flex; gap: 0.6rem; margin-bottom: 1.2rem;">
+                    <button class="admin-btn admin-btn-primary asset-subtab-btn active" data-subtab="clothes">👘 Outfits</button>
+                    <button class="admin-btn admin-btn-secondary asset-subtab-btn" data-subtab="poses">🕺 Poses</button>
+                    <button class="admin-btn admin-btn-secondary asset-subtab-btn" data-subtab="backgrounds">🏞️ Backgrounds</button>
+                </div>
+
+                <!-- Clothes Sub-panel -->
+                <div id="subtab-clothes" class="asset-subtab-panel">
+                    <div class="form-section">
+                        <h3 class="section-title">Outfits Catalog</h3>
+                        <p class="section-desc">Clothing designs registered in data.json for this theme.</p>
+                        <div id="studio-clothes-grid" class="asset-studio-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Poses Sub-panel -->
+                <div id="subtab-poses" class="asset-subtab-panel" style="display:none;">
+                    <div class="form-section">
+                        <h3 class="section-title">Poses Catalog</h3>
+                        <p class="section-desc">Selection of poses for this theme.</p>
+                        <div id="studio-poses-grid" class="asset-studio-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Backgrounds Sub-panel -->
+                <div id="subtab-backgrounds" class="asset-subtab-panel" style="display:none;">
+                    <div class="form-section">
+                        <h3 class="section-title">Backgrounds Catalog</h3>
+                        <p class="section-desc">Environments registered in data.json.</p>
+                        <div id="studio-bg-grid" class="asset-studio-grid"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab 4: Review & Publish -->
+            <section id="tab-publish" class="tab-content">
+                <div class="form-section" style="text-align: center; padding: 3rem 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+                    <h3 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.6rem;">Ready to Publish?</h3>
+                    <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 2rem; line-height: 1.5;">
+                        Publishing writes <code style="color: var(--accent);">theme.json</code> and <code style="color: var(--accent);">data.json</code> into the theme package. It will be instantly playable in the Universal Kiosk Engine.
+                    </p>
+                    <button id="save-publish-btn-tab" class="admin-btn admin-btn-primary" style="padding: 0.9rem 2.5rem; font-size: 1.1rem;" onclick="document.getElementById('save-publish-btn').click();">
+                        Publish Theme Live
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Script -->
+    <script src="/static/admin/admin.js"></script>
+</body>
+</html>

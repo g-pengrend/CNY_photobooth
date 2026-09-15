@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photobooth Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link id="theme-font-link" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap">
+    <link rel="stylesheet" href="/static/engine/kiosk.css">
+    <link id="custom-theme-css" rel="stylesheet" href="" style="display:none;">
+</head>
+<body>
+    <!-- Persistent Theme Atmosphere / Decorations -->
+    <div id="persistent-decorations" class="persistent-decorations">
+        <!-- Injected dynamically based on theme.json (particles or custom decorations.html) -->
+    </div>
+
+    <!-- Screen 1: Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <!-- Rolling Film Strip (Optional Atmosphere) -->
+        <div id="film-strip-container" class="film-strip-container">
+            <div class="film-strip-row row-left">
+                <div id="film-track-left" class="film-strip-track"></div>
+            </div>
+            <div class="film-strip-row row-right">
+                <div id="film-track-right" class="film-strip-track"></div>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="hero-section">
+                <div id="theme-badge" class="hero-badge">✨ Featured Experience</div>
+                <h1 class="hero-title">
+                    <span id="theme-title-main">Virtual Try-On</span><br>
+                    <span id="theme-title-sub" style="font-size: 0.6em; opacity: 0.85;">Photo Studio</span>
+                </h1>
+                <p id="theme-subtitle" class="hero-subtitle">
+                    Step into our AI portrait studio. Select your look, strike a pose, and experience the magic.
+                </p>
+                <button id="start-btn" class="btn btn-primary">
+                    <span id="theme-cta-text">Start Experience</span>
+                    <span id="theme-cta-icon">→</span>
+                </button>
+                <a href="/" class="back-home-link">← Return to All Themes</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 2: Gender Selection -->
+    <div id="options-screen" class="screen">
+        <div class="content-wrapper">
+            <h2 class="screen-title">Select Gender</h2>
+            <p class="screen-subtitle">Choose your styling profile to preview outfits</p>
+            <div class="gender-selection">
+                <button class="gender-option" data-gender="female">
+                    <div class="gender-icon">👩</div>
+                    <div class="gender-label">Female</div>
+                </button>
+                <button class="gender-option" data-gender="male">
+                    <div class="gender-icon">👨</div>
+                    <div class="gender-label">Male</div>
+                </button>
+            </div>
+            <button id="back-to-welcome-btn" class="btn btn-secondary">← Back</button>
+        </div>
+    </div>
+
+    <!-- Screen 3: Settings / Lucky Number (Conditional) -->
+    <div id="settings-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="settings-container">
+                <h2 class="screen-title">Auspicious Numbers</h2>
+                <p class="screen-subtitle">Generate your personalized blessing and lucky digits</p>
+                <div class="lucky-toggle-wrapper">
+                    <span>Include Lucky Number</span>
+                    <label class="switch">
+                        <input id="lucky-number-toggle" type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="nav-buttons">
+                    <button id="back-to-gender-btn" class="btn btn-secondary">← Back</button>
+                    <button id="continue-to-pose-btn" class="btn btn-primary">Continue →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 4: Pose Selection -->
+    <div id="pose-screen" class="screen">
+        <div class="content-wrapper">
+            <h2 class="screen-title">Choose Your Pose</h2>
+            <p class="screen-subtitle">Pick the stance that matches your energy</p>
+            <div id="pose-grid" class="cards-grid"></div>
+            <div class="nav-buttons">
+                <button id="pose-back-btn" class="btn btn-secondary">← Back</button>
+                <button id="pose-next-btn" class="btn btn-primary">Next: Outfit →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 5: Clothes Selection -->
+    <div id="clothes-screen" class="screen">
+        <div class="content-wrapper">
+            <h2 class="screen-title">Select Your Outfit</h2>
+            <p class="screen-subtitle">Browse exquisite festive and formal attire</p>
+            <div id="clothes-filter-tabs" class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">All</button>
+                <button class="filter-tab" data-filter="female">Female</button>
+                <button class="filter-tab" data-filter="male">Male</button>
+            </div>
+            <div id="clothes-grid" class="cards-grid"></div>
+            <div class="nav-buttons">
+                <button id="clothes-back-btn" class="btn btn-secondary">← Back</button>
+                <button id="clothes-next-btn" class="btn btn-primary">Next: Setting →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 6: Background Selection -->
+    <div id="background-screen" class="screen">
+        <div class="content-wrapper">
+            <h2 class="screen-title">Select Background</h2>
+            <p class="screen-subtitle">Place yourself in breathtaking environments</p>
+            <div id="background-grid" class="cards-grid"></div>
+            <div class="nav-buttons">
+                <button id="bg-back-btn" class="btn btn-secondary">← Back</button>
+                <button id="bg-next-btn" class="btn btn-primary">Next: Camera →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 7: Camera & Capture -->
+    <div id="camera-screen" class="screen">
+        <div class="content-wrapper">
+            <h2 class="screen-title">Take Your Photo</h2>
+            <p class="screen-subtitle">Align your face inside the guide oval</p>
+            <div class="camera-container">
+                <video id="camera-video" autoplay playsinline></video>
+                <canvas id="photo-canvas" style="display:none;"></canvas>
+                <div class="camera-overlay">
+                    <div class="camera-guide-oval"></div>
+                    <div id="countdown-display" class="countdown-display">3</div>
+                </div>
+                <div id="camera-flash" class="camera-flash"></div>
+            </div>
+            <div class="camera-controls">
+                <button id="camera-back-btn" class="btn btn-secondary">← Back</button>
+                <button id="snap-btn" class="snap-button" title="Capture Photo"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 8: Result & Manifestation Sequence -->
+    <div id="result-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="result-display-wrap">
+                <!-- Loading / Manifestation View -->
+                <div id="loading-view" class="loading-view">
+                    <div class="loading-spinner"></div>
+                    <h3 id="manifest-title" style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.4rem;">Creating Magic...</h3>
+                    <p id="manifest-subtitle" style="font-size: 0.95rem; opacity: 0.75;">Processing your photo</p>
+                    <div id="analytics-overlay" class="analytics-overlay">
+                        <!-- Manifestation sequence steps injected dynamically -->
+                    </div>
+                </div>
+
+                <!-- Final Processed Photo -->
+                <img id="result-image" class="success-image" src="" alt="AI Generated Portrait" style="display:none;">
+            </div>
+
+            <!-- Reveal Button (Click to reveal completed photo) -->
+            <button id="view-result-btn" class="btn btn-primary" style="display:none; margin-top: 1.5rem;">
+                ✨ Reveal Your Portrait
+            </button>
+
+            <!-- Final Result Actions -->
+            <div id="result-actions" class="result-actions" style="display:none;">
+                <button id="print-btn" class="btn btn-primary">🖨️ Print Photo</button>
+                <button id="download-btn" class="btn btn-secondary">💾 Save Photo</button>
+                <button id="home-btn" class="btn btn-secondary">🔄 Start Over</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expand Image Modal -->
+    <div id="image-modal" class="image-modal">
+        <div class="modal-content">
+            <img id="modal-img" src="" alt="Expanded Portrait">
+        </div>
+    </div>
+
+    <!-- Universal Engine Script -->
+    <script type="module" src="/static/engine/kiosk_engine.js"></script>
+</body>
+</html>

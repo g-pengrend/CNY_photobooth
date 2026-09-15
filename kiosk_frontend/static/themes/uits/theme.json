@@ -1,0 +1,82 @@
+{
+  "title": "UITS 50th Anniversary",
+  "subtitle": "Golden Jubilee Dinner",
+  "badge": "Golden Jubilee",
+  "icon": "✨",
+  "description": "Celebrate 50 years of excellence and prestige with our exclusive Golden Jubilee Gala experience.",
+  "cta": "Start Experience",
+  "status": "live",
+  "cardBackground": "/static/landing/uits50_card_bg.png",
+  "features": {
+    "luckyNumber": false,
+    "filmStrip": true,
+    "genderFilter": true
+  },
+  "background": {
+    "type": "particles",
+    "floatingIcons": [
+      "✨",
+      "✦",
+      "⭐",
+      "✧"
+    ],
+    "filmStrip": true
+  },
+  "style": {
+    "fontFamily": "'Outfit', 'Inter', sans-serif",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;600;700&display=swap",
+    "colors": {
+      "background": "#050505",
+      "text": "#FFF8DC",
+      "primary": "#1a1a1a",
+      "accent": "#D4AF37",
+      "accentGlow": "rgba(212, 175, 55, 0.25)",
+      "surface": "rgba(255, 255, 255, 0.05)",
+      "surfaceBorder": "rgba(212, 175, 55, 0.3)"
+    },
+    "gradients": {
+      "radialBackground": "radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.15) 0%, transparent 70%)",
+      "primaryButton": "linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #FFDF00 100%)"
+    }
+  },
+  "waitingExperience": {
+    "title": "Creating Magic...",
+    "subtitle": "Processing your photo",
+    "sequence": [
+      {
+        "text": "Happy 50th Anniversary!",
+        "color": "#FFD700",
+        "size": "1.4rem",
+        "delay": 500
+      },
+      {
+        "text": "UITS Golden Jubilee",
+        "color": "#FFF8DC",
+        "size": "1.1rem",
+        "delay": 2500
+      },
+      {
+        "text": "Unveiling the luxurious textures...",
+        "opacity": 0.8,
+        "delay": 5000
+      },
+      {
+        "text": "Enhancing the golden bokeh...",
+        "opacity": 0.8,
+        "delay": 8000
+      },
+      {
+        "text": "Perfecting the chiaroscuro lighting...",
+        "opacity": 0.8,
+        "delay": 11000
+      },
+      {
+        "text": "Getting ready for the Jubilee Dinner!",
+        "opacity": 0.8,
+        "delay": 13500
+      }
+    ],
+    "completionMessage": "Calculations Complete! Ready to manifest."
+  },
+  "slug": "uits"
+}

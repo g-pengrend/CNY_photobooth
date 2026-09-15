@@ -1,0 +1,14 @@
+{
+  "input_image_node": "65",
+  "prompt_node": "45",
+  "sampler_node": "44",
+  "face_swap_node": "57",
+  "output_node": "60",
+  "detected_tokens": [
+    "\"gender\"",
+    "\"pose\"",
+    "\"clothes_style\"",
+    "\"background\""
+  ],
+  "confidence": "high"
+}

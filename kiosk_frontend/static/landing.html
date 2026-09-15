@@ -30,9 +30,15 @@
                         <span class="logo-subtitle">Festive Virtual Try-On</span>
                     </div>
                 </div>
-                <div class="header-status">
-                    <span class="status-dot"></span>
-                    <span class="status-text">Studio Online</span>
+                <div class="header-actions">
+                    <a href="/admin" class="header-studio-btn" id="theme-studio-btn">
+                        <span>🎨</span>
+                        <span>Theme Studio</span>
+                    </a>
+                    <div class="header-status">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Studio Online</span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -45,7 +51,7 @@
                     pose, and watch your festive look come to life.</p>
             </div>
 
-            <div class="theme-grid">
+            <div class="theme-grid" id="theme-grid">
                 <!-- CNY Theme Card -->
                 <a href="/cny" class="theme-card" id="cny-card">
                     <div class="card-image-wrap">
@@ -259,6 +265,70 @@
                     settingsModal.style.display = 'none';
                 }
             });
+
+            // Dynamically render themes from API
+            async function loadDynamicThemes() {
+                try {
+                    const res = await fetch('/api/themes');
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    const themes = Array.isArray(data) ? data : (data.themes || []);
+                    if (!themes || !Array.isArray(themes) || themes.length === 0) return;
+
+                    const grid = document.getElementById('theme-grid');
+                    if (!grid) return;
+
+                    grid.innerHTML = themes.map(t => {
+                        const slug = t.slug;
+                        const title = t.title || slug.toUpperCase();
+                        const badge = t.badge || 'Virtual Try-On';
+                        const icon = t.icon || '✨';
+                        const desc = t.description || 'Celebrate with AI Virtual Try-On';
+                        const cta = t.cta || 'Start Celebration';
+                        const accent = t.style?.colors?.accent || '#fbbf24';
+                        const isComingSoon = t.status === 'coming-soon';
+
+                        const tags = [];
+                        if (t.features?.luckyNumber) tags.push('Lucky Numbers');
+                        if (t.features?.genderFilter) tags.push('Multi-Gender');
+                        if (t.features?.filmStrip) tags.push('Film Strip');
+                        if (tags.length === 0) tags.push('New Experience');
+
+                        const cardBg = t.cardBackground || `/static/landing/${slug}_card_bg.png`;
+                        const altBg = `/static/landing/${slug}_bg.png`;
+
+                        return `
+                        <a href="/${slug}" class="theme-card" id="${slug}-card" style="border: 1px solid ${accent}40;">
+                            <div class="card-image-wrap" style="background: radial-gradient(circle at center, ${accent}22 0%, #0a0a0f 80%);">
+                                <img src="${cardBg}" alt="${title}" class="card-bg" onerror="if (this.src.indexOf('${altBg}') === -1) { this.src='${altBg}'; } else { this.style.display='none'; }">
+                                <div class="card-overlay"></div>
+                            </div>
+                            <div class="card-inner">
+                                <div class="card-badge ${isComingSoon ? 'coming-soon' : ''}" style="background: ${accent}22; border-color: ${accent}60; color: ${accent};">
+                                    ${badge}
+                                </div>
+                                <div class="card-icon">${icon}</div>
+                                <h2 class="card-title" style="color: #fff;">${title}</h2>
+                                <p class="card-description">${desc}</p>
+                                <div class="card-tags">
+                                    ${tags.map(tag => `<span class="tag" style="border-color: ${accent}50; color: ${accent};">${tag}</span>`).join('')}
+                                </div>
+                                <div class="card-cta" style="background: ${accent}; color: #000;">
+                                    <span>${cta}</span>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </a>
+                        `;
+                    }).join('');
+                } catch (err) {
+                    console.warn('Could not dynamically refresh theme grid:', err);
+                }
+            }
+
+            loadDynamicThemes();
         });
     </script>
 </body>

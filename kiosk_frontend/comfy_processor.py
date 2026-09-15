@@ -7,6 +7,7 @@ import io
 from PIL import Image
 import websocket
 from face_analysis import generate_lucky_number_from_face
+from workflow_inspector import load_theme_bindings
 
 # Configuration
 from config import COMFY_SERVER_ADDRESS
@@ -20,30 +21,47 @@ def encode_image_to_base64(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
-def update_workflow_with_image(workflow, image_path, gender="female", pose="", clothes_style="", background=""):
-    """Update workflow with uploaded image and all user selections"""
+def update_workflow_with_image(workflow, image_path, gender="female", pose="", clothes_style="", background="", bindings=None):
+    """Update workflow with uploaded image and all user selections dynamically"""
+    bindings = bindings or {}
+    image_node = bindings.get("input_image_node", "65")
+    prompt_node = bindings.get("prompt_node", "45")
+    face_swap_node = bindings.get("face_swap_node", "57")
+
     base64_image = encode_image_to_base64(image_path)
-    workflow["65"]["inputs"]["base64_data"] = base64_image
+    if image_node in workflow and "inputs" in workflow[image_node]:
+        workflow[image_node]["inputs"]["base64_data"] = base64_image
     
-    # New logic for gender_style
+    # Logic for gender_style
     gender_style = "executive leading man" if gender.lower() == "male" else "charismatic k-pop idol"
 
     # Update prompt text with all variables
-    current_text = workflow["45"]["inputs"]["text"]
-    current_text = current_text.replace('"gender"', gender)
-    current_text = current_text.replace('"gender_style"', gender_style)
-    current_text = current_text.replace('"pose"', pose)
-    current_text = current_text.replace('"clothes_style"', clothes_style)
-    current_text = current_text.replace('"background"', background)
-    workflow["45"]["inputs"]["text"] = current_text
+    if prompt_node in workflow and "inputs" in workflow[prompt_node] and "text" in workflow[prompt_node]["inputs"]:
+        current_text = workflow[prompt_node]["inputs"]["text"]
+        replacements = {
+            '"gender"': gender,
+            '{gender}': gender,
+            '"gender_style"': gender_style,
+            '{gender_style}': gender_style,
+            '"pose"': pose,
+            '{pose}': pose,
+            '"clothes_style"': clothes_style,
+            '{clothes_style}': clothes_style,
+            '"background"': background,
+            '{background}': background
+        }
+        for token, val in replacements.items():
+            current_text = current_text.replace(token, val)
+        workflow[prompt_node]["inputs"]["text"] = current_text
     
-    # Update gender detection fields (lines 144, 145)
-    workflow["57"]["inputs"]["detect_gender_input"] = "no"
-    workflow["57"]["inputs"]["detect_gender_source"] = "no"
+    # Update gender detection fields if node exists
+    if face_swap_node in workflow and "inputs" in workflow[face_swap_node]:
+        workflow[face_swap_node]["inputs"]["detect_gender_input"] = "no"
+        workflow[face_swap_node]["inputs"]["detect_gender_source"] = "no"
     
     return workflow
 
-def update_workflow_with_lucky_number(workflow, enable_lucky_number=True, image_path=None):
+def update_workflow_with_lucky_number(workflow, enable_lucky_number=True, image_path=None, bindings=None):
 
     """Update workflow with lucky number text or empty string"""
     
@@ -71,8 +89,11 @@ def update_workflow_with_lucky_number(workflow, enable_lucky_number=True, image_
         lucky_text = f'Centered at the bottom is the elegant text "{selected_blessing}".'
         print(f"Lucky number disabled, using blessing: {lucky_text}")
     
-    current_text = workflow["45"]["inputs"]["text"]
-    workflow["45"]["inputs"]["text"] = current_text.replace('"lucky_num"', lucky_text)
+    prompt_node = (bindings or {}).get("prompt_node", "45")
+    if prompt_node in workflow and "inputs" in workflow[prompt_node] and "text" in workflow[prompt_node]["inputs"]:
+        current_text = workflow[prompt_node]["inputs"]["text"]
+        current_text = current_text.replace('"lucky_num"', lucky_text).replace('{lucky_num}', lucky_text)
+        workflow[prompt_node]["inputs"]["text"] = current_text
     return workflow
 
 def queue_prompt(prompt, workflow=None):
@@ -159,29 +180,38 @@ def process_image(input_image_path, theme="cny", gender="female", pose="", cloth
     """
     try:
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        if theme == "hariraya":
-            workflow_file = os.path.join(base_dir, "static", "themes", "hariraya", "ZIT_FaceSwapAPI(HR).json")
-        elif theme == "uits":
-            workflow_file = os.path.join(base_dir, "static", "themes", "uits", "ZIT_FaceSwapAPI(uits).json")
-        elif theme == "ndp2026":
-            workflow_file = os.path.join(base_dir, "static", "themes", "ndp2026", "ZIT_FaceSwapAPI(ndp2026).json")
-        else:
+        theme_dir = os.path.join(base_dir, "static", "themes", theme)
+        workflow_file = None
+
+        # Dynamically find workflow in theme directory
+        if os.path.exists(theme_dir):
+            for fname in os.listdir(theme_dir):
+                if fname.endswith(".json") and ("ZIT" in fname or "workflow" in fname.lower()) and fname != "bindings.json":
+                    workflow_file = os.path.join(theme_dir, fname)
+                    break
+
+        if not workflow_file:
+            # Fallback
             workflow_file = os.path.join(base_dir, "static", "themes", "cny", "ZIT_FaceSwapAPI(CNY).json")
+
+        # Load dynamic theme bindings
+        bindings = load_theme_bindings(theme_dir) if os.path.exists(theme_dir) else {}
+        sampler_node = bindings.get("sampler_node", "44")
 
         # Load workflow from JSON file
         workflow = load_workflow(workflow_file)
         
-        # Randomize Seed for KSampler (Node 44)
+        # Randomize Seed for KSampler dynamically
         seed = random.randint(1, 1000000000000000)
-        if "44" in workflow and "inputs" in workflow["44"]:
-            workflow["44"]["inputs"]["seed"] = seed
-            print(f"Randomized Seed: {seed}")
+        if sampler_node in workflow and "inputs" in workflow[sampler_node]:
+            workflow[sampler_node]["inputs"]["seed"] = seed
+            print(f"Randomized Seed in Node #{sampler_node}: {seed}")
             
-        print("Workflow loaded successfully.")
+        print(f"Workflow loaded successfully for theme: {theme} ({os.path.basename(workflow_file)})")
 
-        # Update the workflow with the input image and all selections
-        workflow = update_workflow_with_image(workflow, input_image_path, gender, pose, clothes_style, background)
-        workflow = update_workflow_with_lucky_number(workflow, enable_lucky_number, input_image_path)
+        # Update the workflow with the input image and all selections using dynamic bindings
+        workflow = update_workflow_with_image(workflow, input_image_path, gender, pose, clothes_style, background, bindings=bindings)
+        workflow = update_workflow_with_lucky_number(workflow, enable_lucky_number, input_image_path, bindings=bindings)
         
         # Calculate gender_style for logging
         gender_style = "asian, fit and charismatic" if gender.lower() == "male" else "charismatic k-pop idol"

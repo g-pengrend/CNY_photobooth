@@ -1,0 +1,82 @@
+{
+  "title": "NDP 2026",
+  "subtitle": "Majulah Singapura — Go Beyond!",
+  "badge": "National Day",
+  "icon": "🎆",
+  "description": "Celebrate National Day 2026 with our exclusive festive Virtual Try-On experience.",
+  "cta": "Start Celebration",
+  "status": "live",
+  "cardBackground": "/static/landing/ndp2026_bg.png",
+  "features": {
+    "luckyNumber": false,
+    "filmStrip": true,
+    "genderFilter": true
+  },
+  "background": {
+    "type": "particles",
+    "floatingIcons": [
+      "⭐",
+      "✨",
+      "🎆",
+      "✦"
+    ],
+    "filmStrip": true
+  },
+  "style": {
+    "fontFamily": "'Outfit', 'Inter', sans-serif",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;600;700&display=swap",
+    "colors": {
+      "background": "#0F0306",
+      "text": "#FFFFFF",
+      "primary": "#ED1C24",
+      "accent": "#FFC72C",
+      "accentGlow": "rgba(237, 28, 36, 0.25)",
+      "surface": "rgba(255, 255, 255, 0.05)",
+      "surfaceBorder": "rgba(237, 28, 36, 0.3)"
+    },
+    "gradients": {
+      "radialBackground": "radial-gradient(circle at 50% 50%, rgba(237, 28, 36, 0.25) 0%, transparent 70%)",
+      "primaryButton": "linear-gradient(135deg, #ED1C24 0%, #C4121A 50%, #800000 100%)"
+    }
+  },
+  "waitingExperience": {
+    "title": "Creating Magic...",
+    "subtitle": "Processing your photo",
+    "sequence": [
+      {
+        "text": "Happy NDP 2026!",
+        "color": "#FFD700",
+        "size": "1.4rem",
+        "delay": 500
+      },
+      {
+        "text": "Majulah Singapura — Go Beyond!",
+        "color": "#FFFFFF",
+        "size": "1.1rem",
+        "delay": 2500
+      },
+      {
+        "text": "Unveiling the vibrant festive textures...",
+        "opacity": 0.8,
+        "delay": 5000
+      },
+      {
+        "text": "Enhancing the celebratory fireworks glow...",
+        "opacity": 0.8,
+        "delay": 8000
+      },
+      {
+        "text": "Perfecting the National Day portrait lighting...",
+        "opacity": 0.8,
+        "delay": 11000
+      },
+      {
+        "text": "Getting ready for the NDP 2026 Celebration!",
+        "opacity": 0.8,
+        "delay": 13500
+      }
+    ],
+    "completionMessage": "Calculations Complete! Ready to manifest."
+  },
+  "slug": "ndp2026"
+}
