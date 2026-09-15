@@ -1,6 +1,11 @@
 # CNY Photobooth - Client Dependencies
 # Suitable for Windows Host PC or macOS (M1/M2/M3) client
 
+# Cloudflare Tunnel CLI (cloudflared) is required on both Mac and Windows for mobile QR code access:
+# - Mac: install via Homebrew: brew install cloudflared
+# - Windows: install via Winget: winget install Cloudflare.cloudflared
+#   (Or download cloudflared.exe and place it in your system PATH or project folder)
+
 Flask>=3.0.0
 Flask-Cors>=4.0.0
 requests>=2.31.0
