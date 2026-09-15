@@ -10,8 +10,6 @@ from comfy_processor import queue_prompt, get_image
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES_DIR = os.path.join(BASE_DIR, "admin", "asset_templates")
-if not os.path.exists(TEMPLATES_DIR):
-    TEMPLATES_DIR = os.path.join(BASE_DIR, "asset_templates")
 TMP_DIR = os.path.join(BASE_DIR, "static", "tmp")
 os.makedirs(TMP_DIR, exist_ok=True)
 
