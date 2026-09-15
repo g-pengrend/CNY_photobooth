@@ -26,17 +26,17 @@
     "fontFamily": "'Outfit', 'Inter', sans-serif",
     "googleFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;600;700&display=swap",
     "colors": {
-      "background": "#0F0306",
-      "text": "#FFFFFF",
-      "primary": "#ED1C24",
-      "accent": "#FFC72C",
-      "accentGlow": "rgba(237, 28, 36, 0.25)",
+      "background": "#0f0306",
+      "accent": "#ffc72c",
+      "text": "#ffffff",
+      "primary": "#ed1c24",
+      "accentGlow": "rgba(255, 199, 44, 0.25)",
       "surface": "rgba(255, 255, 255, 0.05)",
-      "surfaceBorder": "rgba(237, 28, 36, 0.3)"
+      "surfaceBorder": "rgba(255, 199, 44, 0.3)"
     },
     "gradients": {
-      "radialBackground": "radial-gradient(circle at 50% 50%, rgba(237, 28, 36, 0.25) 0%, transparent 70%)",
-      "primaryButton": "linear-gradient(135deg, #ED1C24 0%, #C4121A 50%, #800000 100%)"
+      "radialBackground": "radial-gradient(circle at 50% 50%, rgba(255, 199, 44, 0.25) 0%, transparent 70%)",
+      "primaryButton": "linear-gradient(135deg, #ed1c24 0%, #ffc72c 100%)"
     }
   },
   "waitingExperience": {
@@ -45,35 +45,33 @@
     "sequence": [
       {
         "text": "Happy NDP 2026!",
-        "color": "#FFD700",
-        "size": "1.4rem",
-        "delay": 500
+        "delay": 500,
+        "color": "#ffd700"
       },
       {
         "text": "Majulah Singapura — Go Beyond!",
-        "color": "#FFFFFF",
-        "size": "1.1rem",
-        "delay": 2500
+        "delay": 2500,
+        "color": "#ffffff"
       },
       {
         "text": "Unveiling the vibrant festive textures...",
-        "opacity": 0.8,
-        "delay": 5000
+        "delay": 5000,
+        "color": "#ffffff"
       },
       {
         "text": "Enhancing the celebratory fireworks glow...",
-        "opacity": 0.8,
-        "delay": 8000
+        "delay": 8000,
+        "color": "#ffffff"
       },
       {
         "text": "Perfecting the National Day portrait lighting...",
-        "opacity": 0.8,
-        "delay": 11000
+        "delay": 11000,
+        "color": "#ffffff"
       },
       {
         "text": "Getting ready for the NDP 2026 Celebration!",
-        "opacity": 0.8,
-        "delay": 13500
+        "delay": 13500,
+        "color": "#ffffff"
       }
     ],
     "completionMessage": "Calculations Complete! Ready to manifest."

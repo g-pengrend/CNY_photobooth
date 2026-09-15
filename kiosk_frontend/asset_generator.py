@@ -29,7 +29,7 @@ ASSET_TEMPLATES = {
         "title": "Outfit / Clothes",
         "file": "clothes_templateAPI.json",
         "category": "clothes",
-        "code_prefix": "O",
+        "code_prefix": "C",
         "static_prefix_template": "A professional studio product shot of a standalone {gender} outfit, featuring \n\n",
         "default_middle": "a stylish sleeveless A-line dress that integrates a clean white bodice with a deep Singapore red skirt. The slightly flared skirt is adorned with an elegant, flowing white Vanda Miss Joaquim orchid motif pattern across its surface, balanced against the white bodice for an aesthetically pleasing mix of both colors.",
         "static_suffix": "\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
@@ -192,43 +192,49 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
     resolved_title, file_slug = generate_asset_name_and_slug(asset_type, asset_name, prompt_desc)
     final_filename = f"{file_slug}.png"
 
-    # Target directory in theme or master
-    theme_slug = (target_theme or "master").strip().lower()
-    theme_dir = os.path.join(BASE_DIR, "static", "themes", theme_slug)
-    dest_dir = os.path.join(theme_dir, "images", category)
-    os.makedirs(dest_dir, exist_ok=True)
-    dest_path = os.path.join(dest_dir, final_filename)
+    # Always copy to canonical master images
+    master_dir = os.path.join(BASE_DIR, "static", "themes", "master")
+    master_dest_dir = os.path.join(master_dir, "images", category)
+    os.makedirs(master_dest_dir, exist_ok=True)
+    master_dest_path = os.path.join(master_dest_dir, final_filename)
 
     # Avoid collision by appending timestamp if exists
-    if os.path.exists(dest_path):
+    if os.path.exists(master_dest_path):
         final_filename = f"{file_slug}-{int(time.time()) % 10000}.png"
-        dest_path = os.path.join(dest_dir, final_filename)
+        master_dest_path = os.path.join(master_dest_dir, final_filename)
 
-    shutil.copy2(src_path, dest_path)
-    web_path = f"/static/themes/{theme_slug}/images/{category}/{final_filename}"
-    print(f"✅ [AssetGen] Asset permanently stored at: {web_path}")
+    shutil.copy2(src_path, master_dest_path)
+    canonical_web_path = f"/static/themes/master/images/{category}/{final_filename}"
+    print(f"✅ [AssetGen] Canonical asset stored at: {canonical_web_path}")
 
-    # Register into target theme data.json
-    data_json_path = os.path.join(theme_dir, "data.json")
-    theme_data = {"clothes": [], "poses": [], "backgrounds": []}
-    if os.path.exists(data_json_path):
+    # Determine target theme directory
+    theme_slug = (target_theme or "master").strip().lower()
+    if theme_slug != "master":
+        target_dir = os.path.join(BASE_DIR, "static", "themes", theme_slug)
+        target_dest_dir = os.path.join(target_dir, "images", category)
+        os.makedirs(target_dest_dir, exist_ok=True)
+        shutil.copy2(src_path, os.path.join(target_dest_dir, final_filename))
+
+    # Read master data.json to assign sequential code
+    master_data_path = os.path.join(master_dir, "data.json")
+    master_data = {"clothes": [], "poses": [], "backgrounds": []}
+    if os.path.exists(master_data_path):
         try:
-            with open(data_json_path, "r", encoding="utf-8") as f:
-                theme_data = json.load(f)
+            with open(master_data_path, "r", encoding="utf-8") as f:
+                master_data = json.load(f)
         except Exception:
             pass
 
-    if category not in theme_data:
-        theme_data[category] = []
+    if category not in master_data:
+        master_data[category] = []
 
-    item_count = len(theme_data[category])
+    item_count = len(master_data[category])
     code = f"{cfg['code_prefix']}{item_count + 1:02d}" if cfg['code_prefix'] == 'C' else f"{cfg['code_prefix']}{item_count + 1}"
-    item_id = f"{theme_slug}_{file_slug}"
+    item_id = file_slug
 
     # Extract concise description for the FLF workflow
     mapping_desc = resolved_title
     if asset_type == "clothes":
-        # Strip out prompt boilerplate to get concise phrase for FLF style_type
         clean_text = prompt_desc or ""
         clean_text = re.sub(r'^.*?featuring\s+', '', clean_text, flags=re.IGNORECASE)
         clean_text = re.sub(r'The outfit is displayed to maintain.*$', '', clean_text, flags=re.IGNORECASE | re.DOTALL)
@@ -241,28 +247,58 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
 
     lighting_desc = "Warm Golden and Scarlet" if "cny" in theme_slug else "Cinematic ambient studio lighting"
 
-    new_item = {
+    # 1. Full Master Asset Definition
+    master_item = {
         "id": item_id,
         "code": code,
         "title": resolved_title,
         "name": resolved_title,
-        "image": web_path,
+        "image": canonical_web_path,
         "prompt_modifier": prompt_desc or resolved_title,
         "mapping_desc": mapping_desc,
         "lighting": lighting_desc
     }
-
     if asset_type == "clothes":
-        new_item["category"] = gender or "unisex"
-        new_item["gender"] = gender or "unisex"
+        master_item["category"] = gender or "unisex"
+        master_item["gender"] = gender or "unisex"
 
-        # Update clothes_mapping.json for FLF workflow across themes and DGX
+    # Add to master if not already present
+    if not any(i.get('id') == item_id for i in master_data[category]):
+        master_data[category].append(master_item)
+        with open(master_data_path, "w", encoding="utf-8") as f:
+            json.dump(master_data, f, indent=2, ensure_ascii=False)
+
+    # 2. If target theme is not master, add clean pointer reference to target theme data.json
+    if theme_slug != "master":
+        target_data_path = os.path.join(BASE_DIR, "static", "themes", theme_slug, "data.json")
+        target_data = {"clothes": [], "poses": [], "backgrounds": []}
+        if os.path.exists(target_data_path):
+            try:
+                with open(target_data_path, "r", encoding="utf-8") as f:
+                    target_data = json.load(f)
+            except Exception:
+                pass
+        if category not in target_data:
+            target_data[category] = []
+        theme_item_count = len(target_data[category])
+        theme_code = f"{cfg['code_prefix']}{theme_item_count + 1:02d}" if cfg['code_prefix'] == 'C' else f"{cfg['code_prefix']}{theme_item_count + 1}"
+        pointer = {"id": item_id, "code": theme_code}
+        if asset_type == "clothes" and gender:
+            pointer["category"] = gender
+        target_data[category].append(pointer)
+        with open(target_data_path, "w", encoding="utf-8") as f:
+            json.dump(target_data, f, indent=2, ensure_ascii=False)
+
+    # 3. Update clothes_mapping.json for FLF workflow across themes and DGX
+    if asset_type == "clothes":
         mapping_dirs = [
-            theme_dir,
             os.path.join(BASE_DIR, "static", "themes", "master"),
-            os.path.join(BASE_DIR, "..", "dgx_photobooth", "templates", "themes", theme_slug),
             os.path.join(BASE_DIR, "..", "dgx_photobooth", "templates", "themes", "master")
         ]
+        if theme_slug != "master":
+            mapping_dirs.append(os.path.join(BASE_DIR, "static", "themes", theme_slug))
+            mapping_dirs.append(os.path.join(BASE_DIR, "..", "dgx_photobooth", "templates", "themes", theme_slug))
+
         for m_dir in mapping_dirs:
             os.makedirs(m_dir, exist_ok=True)
             m_path = os.path.join(m_dir, "clothes_mapping.json")
@@ -284,18 +320,14 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
             except Exception as me:
                 print(f"⚠️ [AssetGen] Failed writing mapping {m_path}: {me}")
 
-    theme_data[category].append(new_item)
-
-    with open(data_json_path, "w", encoding="utf-8") as f:
-        json.dump(theme_data, f, indent=2, ensure_ascii=False)
-
     return {
         "success": True,
-        "web_path": web_path,
+        "web_path": canonical_web_path,
         "filename": final_filename,
         "title": resolved_title,
-        "item": new_item,
+        "item": master_item,
         "target_theme": theme_slug
     }
+
 
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_file, send_from_directory
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 import os
 import sys
@@ -25,11 +25,10 @@ CORS(app)
 # Store job status in memory (for production, use Redis or database)
 jobs = {}
 
-# Configuration
+# Configuration & Network
 from config import LINUX_RECEIVER_URL, print_config
 CURRENT_LINUX_URL = LINUX_RECEIVER_URL
 
-# Configuration
 UPLOAD_FOLDER = 'uploads'
 OUTPUT_FOLDER = 'outputs'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)

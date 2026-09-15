@@ -1,191 +1,401 @@
 {
+  "backgrounds": [
+    {
+      "code": "B01",
+      "description": "The Gardens by the Bay at twilight, with orchids and exotic ferns",
+      "id": "the-gardens-by-the-bay",
+      "image": "/static/themes/master/images/backgrounds/the-gardens-by-the-bay.png",
+      "prompt": "A wide open space overlooking Gardens by the Bay at twilight. Soft bioluminescent light and cool ambient glow illuminate lush interior orchids and exotic ferns. In the distance, majestic illuminated Supertrees rise into a deep violet evening sky, glowing with vibrant magenta and warm gold lights.",
+      "title": "The Gardens by the Bay at twilight"
+    },
+    {
+      "code": "B02",
+      "description": "A cinematic, mid-distance view of marina bay hotel in the night",
+      "id": "the-marina-bay-scene",
+      "image": "/static/themes/master/images/backgrounds/the-marina-bay-scene.png",
+      "prompt": "A cinematic, mid-distance view across the dark water at night, bringing the glowing lotus structure of the ArtScience Museum into the immediate foreground. Towering directly behind it, the monumental Marina Bay Sands hotel looms grandly into the night sky, creating a dramatic sense of scale where the landmarks feel intimately detailed yet grandly immense, with vibrant night lights reflecting across the bay.",
+      "title": "The Marina Bay Scene"
+    },
+    {
+      "code": "B03",
+      "description": "A cinematic, mid-distance view at night focusing on the iconic Merlion statue",
+      "id": "the-merlion-park",
+      "image": "/static/themes/master/images/backgrounds/the-merlion-park.png",
+      "prompt": "A cinematic, mid-distance view at night focusing on the iconic Merlion statue, brilliantly illuminated as a stream of water spouts into the dark bay. In the background, the glowing Marina Bay city skyline creates a grand, luminous backdrop, with vibrant night lights and architecture reflecting shimmering colors across the water's surface.",
+      "title": "The Merlion Park"
+    },
+    {
+      "code": "B04",
+      "description": "Elegant colonial-era porch featuring emerald Peranakan tiles, louvered shutters, and a traditional Malay feast",
+      "id": "colonial-era-veranda",
+      "image": "/static/themes/master/images/backgrounds/colonial-era-veranda.png",
+      "prompt": "an elegant colonial-era veranda in Singapore, with gleaming emerald-green Peranakan floor tiles and white louvered shutters. Soft morning sunlight filters through a lush tropical garden of oversized monstera leaves and blooming hibiscus. In the distance, a beautifully set dining table holds antique brass trays filled with traditional Malay delicacies,",
+      "title": "Singapore Heritage Veranda"
+    },
+    {
+      "code": "B05",
+      "description": "Epic panoramic view of snow-covered mountains with sunburst and ice formations",
+      "id": "the-frozen-sunburst-summit",
+      "image": "/static/themes/master/images/backgrounds/the-frozen-sunburst-summit.png",
+      "prompt": "An epic, ultra-realistic panoramic view of a snow-covered mountain range at dawn. Massive, jagged ice formations in the foreground reflect pale-blue and violet light. A rare sunburst pierces through the heavy cloud cover, casting golden light beams across the frosted landscape.",
+      "title": "The Frozen Sunburst Summit"
+    },
+    {
+      "code": "B06",
+      "description": "A minimalist winter courtyard at twilight with a frozen, jet-black obsidian pond",
+      "id": "the-winter-courtyard",
+      "image": "/static/themes/master/images/backgrounds/the-winter-courtyard.png",
+      "prompt": "A minimalist winter western-style courtyard at twilight with a frozen, jet-black obsidian pond. The surrounding trees are crafted from hand-blown frosted glass and crystalline silver, catching the moonlight. The ground is a dark, wet slate that reflects the deep indigo sky.",
+      "title": "The Winter Courtyard"
+    },
+    {
+      "code": "B07",
+      "description": "Storm clouds part as sun-moon halo crowns the ancient jade mountains.",
+      "id": "halo-over-the-jade-ridge",
+      "image": "/static/themes/master/images/backgrounds/halo-over-the-jade-ridge.png",
+      "prompt": "A remote mountain ridge at night, rendered in ultra-photorealistic detail. Jagged dark-jade cliffs and ancient stone formations fade into mist. In the distant sky, a rare sun-moon halo glows behind layered storm clouds, casting silver-gold light across the landscape.",
+      "title": "Halo Over the Jade Ridge"
+    },
+    {
+      "code": "B09",
+      "description": "Dreamy cherry blossom forest with glowing petals and floating spirit-lights",
+      "id": "the-ethereal-moonlit-blossom-forest",
+      "image": "/static/themes/master/images/backgrounds/the-ethereal-moonlit-blossom-forest.png",
+      "prompt": "A moonlit forest of cherry blossom trees with luminous, pale-pink petals that glow from within. The ground is a soft carpet of fallen blossoms, and small, floating spirit-lights (will-o'-the-wisps) drift between the branches. A soft-focus, dreamy background with a deep indigo sky and a giant, silver full moon.",
+      "title": "The Ethereal Moonlit Blossom Forest"
+    },
+    {
+      "id": "jewel-rain-vortex",
+      "code": "B28"
+    }
+  ],
   "clothes": [
     {
-      "id": "singapore-skyline-button-up",
+      "category": "male",
       "code": "C01",
-      "category": "male"
+      "description": "Men's contemporary short-sleeve button-up in vibrant Singapore red with a white tonal abstract skyline pattern, paired with white tailored chinos",
+      "id": "singapore-skyline-button-up",
+      "image": "/static/themes/master/images/clothes/singapore-skyline-button-up.png",
+      "lighting": "Red and Crisp White",
+      "mapping_desc": "contemporary short-sleeve button-up shirt in red, white chinos",
+      "prompt": "Men's contemporary short-sleeve button-up shirt in a vibrant Singapore red, featuring a white tonal abstract Singapore skyline pattern across the chest, paired with clean white tailored chinos, modern celebratory aesthetic.",
+      "title": "Singapore Skyline Button-Up"
     },
     {
-      "id": "vanda-miss-joaquim-orchid-dress",
+      "category": "female",
       "code": "C02",
-      "category": "female"
+      "description": "Women's stylish sleeveless A-line dress with a structured white bodice, deep red skirt, and cascading white Vanda Miss Joaquim orchid motifs",
+      "id": "vanda-miss-joaquim-orchid-dress",
+      "image": "/static/themes/master/images/clothes/vanda-miss-joaquim-orchid-dress.png",
+      "lighting": "Red and Crisp White",
+      "mapping_desc": "stylish A-line dress, deep red skirt, and orchid motifs",
+      "prompt": "women's outfit, featuring a stylish sleeveless A-line dress that integrates a clean white bodice with a deep Singapore red skirt. The slightly flared skirt is adorned with an elegant, flowing white Vanda Miss Joaquim orchid motif pattern across its surface, balanced against the white bodice for an aesthetically pleasing mix of both colors.",
+      "title": "Vanda Miss Joaquim Orchid Dress"
     },
     {
-      "id": "abyssal-phoenix-daopa",
+      "category": "male",
       "code": "C03",
-      "category": "male"
+      "description": "Midnight silk robes layered with molten gold embroidery and flowing crimson sashes",
+      "id": "abyssal-phoenix-daopa",
+      "image": "/static/themes/master/images/clothes/abyssal-phoenix-daopa.png",
+      "lighting": "Midnight Blue and Gold",
+      "mapping_desc": "midnight-black silk with heavy gold-thread dragon-scale embroidery",
+      "prompt": "A Xianxia style male immortal, a structured midnight-black silk Daopa (道袍) with heavy gold-thread dragon-scale embroidery. Layered with a dark charcoal translucent outer robe that billows with spiritual energy. Cinched by a wide scarlet leather belt with gold dragon buckles and long, dark red silk ribbons. The fabric features an iridescent oil-slick sheen that transitions from deep black to forest green.",
+      "title": "Abyssal Phoenix Daopa (道袍)"
     },
     {
-      "id": "iron-blood-shanwenjia",
+      "category": "male",
       "code": "C04",
-      "category": "male"
+      "description": "Crimson robes armored in mountain-pattern steel and heavy silk",
+      "id": "iron-blood-shanwenjia",
+      "image": "/static/themes/master/images/clothes/iron-blood-shanwenjia.png",
+      "lighting": "Vermillion and Steel Grey",
+      "mapping_desc": "deep vermilion robe layered under a black iron chest plate",
+      "prompt": "A deep vermilion Yuanlingpao (圆领袍) robe layered under a black iron Shanwenjia (山纹甲) chest plate, secured by a heavy leather Gedai (革带) and wide silk Panyu (盘腰) sashes.",
+      "title": "Iron Blood Shanwenjia (山纹甲)"
     },
     {
-      "id": "golden-radiance-qipao",
+      "category": "female",
       "code": "C05",
-      "category": "female"
+      "description": "Elegant gold brocade with graceful red chiffon butterfly sleeves",
+      "id": "golden-radiance-qipao",
+      "image": "/static/themes/master/images/clothes/golden-radiance-qipao.png",
+      "lighting": "Warm Gold and Soft Red",
+      "mapping_desc": "contemporary knee-length dress crafted from metallic gold floral brocade",
+      "prompt": "A contemporary knee-length Cheongsam crafted from metallic gold floral brocade, featuring a high mandarin collar and delicate red silk piping. Instead of a sheer overlay, it includes translucent red chiffon butterfly sleeves for a touch of airy elegance.",
+      "title": "Golden Radiance Qipao"
     },
     {
-      "id": "moonlit-peony-ruqun",
+      "category": "female",
       "code": "C06",
-      "category": "female"
+      "description": "Ethereal silk layers in soft peach and silver with misty floral embroidery",
+      "id": "moonlit-peony-ruqun",
+      "image": "/static/themes/master/images/clothes/moonlit-peony-ruqun.png",
+      "lighting": "Silver and Peach",
+      "mapping_desc": "multi-layered dress in moonlight silver and soft peach silk",
+      "prompt": "Xianxia style female immortal, a multi-layered Ruqun (襦裙) in moonlight silver and soft peach silk. The inner robe is pale vermilion with delicate white peony embroidery, covered by a translucent floor-length outer robe that creates a misty, ethereal glow. Wide 'water sleeves' drape gracefully, finished with iridescent silver piping. A high-waisted silk sash with long, flowing ribbons catches the wind, surrounded by faint floating cherry blossom petals.",
+      "title": "Moonlit Peony Ruqun (襦裙)"
     },
     {
-      "id": "peony-jacquard-dress",
+      "category": "female",
       "code": "C07",
-      "category": "female"
+      "description": "Crimson velvet cape over a rich peony-patterned gold-pink gown",
+      "id": "peony-jacquard-dress",
+      "image": "/static/themes/master/images/clothes/peony-jacquard-dress.png",
+      "lighting": "Crimson and Pink",
+      "mapping_desc": "short, structured shoulder cape in crimson velvet with gold floral embroidery",
+      "prompt": "A short, structured shoulder cape in crimson velvet with gold floral embroidery, worn over a simple sleek pink and gold dress featuring a woven peony jacquard pattern and metallic cloud-motif (祥云) accents throughout the fabric.",
+      "title": "Peony Jacquard Dress"
     },
     {
-      "id": "midnight-blue-newage-ensemble",
+      "category": "male",
       "code": "C08",
-      "category": "male"
+      "description": "Asymmetrical iridescent silk with 3D geometric textures and a carbon-fiber style songket",
+      "id": "midnight-blue-newage-ensemble",
+      "image": "/static/themes/master/images/clothes/midnight-blue-newage-ensemble.png",
+      "lighting": "Midnight Blue and Silver",
+      "mapping_desc": "asymmetrical iridescent silk with 3D geometric textures",
+      "prompt": "An avant-garde modern Malay ensemble featuring an asymmetrical long-line tunic in iridescent midnight-blue silk. The fabric has a 3D geometric laser-cut texture that catches the light. Paired with ultra-slim black tailored trousers. A New Age Sampin wrapped around the waist is made of silver-on-black geometric carbon-fiber songket,",
+      "title": "Midnight Neo-Sampin"
     },
     {
-      "id": "premium-baju-melayu-cekak-musang",
+      "category": "male",
       "code": "C09",
-      "category": "male"
+      "description": "Premium matte-finish dull satin paired with a gold-threaded Songket Sampin and traditional velvet Songkok",
+      "id": "premium-baju-melayu-cekak-musang",
+      "image": "/static/themes/master/images/clothes/premium-baju-melayu-cekak-musang.png",
+      "lighting": "Emerald Green and Gold",
+      "mapping_desc": "premium matte-finish satin",
+      "prompt": "A high-end Baju Melayu Cekak Musang in premium Valentino dull satin, featuring a stiff high collar with five gold jeweled studs (butang). The fabric has a subtle, elegant matte sheen with soft, realistic folds. Paired a hand-woven gold-threaded Songket Sampin wrapped neatly around the waist. A traditional black velvet Songkok is worn on the head,",
+      "title": "Emerald Valentino Cekak Musang"
     },
     {
-      "id": "turqoise-swiss-voile-nyonya-kebaya",
+      "category": "female",
       "code": "C10",
-      "category": "female"
+      "description": "Intricate Swiss Voile with vibrant free-motion embroidery, antique gold brooches, and hand-drawn Batik",
+      "id": "turqoise-swiss-voile-nyonya-kebaya",
+      "image": "/static/themes/master/images/clothes/turqoise-swiss-voile-nyonya-kebaya.png",
+      "lighting": "Turquoise and Antique Gold",
+      "mapping_desc": "intricate Swiss Voile and hand-drawn Batik",
+      "prompt": "A breathtakingly intricate Peranakan Nyonya Kebaya crafted from sheer, turquoise Swiss Voile. The sharply tailored tunic is completely adorned with dense, vibrant free-motion embroidery in multicolored silk threads, featuring elaborate peony and phoenix motifs. The edges of the V-neckline, front opening, and scalloped hem exhibit intricate Kerawang cut-out lacework. It is fastened by a set of three antique gold connected brooches set with intan diamond accents. Paired with a contrasting, rich brown hand-drawn Batik Lasem skirt featuring classic Parang patterns,",
+      "title": "Peranakan Phoenix Kebaya"
     },
     {
-      "id": "champagne-gold-kabaya-labuh",
+      "category": "female",
       "code": "C11",
-      "category": "female"
+      "description": "Floral jacquard brocade with a triple-tiered gold brooch and metallic emerald songket",
+      "id": "champagne-gold-kabaya-labuh",
+      "image": "/static/themes/master/images/clothes/champagne-gold-kabaya-labuh.png",
+      "lighting": "Champagne Gold and Emerald",
+      "mapping_desc": "floral jacquard brocade and metallic emerald songket",
+      "prompt": "A sophisticated Modern Kebaya Labuh in Champagne Gold floral jacquard brocade. The long, open-front tunic features a scalloped traditional embroidery border along the edges. It is fastened by a magnificent gold triple-tiered brooch. Paired with a contrasting deep emerald Songket skirt with gold metallic weave. The hijab is a soft chiffon silk shawl draped gracefully in a flowy style,",
+      "title": "Champagne Emerald Kebaya"
     },
     {
-      "id": "indian-purple-dress",
+      "category": "female",
       "code": "C12",
-      "category": "female"
+      "description": "Deep royal purple Anarkali gown with full-length flowy skirt, paired with a long sheer dupatta",
+      "id": "indian-purple-dress",
+      "image": "/static/themes/master/images/clothes/indian-purple-dress.png",
+      "lighting": "Amethyst and Golden",
+      "mapping_desc": "royal purple Anarkali gown with sheer dupatta",
+      "prompt": "Deep royal purple Anarkali gown with full-length flowy skirt, paired with a long sheer dupatta draped to one side. The bodice is heavily embroidered with intricate gold threadwork, floral and geometric patterns, and embellished borders. The sleeves are full-length with matching gold embroidery at the cuffs. The dupatta features a wide ornate gold embroidered border with delicate motifs scattered across the fabric.",
+      "title": "Deep Royal Purple Anarkali Gown"
     },
     {
-      "id": "indian-blue-dress",
+      "category": "female",
       "code": "C13",
-      "category": "female"
+      "description": "Royal blue silk saree, richly woven with intricate gold zari patterns",
+      "id": "indian-blue-dress",
+      "image": "/static/themes/master/images/clothes/indian-blue-dress.png",
+      "lighting": "Royal Blue and Golden",
+      "mapping_desc": "royal blue silk saree with intricate gold zari",
+      "prompt": "Royal blue silk saree, richly woven with intricate gold zari patterns, features traditional Indian motifs including floral medallions, paisley elements, and geometric lattice designs across the entire fabric. The pallu is heavily decorated with dense gold brocade work and ornate symmetrical patterns.",
+      "title": "Royal Blue Saree"
     },
     {
-      "id": "male-indian-blue",
+      "category": "male",
       "code": "C14",
-      "category": "male"
+      "description": "Rich tiffany blue sherwani outfit with a mandarin collar",
+      "id": "male-indian-blue",
+      "image": "/static/themes/master/images/clothes/male-indian-blue.png",
+      "lighting": "Tiffany Blue and Golden",
+      "mapping_desc": "tiffany blue sherwani with mandarin collar",
+      "prompt": "Regal Tiffany blue silk sherwani, mandarin collar, heavily embroidered with metallic floral patterns on chest and hem. Structured tailored fit, ornate buttons, paired with slim white churidars.",
+      "title": "Tiffany Blue Sherwani with mandarin collar"
     },
     {
-      "id": "male-indian-purple",
+      "category": "male",
       "code": "C15",
-      "category": "male"
+      "description": "Traditional rich royal purple kurta with a mandarin collar paired with white dhoti-style pants with soft gathered drape",
+      "id": "male-indian-purple",
+      "image": "/static/themes/master/images/clothes/male-indian-purple.png",
+      "lighting": "Amethys and Golden",
+      "mapping_desc": "royal purple kurta and white dhoti pants",
+      "prompt": "Traditional rich royal purple kurta with a mandarin collar, straight knee-length silhouette, fine silver embroidery with small repeated motifs across the fabric, heavily embroidered placket and neckline with intricate detailing, smooth silk or cotton-silk blend fabric with a soft sheen, full sleeves with clean cuffs, paired with white dhoti-style pants with soft gathered drape, minimal yet elegant ethnic wear, refined festive style, high detail textile texture.",
+      "title": "Traditional rich royal purple kurta with a mandarin collar"
     },
     {
-      "id": "pink-retro-dress",
+      "category": "female",
       "code": "C16",
-      "category": "female"
+      "description": "Vintage halter dress fitted bodice with White lapel collar flared A-line skirt",
+      "id": "pink-retro-dress",
+      "image": "/static/themes/master/images/clothes/pink-retro-dress.png",
+      "lighting": "Pink and Golden",
+      "mapping_desc": "vintage pink halter dress with white lapel",
+      "prompt": "A vintage-inspired halter dress, sleeveless, fitted bodice with white lapel collar, button details on the front, flared A-line skirt, elegant and feminine silhouette, smooth fabric texture, bright pink dress.",
+      "title": "Retro Pink Halter Dress"
     },
     {
-      "id": "blue-retro-dress",
+      "category": "female",
       "code": "C17",
-      "category": "female"
+      "description": "Vintage sleeveless dress light blue and white striped with chevron stripe pattern",
+      "id": "blue-retro-dress",
+      "image": "/static/themes/master/images/clothes/blue-retro-dress.png",
+      "lighting": "White and Golden",
+      "mapping_desc": "vintage blue and white striped dress with white belt",
+      "prompt": "Vintage-inspired sleeveless dress, light blue and white striped fabric, fitted bodice with chevron stripe pattern, thin white shoulder straps, high waist with a white belt, flared A-line skirt with soft pleats, 3/4-length, structured yet flowy fabric, subtle sheen.",
+      "title": "Retro Blue White Stripe Dress"
     },
     {
-      "id": "male-retro-suspender",
+      "category": "male",
       "code": "C18",
-      "category": "male"
+      "description": "Retro Shirt Rollup with Suspenders and slim tapered fit grey pant",
+      "id": "male-retro-suspender",
+      "image": "/static/themes/master/images/clothes/male-retro-suspender.png",
+      "lighting": "Silver and Golden",
+      "mapping_desc": "white casual shirt and grey trousers with leather suspenders",
+      "prompt": "white casual button-up shirt with open collar and rolled 3/4 sleeves, tailored high-waisted grey trousers with a slim tapered fit, brown leather suspenders, clean structured fabric, minimal wrinkles, elegant and modern style",
+      "title": "Retro Men Outfit with suspenders"
     },
     {
-      "id": "male-retro-knitted",
+      "category": "male",
       "code": "C19",
-      "category": "male"
+      "description": "Men retro short sleeve knit polo with ribbed collar with beige pants",
+      "id": "male-retro-knitted",
+      "image": "/static/themes/master/images/clothes/male-retro-knitted.png",
+      "lighting": "Silver and Golden",
+      "mapping_desc": "retro multi-tone striped knit polo in beige",
+      "prompt": "retro short sleeve knit polo with ribbed collar and sleeve cuffs in beige, vertical stripe pattern in cream, beige, dusty pink, red, and dark brown tones, soft knitted fabric texture, slightly fitted silhouette, paired with beige tailored trousers, clean minimal styling, modern vintage aesthetic",
+      "title": "Retro men's knitted outfit"
     },
     {
-      "id": "black-cream-wrap-dress",
+      "category": "female",
       "code": "C20",
-      "category": "female"
+      "description": "Elegant sleeveless evening gown featuring a bold bicolor geometric wrap design in black and champagne cream",
+      "id": "black-cream-wrap-dress",
+      "image": "/static/themes/master/images/clothes/black-cream-wrap-dress.png",
+      "lighting": "Golden and Cream",
+      "mapping_desc": "sleeveless geometric wrap gown in black and champagne",
+      "prompt": "Elegant sleeveless evening gown featuring a bold bicolor geometric wrap design in black and champagne cream. V-neckline with structured shoulder straps, fitted bodice, and a crisscross draped silhouette. Smooth satin-finish fabric with a subtle sheen. Sophisticated, modern formal attire.",
+      "title": "Black and Cream Wrap Dress"
     },
     {
-      "id": "gold-and-blue-evening-gown",
+      "category": "female",
       "code": "C21",
-      "category": "female"
+      "description": "Evening gown with a sleek champagne-gold satin skirt and a bodice overlaid with delicate, light modern lace with blue and bronze sequins",
+      "id": "gold-and-blue-evening-gown",
+      "image": "/static/themes/master/images/clothes/gold-and-blue-evening-gown.png",
+      "lighting": "Golden and sliver",
+      "mapping_desc": "champagne-gold satin gown with blue and bronze sequined bodice",
+      "prompt": "Evening gown featuring a sleek champagne-gold satin skirt. The bodice is overlaid with delicate, light modern lace with blue and bronze sequins covering the chest, shoulders, and high neckline for a refined illusion effect.",
+      "title": "Gold and Blue Evening Gown"
     },
     {
-      "id": "midnight-blue-tuxedo",
+      "category": "male",
       "code": "C22",
-      "category": "male"
+      "description": "A modern, tailored 3-piece tuxedo in deep midnight blue wool",
+      "id": "midnight-blue-tuxedo",
+      "image": "/static/themes/master/images/clothes/midnight-blue-tuxedo.png",
+      "lighting": "Blue and Golden",
+      "mapping_desc": "midnight blue wool tuxedo with black satin shawl lapel",
+      "prompt": "a modern, tailored 3-piece tuxedo in deep midnight blue wool. Features a single-breasted jacket with a sleek black satin shawl lapel, a matching slim-cut waistcoat, and flat-front trousers. Pared with a crisp white dress shirt and a black silk bow tie.",
+      "title": "Midnight Blue Tuxedo"
     },
     {
-      "id": "black-suit-white-shirt",
+      "category": "male",
       "code": "C23",
-      "category": "male"
+      "description": "A modern, slim-fit black suit with a slight sheen",
+      "id": "black-suit-white-shirt",
+      "image": "/static/themes/master/images/clothes/black-suit-white-shirt.png",
+      "lighting": "Silver and Golden",
+      "mapping_desc": "slim-fit black wool suit with narrow notch lapels",
+      "prompt": "a modern, slim-fit black suit in premium wool with a slight sheen. Features a two-button jacket with narrow notch lapels and matching tailored trousers. Paired with a crisp, high-thread-count white dress shirt and a slim black silk necktie.",
+      "title": "Black Suit with White Dress Shirt and black necktie"
     }
   ],
   "poses": [
     {
+      "code": "P01",
+      "description": "Wide smile with open arms",
       "id": "the-warm-welcome",
-      "code": "P01"
+      "image": "/static/themes/master/images/poses/the-warm-welcome.png",
+      "prompt": "A wide, bright smile with arms slightly spread open, as if greeting the viewer into the New Year,",
+      "title": "The Warm Welcome"
     },
     {
+      "code": "P02",
+      "description": "Big smile into camera",
       "id": "the-eye-smile",
-      "code": "P02"
+      "image": "/static/themes/master/images/poses/the-eye-smile.png",
+      "prompt": "A gentle, beaming grin that makes the eyes crinkle, looking directly into the lens with a neighborly idol charm,",
+      "title": "The Eye-Smile"
     },
     {
+      "code": "P03",
+      "description": "A charming, friendly wave",
       "id": "charming-wave",
-      "code": "P03"
+      "image": "/static/themes/master/images/poses/charming-wave.png",
+      "prompt": "Facing the camera with a warm smile, one hand raised in a friendly wave at chest height, with the other hand clasped near his chest,",
+      "title": "Charming Wave"
     },
     {
+      "code": "P04",
+      "description": "Soft expression, hands behind back",
       "id": "the-gentle-gaze",
-      "code": "P04"
+      "image": "/static/themes/master/images/poses/the-gentle-gaze.png",
+      "prompt": "Hands clasped behind the back, facing forward and leaning slightly into the frame with a soft, inviting expression,",
+      "title": "The Gentle Gaze"
     },
     {
+      "code": "P05",
+      "description": "Double-hand heart pose",
       "id": "the-k-heart-spark",
-      "code": "P05"
+      "image": "/static/themes/master/images/poses/the-k-heart-spark.png",
+      "prompt": "Facing forward with a bright expression, hands brought together at chest height to form a delicate finger heart,",
+      "title": "The K-Heart Spark"
     },
     {
+      "code": "P06",
+      "description": "Forward-pointing with captivating smile",
       "id": "charismatic-pointing",
-      "code": "P06"
+      "image": "/static/themes/master/images/poses/charismatic-pointing.png",
+      "prompt": "Facing the camera with a captivating smile, one arm extended forward with the index finger pointing directly at the viewer,",
+      "title": "Charismatic Pointing"
     },
     {
+      "code": "P07",
+      "description": "Smiling and hands by the hip",
       "id": "smiling-hands-by-the-hip",
-      "code": "P07"
+      "image": "/static/themes/master/images/poses/smiling-hands-by-the-hip.png",
+      "prompt": "Smiling and hands by the hip looking at the camera",
+      "title": "Hands On Hip"
     },
     {
+      "code": "P08",
+      "description": "A powerful, structured stance with one hand on the waist, projecting royal authority and elegance",
       "id": "confident-gaze",
-      "code": "P08"
+      "image": "/static/themes/master/images/poses/confident-gaze.png",
+      "prompt": "Facing the camera with one hand resting firmly on the waist, the other hand resting naturally at the side. Chin slightly up, projecting a smiling confidence,",
+      "title": "Confident Heritage Pose"
     },
     {
+      "code": "P09",
+      "description": "A relaxed yet professional posture with lightly folded arms, blending modern confidence with traditional charm",
       "id": "confident-arm-fold",
-      "code": "P09"
-    }
-  ],
-  "backgrounds": [
-    {
-      "id": "the-gardens-by-the-bay",
-      "code": "B01"
-    },
-    {
-      "id": "the-marina-bay-scene",
-      "code": "B02"
-    },
-    {
-      "id": "the-merlion-park",
-      "code": "B03"
-    },
-    {
-      "id": "colonial-era-veranda",
-      "code": "B04"
-    },
-    {
-      "id": "the-frozen-sunburst-summit",
-      "code": "B05"
-    },
-    {
-      "id": "the-winter-courtyard",
-      "code": "B06"
-    },
-    {
-      "id": "halo-over-the-jade-ridge",
-      "code": "B07"
-    },
-    {
-      "id": "the-ethereal-moonlit-blossom-forest",
-      "code": "B09"
+      "image": "/static/themes/master/images/poses/confident-arm-fold.png",
+      "prompt": "Facing forward, looking at the camera, with a mesmerizing smile and a confident gaze, lightly folding arms,",
+      "title": "Composed Festive Grace"
     }
   ]
 }
