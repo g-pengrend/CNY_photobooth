@@ -9,7 +9,9 @@ import shutil
 from comfy_processor import queue_prompt, get_image
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TEMPLATES_DIR = os.path.join(BASE_DIR, "asset_templates")
+TEMPLATES_DIR = os.path.join(BASE_DIR, "admin", "asset_templates")
+if not os.path.exists(TEMPLATES_DIR):
+    TEMPLATES_DIR = os.path.join(BASE_DIR, "asset_templates")
 TMP_DIR = os.path.join(BASE_DIR, "static", "tmp")
 os.makedirs(TMP_DIR, exist_ok=True)
 
@@ -222,8 +224,24 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
         theme_data[category] = []
 
     item_count = len(theme_data[category])
-    code = f"{cfg['code_prefix']}{item_count + 1}"
+    code = f"{cfg['code_prefix']}{item_count + 1:02d}" if cfg['code_prefix'] == 'C' else f"{cfg['code_prefix']}{item_count + 1}"
     item_id = f"{theme_slug}_{file_slug}"
+
+    # Extract concise description for the FLF workflow
+    mapping_desc = resolved_title
+    if asset_type == "clothes":
+        # Strip out prompt boilerplate to get concise phrase for FLF style_type
+        clean_text = prompt_desc or ""
+        clean_text = re.sub(r'^.*?featuring\s+', '', clean_text, flags=re.IGNORECASE)
+        clean_text = re.sub(r'The outfit is displayed to maintain.*$', '', clean_text, flags=re.IGNORECASE | re.DOTALL)
+        clean_text = re.sub(r'No human hands.*$', '', clean_text, flags=re.IGNORECASE)
+        first_clause = re.split(r'[.;\n]', clean_text.strip())[0].strip()
+        words = first_clause.split()
+        if len(words) > 15:
+            first_clause = " ".join(words[:15])
+        mapping_desc = first_clause if first_clause else resolved_title
+
+    lighting_desc = "Warm Golden and Scarlet" if "cny" in theme_slug else "Cinematic ambient studio lighting"
 
     new_item = {
         "id": item_id,
@@ -232,12 +250,41 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
         "name": resolved_title,
         "image": web_path,
         "prompt_modifier": prompt_desc or resolved_title,
-        "lighting": "Cinematic ambient studio lighting"
+        "mapping_desc": mapping_desc,
+        "lighting": lighting_desc
     }
 
     if asset_type == "clothes":
         new_item["category"] = gender or "unisex"
         new_item["gender"] = gender or "unisex"
+
+        # Update clothes_mapping.json for FLF workflow across themes and DGX
+        mapping_dirs = [
+            theme_dir,
+            os.path.join(BASE_DIR, "static", "themes", "master"),
+            os.path.join(BASE_DIR, "..", "dgx_photobooth", "templates", "themes", theme_slug),
+            os.path.join(BASE_DIR, "..", "dgx_photobooth", "templates", "themes", "master")
+        ]
+        for m_dir in mapping_dirs:
+            os.makedirs(m_dir, exist_ok=True)
+            m_path = os.path.join(m_dir, "clothes_mapping.json")
+            m_data = {}
+            if os.path.exists(m_path):
+                try:
+                    with open(m_path, "r", encoding="utf-8") as mf:
+                        m_data = json.load(mf)
+                except Exception:
+                    pass
+            m_data[code] = {
+                "desc": mapping_desc,
+                "lighting": lighting_desc
+            }
+            try:
+                with open(m_path, "w", encoding="utf-8") as mf:
+                    json.dump(m_data, mf, indent=2, ensure_ascii=False)
+                print(f"✅ [AssetGen] Updated FLF clothes mapping at: {m_path}")
+            except Exception as me:
+                print(f"⚠️ [AssetGen] Failed writing mapping {m_path}: {me}")
 
     theme_data[category].append(new_item)
 
@@ -252,4 +299,5 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
         "item": new_item,
         "target_theme": theme_slug
     }
+
 

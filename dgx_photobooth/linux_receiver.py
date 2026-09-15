@@ -193,25 +193,46 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
         
         # --- Prompt Injection Logic ---
         import re
-        style_match = re.search(r"(C\d{2})", gen_filename)
+        style_match = re.search(r"([CO]\d+)", gen_filename, re.IGNORECASE)
         
-        # Load theme-specific clothes mapping
+        # Load theme-specific clothes mapping, with fallback to master
         clothes_mapping_file = os.path.join(base_dir, "templates", "themes", theme, "clothes_mapping.json")
+        master_mapping_file = os.path.join(base_dir, "templates", "themes", "master", "clothes_mapping.json")
         clothes_mapping = {}
         if os.path.exists(clothes_mapping_file):
-            with open(clothes_mapping_file, 'r', encoding='utf-8') as f:
-                clothes_mapping = json.load(f)
+            try:
+                with open(clothes_mapping_file, 'r', encoding='utf-8') as f:
+                    clothes_mapping = json.load(f)
+            except Exception as e:
+                print(f"⚠️ Error reading {clothes_mapping_file}: {e}")
         else:
             print(f"⚠️ Warning: Clothes mapping file not found at {clothes_mapping_file}")
 
+        # Fallback to master mapping for unmapped codes
+        if os.path.exists(master_mapping_file):
+            try:
+                with open(master_mapping_file, 'r', encoding='utf-8') as f:
+                    master_mapping = json.load(f)
+                    for k, v in master_mapping.items():
+                        if k not in clothes_mapping:
+                            clothes_mapping[k] = v
+            except Exception as e:
+                print(f"⚠️ Error reading master mapping: {e}")
+
         if style_match:
-            code = style_match.group(1)
-            style_data = clothes_mapping.get(code)
+            raw_code = style_match.group(1).upper()
+            # Try exact code, then normalized zero-padded code (e.g. C1 -> C01)
+            prefix = raw_code[0]
+            num_part = raw_code[1:]
+            padded_code = f"{prefix}{int(num_part):02d}" if num_part.isdigit() else raw_code
+            unpadded_code = f"{prefix}{int(num_part)}" if num_part.isdigit() else raw_code
+
+            style_data = clothes_mapping.get(raw_code) or clothes_mapping.get(padded_code) or clothes_mapping.get(unpadded_code)
             
             if style_data:
-                style_desc = style_data["desc"]
-                lighting_desc = style_data["lighting"]
-                print(f"  - Detected Style Code: {code}")
+                style_desc = style_data.get("desc", "")
+                lighting_desc = style_data.get("lighting", "Cinematic lighting")
+                print(f"  - Detected Style Code: {raw_code} (Resolved as {padded_code})")
                 print(f"    -> Desc: '{style_desc}'")
                 print(f"    -> Lighting: '{lighting_desc}'")
                 

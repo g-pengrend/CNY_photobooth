@@ -1,0 +1,98 @@
+{
+  "C01": {
+    "desc": "contemporary short-sleeve button-up shirt in red, white chinos",
+    "lighting": "Red and Crisp White"
+  },
+  "C02": {
+    "desc": "stylish A-line dress, deep red skirt, and orchid motifs",
+    "lighting": "Red and Crisp White"
+  },
+  "C03": {
+    "desc": "majestic full-set gold Songket Bunga Tabur",
+    "lighting": "Royal Yellow and Gold"
+  },
+  "C04": {
+    "desc": "asymmetrical iridescent silk with 3D geometric textures",
+    "lighting": "Midnight Blue and Silver"
+  },
+  "C05": {
+    "desc": "floral jacquard brocade and metallic emerald songket",
+    "lighting": "Champagne Gold and Emerald"
+  },
+  "C06": {
+    "desc": "structured crepe-silk and a crystal-embellished bawal hijab",
+    "lighting": "Dusty Lavender and Crystal"
+  },
+  "C07": {
+    "desc": "full-set royal yellow songket with a diamond-encrusted crown and ornate gold kerongsang",
+    "lighting": "Royal Yellow and Diamonds"
+  },
+  "C08": {
+    "desc": "structured Duchess satin and a signature heritage pearl",
+    "lighting": "Midnight Teal and Pearl"
+  },
+  "C09": {
+    "desc": "intricate Swiss Voile and hand-drawn Batik",
+    "lighting": "Turquoise and Antique Gold"
+  },
+  "C10": {
+    "desc": "structured Cinnabar-red vest with Cyan-blue piping",
+    "lighting": "Cinnabar Red and Cyan"
+  },
+  "C11": {
+    "desc": "short-sleeved tunic in Emerald-Green silk with a vibrant Vermilion sash",
+    "lighting": "Emerald Green and Gold"
+  },
+  "C12": {
+    "desc": "royal purple Anarkali gown with sheer dupatta",
+    "lighting": "Amethyst and Golden"
+  },
+  "C13": {
+    "desc": "royal blue silk saree with intricate gold zari",
+    "lighting": "Royal Blue and Golden"
+  },
+  "C14": {
+    "desc": "tiffany blue sherwani with mandarin collar",
+    "lighting": "Tiffany Blue and Golden"
+  },
+  "C15": {
+    "desc": "royal purple kurta and white dhoti pants",
+    "lighting": "Amethys and Golden"
+  },
+  "C16": {
+    "desc": "vintage pink halter dress with white lapel",
+    "lighting": "Pink and Golden"
+  },
+  "C17": {
+    "desc": "vintage blue and white striped dress with white belt",
+    "lighting": "White and Golden"
+  },
+  "C18": {
+    "desc": "white casual shirt and grey trousers with leather suspenders",
+    "lighting": "Silver and Golden"
+  },
+  "C19": {
+    "desc": "retro multi-tone striped knit polo in beige",
+    "lighting": "Silver and Golden"
+  },
+  "C20": {
+    "desc": "sleeveless geometric wrap gown in black and champagne",
+    "lighting": "Golden and Cream"
+  },
+  "C21": {
+    "desc": "champagne-gold satin gown with blue and bronze sequined bodice",
+    "lighting": "Golden and sliver"
+  },
+  "C22": {
+    "desc": "midnight blue wool tuxedo with black satin shawl lapel",
+    "lighting": "Blue and Golden"
+  },
+  "C23": {
+    "desc": "slim-fit black wool suit with narrow notch lapels",
+    "lighting": "Silver and Golden"
+  },
+  "A1": {
+    "desc": "",
+    "lighting": "Warm cinematic lighting"
+  }
+}

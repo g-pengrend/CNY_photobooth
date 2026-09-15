@@ -119,13 +119,84 @@ def get_theme_config(theme_slug):
     return jsonify({"error": "Theme config not found"}), 404
 
 
+def load_master_data_index():
+    """Build fast lookup map of master assets by id, code, and image filename."""
+    master_file = os.path.join(app.static_folder, 'themes', 'master', 'data.json')
+    lookup = {'clothes': {}, 'poses': {}, 'backgrounds': {}}
+    if not os.path.exists(master_file):
+        return lookup
+    try:
+        with open(master_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        for cat in ['clothes', 'poses', 'backgrounds']:
+            for item in data.get(cat, []):
+                item_id = item.get('id')
+                code = item.get('code')
+                img = item.get('image', '')
+                slug = os.path.splitext(os.path.basename(img))[0]
+                if item_id:
+                    lookup[cat][item_id] = item
+                if slug and slug != item_id:
+                    lookup[cat][slug] = item
+                if code and code not in lookup[cat]:
+                    lookup[cat][code] = item
+    except Exception as e:
+        print(f"Error loading master index: {e}")
+    return lookup
+
+
+def resolve_theme_data(theme_slug):
+    """Load theme data.json and resolve any master pointers into full asset objects."""
+    data_file = os.path.join(app.static_folder, 'themes', theme_slug, 'data.json')
+    if not os.path.exists(data_file):
+        return {"poses": [], "clothes": [], "backgrounds": []}
+
+    try:
+        with open(data_file, 'r', encoding='utf-8') as f:
+            theme_data = json.load(f)
+    except Exception:
+        return {"poses": [], "clothes": [], "backgrounds": []}
+
+    if theme_slug == 'master':
+        return theme_data
+
+    master_index = load_master_data_index()
+    resolved = {}
+
+    for cat in ['clothes', 'poses', 'backgrounds']:
+        resolved[cat] = []
+        cat_index = master_index.get(cat, {})
+        for idx, entry in enumerate(theme_data.get(cat, [])):
+            if isinstance(entry, str):
+                base_item = cat_index.get(entry, {})
+                item = dict(base_item) if base_item else {"id": entry, "title": entry}
+            elif isinstance(entry, dict):
+                ref_id = entry.get('id') or entry.get('ref')
+                base_item = cat_index.get(ref_id, {}) if ref_id else {}
+                if not base_item and entry.get('code'):
+                    base_item = cat_index.get(entry.get('code'), {})
+                item = dict(base_item)
+                item.update(entry)
+            else:
+                continue
+
+            if not item.get('code'):
+                prefix = 'O' if cat == 'clothes' else ('P' if cat == 'poses' else 'B')
+                item['code'] = f"{prefix}{idx+1:02d}"
+
+            resolved[cat].append(item)
+
+    return resolved
+
+
 @app.route('/api/theme/<theme_slug>/data')
 def get_theme_data(theme_slug):
-    """Serve data.json for a given theme."""
+    """Serve resolved data.json for a given theme."""
     data_file = os.path.join(app.static_folder, 'themes', theme_slug, 'data.json')
-    if os.path.exists(data_file):
-        return send_file(data_file, mimetype='application/json')
-    return jsonify({"poses": [], "clothes": [], "backgrounds": []}), 404
+    if not os.path.exists(data_file):
+        return jsonify({"poses": [], "clothes": [], "backgrounds": []}), 404
+    resolved = resolve_theme_data(theme_slug)
+    return jsonify(resolved)
 
 
 @app.route('/api/theme/<theme_slug>/samples')
@@ -468,60 +539,46 @@ def admin_panel():
 
 @app.route('/api/admin/assets')
 def get_master_assets():
-    """Return a master catalog of all clothes, poses, and backgrounds across all themes."""
+    """Return a master catalog of all clothes, poses, and backgrounds from master repository and themes."""
     catalog = {
         'clothes': [],
         'poses': [],
         'backgrounds': []
     }
-    themes_dir = os.path.join(app.static_folder, 'themes')
-    if not os.path.exists(themes_dir):
-        return jsonify(catalog)
-
+    master_data = resolve_theme_data('master')
+    seen_ids = {'clothes': set(), 'poses': set(), 'backgrounds': set()}
     seen_images = {'clothes': set(), 'poses': set(), 'backgrounds': set()}
 
-    for theme_slug in sorted(os.listdir(themes_dir)):
-        if theme_slug.startswith('.') or theme_slug in RESERVED_SLUGS:
-            continue
-        theme_path = os.path.join(themes_dir, theme_slug)
-        if not os.path.isdir(theme_path):
-            continue
+    for cat in ['clothes', 'poses', 'backgrounds']:
+        for item in master_data.get(cat, []):
+            item_id = item.get('id')
+            img_path = item.get('image', '')
+            if item_id:
+                seen_ids[cat].add(item_id)
+            if img_path:
+                seen_images[cat].add(img_path.strip().lower())
+            entry = dict(item)
+            entry['source_theme'] = 'master'
+            catalog[cat].append(entry)
 
-        # 1. Read from data.json if available
-        data_json = os.path.join(theme_path, 'data.json')
-        if os.path.exists(data_json):
-            try:
-                with open(data_json, 'r', encoding='utf-8') as f:
-                    theme_data = json.load(f)
-                    for cat in ['clothes', 'poses', 'backgrounds']:
-                        for item in theme_data.get(cat, []):
-                            img_path = item.get('image', '')
-                            if img_path:
-                                seen_images[cat].add(img_path.strip().lower())
-                            item_entry = dict(item)
-                            item_entry['source_theme'] = theme_slug
-                            catalog[cat].append(item_entry)
-            except Exception as e:
-                print(f"Error reading {data_json}: {e}")
-
-        # 2. Scan images folder directly for any untracked images
-        for cat in ['clothes', 'poses', 'backgrounds']:
-            cat_dir = os.path.join(theme_path, 'images', cat)
-            if os.path.exists(cat_dir):
-                for fname in sorted(os.listdir(cat_dir)):
-                    if fname.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')):
-                        web_path = f"/static/themes/{theme_slug}/images/{cat}/{fname}"
-                        if web_path.lower() not in seen_images[cat]:
-                            seen_images[cat].add(web_path.lower())
-                            clean_name = os.path.splitext(fname)[0].replace('-', ' ').replace('_', ' ').title()
-                            catalog[cat].append({
-                                'id': f"{theme_slug}_{fname}",
-                                'code': '',
-                                'name': clean_name,
-                                'image': web_path,
-                                'prompt_modifier': '',
-                                'source_theme': theme_slug
-                            })
+    # Also include any custom theme items
+    themes_dir = os.path.join(app.static_folder, 'themes')
+    if os.path.exists(themes_dir):
+        for theme_slug in sorted(os.listdir(themes_dir)):
+            if theme_slug in RESERVED_SLUGS or theme_slug == 'master':
+                continue
+            theme_resolved = resolve_theme_data(theme_slug)
+            for cat in ['clothes', 'poses', 'backgrounds']:
+                for item in theme_resolved.get(cat, []):
+                    item_id = item.get('id')
+                    img_path = item.get('image', '')
+                    if item_id and item_id not in seen_ids[cat]:
+                        seen_ids[cat].add(item_id)
+                        if img_path:
+                            seen_images[cat].add(img_path.strip().lower())
+                        entry = dict(item)
+                        entry['source_theme'] = theme_slug
+                        catalog[cat].append(entry)
 
     return jsonify(catalog)
 
@@ -586,20 +643,42 @@ def admin_save_theme():
             with open(wf_path, 'w', encoding='utf-8') as f:
                 json.dump(workflow, f, indent=2)
 
-        # 5. Sync DGX receiver clothes_mapping.json for backwards compatibility
-        dgx_mapping = {}
+        # 5. Sync clothes_mapping.json for FLF workflow across theme and master
+        theme_mapping = {}
         for item in asset_data.get('clothes', []):
             code = item.get('code')
             if code:
-                dgx_mapping[code] = {
-                    'desc': item.get('mapping_desc') or item.get('description', ''),
+                theme_mapping[code] = {
+                    'desc': item.get('mapping_desc') or item.get('description', '') or item.get('title', ''),
                     'lighting': item.get('lighting', 'Warm cinematic lighting')
                 }
+
+        # Write to theme dir & dgx theme dir
+        with open(os.path.join(theme_dir, 'clothes_mapping.json'), 'w', encoding='utf-8') as f:
+            json.dump(theme_mapping, f, indent=2, ensure_ascii=False)
         dgx_mapping_path = os.path.join(dgx_theme_dir, 'clothes_mapping.json')
         with open(dgx_mapping_path, 'w', encoding='utf-8') as f:
-            json.dump(dgx_mapping, f, indent=2, ensure_ascii=False)
+            json.dump(theme_mapping, f, indent=2, ensure_ascii=False)
 
-        print(f"✅ [Studio] Successfully saved theme package for: '{slug}'")
+        # Merge into master clothes mappings
+        for m_dir in [
+            os.path.join(base_dir, 'static', 'themes', 'master'),
+            os.path.join(base_dir, '..', 'dgx_photobooth', 'templates', 'themes', 'master')
+        ]:
+            os.makedirs(m_dir, exist_ok=True)
+            m_path = os.path.join(m_dir, 'clothes_mapping.json')
+            m_data = {}
+            if os.path.exists(m_path):
+                try:
+                    with open(m_path, 'r', encoding='utf-8') as mf:
+                        m_data = json.load(mf)
+                except Exception:
+                    pass
+            m_data.update(theme_mapping)
+            with open(m_path, 'w', encoding='utf-8') as mf:
+                json.dump(m_data, mf, indent=2, ensure_ascii=False)
+
+        print(f"✅ [Studio] Successfully saved theme package and FLF clothes mapping for: '{slug}'")
         return jsonify({
             'status': 'success',
             'slug': slug,
