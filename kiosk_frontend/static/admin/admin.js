@@ -1083,7 +1083,7 @@ window.acceptGeneratedAsset = async function() {
                 <strong>Saved Successfully!</strong><br>
                 File: <code>${data.filename}</code><br>
                 Destination: <code>${data.web_path}</code><br>
-                Added to theme: <strong>${targetTheme.toUpperCase()}</strong>
+                Library: <strong>Master Asset Library (Shared across all themes)</strong>
             `;
         }
 

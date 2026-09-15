@@ -326,11 +326,11 @@ export const backgrounds = [
         prompt: "A moonlit forest of cherry blossom trees with luminous, pale-pink petals that glow from within. The ground is a soft carpet of fallen blossoms, and small, floating spirit-lights (will-o'-the-wisps) drift between the branches. A soft-focus, dreamy background with a deep indigo sky and a giant, silver full moon.",
         image: "/static/themes/master/images/backgrounds/the-ethereal-moonlit-blossom-forest.png"
     },
-    // {
-    //     code: "B10",
-    //     title: "The Twilight Gothic Fortress",
-    //     description: "Epic cinematic view from the battlements of a gothic castle at twilight",
-    //     prompt: "A wide-angle cinematic shot from the stone battlements of a massive gothic fortress at twilight. The background reveals the entire castle complex with towering keeps and bridges under a moody charcoal and amethyst sky pierced by blood-orange sunlight. The foreground features a spacious, well-lit weathered stone platform framed by ancient ramparts, providing a clear stage for a portrait while capturing the castle's epic scale.",
-    //     image: "/static/themes/master/images/backgrounds/the-twilight-gothic-fortress.png"
-    // },
+    {
+        code: "B28",
+        title: "Jewel HSBC Rain Vortex",
+        description: "Dramatic indoor waterfall and lush tropical forest at Jewel Changi",
+        prompt: "A cinematic, low-angle view looking up at the HSBC Rain Vortex, the world’s tallest indoor waterfall, cascades dramatically from a vaulted glass-and-steel ceiling. Surrounding the waterfall, the lush, multi-tiered indoor forest of the Shiseido Forest Valley creates a grand, tropical backdrop, with soft mist and hidden accent lights reflecting shimmering colors across the dense canopy. Wide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+        image: "/static/themes/master/images/backgrounds/jewel-rain-vortex.png"
+    }
 ];

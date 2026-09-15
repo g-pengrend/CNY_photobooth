@@ -180,8 +180,15 @@ def resolve_theme_data(theme_slug):
                 continue
 
             if not item.get('code'):
-                prefix = 'O' if cat == 'clothes' else ('P' if cat == 'poses' else 'B')
+                prefix = 'C' if cat == 'clothes' else ('P' if cat == 'poses' else 'B')
                 item['code'] = f"{prefix}{idx+1:02d}"
+
+            if not item.get('prompt') and item.get('prompt_modifier'):
+                item['prompt'] = item['prompt_modifier']
+            if not item.get('title') and item.get('name'):
+                item['title'] = item['name']
+            if not item.get('description') and item.get('mapping_desc'):
+                item['description'] = item['mapping_desc']
 
             resolved[cat].append(item)
 

@@ -18,48 +18,65 @@ const states = {
     error: document.getElementById('error-state')
 };
 
-export function renderSelections() {
-    renderGrid('pose-grid', poses, (item) => `
-        <button class="selection-card" data-pose="${escapeHtml(item.prompt)}" data-code="${item.code}">
+export async function renderSelections() {
+    let activePoses = poses;
+    let activeClothes = clothes;
+    let activeBackgrounds = backgrounds;
+
+    try {
+        const themeSlug = window.location.pathname.split('/').filter(Boolean)[0] || 'cny';
+        const res = await fetch(`/api/theme/${themeSlug}/data`);
+        if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data.poses) && data.poses.length > 0) activePoses = data.poses;
+            if (Array.isArray(data.clothes) && data.clothes.length > 0) activeClothes = data.clothes;
+            if (Array.isArray(data.backgrounds) && data.backgrounds.length > 0) activeBackgrounds = data.backgrounds;
+        }
+    } catch (e) {
+        console.warn("Using bundled fallback theme data:", e);
+    }
+
+    renderGrid('pose-grid', activePoses, (item) => `
+        <button class="selection-card" data-pose="${escapeHtml(item.prompt || item.prompt_modifier || '')}" data-code="${item.code}">
             <div class="card-content-wrapper">
                 <div class="card-thumbnail" onclick="event.stopPropagation(); expandImage('${item.image}')">
-                    <img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'">
+                    <img src="${item.image}" alt="${escapeHtml(item.title || item.name || '')}" onerror="this.style.display='none'">
                     <div class="expand-icon">🔍</div>
                 </div>
                 <div class="card-text">
-                    <div class="card-title">${item.title}</div>
-                    <div class="card-description">${item.description}</div>
+                    <div class="card-title">${escapeHtml(item.title || item.name || '')}</div>
+                    <div class="card-description">${escapeHtml(item.description || item.mapping_desc || '')}</div>
                 </div>
             </div>
         </button>
     `);
 
-    renderGrid('clothes-grid', clothes, (item) => `
-        <button class="selection-card" data-clothes="${escapeHtml(item.prompt)}" data-code="${item.code}" data-category="${item.category}">
+    renderGrid('clothes-grid', activeClothes, (item) => `
+        <button class="selection-card" data-clothes="${escapeHtml(item.prompt || item.prompt_modifier || '')}" data-code="${item.code}" data-category="${item.category}">
             <span class="category-badge ${item.category}">${capitalize(item.category)}</span>
             <div class="card-content-wrapper">
                 <div class="card-thumbnail" onclick="event.stopPropagation(); expandImage('${item.image}')">
-                    <img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'">
+                    <img src="${item.image}" alt="${escapeHtml(item.title || item.name || '')}" onerror="this.style.display='none'">
                     <div class="expand-icon">🔍</div>
                 </div>
                 <div class="card-text">
-                    <div class="card-title">${item.title}</div>
-                    <div class="card-description">${item.description}</div>
+                    <div class="card-title">${escapeHtml(item.title || item.name || '')}</div>
+                    <div class="card-description">${escapeHtml(item.description || item.mapping_desc || '')}</div>
                 </div>
             </div>
         </button>
     `);
 
-    renderGrid('background-grid', backgrounds, (item) => `
-        <button class="selection-card" data-background="${escapeHtml(item.prompt)}" data-code="${item.code}">
+    renderGrid('background-grid', activeBackgrounds, (item) => `
+        <button class="selection-card" data-background="${escapeHtml(item.prompt || item.prompt_modifier || '')}" data-code="${item.code}">
             <div class="card-content-wrapper">
                 <div class="card-thumbnail" onclick="event.stopPropagation(); expandImage('${item.image}')">
-                    <img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'">
+                    <img src="${item.image}" alt="${escapeHtml(item.title || item.name || '')}" onerror="this.style.display='none'">
                     <div class="expand-icon">🔍</div>
                 </div>
                 <div class="card-text">
-                    <div class="card-title">${item.title}</div>
-                    <div class="card-description">${item.description}</div>
+                    <div class="card-title">${escapeHtml(item.title || item.name || '')}</div>
+                    <div class="card-description">${escapeHtml(item.description || item.mapping_desc || '')}</div>
                 </div>
             </div>
         </button>
