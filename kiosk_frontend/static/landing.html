@@ -266,7 +266,7 @@
                 }
             });
 
-            // Dynamically render themes from API
+            // Append newly published themes from Theme Studio without touching or lagging original cards
             async function loadDynamicThemes() {
                 try {
                     const res = await fetch('/api/themes');
@@ -278,33 +278,39 @@
                     const grid = document.getElementById('theme-grid');
                     if (!grid) return;
 
-                    grid.innerHTML = themes.map(t => {
+                    const builtInSlugs = ['cny', 'hariraya', 'deepavali', 'uits', 'ndp2026'];
+                    const customThemes = themes.filter(t => t.slug && !builtInSlugs.includes(t.slug.toLowerCase()) && !document.getElementById(`${t.slug}-card`));
+
+                    customThemes.forEach(t => {
                         const slug = t.slug;
                         const title = t.title || slug.toUpperCase();
-                        const badge = t.badge || 'Virtual Try-On';
+                        const badge = t.badge || 'New Experience';
                         const icon = t.icon || '✨';
                         const desc = t.description || 'Celebrate with AI Virtual Try-On';
-                        const cta = t.cta || 'Start Celebration';
+                        const cta = t.cta || 'Start Experience';
                         const accent = t.style?.colors?.accent || '#fbbf24';
-                        const isComingSoon = t.status === 'coming-soon';
 
                         const tags = [];
                         if (t.features?.luckyNumber) tags.push('Lucky Numbers');
                         if (t.features?.genderFilter) tags.push('Multi-Gender');
                         if (t.features?.filmStrip) tags.push('Film Strip');
-                        if (tags.length === 0) tags.push('New Experience');
+                        if (tags.length === 0) tags.push('Custom Theme');
 
                         const cardBg = t.cardBackground || `/static/landing/${slug}_card_bg.png`;
                         const altBg = `/static/landing/${slug}_bg.png`;
 
-                        return `
-                        <a href="/${slug}" class="theme-card" id="${slug}-card" style="border: 1px solid ${accent}40;">
+                        const cardEl = document.createElement('a');
+                        cardEl.href = `/${slug}`;
+                        cardEl.className = 'theme-card';
+                        cardEl.id = `${slug}-card`;
+                        cardEl.style.border = `1px solid ${accent}40`;
+                        cardEl.innerHTML = `
                             <div class="card-image-wrap" style="background: radial-gradient(circle at center, ${accent}22 0%, #0a0a0f 80%);">
                                 <img src="${cardBg}" alt="${title}" class="card-bg" onerror="if (this.src.indexOf('${altBg}') === -1) { this.src='${altBg}'; } else { this.style.display='none'; }">
                                 <div class="card-overlay"></div>
                             </div>
                             <div class="card-inner">
-                                <div class="card-badge ${isComingSoon ? 'coming-soon' : ''}" style="background: ${accent}22; border-color: ${accent}60; color: ${accent};">
+                                <div class="card-badge" style="background: ${accent}22; border-color: ${accent}60; color: ${accent};">
                                     ${badge}
                                 </div>
                                 <div class="card-icon">${icon}</div>
@@ -320,17 +326,31 @@
                                     </svg>
                                 </div>
                             </div>
-                        </a>
                         `;
-                    }).join('');
+                        grid.appendChild(cardEl);
+                    });
                 } catch (err) {
-                    console.warn('Could not dynamically refresh theme grid:', err);
+                    console.warn('Could not check for additional themes:', err);
                 }
             }
 
             loadDynamicThemes();
         });
     </script>
+
+    <!-- Global Collaborator Watermark -->
+    <div class="global-collaborator-watermark">
+        <div class="watermark-text">
+            Developed by Staff and Students in <strong>ITE CC - Higher Nitec in AI Applications</strong>
+        </div>
+        <div class="watermark-logos">
+            <img src="/static/shared/images/logos/ai-cc.png" alt="AI Applications" onerror="this.style.display='none'">
+            <div class="watermark-separator"></div>
+            <img src="/static/shared/images/logos/seit.avif" alt="SEIT" onerror="this.style.display='none'">
+            <div class="watermark-separator"></div>
+            <img src="/static/shared/images/logos/ite-cc.avif" alt="ITE College Central" onerror="this.style.display='none'">
+        </div>
+    </div>
 </body>
 
 </html>

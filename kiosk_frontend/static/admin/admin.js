@@ -9,14 +9,34 @@ const studio = {
     activeData: { clothes: [], poses: [], backgrounds: [] },
     activeBindings: null,
     uploadedWorkflow: null,
-    activeTab: 'branding'
+    activeTab: 'branding',
+    masterAssets: { clothes: [], poses: [], backgrounds: [] },
+    pickerCategory: 'clothes',
+    pickerTargetIndex: null
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
     initTabs();
     initEventListeners();
     await loadThemes();
+    await loadMasterAssets();
 });
+
+async function loadMasterAssets() {
+    try {
+        const res = await fetch('/api/admin/assets');
+        if (res.ok) {
+            studio.masterAssets = await res.json();
+            console.log("Master assets catalog loaded:", {
+                clothes: studio.masterAssets.clothes?.length,
+                poses: studio.masterAssets.poses?.length,
+                backgrounds: studio.masterAssets.backgrounds?.length
+            });
+        }
+    } catch (e) {
+        console.warn('Could not load master assets:', e);
+    }
+}
 
 // ==========================================================================
 // 1. Theme Loading & Sidebar
@@ -396,7 +416,7 @@ function renderBindingsCard(bindings) {
 }
 
 // ==========================================================================
-// 5. Asset Manager
+// 5. Asset Manager & Master Database Picker
 // ==========================================================================
 function renderAssetsList() {
     renderClothesList();
@@ -409,13 +429,28 @@ function renderClothesList() {
     if (!grid) return;
     const items = studio.activeData?.clothes || [];
 
+    if (items.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted); background: rgba(255,255,255,0.02); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
+                <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">👘</div>
+                <p>No outfits added yet. Click <strong>"Pick from Master Wardrobe"</strong> above to browse existing outfits!</p>
+            </div>
+        `;
+        return;
+    }
+
     grid.innerHTML = items.map((c, idx) => `
         <div class="asset-studio-card">
             <img class="asset-thumb" src="${c.image}" alt="${c.title}" onerror="this.src='/static/landing/cny_card_bg.png'">
             <div class="asset-card-details">
-                <span class="asset-card-code">${c.code} (${c.category || 'unisex'})</span>
-                <div class="asset-card-title">${c.title}</div>
-                <div style="font-size: 0.75rem; color: var(--text-dim);">${c.lighting || 'Warm lighting'}</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="asset-card-code">${c.code || 'O' + (idx+1)} (${c.category || 'unisex'})</span>
+                    <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="openMasterAssetPicker('clothes', ${idx})" title="Replace from Master Library">🔄 Change</button>
+                </div>
+                <div class="asset-card-title">${c.title || c.name || 'Untitled Outfit'}</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${c.prompt_modifier || ''}">
+                    ${c.prompt_modifier || c.lighting || 'Custom festive styling'}
+                </div>
             </div>
             <button class="admin-btn admin-btn-danger" style="position: absolute; top: 6px; right: 6px; padding: 0.2rem 0.4rem; font-size: 0.75rem;" onclick="removeOutfit(${idx})">×</button>
         </div>
@@ -427,12 +462,26 @@ function renderPosesList() {
     if (!grid) return;
     const items = studio.activeData?.poses || [];
 
+    if (items.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted); background: rgba(255,255,255,0.02); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
+                <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🕺</div>
+                <p>No poses added yet. Click <strong>"Pick from Master Poses"</strong> above to browse existing poses!</p>
+            </div>
+        `;
+        return;
+    }
+
     grid.innerHTML = items.map((p, idx) => `
         <div class="asset-studio-card">
             <img class="asset-thumb" src="${p.image}" alt="${p.title}" onerror="this.src='/static/landing/cny_card_bg.png'">
             <div class="asset-card-details">
-                <span class="asset-card-code">${p.code}</span>
-                <div class="asset-card-title">${p.title}</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="asset-card-code">${p.code || 'P' + (idx+1)}</span>
+                    <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="openMasterAssetPicker('poses', ${idx})" title="Replace from Master Library">🔄 Change</button>
+                </div>
+                <div class="asset-card-title">${p.title || p.name || 'Untitled Pose'}</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">${p.prompt_modifier || 'Pose modifier'}</div>
             </div>
             <button class="admin-btn admin-btn-danger" style="position: absolute; top: 6px; right: 6px; padding: 0.2rem 0.4rem; font-size: 0.75rem;" onclick="removePose(${idx})">×</button>
         </div>
@@ -444,12 +493,26 @@ function renderBackgroundsList() {
     if (!grid) return;
     const items = studio.activeData?.backgrounds || [];
 
+    if (items.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted); background: rgba(255,255,255,0.02); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
+                <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🏞️</div>
+                <p>No backgrounds added yet. Click <strong>"Pick from Master Backgrounds"</strong> above to browse existing backgrounds!</p>
+            </div>
+        `;
+        return;
+    }
+
     grid.innerHTML = items.map((b, idx) => `
         <div class="asset-studio-card">
             <img class="asset-thumb" src="${b.image}" alt="${b.title}" onerror="this.src='/static/landing/cny_card_bg.png'">
             <div class="asset-card-details">
-                <span class="asset-card-code">${b.code}</span>
-                <div class="asset-card-title">${b.title}</div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="asset-card-code">${b.code || 'B' + (idx+1)}</span>
+                    <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="openMasterAssetPicker('backgrounds', ${idx})" title="Replace from Master Library">🔄 Change</button>
+                </div>
+                <div class="asset-card-title">${b.title || b.name || 'Untitled Background'}</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim);">${b.prompt_modifier || 'Atmospheric setting'}</div>
             </div>
             <button class="admin-btn admin-btn-danger" style="position: absolute; top: 6px; right: 6px; padding: 0.2rem 0.4rem; font-size: 0.75rem;" onclick="removeBackground(${idx})">×</button>
         </div>
@@ -469,6 +532,215 @@ window.removePose = function(idx) {
 window.removeBackground = function(idx) {
     studio.activeData.backgrounds.splice(idx, 1);
     renderBackgroundsList();
+};
+
+// --- Master Asset Picker Modal Controls ---
+window.openMasterAssetPicker = function(category = 'clothes', replaceIndex = null) {
+    studio.pickerCategory = category;
+    studio.pickerTargetIndex = replaceIndex;
+    const modal = document.getElementById('asset-library-modal');
+    if (!modal) return;
+
+    document.querySelectorAll('.modal-cat-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.cat === category);
+    });
+
+    modal.classList.add('open');
+    filterPickerAssets();
+};
+
+window.closeMasterAssetPicker = function() {
+    const modal = document.getElementById('asset-library-modal');
+    if (modal) modal.classList.remove('open');
+    studio.pickerTargetIndex = null;
+};
+
+window.setPickerCategory = function(cat) {
+    studio.pickerCategory = cat;
+    document.querySelectorAll('.modal-cat-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.cat === cat);
+    });
+    filterPickerAssets();
+};
+
+window.filterPickerAssets = function() {
+    const grid = document.getElementById('modal-asset-grid');
+    const countEl = document.getElementById('modal-asset-count');
+    if (!grid) return;
+
+    const cat = studio.pickerCategory || 'clothes';
+    const themeFilter = document.getElementById('modal-theme-filter')?.value || 'all';
+    const searchFilter = (document.getElementById('modal-search-input')?.value || '').toLowerCase().trim();
+
+    const allItems = studio.masterAssets[cat] || [];
+    const filtered = allItems.filter(item => {
+        if (themeFilter !== 'all' && item.source_theme?.toLowerCase() !== themeFilter.toLowerCase()) {
+            return false;
+        }
+        if (searchFilter) {
+            const name = (item.title || item.name || '').toLowerCase();
+            const code = (item.code || '').toLowerCase();
+            const prompt = (item.prompt_modifier || item.mapping_desc || '').toLowerCase();
+            if (!name.includes(searchFilter) && !code.includes(searchFilter) && !prompt.includes(searchFilter)) {
+                return false;
+            }
+        }
+        return true;
+    });
+
+    if (countEl) {
+        countEl.textContent = `Showing ${filtered.length} of ${allItems.length} assets in library`;
+    }
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">
+                <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🔍</div>
+                <div>No matching assets found in master database</div>
+            </div>
+        `;
+        return;
+    }
+
+    grid.innerHTML = filtered.map((item, idx) => {
+        const title = item.title || item.name || 'Untitled Asset';
+        const code = item.code || '';
+        const theme = item.source_theme || 'shared';
+        const prompt = item.prompt_modifier || item.mapping_desc || item.lighting || '';
+        const isSelected = (studio.activeData[cat] || []).some(existing => existing.image === item.image);
+
+        return `
+            <div class="modal-asset-card ${isSelected ? 'selected' : ''}" onclick="selectMasterAsset('${cat}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                <img class="modal-asset-thumb" src="${item.image}" alt="${title}" onerror="this.src='/static/landing/cny_card_bg.png'">
+                <div class="modal-asset-info">
+                    <div class="modal-asset-header">
+                        <span class="modal-asset-theme-tag">${theme.toUpperCase()}</span>
+                        ${code ? `<span class="modal-asset-code">${code}</span>` : ''}
+                    </div>
+                    <div class="modal-asset-name">${title}</div>
+                    ${prompt ? `<div class="modal-asset-prompt">${prompt}</div>` : ''}
+                    <div class="modal-asset-action">
+                        <button type="button" class="modal-add-btn">
+                            ${studio.pickerTargetIndex !== null ? '🔄 Replace With This' : (isSelected ? '✓ Added to Theme' : '➕ Add to Theme')}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+};
+
+window.selectMasterAsset = function(category, item) {
+    studio.activeData = studio.activeData || { clothes: [], poses: [], backgrounds: [] };
+    studio.activeData[category] = studio.activeData[category] || [];
+
+    const cloned = {
+        id: `${studio.activeTheme?.slug || 'theme'}_${Date.now().toString().slice(-4)}`,
+        code: item.code || `${category[0].toUpperCase()}${studio.activeData[category].length + 1}`,
+        title: item.title || item.name || 'New Asset',
+        image: item.image,
+        prompt_modifier: item.prompt_modifier || item.mapping_desc || '',
+        category: item.category || item.gender || 'unisex',
+        lighting: item.lighting || 'Warm cinematic lighting'
+    };
+
+    if (studio.pickerTargetIndex !== null && studio.pickerTargetIndex >= 0) {
+        studio.activeData[category][studio.pickerTargetIndex] = cloned;
+        showToast(`Replaced item with "${cloned.title}"!`, 'success');
+        closeMasterAssetPicker();
+    } else {
+        studio.activeData[category].push(cloned);
+        showToast(`Added "${cloned.title}" to ${category}!`, 'success');
+    }
+
+    renderAssetsList();
+    filterPickerAssets();
+};
+
+// --- Blank Item Creators ---
+window.addBlankOutfit = function() {
+    studio.activeData.clothes = studio.activeData.clothes || [];
+    const num = studio.activeData.clothes.length + 1;
+    studio.activeData.clothes.push({
+        id: `outfit_${Date.now().toString().slice(-4)}`,
+        code: `O${num}`,
+        title: `Custom Outfit ${num}`,
+        image: '/static/landing/cny_card_bg.png',
+        category: 'unisex',
+        prompt_modifier: 'wearing traditional festive attire',
+        lighting: 'Warm cinematic lighting'
+    });
+    renderClothesList();
+    showToast('Added blank outfit. Click "🔄 Change" to pick photo!', 'success');
+};
+
+window.addBlankPose = function() {
+    studio.activeData.poses = studio.activeData.poses || [];
+    const num = studio.activeData.poses.length + 1;
+    studio.activeData.poses.push({
+        id: `pose_${Date.now().toString().slice(-4)}`,
+        code: `P${num}`,
+        title: `Custom Pose ${num}`,
+        image: '/static/landing/cny_card_bg.png',
+        prompt_modifier: 'standing with confidence'
+    });
+    renderPosesList();
+    showToast('Added blank pose. Click "🔄 Change" to pick photo!', 'success');
+};
+
+window.addBlankBackground = function() {
+    studio.activeData.backgrounds = studio.activeData.backgrounds || [];
+    const num = studio.activeData.backgrounds.length + 1;
+    studio.activeData.backgrounds.push({
+        id: `bg_${Date.now().toString().slice(-4)}`,
+        code: `B${num}`,
+        title: `Custom Background ${num}`,
+        image: '/static/landing/cny_card_bg.png',
+        prompt_modifier: 'luxurious festive celebration hall'
+    });
+    renderBackgroundsList();
+    showToast('Added blank background. Click "🔄 Change" to pick photo!', 'success');
+};
+
+// --- Entire Theme Importer ---
+window.openImportThemeModal = function() {
+    const modal = document.getElementById('theme-import-modal');
+    if (modal) modal.classList.add('open');
+};
+
+window.closeImportThemeModal = function() {
+    const modal = document.getElementById('theme-import-modal');
+    if (modal) modal.classList.remove('open');
+};
+
+window.confirmImportTheme = async function() {
+    const sourceTheme = document.getElementById('import-source-theme')?.value || 'uits';
+    const overwrite = document.getElementById('import-overwrite-chk')?.checked;
+
+    try {
+        const res = await fetch(`/api/theme/${sourceTheme}/data`);
+        if (!res.ok) throw new Error('Could not load theme assets');
+        const data = await res.json();
+
+        if (overwrite) {
+            studio.activeData = {
+                clothes: data.clothes ? [...data.clothes] : [],
+                poses: data.poses ? [...data.poses] : [],
+                backgrounds: data.backgrounds ? [...data.backgrounds] : []
+            };
+        } else {
+            studio.activeData = studio.activeData || { clothes: [], poses: [], backgrounds: [] };
+            studio.activeData.clothes = [...(studio.activeData.clothes || []), ...(data.clothes || [])];
+            studio.activeData.poses = [...(studio.activeData.poses || []), ...(data.poses || [])];
+            studio.activeData.backgrounds = [...(studio.activeData.backgrounds || []), ...(data.backgrounds || [])];
+        }
+
+        renderAssetsList();
+        closeImportThemeModal();
+        showToast(`Successfully imported assets from ${sourceTheme.toUpperCase()}!`, 'success');
+    } catch (err) {
+        showToast('Import failed: ' + err.message, 'error');
+    }
 };
 
 // ==========================================================================

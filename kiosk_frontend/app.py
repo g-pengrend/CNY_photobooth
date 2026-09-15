@@ -142,7 +142,7 @@ def list_theme_samples(theme_slug):
 
 @app.route('/<theme_slug>')
 def serve_theme(theme_slug):
-    """Serve the Universal Engine for modern themes, with fallback to legacy index.html."""
+    """Serve theme: custom index.html if present, otherwise Universal Engine."""
     if theme_slug in RESERVED_SLUGS:
         return "Not Found", 404
         
@@ -150,12 +150,19 @@ def serve_theme(theme_slug):
     if not os.path.exists(theme_dir):
         return "Theme Not Found", 404
         
-    # If theme.json exists, serve the Universal Engine
-    if os.path.exists(os.path.join(theme_dir, 'theme.json')):
+    use_engine_preview = request.args.get('engine') == 'universal'
+    custom_index = os.path.join(theme_dir, 'index.html')
+
+    # PRIORITY 1: If custom index.html exists and not explicitly asking for universal engine, serve bespoke theme page
+    if os.path.exists(custom_index) and not use_engine_preview:
+        return send_from_directory(theme_dir, 'index.html')
+
+    # PRIORITY 2: Universal Engine fallback for newly generated / studio themes or explicit preview
+    engine_html = os.path.join(app.static_folder, 'engine', 'kiosk.html')
+    if os.path.exists(engine_html):
         return send_from_directory(os.path.join(app.static_folder, 'engine'), 'kiosk.html')
-        
-    # Fallback to legacy index.html if not yet migrated
-    if os.path.exists(os.path.join(theme_dir, 'index.html')):
+
+    if os.path.exists(custom_index):
         return send_from_directory(theme_dir, 'index.html')
         
     return "Theme Template Not Found", 404
@@ -457,6 +464,66 @@ def admin_panel():
     """Serve the Theme Studio Admin SPA."""
     admin_dir = os.path.join(app.static_folder, 'admin')
     return send_from_directory(admin_dir, 'index.html')
+
+
+@app.route('/api/admin/assets')
+def get_master_assets():
+    """Return a master catalog of all clothes, poses, and backgrounds across all themes."""
+    catalog = {
+        'clothes': [],
+        'poses': [],
+        'backgrounds': []
+    }
+    themes_dir = os.path.join(app.static_folder, 'themes')
+    if not os.path.exists(themes_dir):
+        return jsonify(catalog)
+
+    seen_images = {'clothes': set(), 'poses': set(), 'backgrounds': set()}
+
+    for theme_slug in sorted(os.listdir(themes_dir)):
+        if theme_slug.startswith('.') or theme_slug in RESERVED_SLUGS:
+            continue
+        theme_path = os.path.join(themes_dir, theme_slug)
+        if not os.path.isdir(theme_path):
+            continue
+
+        # 1. Read from data.json if available
+        data_json = os.path.join(theme_path, 'data.json')
+        if os.path.exists(data_json):
+            try:
+                with open(data_json, 'r', encoding='utf-8') as f:
+                    theme_data = json.load(f)
+                    for cat in ['clothes', 'poses', 'backgrounds']:
+                        for item in theme_data.get(cat, []):
+                            img_path = item.get('image', '')
+                            if img_path:
+                                seen_images[cat].add(img_path.strip().lower())
+                            item_entry = dict(item)
+                            item_entry['source_theme'] = theme_slug
+                            catalog[cat].append(item_entry)
+            except Exception as e:
+                print(f"Error reading {data_json}: {e}")
+
+        # 2. Scan images folder directly for any untracked images
+        for cat in ['clothes', 'poses', 'backgrounds']:
+            cat_dir = os.path.join(theme_path, 'images', cat)
+            if os.path.exists(cat_dir):
+                for fname in sorted(os.listdir(cat_dir)):
+                    if fname.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')):
+                        web_path = f"/static/themes/{theme_slug}/images/{cat}/{fname}"
+                        if web_path.lower() not in seen_images[cat]:
+                            seen_images[cat].add(web_path.lower())
+                            clean_name = os.path.splitext(fname)[0].replace('-', ' ').replace('_', ' ').title()
+                            catalog[cat].append({
+                                'id': f"{theme_slug}_{fname}",
+                                'code': '',
+                                'name': clean_name,
+                                'image': web_path,
+                                'prompt_modifier': '',
+                                'source_theme': theme_slug
+                            })
+
+    return jsonify(catalog)
 
 
 @app.route('/api/admin/workflow/inspect', methods=['POST'])

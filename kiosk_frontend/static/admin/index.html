@@ -234,17 +234,39 @@
             <!-- Tab 3: Asset Manager -->
             <section id="tab-assets" class="tab-content">
                 <!-- Sub-nav for assets -->
-                <div style="display: flex; gap: 0.6rem; margin-bottom: 1.2rem;">
-                    <button class="admin-btn admin-btn-primary asset-subtab-btn active" data-subtab="clothes">👘 Outfits</button>
-                    <button class="admin-btn admin-btn-secondary asset-subtab-btn" data-subtab="poses">🕺 Poses</button>
-                    <button class="admin-btn admin-btn-secondary asset-subtab-btn" data-subtab="backgrounds">🏞️ Backgrounds</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.8rem;">
+                    <div style="display: flex; gap: 0.6rem;">
+                        <button class="admin-btn admin-btn-primary asset-subtab-btn active" data-subtab="clothes">👘 Outfits</button>
+                        <button class="admin-btn admin-btn-secondary asset-subtab-btn" data-subtab="poses">🕺 Poses</button>
+                        <button class="admin-btn admin-btn-secondary asset-subtab-btn" data-subtab="backgrounds">🏞️ Backgrounds</button>
+                    </div>
+                    <div style="display: flex; gap: 0.6rem;">
+                        <button type="button" class="admin-btn admin-btn-accent" onclick="openMasterAssetPicker()">
+                            📚 Open Master Database
+                        </button>
+                        <button type="button" class="admin-btn admin-btn-secondary" onclick="openImportThemeModal()">
+                            📥 Import Entire Theme
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Clothes Sub-panel -->
                 <div id="subtab-clothes" class="asset-subtab-panel">
                     <div class="form-section">
-                        <h3 class="section-title">Outfits Catalog</h3>
-                        <p class="section-desc">Clothing designs registered in data.json for this theme.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.8rem;">
+                            <div>
+                                <h3 class="section-title">Outfits Catalog</h3>
+                                <p class="section-desc">Clothing designs registered in data.json for this theme.</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button type="button" class="admin-btn admin-btn-accent" onclick="openMasterAssetPicker('clothes')">
+                                    📚 Pick from Master Wardrobe
+                                </button>
+                                <button type="button" class="admin-btn admin-btn-secondary" onclick="addBlankOutfit()">
+                                    ➕ Add Blank
+                                </button>
+                            </div>
+                        </div>
                         <div id="studio-clothes-grid" class="asset-studio-grid"></div>
                     </div>
                 </div>
@@ -252,8 +274,20 @@
                 <!-- Poses Sub-panel -->
                 <div id="subtab-poses" class="asset-subtab-panel" style="display:none;">
                     <div class="form-section">
-                        <h3 class="section-title">Poses Catalog</h3>
-                        <p class="section-desc">Selection of poses for this theme.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.8rem;">
+                            <div>
+                                <h3 class="section-title">Poses Catalog</h3>
+                                <p class="section-desc">Selection of poses for this theme.</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button type="button" class="admin-btn admin-btn-accent" onclick="openMasterAssetPicker('poses')">
+                                    📚 Pick from Master Poses
+                                </button>
+                                <button type="button" class="admin-btn admin-btn-secondary" onclick="addBlankPose()">
+                                    ➕ Add Blank
+                                </button>
+                            </div>
+                        </div>
                         <div id="studio-poses-grid" class="asset-studio-grid"></div>
                     </div>
                 </div>
@@ -261,8 +295,20 @@
                 <!-- Backgrounds Sub-panel -->
                 <div id="subtab-backgrounds" class="asset-subtab-panel" style="display:none;">
                     <div class="form-section">
-                        <h3 class="section-title">Backgrounds Catalog</h3>
-                        <p class="section-desc">Environments registered in data.json.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.8rem;">
+                            <div>
+                                <h3 class="section-title">Backgrounds Catalog</h3>
+                                <p class="section-desc">Environments registered in data.json.</p>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button type="button" class="admin-btn admin-btn-accent" onclick="openMasterAssetPicker('backgrounds')">
+                                    📚 Pick from Master Backgrounds
+                                </button>
+                                <button type="button" class="admin-btn admin-btn-secondary" onclick="addBlankBackground()">
+                                    ➕ Add Blank
+                                </button>
+                            </div>
+                        </div>
                         <div id="studio-bg-grid" class="asset-studio-grid"></div>
                     </div>
                 </div>
@@ -282,6 +328,72 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- Master Asset Database Modal -->
+    <div id="asset-library-modal" class="modal-overlay">
+        <div class="asset-picker-dialog">
+            <div class="modal-header">
+                <h3>📚 Master Asset Database & Media Picker</h3>
+                <button class="modal-close-btn" onclick="closeMasterAssetPicker()">&times;</button>
+            </div>
+            <div class="modal-filter-bar">
+                <div class="modal-category-tabs">
+                    <button class="modal-cat-btn active" data-cat="clothes" onclick="setPickerCategory('clothes')">👘 Outfits</button>
+                    <button class="modal-cat-btn" data-cat="poses" onclick="setPickerCategory('poses')">🕺 Poses</button>
+                    <button class="modal-cat-btn" data-cat="backgrounds" onclick="setPickerCategory('backgrounds')">🏞️ Backgrounds</button>
+                </div>
+                <select id="modal-theme-filter" class="modal-filter-select" onchange="filterPickerAssets()">
+                    <option value="all">All Source Themes</option>
+                    <option value="cny">CNY</option>
+                    <option value="uits">UITS</option>
+                    <option value="hariraya">Hari Raya</option>
+                    <option value="ndp2026">NDP 2026</option>
+                </select>
+                <input id="modal-search-input" type="text" class="modal-search-input" placeholder="Search by name, code, or keyword..." oninput="filterPickerAssets()">
+            </div>
+            <div id="modal-asset-grid" class="modal-grid-container">
+                <!-- Injected dynamically -->
+            </div>
+            <div class="modal-footer">
+                <span id="modal-asset-count" style="font-size: 0.85rem; color: var(--text-muted);">Showing 0 assets</span>
+                <button class="admin-btn admin-btn-secondary" onclick="closeMasterAssetPicker()">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Theme Assets Modal -->
+    <div id="theme-import-modal" class="modal-overlay">
+        <div class="asset-picker-dialog" style="max-width: 550px;">
+            <div class="modal-header">
+                <h3>📥 Import Entire Theme Assets</h3>
+                <button class="modal-close-btn" onclick="closeImportThemeModal()">&times;</button>
+            </div>
+            <div style="padding: 1.8rem;">
+                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem;">
+                    Quickly populate this theme with a complete set of outfits, poses, and backgrounds copied from an existing theme:
+                </p>
+                <div class="form-group">
+                    <label>Choose Source Theme</label>
+                    <select id="import-source-theme" class="modal-filter-select" style="width: 100%; margin-top: 0.4rem;">
+                        <option value="uits">UITS 50th Anniversary (Black & Gold Gala)</option>
+                        <option value="cny">Chinese New Year (Lunar Prosperity)</option>
+                        <option value="hariraya">Hari Raya Aidilfitri</option>
+                        <option value="ndp2026">NDP 2026 (National Day)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input id="import-overwrite-chk" type="checkbox" checked>
+                        <span>Replace current theme assets (uncheck to merge)</span>
+                    </label>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.8rem; margin-top: 2rem;">
+                    <button class="admin-btn admin-btn-secondary" onclick="closeImportThemeModal()">Cancel</button>
+                    <button class="admin-btn admin-btn-primary" onclick="confirmImportTheme()">Import Now</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Script -->
