@@ -12,7 +12,10 @@ const studio = {
     activeTab: 'branding',
     masterAssets: { clothes: [], poses: [], backgrounds: [] },
     pickerCategory: 'clothes',
-    pickerTargetIndex: null
+    pickerTargetIndex: null,
+    assetGenConfigs: {},
+    currentGenType: 'backdrop',
+    lastGenResult: null
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -20,6 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initEventListeners();
     await loadThemes();
     await loadMasterAssets();
+    await loadAssetGenConfigs();
 });
 
 async function loadMasterAssets() {
@@ -866,3 +870,239 @@ function showToast(message, type = 'success') {
         setTimeout(() => toast.remove(), 300);
     }, 3500);
 }
+
+// ==========================================================================
+// 8. AI Asset Studio (ComfyUI Generator)
+// ==========================================================================
+async function loadAssetGenConfigs() {
+    try {
+        const res = await fetch('/api/admin/asset-generator/config');
+        if (res.ok) {
+            const data = await res.json();
+            studio.assetGenConfigs = data.templates || {};
+            updateGeneratorPreview();
+        }
+    } catch (e) {
+        console.warn('Could not load asset generator configs:', e);
+    }
+}
+
+window.selectGeneratorType = function(type) {
+    studio.currentGenType = type;
+    document.querySelectorAll('.gen-type-btn').forEach(btn => {
+        btn.classList.toggle('admin-btn-primary', btn.dataset.type === type);
+        btn.classList.toggle('admin-btn-secondary', btn.dataset.type !== type);
+    });
+
+    const genderGroup = document.getElementById('gen-gender-group');
+    if (genderGroup) {
+        genderGroup.style.display = type === 'clothes' ? 'block' : 'none';
+    }
+
+    updateGeneratorPreview();
+};
+
+window.updateGeneratorPreview = function() {
+    const type = studio.currentGenType || 'backdrop';
+    const cfg = studio.assetGenConfigs[type];
+    if (!cfg) return;
+
+    const prefixEl = document.getElementById('gen-static-prefix');
+    const suffixEl = document.getElementById('gen-static-suffix');
+    const middleInput = document.getElementById('gen-middle-prompt');
+
+    if (type === 'clothes') {
+        const gender = document.getElementById('gen-clothes-gender')?.value || 'female';
+        if (prefixEl) prefixEl.textContent = `A professional studio product shot of a standalone ${gender} outfit, featuring`;
+    } else {
+        if (prefixEl) prefixEl.textContent = cfg.static_prefix.trim();
+    }
+
+    if (suffixEl) suffixEl.textContent = cfg.static_suffix.trim();
+
+    // If middle prompt is empty, set default example
+    if (middleInput && !middleInput.value.trim()) {
+        middleInput.value = cfg.default_middle || '';
+    }
+};
+
+window.loadGeneratorExamplePrompt = function() {
+    const type = studio.currentGenType || 'backdrop';
+    const cfg = studio.assetGenConfigs[type];
+    const middleInput = document.getElementById('gen-middle-prompt');
+    if (cfg && middleInput) {
+        middleInput.value = cfg.default_middle || '';
+        showToast('Loaded example prompt description!', 'success');
+    }
+};
+
+window.clearGeneratorPrompt = function() {
+    const middleInput = document.getElementById('gen-middle-prompt');
+    if (middleInput) middleInput.value = '';
+};
+
+window.triggerAssetGeneration = async function() {
+    const type = studio.currentGenType || 'backdrop';
+    const middlePrompt = document.getElementById('gen-middle-prompt')?.value.trim();
+    const gender = document.getElementById('gen-clothes-gender')?.value || 'female';
+    const seed = document.getElementById('gen-seed-input')?.value.trim();
+    const btn = document.getElementById('trigger-generate-asset-btn');
+
+    if (!middlePrompt) {
+        showToast('Please enter a description for the asset!', 'error');
+        return;
+    }
+
+    const origText = btn.innerHTML;
+    btn.innerHTML = '⏳ Generating with ComfyUI...';
+    btn.disabled = true;
+
+    try {
+        const res = await fetch('/api/admin/asset-generator/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                type: type,
+                description: middlePrompt,
+                gender: gender,
+                seed: seed || undefined
+            })
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Generation failed');
+        }
+
+        const data = await res.json();
+        studio.lastGenResult = data;
+
+        // Render result panel
+        const panel = document.getElementById('gen-result-panel');
+        const img = document.getElementById('gen-result-img');
+        const seedBadge = document.getElementById('gen-result-seed-badge');
+        const nameInput = document.getElementById('gen-asset-name');
+        const themeSelect = document.getElementById('gen-target-theme');
+        const statusMsg = document.getElementById('gen-status-msg');
+
+        if (panel) panel.style.display = 'block';
+        if (img) img.src = data.preview_url + '?t=' + Date.now();
+        if (seedBadge) seedBadge.textContent = `Seed: #${data.seed}`;
+
+        // Auto-generate title suggestion
+        if (nameInput) {
+            let suggestedTitle = '';
+            if (type === 'backdrop') suggestedTitle = 'Cinematic Backdrop ' + Math.floor(Math.random()*900 + 100);
+            else if (type === 'clothes') suggestedTitle = (gender === 'female' ? 'Women ' : 'Men ') + 'Celebration Attire ' + Math.floor(Math.random()*900 + 100);
+            else suggestedTitle = 'Hero Chibi Pose ' + Math.floor(Math.random()*900 + 100);
+            nameInput.value = suggestedTitle;
+            updateFilenamePreview();
+        }
+
+        if (themeSelect) {
+            themeSelect.value = 'master';
+        }
+
+        if (statusMsg) statusMsg.style.display = 'none';
+
+        showToast('🎉 Asset generated successfully! Review below.', 'success');
+        panel.scrollIntoView({ behavior: 'smooth' });
+
+    } catch (err) {
+        showToast('Generation error: ' + err.message, 'error');
+    } finally {
+        btn.innerHTML = origText;
+        btn.disabled = false;
+    }
+};
+
+window.updateFilenamePreview = function() {
+    const nameInput = document.getElementById('gen-asset-name');
+    const previewEl = document.getElementById('gen-filename-preview');
+    if (!previewEl) return;
+    const val = (nameInput?.value || '').trim();
+    if (val) {
+        const slug = val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        previewEl.textContent = (slug || 'asset') + '.png';
+    } else {
+        previewEl.textContent = 'autogenerated-from-prompt.png';
+    }
+};
+
+window.regenerateAsset = function() {
+    const seedInput = document.getElementById('gen-seed-input');
+    if (seedInput) seedInput.value = ''; // force new random seed
+    triggerAssetGeneration();
+};
+
+window.acceptGeneratedAsset = async function() {
+    if (!studio.lastGenResult) {
+        showToast('No generated asset to accept', 'error');
+        return;
+    }
+
+    const type = studio.currentGenType || 'backdrop';
+    const name = document.getElementById('gen-asset-name')?.value.trim();
+    const targetTheme = document.getElementById('gen-target-theme')?.value || 'master';
+    const gender = document.getElementById('gen-clothes-gender')?.value || 'unisex';
+    const btn = document.getElementById('gen-accept-btn');
+    const statusMsg = document.getElementById('gen-status-msg');
+
+    const origText = btn.innerHTML;
+    btn.innerHTML = '💾 Saving to Master...';
+    btn.disabled = true;
+
+    try {
+        const res = await fetch('/api/admin/asset-generator/accept', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                preview_filename: studio.lastGenResult.preview_filename,
+                type: type,
+                name: name,
+                target_theme: targetTheme,
+                prompt_desc: studio.lastGenResult.full_prompt,
+                gender: gender
+            })
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Failed to save asset');
+        }
+
+        const data = await res.json();
+        showToast(`✅ Saved as "${data.filename}" and added to Master Database!`, 'success');
+
+        if (statusMsg) {
+            statusMsg.style.display = 'block';
+            statusMsg.style.background = 'rgba(16, 185, 129, 0.15)';
+            statusMsg.style.border = '1px solid #10b981';
+            statusMsg.style.color = '#34d399';
+            statusMsg.innerHTML = `
+                <strong>Saved Successfully!</strong><br>
+                File: <code>${data.filename}</code><br>
+                Destination: <code>${data.web_path}</code><br>
+                Added to theme: <strong>${targetTheme.toUpperCase()}</strong>
+            `;
+        }
+
+        // Refresh master assets so it's instantly pickable everywhere
+        await loadMasterAssets();
+
+        // If the saved asset belongs to active theme, reload active data
+        if (studio.activeTheme?.slug === targetTheme) {
+            const dataRes = await fetch(`/api/theme/${targetTheme}/data`);
+            if (dataRes.ok) {
+                studio.activeData = await dataRes.json();
+                renderAssetsList();
+            }
+        }
+
+    } catch (err) {
+        showToast('Save error: ' + err.message, 'error');
+    } finally {
+        btn.innerHTML = origText;
+        btn.disabled = false;
+    }
+};

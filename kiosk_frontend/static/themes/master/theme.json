@@ -1,0 +1,14 @@
+{
+  "title": "Master Asset Library",
+  "slug": "master",
+  "subtitle": "Global Master Repository",
+  "badge": "Master",
+  "icon": "📦",
+  "description": "Shared master repository for all AI generated assets across themes.",
+  "status": "library",
+  "features": {
+    "luckyNumber": false,
+    "filmStrip": false,
+    "genderFilter": true
+  }
+}

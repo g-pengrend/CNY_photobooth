@@ -60,6 +60,9 @@
                 <button class="tab-btn" data-tab="assets">
                     <span>👘</span> Asset Manager
                 </button>
+                <button class="tab-btn" data-tab="generator">
+                    <span>🎨</span> AI Asset Creator
+                </button>
                 <button class="tab-btn" data-tab="publish">
                     <span>🚀</span> Review & Publish
                 </button>
@@ -310,6 +313,139 @@
                             </div>
                         </div>
                         <div id="studio-bg-grid" class="asset-studio-grid"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: AI Asset Creator -->
+            <section id="tab-generator" class="tab-content">
+                <div class="form-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.8rem;">
+                        <h3 class="section-title">✨ AI Asset Studio (ComfyUI Generator)</h3>
+                        <span class="binding-tag" style="background: rgba(212, 175, 55, 0.15); color: var(--accent);">3 Template Workflows Active</span>
+                    </div>
+                    <p class="section-desc">Generate production-ready backdrops, clothes, and poses with your dedicated ComfyUI pipelines. Edit the middle description variable while the studio prefix and suffix maintain consistent aesthetics.</p>
+
+                    <!-- Asset Type Selector Tabs -->
+                    <div style="display: flex; gap: 0.8rem; margin: 1.5rem 0 1rem; flex-wrap: wrap;">
+                        <button type="button" class="admin-btn admin-btn-primary gen-type-btn active" data-type="backdrop" onclick="selectGeneratorType('backdrop')">
+                            🏞️ Backdrop / Background
+                        </button>
+                        <button type="button" class="admin-btn admin-btn-secondary gen-type-btn" data-type="clothes" onclick="selectGeneratorType('clothes')">
+                            👘 Outfit / Clothes
+                        </button>
+                        <button type="button" class="admin-btn admin-btn-secondary gen-type-btn" data-type="pose" onclick="selectGeneratorType('pose')">
+                            🕺 3D Chibi Pose
+                        </button>
+                    </div>
+
+                    <!-- Prompt Builder Form -->
+                    <div class="prompt-builder-container" style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem;">
+                        <!-- Gender Selection (for Clothes only) -->
+                        <div id="gen-gender-group" class="form-group" style="display: none; margin-bottom: 1rem;">
+                            <label for="gen-clothes-gender">Target Outfit Type / Gender</label>
+                            <select id="gen-clothes-gender" class="modal-filter-select" style="max-width: 260px;" onchange="updateGeneratorPreview()">
+                                <option value="female">Female Outfit</option>
+                                <option value="male">Male Outfit</option>
+                                <option value="unisex">Standalone / Unisex Outfit</option>
+                            </select>
+                        </div>
+
+                        <!-- Static Prefix Box -->
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                                <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); letter-spacing: 0.5px;">🔒 Starting Prompt (Static Prefix)</span>
+                            </div>
+                            <div id="gen-static-prefix" style="padding: 0.8rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--text-dim); font-family: monospace; line-height: 1.4;">
+                                A professional studio asset of a background environment, featuring
+                            </div>
+                        </div>
+
+                        <!-- Middle Variable Textarea -->
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                                <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #4ade80; letter-spacing: 0.5px;">✏️ Variable Description (Editable Middle Portion)</span>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button type="button" class="admin-btn admin-btn-secondary" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;" onclick="loadGeneratorExamplePrompt()">
+                                        💡 Load Example
+                                    </button>
+                                    <button type="button" class="admin-btn admin-btn-secondary" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;" onclick="clearGeneratorPrompt()">
+                                        🧹 Clear
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea id="gen-middle-prompt" rows="5" placeholder="Enter your custom description for this asset..." style="width: 100%; padding: 1rem; border-radius: var(--radius-sm); background: rgba(0,0,0,0.5); border: 1px solid var(--accent); color: #fff; font-size: 0.95rem; font-family: inherit; line-height: 1.5; outline: none;"></textarea>
+                        </div>
+
+                        <!-- Static Suffix Box -->
+                        <div style="margin-bottom: 1.2rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                                <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--accent); letter-spacing: 0.5px;">🔒 Ending Prompt (Static Suffix)</span>
+                            </div>
+                            <div id="gen-static-suffix" style="padding: 0.8rem 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--text-dim); font-family: monospace; line-height: 1.4;">
+                                Wide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition
+                            </div>
+                        </div>
+
+                        <!-- Action Bar -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding-top: 0.8rem; border-top: 1px solid var(--border-subtle);">
+                            <div style="display: flex; align-items: center; gap: 0.8rem;">
+                                <label style="font-size: 0.85rem; color: var(--text-muted);">Seed (optional):</label>
+                                <input id="gen-seed-input" type="text" placeholder="Random" style="width: 140px; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); color: #fff; font-size: 0.85rem; font-family: monospace;">
+                            </div>
+                            <button id="trigger-generate-asset-btn" type="button" class="admin-btn admin-btn-accent" style="padding: 0.75rem 2rem; font-size: 1rem;" onclick="triggerAssetGeneration()">
+                                ✨ Generate Asset with ComfyUI
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Generation Results / Decision Panel (Hidden until generated) -->
+                    <div id="gen-result-panel" style="display: none; background: rgba(12, 13, 20, 0.95); border: 1px solid var(--accent); border-radius: var(--radius-md); padding: 1.5rem; margin-top: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                                🎉 Asset Generated
+                            </h4>
+                            <span id="gen-result-seed-badge" class="binding-tag" style="background: rgba(255,255,255,0.1); color: #fff;">Seed: #0</span>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: minmax(280px, 360px) 1fr; gap: 1.8rem; align-items: start;">
+                            <!-- Preview Image Container -->
+                            <div style="background: #000; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); overflow: hidden; position: relative;">
+                                <img id="gen-result-img" src="" alt="Generated Asset Preview" style="width: 100%; aspect-ratio: 1/1; object-fit: contain; display: block;">
+                            </div>
+
+                            <!-- Acceptance Form & Options -->
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div class="form-group">
+                                    <label for="gen-asset-name">Asset Title / Name <span style="color: var(--text-muted); font-weight: normal; font-size: 0.85rem;">(Autogenerated if left blank)</span></label>
+                                    <input id="gen-asset-name" type="text" placeholder="e.g. Merlion Night Skyline" style="width: 100%; font-size: 1rem;" oninput="updateFilenamePreview()">
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Autogenerated filename: <code id="gen-filename-preview" style="color: #4ade80;">merlion-night-skyline.png</code></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="gen-target-theme">Save Destination</label>
+                                    <select id="gen-target-theme" class="modal-filter-select" style="width: 100%;">
+                                        <option value="master" selected>⭐ Master Asset Library (Shared across all themes)</option>
+                                        <option value="uits">UITS 50th Anniversary</option>
+                                        <option value="cny">Chinese New Year</option>
+                                        <option value="hariraya">Hari Raya Aidilfitri</option>
+                                        <option value="ndp2026">NDP 2026</option>
+                                    </select>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Stored permanently in the Master Library and immediately selectable across all themes.</span>
+                                </div>
+
+                                <div style="display: flex; gap: 0.8rem; margin-top: 1rem;">
+                                    <button type="button" class="admin-btn admin-btn-secondary" style="flex: 1; padding: 0.8rem;" onclick="regenerateAsset()">
+                                        🔄 Re-Generate (New Seed)
+                                    </button>
+                                    <button id="gen-accept-btn" type="button" class="admin-btn admin-btn-primary" style="flex: 1.5; padding: 0.8rem; font-size: 1rem;" onclick="acceptGeneratedAsset()">
+                                        ✅ Accept & Save to Master
+                                    </button>
+                                </div>
+
+                                <div id="gen-status-msg" style="display: none; padding: 0.8rem; border-radius: var(--radius-sm); font-size: 0.85rem; margin-top: 0.5rem;"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

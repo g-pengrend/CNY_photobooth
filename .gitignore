@@ -13,3 +13,6 @@ __pycache__/
 dgx_photobooth/tunnel.log
 *.pyc
 .DS_Store
+/kiosk_frontend/static/tmp/*
+!/kiosk_frontend/static/tmp/.gitkeep
+scratch/

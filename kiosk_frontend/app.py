@@ -611,6 +611,78 @@ def admin_save_theme():
         return jsonify({'error': str(e)}), 500
 
 
+# ============================================================
+# AI ASSET GENERATOR ROUTES (Backdrop, Clothes, Pose)
+# ============================================================
+from asset_generator import get_template_configs, generate_asset_image, accept_and_store_asset
+
+@app.route('/api/admin/asset-generator/config')
+def admin_asset_generator_config():
+    """Return prefix, suffix, and default middle prompt for each asset generator."""
+    return jsonify({
+        'status': 'success',
+        'templates': get_template_configs()
+    })
+
+
+@app.route('/api/admin/asset-generator/generate', methods=['POST'])
+def admin_asset_generator_generate():
+    """Generate an asset preview with ComfyUI from middle prompt variable."""
+    try:
+        data = request.json or {}
+        asset_type = data.get('type', 'backdrop')
+        description = data.get('description', '')
+        gender = data.get('gender', 'female')
+        seed = data.get('seed')
+        if seed is not None:
+            try:
+                seed = int(seed)
+            except ValueError:
+                seed = None
+
+        if not description.strip():
+            return jsonify({'error': 'Please provide a description for the asset'}), 400
+
+        result = generate_asset_image(asset_type, description, gender=gender, seed=seed)
+        if not result.get('success'):
+            return jsonify({'error': result.get('error', 'Generation failed')}), 500
+
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/admin/asset-generator/accept', methods=['POST'])
+def admin_asset_generator_accept():
+    """Accept and store preview image permanently into the target theme."""
+    try:
+        data = request.json or {}
+        preview_filename = data.get('preview_filename')
+        asset_type = data.get('type', 'backdrop')
+        asset_name = data.get('name', '').strip()
+        target_theme = data.get('target_theme', 'master')
+        prompt_desc = data.get('prompt_desc', '')
+        gender = data.get('gender', 'unisex')
+
+        if not preview_filename:
+            return jsonify({'error': 'Missing preview_filename'}), 400
+
+        res = accept_and_store_asset(
+            preview_filename=preview_filename,
+            asset_type=asset_type,
+            asset_name=asset_name,
+            target_theme=target_theme,
+            prompt_desc=prompt_desc,
+            gender=gender
+        )
+        if not res.get('success'):
+            return jsonify({'error': res.get('error', 'Failed to store asset')}), 500
+
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     print("SEIT 4D Vision Studio - Starting...")
     print_config()
