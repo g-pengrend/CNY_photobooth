@@ -55,14 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fallback to clothes images if samples folder is empty
             if (images.length === 0) {
                 images = [
-                    '/static/themes/ndp2026/images/clothes/abyssal-phoenix-daopa.png',
-                    '/static/themes/ndp2026/images/clothes/midnight-blue-tuxedo.png',
-                    '/static/themes/ndp2026/images/clothes/golden-radiance-qipao.png',
-                    '/static/themes/ndp2026/images/clothes/premium-baju-melayu-cekak-musang.png',
-                    '/static/themes/ndp2026/images/clothes/black-cream-wrap-dress.png',
-                    '/static/themes/ndp2026/images/clothes/male-indian-blue.png',
-                    '/static/themes/ndp2026/images/clothes/gold-and-blue-evening-gown.png',
-                    '/static/themes/ndp2026/images/clothes/midnight-blue-newage-ensemble.png'
+                    '/static/themes/master/images/clothes/abyssal-phoenix-daopa.png',
+                    '/static/themes/master/images/clothes/midnight-blue-tuxedo.png',
+                    '/static/themes/master/images/clothes/golden-radiance-qipao.png',
+                    '/static/themes/master/images/clothes/premium-baju-melayu-cekak-musang.png',
+                    '/static/themes/master/images/clothes/black-cream-wrap-dress.png',
+                    '/static/themes/master/images/clothes/male-indian-blue.png',
+                    '/static/themes/master/images/clothes/gold-and-blue-evening-gown.png',
+                    '/static/themes/master/images/clothes/midnight-blue-newage-ensemble.png'
                 ];
             }
 

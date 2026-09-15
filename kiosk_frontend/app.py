@@ -210,6 +210,18 @@ def list_theme_samples(theme_slug):
     return jsonify([f"/static/themes/{theme_slug}/images/samples/{img}" for img in images])
 
 
+@app.route('/static/themes/<theme_slug>/images/<category>/<filename>')
+def serve_theme_image_fallback(theme_slug, category, filename):
+    """Serve image from theme if present, otherwise fallback automatically to master."""
+    theme_file = os.path.join(app.static_folder, 'themes', theme_slug, 'images', category, filename)
+    if os.path.exists(theme_file):
+        return send_file(theme_file)
+    master_file = os.path.join(app.static_folder, 'themes', 'master', 'images', category, filename)
+    if os.path.exists(master_file):
+        return send_file(master_file)
+    return "Image Not Found", 404
+
+
 @app.route('/<theme_slug>')
 def serve_theme(theme_slug):
     """Serve theme: custom index.html if present, otherwise Universal Engine."""

@@ -3,9 +3,9 @@
     {
       "category": "male",
       "code": "C01",
-      "title": "Crimson Sovereign Magua (\u9a6c\u8902)",
+      "title": "Crimson Sovereign Magua (马褂)",
       "description": "Bold velvet mantle over a rugged, geometric-patterned gold silk tunic.",
-      "prompt": "A structured, hip-length Magua (\u9a6c\u8902) jacket in crimson velvet with bold gold dragon-scale embroidery, layered over a dark gold and black silk jacquard tunic featuring woven geometric fretwork (\u56de\u7eb9) patterns and a high, reinforced mandarin collar.",
+      "prompt": "A structured, hip-length Magua (马褂) jacket in crimson velvet with bold gold dragon-scale embroidery, layered over a dark gold and black silk jacquard tunic featuring woven geometric fretwork (回纹) patterns and a high, reinforced mandarin collar.",
       "image": "/static/themes/master/images/clothes/crimson-sovereign-magua.png",
       "mapping_desc": "jacket in crimson velvet with bold gold dragon-scale embroidery",
       "lighting": "Crimson and Gold",
@@ -25,9 +25,9 @@
     {
       "category": "male",
       "code": "C03",
-      "title": "Abyssal Phoenix Daopa (\u9053\u888d)",
+      "title": "Abyssal Phoenix Daopa (道袍)",
       "description": "Midnight silk robes layered with molten gold embroidery and flowing crimson sashes",
-      "prompt": "A Xianxia style male immortal, a structured midnight-black silk Daopa (\u9053\u888d) with heavy gold-thread dragon-scale embroidery. Layered with a dark charcoal translucent outer robe that billows with spiritual energy. Cinched by a wide scarlet leather belt with gold dragon buckles and long, dark red silk ribbons. The fabric features an iridescent oil-slick sheen that transitions from deep black to forest green.",
+      "prompt": "A Xianxia style male immortal, a structured midnight-black silk Daopa (道袍) with heavy gold-thread dragon-scale embroidery. Layered with a dark charcoal translucent outer robe that billows with spiritual energy. Cinched by a wide scarlet leather belt with gold dragon buckles and long, dark red silk ribbons. The fabric features an iridescent oil-slick sheen that transitions from deep black to forest green.",
       "image": "/static/themes/master/images/clothes/abyssal-phoenix-daopa.png",
       "mapping_desc": "midnight-black silk with heavy gold-thread dragon-scale embroidery",
       "lighting": "Midnight Blue and Gold",
@@ -36,9 +36,9 @@
     {
       "category": "male",
       "code": "C04",
-      "title": "Iron Blood Shanwenjia (\u5c71\u7eb9\u7532)",
+      "title": "Iron Blood Shanwenjia (山纹甲)",
       "description": "Crimson robes armored in mountain-pattern steel and heavy silk",
-      "prompt": "A deep vermilion Yuanlingpao (\u5706\u9886\u888d) robe layered under a black iron Shanwenjia (\u5c71\u7eb9\u7532) chest plate, secured by a heavy leather Gedai (\u9769\u5e26) and wide silk Panyu (\u76d8\u8170) sashes.",
+      "prompt": "A deep vermilion Yuanlingpao (圆领袍) robe layered under a black iron Shanwenjia (山纹甲) chest plate, secured by a heavy leather Gedai (革带) and wide silk Panyu (盘腰) sashes.",
       "image": "/static/themes/master/images/clothes/iron-blood-shanwenjia.png",
       "mapping_desc": "deep vermilion robe layered under a black iron chest plate",
       "lighting": "Vermillion and Steel Grey",
@@ -58,9 +58,9 @@
     {
       "category": "female",
       "code": "C06",
-      "title": "Moonlit Peony Ruqun (\u8966\u88d9)",
+      "title": "Moonlit Peony Ruqun (襦裙)",
       "description": "Ethereal silk layers in soft peach and silver with misty floral embroidery",
-      "prompt": "Xianxia style female immortal, a multi-layered Ruqun (\u8966\u88d9) in moonlight silver and soft peach silk. The inner robe is pale vermilion with delicate white peony embroidery, covered by a translucent floor-length outer robe that creates a misty, ethereal glow. Wide 'water sleeves' drape gracefully, finished with iridescent silver piping. A high-waisted silk sash with long, flowing ribbons catches the wind, surrounded by faint floating cherry blossom petals.",
+      "prompt": "Xianxia style female immortal, a multi-layered Ruqun (襦裙) in moonlight silver and soft peach silk. The inner robe is pale vermilion with delicate white peony embroidery, covered by a translucent floor-length outer robe that creates a misty, ethereal glow. Wide 'water sleeves' drape gracefully, finished with iridescent silver piping. A high-waisted silk sash with long, flowing ribbons catches the wind, surrounded by faint floating cherry blossom petals.",
       "image": "/static/themes/master/images/clothes/moonlit-peony-ruqun.png",
       "mapping_desc": "multi-layered dress in moonlight silver and soft peach silk",
       "lighting": "Silver and Peach",
@@ -69,9 +69,9 @@
     {
       "category": "female",
       "code": "C07",
-      "title": "Scarlet Ao-Qun (\u8884\u88d9)",
+      "title": "Scarlet Ao-Qun (袄裙)",
       "description": "Pristine white Ao paired with a majestic pleated Ma Mian Qun",
-      "prompt": "A white cross-collar Ao (\u8884) with cloud-patterned embroidery, cinched by a wide scarlet Lanyao (\u62e6\u8170) waist wrap over a flowing red Ma Mian Qun (\u9a6c\u9762\u88d9) pleated skirt.",
+      "prompt": "A white cross-collar Ao (袄) with cloud-patterned embroidery, cinched by a wide scarlet Lanyao (拦腰) waist wrap over a flowing red Ma Mian Qun (马面裙) pleated skirt.",
       "image": "/static/themes/master/images/clothes/scarlet-ao-qun.png",
       "mapping_desc": "white cross-collar dress cinched by a wide scarlet waist wrap",
       "lighting": "White and Scarlet",
@@ -82,7 +82,7 @@
       "code": "C08",
       "title": "Peony Jacquard Dress",
       "description": "Crimson velvet cape over a rich peony-patterned gold-pink gown",
-      "prompt": "A short, structured shoulder cape in crimson velvet with gold floral embroidery, worn over a simple sleek pink and gold dress featuring a woven peony jacquard pattern and metallic cloud-motif (\u7965\u4e91) accents throughout the fabric.",
+      "prompt": "A short, structured shoulder cape in crimson velvet with gold floral embroidery, worn over a simple sleek pink and gold dress featuring a woven peony jacquard pattern and metallic cloud-motif (祥云) accents throughout the fabric.",
       "image": "/static/themes/master/images/clothes/peony-jacquard-dress.png",
       "mapping_desc": "short, structured shoulder cape in crimson velvet with gold floral embroidery",
       "lighting": "Crimson and Pink",
@@ -102,9 +102,9 @@
     {
       "category": "unisex",
       "code": "C10",
-      "title": "Prismatic Wucai (\u4e94\u5f69) Bijia",
+      "title": "Prismatic Wucai (五彩) Bijia",
       "description": "Electric red vest over jade-gold silk with vivid violet-magenta clouds",
-      "prompt": "A structured Cinnabar-red Bijia (\u6bd4\u7532) vest featuring Cyan-blue piping, worn over a voluminous shirt in Jade-to-Gold gradient silk. The wide sleeves are accented with Violet silk panels, while the hem explodes with Wucai (\u4e94\u5f69) embroidery, weaving together threads of turquoise, magenta, and pure gold in a Five-Color Cloud pattern.",
+      "prompt": "A structured Cinnabar-red Bijia (比甲) vest featuring Cyan-blue piping, worn over a voluminous shirt in Jade-to-Gold gradient silk. The wide sleeves are accented with Violet silk panels, while the hem explodes with Wucai (五彩) embroidery, weaving together threads of turquoise, magenta, and pure gold in a Five-Color Cloud pattern.",
       "image": "/static/themes/master/images/clothes/prismatic-wucai-bijia.png",
       "mapping_desc": "structured Cinnabar-red vest with Cyan-blue piping",
       "lighting": "Cinnabar Red and Cyan",
@@ -115,7 +115,7 @@
       "code": "C11",
       "title": "The Phoenix Guardian",
       "description": "Emerald silk meets gold-plated phoenix armor and fiery vermilion wraps",
-      "prompt": "A hybrid short-sleeved tunic in Emerald-Green silk with a vibrant Vermilion sash, topped with Polished Gold Shanwenjia (\u5c71\u7eb9\u7532) pauldrons. The shoulder guards are etched with Phoenix motifs that bleed into the fabric via gold-leaf embroidery, mixing leather textures with high-shine silk.",
+      "prompt": "A hybrid short-sleeved tunic in Emerald-Green silk with a vibrant Vermilion sash, topped with Polished Gold Shanwenjia (山纹甲) pauldrons. The shoulder guards are etched with Phoenix motifs that bleed into the fabric via gold-leaf embroidery, mixing leather textures with high-shine silk.",
       "image": "/static/themes/master/images/clothes/the-phoenix-guardian.png",
       "mapping_desc": "short-sleeved tunic in Emerald-Green silk with a vibrant Vermilion sash",
       "lighting": "Emerald Green and Gold",
@@ -124,9 +124,9 @@
     {
       "category": "unisex",
       "code": "C12",
-      "title": "Celestial Ink-Mist Pao (\u888d)",
+      "title": "Celestial Ink-Mist Pao (袍)",
       "description": "Ethereal white-to-indigo gradient silk with silver-thread mountain landscapes",
-      "prompt": "A luxurious, high-collared unisex Pao (\u888d) crafted from iridescent white silk that fades into a deep indigo gradient at the hem. Delicate silver-thread embroidery depicts misty mountain peaks and pine trees in a traditional Shanshui ink-wash style. The robe features wide, flowing sleeves lined with shimmering silver satin and a structured waist cinched by a braided silk cord with jade tassels.",
+      "prompt": "A luxurious, high-collared unisex Pao (袍) crafted from iridescent white silk that fades into a deep indigo gradient at the hem. Delicate silver-thread embroidery depicts misty mountain peaks and pine trees in a traditional Shanshui ink-wash style. The robe features wide, flowing sleeves lined with shimmering silver satin and a structured waist cinched by a braided silk cord with jade tassels.",
       "image": "/static/themes/master/images/clothes/celestial-ink-mist-pao.png",
       "mapping_desc": "high-collared unisex robe crafted from iridescent white silk",
       "lighting": "Iridescent White and Indigo",
@@ -384,6 +384,39 @@
       "mapping_desc": "slim-fit black wool suit with narrow notch lapels",
       "lighting": "Silver and Golden",
       "id": "black-suit-white-shirt"
+    },
+    {
+      "id": "crimson-scholar-daopa",
+      "code": "C36",
+      "title": "Crimson Scholar Daopa",
+      "name": "Crimson Scholar Daopa",
+      "image": "/static/themes/master/images/clothes/crimson-scholar-daopa.png",
+      "prompt": "A Xianxia style scholar robe in crimson velvet with delicate silver cloud embroidery, cinched by a jade sash.",
+      "mapping_desc": "scholar robe in crimson velvet with silver cloud embroidery",
+      "lighting": "Warm Golden and Scarlet",
+      "category": "unisex"
+    },
+    {
+      "id": "ink-wash-pao",
+      "code": "C37",
+      "title": "Ink Wash Pao",
+      "name": "Ink Wash Pao",
+      "image": "/static/themes/master/images/clothes/ink-wash-pao.png",
+      "prompt": "A flowing robe in mist-grey silk with hand-painted monochrome ink wash landscape art, finished with deep charcoal piping.",
+      "mapping_desc": "flowing robe in mist-grey silk with monochrome ink wash art",
+      "lighting": "Soft Daylight Studio",
+      "category": "unisex"
+    },
+    {
+      "id": "silken-power-suit",
+      "code": "C38",
+      "title": "Silken Power Suit",
+      "name": "Silken Power Suit",
+      "image": "/static/themes/master/images/clothes/silken-power-suit.png",
+      "prompt": "A tailored contemporary silhouette in champagne silk with peak lapels, sharp shoulders, and minimal pearl buttons.",
+      "mapping_desc": "tailored contemporary suit in champagne silk with peak lapels",
+      "lighting": "Crisp Editorial Studio",
+      "category": "unisex"
     }
   ],
   "poses": [
@@ -561,7 +594,7 @@
       "code": "B07",
       "title": "The Ink-Wash Realm",
       "description": "3D Shanshui painting style",
-      "prompt": "A background that looks like a 3D version of an ancient Shanshui painting\u2014flowing waterfalls and jagged cliffs rendered in charcoal black and vivid rainbow hues.",
+      "prompt": "A background that looks like a 3D version of an ancient Shanshui painting—flowing waterfalls and jagged cliffs rendered in charcoal black and vivid rainbow hues.",
       "image": "/static/themes/master/images/backgrounds/the-ink-wash-realm.png",
       "id": "the-ink-wash-realm"
     },
@@ -617,7 +650,7 @@
       "code": "B04",
       "title": "Midnight Timber Pavilion",
       "description": "Intricate wood carving floating over a lily pond, bathed in full moon glow",
-      "prompt": "The background features a traditional Malay timber pavilion\u2014similar in intricate wood carving floating over a tranquil pond filled with purple and pink water lilies. The atmosphere is mystical, bathed in the soft, cool glow of a large full moon which is reflected, almost abstractly, on the water surface, surrounded by glowing stars,",
+      "prompt": "The background features a traditional Malay timber pavilion—similar in intricate wood carving floating over a tranquil pond filled with purple and pink water lilies. The atmosphere is mystical, bathed in the soft, cool glow of a large full moon which is reflected, almost abstractly, on the water surface, surrounded by glowing stars,",
       "image": "/static/themes/master/images/backgrounds/timber-pavilion-floating-over-pond.png",
       "id": "timber-pavilion-floating-over-pond"
     },
@@ -723,9 +756,19 @@
       "title": "jewel rain vortex",
       "name": "jewel rain vortex",
       "image": "/static/themes/master/images/backgrounds/jewel-rain-vortex.png",
-      "prompt_modifier": "A professional studio asset of a background environment, featuring \n\nA cinematic, low-angle view looking up at the HSBC Rain Vortex, the world\u2019s tallest indoor waterfall, cascades dramatically from a vaulted glass-and-steel ceiling. Surrounding the waterfall, the lush, multi-tiered indoor forest of the Shiseido Forest Valley creates a grand, tropical backdrop, with soft mist and hidden accent lights reflecting shimmering colors across the dense canopy.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "prompt_modifier": "A professional studio asset of a background environment, featuring \n\nA cinematic, low-angle view looking up at the HSBC Rain Vortex, the world’s tallest indoor waterfall, cascades dramatically from a vaulted glass-and-steel ceiling. Surrounding the waterfall, the lush, multi-tiered indoor forest of the Shiseido Forest Valley creates a grand, tropical backdrop, with soft mist and hidden accent lights reflecting shimmering colors across the dense canopy.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
       "mapping_desc": "jewel rain vortex",
       "lighting": "Cinematic ambient studio lighting"
+    },
+    {
+      "id": "the-opulent-candlelit-ballroom",
+      "code": "B28",
+      "title": "The Opulent Candlelit Ballroom",
+      "name": "The Opulent Candlelit Ballroom",
+      "image": "/static/themes/master/images/backgrounds/the-opulent-candlelit-ballroom.png",
+      "prompt": "A magnificent grand ballroom with polished marble floors, towering crystal chandeliers, and thousands of warm flickering candles casting a golden glow.",
+      "prompt_modifier": "A magnificent grand ballroom with polished marble floors, crystal chandeliers, and warm flickering candles",
+      "lighting": "Warm Candlelit Ambience"
     }
   ]
 }
