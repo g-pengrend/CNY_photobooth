@@ -232,43 +232,19 @@ function bindEventHandlers() {
             showScreen('options');
         }
     });
-    document.getElementById('pose-next-btn')?.addEventListener('click', () => {
-        if (!state.selections.pose) {
-            alert('Please select a pose to continue!');
-            return;
-        }
-        showScreen('clothes');
-    });
 
     // Clothes Screen
     document.getElementById('clothes-back-btn')?.addEventListener('click', () => showScreen('pose'));
-    document.getElementById('clothes-next-btn')?.addEventListener('click', () => {
-        if (!state.selections.clothesStyle) {
-            alert('Please select an outfit to continue!');
-            return;
-        }
-        showScreen('background');
-    });
 
     // Clothes Gender Filter Tabs
     document.querySelectorAll('#clothes-filter-tabs .filter-tab').forEach(tab => {
         tab.addEventListener('click', () => {
-            document.querySelectorAll('#clothes-filter-tabs .filter-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
             filterClothes(tab.dataset.filter);
         });
     });
 
     // Background Screen
     document.getElementById('bg-back-btn')?.addEventListener('click', () => showScreen('clothes'));
-    document.getElementById('bg-next-btn')?.addEventListener('click', () => {
-        if (!state.selections.background) {
-            alert('Please select a background to continue!');
-            return;
-        }
-        startCamera();
-        showScreen('camera');
-    });
 
     // Camera Screen Controls
     document.getElementById('camera-back-btn')?.addEventListener('click', () => {
@@ -319,11 +295,11 @@ function bindEventHandlers() {
         }
     });
 
-    // Result Screen Actions
-    document.getElementById('view-result-btn')?.addEventListener('click', revealResult);
-    document.getElementById('print-btn')?.addEventListener('click', handlePrint);
-    document.getElementById('download-btn')?.addEventListener('click', handleDownload);
-    document.getElementById('home-btn')?.addEventListener('click', resetKiosk);
+    // Result Screen Actions matching original photobooth templates
+    document.getElementById('transfer-print-btn')?.addEventListener('click', handlePrintOnly);
+    document.getElementById('animate-btn')?.addEventListener('click', handlePrintAndAnimate);
+    document.getElementById('regenerate-btn')?.addEventListener('click', handleRegenerate);
+    document.getElementById('start-over-btn')?.addEventListener('click', resetKiosk);
 
     // Modal Expand
     document.getElementById('result-image')?.addEventListener('click', (e) => {
@@ -461,14 +437,30 @@ function renderClothesGrid(clothesList) {
             }, 280);
         });
     });
+
+    // Synchronize clothes filter with selected gender immediately upon rendering
+    if (state.selections.gender) {
+        filterClothes(state.selections.gender);
+    }
 }
 
 function filterClothes(category) {
+    if (!category) category = 'all';
+
+    // Synchronize the filter tab buttons visually
+    document.querySelectorAll('#clothes-filter-tabs .filter-tab').forEach(tab => {
+        if (tab.dataset.filter.toLowerCase() === category.toLowerCase()) {
+            tab.classList.add('active');
+        } else {
+            tab.classList.remove('active');
+        }
+    });
+
     const cards = document.querySelectorAll('#clothes-grid .selection-card');
     let firstVisible = null;
 
     cards.forEach(card => {
-        const cat = card.dataset.category?.toLowerCase();
+        const cat = (card.dataset.category || 'unisex').toLowerCase();
         if (category === 'all' || cat === 'unisex' || cat === category.toLowerCase()) {
             card.style.display = 'flex';
             if (!firstVisible) firstVisible = card;
@@ -640,13 +632,14 @@ async function startProcessing() {
 
     const loadingView = document.getElementById('loading-view');
     const resultImg = document.getElementById('result-image');
-    const revealBtn = document.getElementById('view-result-btn');
     const actions = document.getElementById('result-actions');
 
     if (loadingView) loadingView.style.display = 'flex';
     if (resultImg) resultImg.style.display = 'none';
-    if (revealBtn) revealBtn.style.display = 'none';
     if (actions) actions.style.display = 'none';
+
+    // Reset transfer action buttons
+    resetTransferButtons();
 
     // Start animated manifestation sequence
     playManifestationSequence();
@@ -720,22 +713,31 @@ function pollJobStatus(jobId) {
             if (!res.ok) return;
             const data = await res.json();
 
+            // Update loading message from backend if available
+            if (data.message) {
+                const subTitleEl = document.getElementById('manifest-subtitle');
+                if (subTitleEl) subTitleEl.textContent = data.message;
+            }
+
             if (data.status === 'completed') {
                 clearInterval(state.pollInterval);
                 state.pollInterval = null;
 
+                const loadingView = document.getElementById('loading-view');
                 const resultImg = document.getElementById('result-image');
-                const revealBtn = document.getElementById('view-result-btn');
+                const actions = document.getElementById('result-actions');
 
+                // Instantly display completed portrait (no reveal button needed)
+                if (loadingView) loadingView.style.display = 'none';
                 if (resultImg && data.image) {
                     resultImg.src = data.image;
+                    resultImg.style.display = 'block';
                 }
-                if (revealBtn) {
-                    revealBtn.style.display = 'inline-flex';
+                if (actions) {
+                    actions.style.display = 'flex';
                 }
 
-                // Trigger remote transfer to DGX receiver in background
-                fetch(`/api/transfer/${jobId}`, { method: 'POST' }).catch(() => {});
+                resetTransferButtons();
             } else if (data.status === 'failed') {
                 clearInterval(state.pollInterval);
                 state.pollInterval = null;
@@ -749,36 +751,80 @@ function pollJobStatus(jobId) {
     }, 2000);
 }
 
-function revealResult() {
-    const loadingView = document.getElementById('loading-view');
-    const resultImg = document.getElementById('result-image');
-    const revealBtn = document.getElementById('view-result-btn');
-    const actions = document.getElementById('result-actions');
-
-    if (loadingView) loadingView.style.display = 'none';
-    if (revealBtn) revealBtn.style.display = 'none';
-    if (resultImg) resultImg.style.display = 'block';
-    if (actions) actions.style.display = 'flex';
-}
-
-// ==========================================================================
-// 7. Print, Download & Reset
-// ==========================================================================
-async function handlePrint() {
-    if (!state.jobId) return;
-    try {
-        const btn = document.getElementById('print-btn');
-        if (btn) btn.textContent = 'Printing...';
-        await fetch(`/api/print/${state.jobId}`);
-        setTimeout(() => { if (btn) btn.textContent = '🖨️ Print Photo'; }, 3000);
-    } catch (e) {
-        console.error('Print error:', e);
+function resetTransferButtons() {
+    const animBtn = document.getElementById('animate-btn');
+    if (animBtn) {
+        animBtn.innerHTML = '<span class="btn-icon">🎬</span><span class="btn-text">Print & Animate</span>';
+        animBtn.disabled = false;
+        animBtn.style.opacity = '';
+        animBtn.style.cursor = '';
+    }
+    const printBtn = document.getElementById('transfer-print-btn');
+    if (printBtn) {
+        printBtn.innerHTML = '<span class="btn-icon">🖨️</span><span class="btn-text">Print Only</span>';
+        printBtn.disabled = false;
+        printBtn.style.opacity = '';
+        printBtn.style.cursor = '';
     }
 }
 
-function handleDownload() {
+// ==========================================================================
+// 7. Photobooth Transfer (Port 5001 Receiver), Regenerate & Reset
+// ==========================================================================
+async function handlePrintOnly() {
     if (!state.jobId) return;
-    window.location.href = `/api/download/${state.jobId}`;
+    const btn = document.getElementById('transfer-print-btn');
+    if (!btn) return;
+    const origHtml = btn.innerHTML;
+
+    try {
+        btn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Sending...</span>';
+        btn.disabled = true;
+
+        const res = await fetch(`/api/transfer_print_only/${state.jobId}`, { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+            btn.innerHTML = '<span class="btn-icon">🖨️</span><span class="btn-text">View photobooth to print</span>';
+        } else {
+            throw new Error(data.error || 'Transfer failed');
+        }
+    } catch (err) {
+        console.error('Print-only transfer error:', err);
+        alert('Failed to send for printing: ' + err.message);
+        btn.innerHTML = origHtml;
+        btn.disabled = false;
+    }
+}
+
+async function handlePrintAndAnimate() {
+    if (!state.jobId) return;
+    const btn = document.getElementById('animate-btn');
+    if (!btn) return;
+    const origHtml = btn.innerHTML;
+
+    try {
+        btn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">Sending...</span>';
+        btn.disabled = true;
+
+        const res = await fetch(`/api/transfer/${state.jobId}`, { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+            btn.innerHTML = '<span class="btn-icon">🚀</span><span class="btn-text">View Animation in Photobooth</span>';
+        } else {
+            throw new Error(data.error || 'Transfer failed');
+        }
+    } catch (err) {
+        console.error('Print & animate transfer error:', err);
+        alert('Failed to send for animation: ' + err.message);
+        btn.innerHTML = origHtml;
+        btn.disabled = false;
+    }
+}
+
+function handleRegenerate() {
+    if (state.photoBlob) {
+        startProcessing();
+    }
 }
 
 function resetKiosk() {

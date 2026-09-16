@@ -832,10 +832,34 @@ input:checked + .slider:before { transform: translateX(24px); }
 
 .result-actions {
     display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
+    gap: 1.2rem;
+    margin-top: 1.8rem;
     flex-wrap: wrap;
     justify-content: center;
+    max-width: 650px;
+    width: 100%;
+}
+
+.result-actions .btn {
+    min-width: 190px;
+    padding: 0.95rem 1.6rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    transition: all var(--transition-normal);
+}
+
+.result-actions .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--theme-accent-glow);
+}
+
+.result-actions .btn:active {
+    transform: scale(0.97);
 }
 
 /* Expand Modal */
