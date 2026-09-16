@@ -529,44 +529,153 @@ input:checked + .slider:before { transform: translateX(24px); }
    Screen 7: Camera & Photo Capture
    ========================================================================== */
 .camera-container {
-    position: relative;
+    text-align: center;
+    max-width: 650px;
     width: 100%;
-    max-width: 480px;
-    aspect-ratio: 3/4;
-    border-radius: var(--radius-lg);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.camera-frame {
+    position: relative;
+    max-width: 540px;
+    max-height: 55vh;
+    width: 90vw;
+    aspect-ratio: 3 / 4;
+    margin: 0 auto 1.5rem;
+    border-radius: 20px;
     overflow: hidden;
-    background: #000;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+                0 0 30px var(--theme-accent-glow),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
     border: 2px solid var(--theme-surface-border);
 }
 
-#camera-video, #photo-canvas {
-    width: 100%; height: 100%;
+#camera-feed {
+    width: 100%;
+    height: 100%;
+    display: block;
     object-fit: cover;
 }
 
-.camera-overlay {
+.frame-corners {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 15;
+}
+
+.corner {
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--theme-accent, #ffd700);
+}
+
+.corner-tl {
+    top: 12px;
+    left: 12px;
+    border-right: none;
+    border-bottom: none;
+    border-radius: 6px 0 0 0;
+}
+
+.corner-tr {
+    top: 12px;
+    right: 12px;
+    border-left: none;
+    border-bottom: none;
+    border-radius: 0 6px 0 0;
+}
+
+.corner-bl {
+    bottom: 12px;
+    left: 12px;
+    border-right: none;
+    border-top: none;
+    border-radius: 0 0 0 6px;
+}
+
+.corner-br {
+    bottom: 12px;
+    right: 12px;
+    border-left: none;
+    border-top: none;
+    border-radius: 0 0 6px 0;
+}
+
+/* Face Guide Overlay */
+.face-guide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none;
+    z-index: 10;
 }
 
-.camera-guide-oval {
-    width: 58%; height: 62%;
-    border: 2px dashed rgba(255, 255, 255, 0.45);
-    border-radius: 50%;
+.guide-frame {
+    position: relative;
+    width: 38%;
+    height: 100%;
+    margin: 0 auto;
+    border: 2px solid var(--theme-accent, #ffd700);
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+}
+
+.guide-text {
+    position: absolute;
+    top: 6%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 82%;
+    max-width: 340px;
+    color: var(--theme-accent, #ffd700);
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    padding: 0.6rem 1rem;
+    background: rgba(15, 15, 15, 0.85);
+    border: 1.5px solid var(--theme-accent, #ffd700);
+    border-radius: 50px;
+    backdrop-filter: blur(8px);
+    z-index: 20;
+    animation: pulse-guide 2.2s infinite;
+}
+
+@keyframes pulse-guide {
+    0%, 100% {
+        transform: translateX(-50%) scale(1);
+        box-shadow: 0 0 15px var(--theme-accent-glow);
+    }
+    50% {
+        transform: translateX(-50%) scale(1.04);
+        box-shadow: 0 0 25px var(--theme-accent-glow);
+    }
 }
 
 .countdown-display {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 6rem;
     font-weight: 900;
     color: #fff;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    text-shadow: 0 4px 20px rgba(0,0,0,0.9);
     display: none;
+    z-index: 25;
 }
 
 .camera-flash {
@@ -575,6 +684,7 @@ input:checked + .slider:before { transform: translateX(24px); }
     background: white;
     opacity: 0;
     pointer-events: none;
+    z-index: 30;
 }
 
 .flash-animation {
@@ -588,23 +698,66 @@ input:checked + .slider:before { transform: translateX(24px); }
 
 .camera-controls {
     display: flex;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+.camera-controls.top-controls {
+    margin-bottom: 1.2rem;
+}
+
+.btn-capture {
+    min-width: 240px;
+    font-size: 1.2rem;
+    padding: 1rem 2.2rem;
+    font-weight: 700;
+    border-radius: 50px;
+    box-shadow: 0 8px 30px var(--theme-accent-glow);
+}
+
+/* ==========================================================================
+   Screen 7b: Preview Screen
+   ========================================================================== */
+.preview-container {
+    text-align: center;
+    max-width: 650px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
     align-items: center;
 }
 
-.snap-button {
-    width: 76px; height: 76px;
-    border-radius: 50%;
-    background: var(--gradient-primary);
-    border: 4px solid #fff;
-    box-shadow: 0 0 25px var(--theme-accent-glow);
-    cursor: pointer;
-    transition: transform var(--transition-fast);
+.preview-frame {
+    position: relative;
+    max-width: 540px;
+    max-height: 55vh;
+    width: 90vw;
+    aspect-ratio: 3 / 4;
+    margin: 0 auto 1.5rem;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+                0 0 30px var(--theme-accent-glow);
+    border: 2px solid var(--theme-surface-border);
 }
 
-.snap-button:active {
-    transform: scale(0.92);
+#preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.preview-actions {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
 }
 
 /* ==========================================================================

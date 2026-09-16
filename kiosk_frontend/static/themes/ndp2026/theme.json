@@ -76,5 +76,21 @@
     ],
     "completionMessage": "Calculations Complete! Ready to manifest."
   },
-  "slug": "ndp2026"
+  "slug": "ndp2026",
+  "promptTemplate": {
+    "framing": "Medium shot, waist up shot of",
+    "maleStyle": "asian, fit and charismatic",
+    "femaleStyle": "charismatic k-pop idol",
+    "borderStyle": "Overlayed smoothly on top of the scene, the photo is framed by a playful, translucent graphic border featuring bold crimson red and crisp white festive banners, translucent star fireworks, and a sleek glassmorphic overlay.",
+    "topTitle": "NDP 2026",
+    "topTitleStyle": "Prominently at the top in large, bold 3D red-and-gold lettering integrated onto the frame is the main header",
+    "subtitle": "",
+    "subtitleStyle": "",
+    "bottomTitle": "Majulah Singapura! Go Beyond!",
+    "bottomTitleStyle": "displayed in playful, bright red and white translucent typography with festive sparkles",
+    "typoStyle": "At the bottom of the frame, overlayed on the scene, the energetic slogan \"Majulah Singapura! Go Beyond!\" is displayed in playful, bright red and white translucent typography with festive sparkles.",
+    "atmosphere": "High quality fashion photography, sharp focus, vibrant Singapore National Day red and white color theme, 8k.",
+    "includeLuckyNum": false,
+    "rawPrompt": "Medium shot, waist up shot of a \"gender\" \"gender_style\" with \"pose\" for a concept photo, dressed in \"clothes_style\". The setting is \"background\". Overlayed smoothly on top of the scene, the photo is framed by a playful, translucent graphic border featuring bold crimson red and crisp white festive banners, translucent star fireworks, and a sleek glassmorphic overlay. Prominently at the top in large, bold 3D red-and-gold lettering integrated onto the frame is the main header \"NDP 2026\". At the bottom of the frame, overlayed on the scene, the energetic slogan \"Majulah Singapura! Go Beyond!\" is displayed in playful, bright red and white translucent typography with festive sparkles. High quality fashion photography, sharp focus, vibrant Singapore National Day red and white color theme, 8k."
+  }
 }

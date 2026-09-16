@@ -1,0 +1,129 @@
+{
+  "clothes": [
+    {
+      "id": "golden-prosperity-tangzhuang",
+      "code": "C02",
+      "title": "Golden Prosperity Tangzhuang",
+      "description": "A bold, contemporary jacket blending rich gold brocade with traditional scarlet accents",
+      "image": "/static/themes/master/images/clothes/golden-prosperity-tangzhuang.png",
+      "prompt": "A structured Tangzhuang jacket in metallic gold floral brocade, featuring a high mandarin collar and scarlet silk frog button closures. The sleeves are finished with folded red silk cuffs to echo airy manliness.",
+      "prompt_modifier": "A structured Tangzhuang jacket in metallic gold floral brocade, featuring a high mandarin collar and scarlet silk frog button closures. The sleeves are finished with folded red silk cuffs to echo airy manliness.",
+      "category": "male",
+      "lighting": "Golden and Scarlet"
+    },
+    {
+      "id": "singapore-skyline-button-up",
+      "code": "C01",
+      "title": "Singapore Skyline Button-Up",
+      "description": "Men's contemporary short-sleeve button-up in vibrant Singapore red with a white tonal abstract skyline pattern, paired with white tailored chinos",
+      "image": "/static/themes/master/images/clothes/singapore-skyline-button-up.png",
+      "prompt": "Men's contemporary short-sleeve button-up shirt in a vibrant Singapore red, featuring a white tonal abstract Singapore skyline pattern across the chest, paired with clean white tailored chinos, modern celebratory aesthetic.",
+      "prompt_modifier": "Men's contemporary short-sleeve button-up shirt in a vibrant Singapore red, featuring a white tonal abstract Singapore skyline pattern across the chest, paired with clean white tailored chinos, modern celebratory aesthetic.",
+      "category": "male",
+      "lighting": "Red and Crisp White"
+    },
+    {
+      "id": "male-indian-purple",
+      "code": "C15",
+      "title": "Traditional rich royal purple kurta with a mandarin collar",
+      "description": "Traditional rich royal purple kurta with a mandarin collar paired with white dhoti-style pants with soft gathered drape",
+      "image": "/static/themes/master/images/clothes/male-indian-purple.png",
+      "prompt": "Traditional rich royal purple kurta with a mandarin collar, straight knee-length silhouette, fine silver embroidery with small repeated motifs across the fabric, heavily embroidered placket and neckline with intricate detailing, smooth silk or cotton-silk blend fabric with a soft sheen, full sleeves with clean cuffs, paired with white dhoti-style pants with soft gathered drape, minimal yet elegant ethnic wear, refined festive style, high detail textile texture.",
+      "prompt_modifier": "Traditional rich royal purple kurta with a mandarin collar, straight knee-length silhouette, fine silver embroidery with small repeated motifs across the fabric, heavily embroidered placket and neckline with intricate detailing, smooth silk or cotton-silk blend fabric with a soft sheen, full sleeves with clean cuffs, paired with white dhoti-style pants with soft gathered drape, minimal yet elegant ethnic wear, refined festive style, high detail textile texture.",
+      "category": "male",
+      "lighting": "Amethys and Golden"
+    },
+    {
+      "id": "black-cream-wrap-dress",
+      "code": "C20",
+      "title": "Black and Cream Wrap Dress",
+      "description": "Elegant sleeveless evening gown featuring a bold bicolor geometric wrap design in black and champagne cream",
+      "image": "/static/themes/master/images/clothes/black-cream-wrap-dress.png",
+      "prompt": "Elegant sleeveless evening gown featuring a bold bicolor geometric wrap design in black and champagne cream. V-neckline with structured shoulder straps, fitted bodice, and a crisscross draped silhouette. Smooth satin-finish fabric with a subtle sheen. Sophisticated, modern formal attire.",
+      "prompt_modifier": "Elegant sleeveless evening gown featuring a bold bicolor geometric wrap design in black and champagne cream. V-neckline with structured shoulder straps, fitted bodice, and a crisscross draped silhouette. Smooth satin-finish fabric with a subtle sheen. Sophisticated, modern formal attire.",
+      "category": "female",
+      "lighting": "Golden and Cream"
+    }
+  ],
+  "poses": [
+    {
+      "id": "the-salam-lebaran",
+      "code": "P04",
+      "title": "Humble Salam Greeting",
+      "description": "A traditional gesture of seeking forgiveness, featuring hands brought together at the heart with a warm, respectful tilt of the head",
+      "image": "/static/themes/master/images/poses/the-salam-lebaran.png",
+      "prompt": "Looking at the camera with hands brought together at chest level, palms touching lightly (like a prayer gesture but softer), with a warm, humble smile and a slight tilt of the head,",
+      "prompt_modifier": "Looking at the camera with hands brought together at chest level, palms touching lightly (like a prayer gesture but softer), with a warm, humble smile and a slight tilt of the head,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "confident-gaze",
+      "code": "P01",
+      "title": "Confident Heritage Pose",
+      "description": "A powerful, structured stance with one hand on the waist, projecting royal authority and elegance",
+      "image": "/static/themes/master/images/poses/confident-gaze.png",
+      "prompt": "Facing the camera with one hand resting firmly on the waist, the other hand resting naturally at the side. Chin slightly up, projecting a smiling confidence,",
+      "prompt_modifier": "Facing the camera with one hand resting firmly on the waist, the other hand resting naturally at the side. Chin slightly up, projecting a smiling confidence,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-wink-and-peace",
+      "code": "P07",
+      "title": "The Wink & Peace",
+      "description": "Wink with V sign",
+      "image": "/static/themes/master/images/poses/the-wink-and-peace.png",
+      "prompt": "A classic, high-energy idol pose with a playful wink and a V sign close to the smiling face,",
+      "prompt_modifier": "A classic, high-energy idol pose with a playful wink and a V sign close to the smiling face,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "the-vermillion-palace-hall",
+      "code": "B09",
+      "title": "The Vermillion Palace Hall",
+      "description": "Palace with dragon columns",
+      "image": "/static/themes/master/images/backgrounds/the-vermillion-palace-hall.png",
+      "prompt": "An interior with towering red lacquer columns wrapped in golden bronze dragons, with floor-to-ceiling silk banners gently swaying.",
+      "prompt_modifier": "An interior with towering red lacquer columns wrapped in golden bronze dragons, with floor-to-ceiling silk banners gently swaying.",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-gardens-by-the-bay",
+      "code": "B01",
+      "title": "The Gardens by the Bay at twilight",
+      "description": "The Gardens by the Bay at twilight, with orchids and exotic ferns",
+      "image": "/static/themes/master/images/backgrounds/the-gardens-by-the-bay.png",
+      "prompt": "A wide open space overlooking Gardens by the Bay at twilight. Soft bioluminescent light and cool ambient glow illuminate lush interior orchids and exotic ferns. In the distance, majestic illuminated Supertrees rise into a deep violet evening sky, glowing with vibrant magenta and warm gold lights.",
+      "prompt_modifier": "A wide open space overlooking Gardens by the Bay at twilight. Soft bioluminescent light and cool ambient glow illuminate lush interior orchids and exotic ferns. In the distance, majestic illuminated Supertrees rise into a deep violet evening sky, glowing with vibrant magenta and warm gold lights.",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-grand-emerald-ballroom",
+      "code": "B02",
+      "title": "The Grand Emerald Ballroom",
+      "description": "A grand ballroom with rich emerald green velvet-textured walls",
+      "image": "/static/themes/master/images/backgrounds/the-grand-emerald-ballroom.png",
+      "prompt": "A grand ballroom featuring rich emerald green velvet-textured walls and dark mahogany flooring. Subtle, dim lighting from wall sconces creates deep shadows, while the ceiling molding is a matte charcoal gray.",
+      "prompt_modifier": "A grand ballroom featuring rich emerald green velvet-textured walls and dark mahogany flooring. Subtle, dim lighting from wall sconces creates deep shadows, while the ceiling molding is a matte charcoal gray.",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "nighttime-clarke-quay",
+      "code": "B29",
+      "title": "nighttime clarke quay",
+      "description": "mid-distance view at night focusing on the bustling Clarke Quay riverfront",
+      "image": "/static/themes/master/images/backgrounds/nighttime-clarke-quay.png",
+      "prompt": "A professional studio asset of a background environment, featuring \n\nA mid-distance view at night focusing on the bustling Clarke Quay riverfront, brilliantly illuminated as a neon light show casts a glow over the futuristic canopy roofs. In the background, the towering Central Business District skyline creates a grand, luminous backdrop, with vibrant nightlife venues and passing bumboats reflecting shimmering colors across the water's surface.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "prompt_modifier": "A professional studio asset of a background environment, featuring \n\nA mid-distance view at night focusing on the bustling Clarke Quay riverfront, brilliantly illuminated as a neon light show casts a glow over the futuristic canopy roofs. In the background, the towering Central Business District skyline creates a grand, luminous backdrop, with vibrant nightlife venues and passing bumboats reflecting shimmering colors across the water's surface.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "category": "unisex",
+      "lighting": "Cinematic ambient studio lighting"
+    }
+  ]
+}

@@ -65,8 +65,27 @@
       "title": "The Ethereal Moonlit Blossom Forest"
     },
     {
+      "code": "B28",
+      "description": "Dramatic indoor waterfall and lush tropical forest at Jewel Changi",
       "id": "jewel-rain-vortex",
-      "code": "B28"
+      "image": "/static/themes/master/images/backgrounds/jewel-rain-vortex.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "Jewel HSBC Rain Vortex",
+      "name": "Jewel HSBC Rain Vortex",
+      "prompt": "A cinematic, low-angle view looking up at the HSBC Rain Vortex, the world’s tallest indoor waterfall, cascades dramatically from a vaulted glass-and-steel ceiling. Surrounding the waterfall, the lush, multi-tiered indoor forest of the Shiseido Forest Valley creates a grand, tropical backdrop, with soft mist and hidden accent lights reflecting shimmering colors across the dense canopy. Wide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "prompt_modifier": "A professional studio asset of a background environment, featuring \n\nA cinematic, low-angle view looking up at the HSBC Rain Vortex, the world’s tallest indoor waterfall, cascades dramatically from a vaulted glass-and-steel ceiling. Surrounding the waterfall, the lush, multi-tiered indoor forest of the Shiseido Forest Valley creates a grand, tropical backdrop, with soft mist and hidden accent lights reflecting shimmering colors across the dense canopy.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "title": "Jewel HSBC Rain Vortex"
+    },
+    {
+      "id": "nighttime-clarke-quay",
+      "code": "B29",
+      "title": "nighttime clarke quay",
+      "description": "mid-distance view at night focusing on the bustling Clarke Quay riverfront",
+      "image": "/static/themes/master/images/backgrounds/nighttime-clarke-quay.png",
+      "prompt": "A professional studio asset of a background environment, featuring \n\nA mid-distance view at night focusing on the bustling Clarke Quay riverfront, brilliantly illuminated as a neon light show casts a glow over the futuristic canopy roofs. In the background, the towering Central Business District skyline creates a grand, luminous backdrop, with vibrant nightlife venues and passing bumboats reflecting shimmering colors across the water's surface.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "prompt_modifier": "A professional studio asset of a background environment, featuring \n\nA mid-distance view at night focusing on the bustling Clarke Quay riverfront, brilliantly illuminated as a neon light show casts a glow over the futuristic canopy roofs. In the background, the towering Central Business District skyline creates a grand, luminous backdrop, with vibrant nightlife venues and passing bumboats reflecting shimmering colors across the water's surface.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "category": "unisex",
+      "lighting": "Cinematic ambient studio lighting"
     }
   ],
   "clothes": [

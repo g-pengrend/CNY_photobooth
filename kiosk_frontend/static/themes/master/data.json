@@ -771,6 +771,18 @@
       "prompt": "A magnificent grand ballroom with polished marble floors, towering crystal chandeliers, and thousands of warm flickering candles casting a golden glow.",
       "prompt_modifier": "A magnificent grand ballroom with polished marble floors, crystal chandeliers, and warm flickering candles",
       "lighting": "Warm Candlelit Ambience"
+    },
+    {
+      "id": "nighttime-clarke-quay",
+      "code": "B29",
+      "title": "nighttime clarke quay",
+      "name": "nighttime clarke quay",
+      "description": "mid-distance view at night focusing on the bustling Clarke Quay riverfront",
+      "image": "/static/themes/master/images/backgrounds/nighttime-clarke-quay.png",
+      "prompt": "A professional studio asset of a background environment, featuring \n\nA mid-distance view at night focusing on the bustling Clarke Quay riverfront, brilliantly illuminated as a neon light show casts a glow over the futuristic canopy roofs. In the background, the towering Central Business District skyline creates a grand, luminous backdrop, with vibrant nightlife venues and passing bumboats reflecting shimmering colors across the water's surface.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "prompt_modifier": "A professional studio asset of a background environment, featuring \n\nA mid-distance view at night focusing on the bustling Clarke Quay riverfront, brilliantly illuminated as a neon light show casts a glow over the futuristic canopy roofs. In the background, the towering Central Business District skyline creates a grand, luminous backdrop, with vibrant nightlife venues and passing bumboats reflecting shimmering colors across the water's surface.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "mapping_desc": "mid-distance view at night focusing on the bustling Clarke Quay riverfront",
+      "lighting": "Cinematic ambient studio lighting"
     }
   ]
 }

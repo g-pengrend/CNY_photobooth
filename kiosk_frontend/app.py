@@ -85,7 +85,7 @@ def landing():
     return send_from_directory(app.static_folder, 'landing.html')
 
 
-RESERVED_SLUGS = {'api', 'static', 'admin', 'uploads', 'outputs'}
+RESERVED_SLUGS = {'api', 'static', 'admin', 'uploads', 'outputs', 'master'}
 
 
 @app.route('/api/themes')
@@ -589,16 +589,132 @@ def get_master_assets():
             for cat in ['clothes', 'poses', 'backgrounds']:
                 for item in theme_resolved.get(cat, []):
                     item_id = item.get('id')
-                    img_path = item.get('image', '')
-                    if item_id and item_id not in seen_ids[cat]:
+                    img_path = (item.get('image') or '').strip().lower()
+                    if item_id and item_id in seen_ids[cat]:
+                        continue
+                    if img_path and img_path in seen_images[cat]:
+                        continue
+                    if item_id:
                         seen_ids[cat].add(item_id)
-                        if img_path:
-                            seen_images[cat].add(img_path.strip().lower())
-                        entry = dict(item)
-                        entry['source_theme'] = theme_slug
-                        catalog[cat].append(entry)
+                    if img_path:
+                        seen_images[cat].add(img_path)
+                    entry = dict(item)
+                    entry['source_theme'] = theme_slug
+                    catalog[cat].append(entry)
 
     return jsonify(catalog)
+
+
+@app.route('/api/admin/asset/delete', methods=['POST'])
+def admin_delete_asset():
+    """Permanently delete an asset from the master library data.json and disk."""
+    try:
+        data = request.json or {}
+        category = data.get('category')  # 'clothes', 'poses', 'backgrounds'
+        asset_id = data.get('id')
+        image_path = data.get('image', '')
+
+        if category not in ['clothes', 'poses', 'backgrounds']:
+            return jsonify({'error': f'Invalid category: {category}'}), 400
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        master_data_path = os.path.join(base_dir, 'static', 'themes', 'master', 'data.json')
+        if not os.path.exists(master_data_path):
+            return jsonify({'error': 'Master data.json not found'}), 404
+
+        with open(master_data_path, 'r', encoding='utf-8') as f:
+            master_data = json.load(f)
+
+        original_list = master_data.get(category, [])
+        new_list = []
+        deleted_item = None
+
+        clean_img_name = os.path.basename(image_path) if image_path else ''
+        for item in original_list:
+            match_id = asset_id and item.get('id') == asset_id
+            match_img = image_path and item.get('image') == image_path
+            match_img_base = clean_img_name and os.path.basename(item.get('image', '')) == clean_img_name
+            if (match_id or match_img or match_img_base) and not deleted_item:
+                deleted_item = item
+            else:
+                new_list.append(item)
+
+        master_data[category] = new_list
+
+        with open(master_data_path, 'w', encoding='utf-8') as f:
+            json.dump(master_data, f, indent=2, ensure_ascii=False)
+
+        # Remove image file if stored in master theme
+        if deleted_item and deleted_item.get('image'):
+            img_rel = deleted_item['image'].lstrip('/')
+            full_img_path = os.path.join(base_dir, img_rel)
+            if os.path.exists(full_img_path) and 'master' in img_rel:
+                try:
+                    os.remove(full_img_path)
+                except Exception as e:
+                    print(f"Notice: Could not remove image file {full_img_path}: {e}")
+
+        # If clothes, clean up clothes_mapping.json
+        if category == 'clothes' and deleted_item and deleted_item.get('code'):
+            code = deleted_item['code']
+            for m_dir in [
+                os.path.join(base_dir, 'static', 'themes', 'master'),
+                os.path.join(base_dir, '..', 'dgx_photobooth', 'templates', 'themes', 'master')
+            ]:
+                m_path = os.path.join(m_dir, 'clothes_mapping.json')
+                if os.path.exists(m_path):
+                    try:
+                        with open(m_path, 'r', encoding='utf-8') as mf:
+                            m_data = json.load(mf)
+                        if code in m_data:
+                            del m_data[code]
+                            with open(m_path, 'w', encoding='utf-8') as mf:
+                                json.dump(m_data, mf, indent=2, ensure_ascii=False)
+                    except Exception:
+                        pass
+
+        # Also remove from all installed themes data.json to prevent resurrection / stale references
+        del_id = (deleted_item.get('id') if deleted_item else asset_id) or ''
+        del_img = (deleted_item.get('image') if deleted_item else image_path) or ''
+        themes_dir = os.path.join(base_dir, 'static', 'themes')
+        if os.path.exists(themes_dir):
+            for t_slug in os.listdir(themes_dir):
+                if t_slug in RESERVED_SLUGS:
+                    continue
+                t_data_path = os.path.join(themes_dir, t_slug, 'data.json')
+                if os.path.exists(t_data_path):
+                    try:
+                        with open(t_data_path, 'r', encoding='utf-8') as tf:
+                            t_data = json.load(tf)
+                        t_cat_list = t_data.get(category, [])
+                        t_new_list = []
+                        for entry in t_cat_list:
+                            if isinstance(entry, str):
+                                if entry == del_id:
+                                    continue
+                            elif isinstance(entry, dict):
+                                e_id = entry.get('id') or ''
+                                e_img = entry.get('image') or ''
+                                if (del_id and e_id == del_id) or (del_img and e_img == del_img):
+                                    continue
+                            t_new_list.append(entry)
+                        if len(t_new_list) != len(t_cat_list):
+                            t_data[category] = t_new_list
+                            with open(t_data_path, 'w', encoding='utf-8') as tf:
+                                json.dump(t_data, tf, indent=2, ensure_ascii=False)
+                    except Exception as te:
+                        print(f"Notice: Could not clean theme {t_slug} data.json: {te}")
+
+        print(f"🗑️ [Studio] Deleted asset from library ({category}): {deleted_item.get('title') if deleted_item else asset_id}")
+        return jsonify({
+            'status': 'success',
+            'category': category,
+            'remaining_count': len(new_list),
+            'deleted_item': deleted_item
+        })
+    except Exception as e:
+        print(f"❌ [Studio] Error deleting asset: {e}")
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/api/admin/workflow/inspect', methods=['POST'])
@@ -660,6 +776,45 @@ def admin_save_theme():
             wf_path = os.path.join(theme_dir, 'workflow_kiosk.json')
             with open(wf_path, 'w', encoding='utf-8') as f:
                 json.dump(workflow, f, indent=2)
+
+        # 4b. Sync prompt formula to workflow files (Node 45)
+        prompt_tpl = theme_cfg.get('promptTemplate', {})
+        raw_prompt = prompt_tpl.get('rawPrompt')
+        if raw_prompt:
+            p_node = (bindings or {}).get('prompt_node', '45')
+            wf_candidates = [f for f in os.listdir(theme_dir) if f.endswith('.json') and ('ZIT' in f or 'workflow' in f.lower()) and f not in ['bindings.json', 'data.json', 'theme.json', 'clothes_mapping.json']]
+            
+            # If no workflow file exists, create workflow_kiosk.json from UITS template
+            if not wf_candidates and not workflow:
+                uits_wf = os.path.join(base_dir, 'static', 'themes', 'uits', 'ZIT_FaceSwapAPI(uits).json')
+                if os.path.exists(uits_wf):
+                    import shutil
+                    target_wf = os.path.join(theme_dir, 'workflow_kiosk.json')
+                    try:
+                        shutil.copyfile(uits_wf, target_wf)
+                        wf_candidates = ['workflow_kiosk.json']
+                    except Exception as ce:
+                        print(f"Notice: Could not copy template workflow: {ce}")
+
+            for wf_file in wf_candidates:
+                full_wf_path = os.path.join(theme_dir, wf_file)
+                try:
+                    with open(full_wf_path, 'r', encoding='utf-8') as wff:
+                        wf_obj = json.load(wff)
+                    node_id = str(p_node)
+                    if node_id in wf_obj and 'inputs' in wf_obj[node_id] and 'text' in wf_obj[node_id]['inputs']:
+                        wf_obj[node_id]['inputs']['text'] = raw_prompt
+                    else:
+                        for nid, ndata in wf_obj.items():
+                            if isinstance(ndata, dict) and ndata.get('class_type') == 'CLIPTextEncode' and 'text' in ndata.get('inputs', {}):
+                                ndata['inputs']['text'] = raw_prompt
+                                break
+                    with open(full_wf_path, 'w', encoding='utf-8') as wff:
+                        json.dump(wf_obj, wff, indent=2, ensure_ascii=False)
+                    print(f"✅ [Studio] Synced prompt formula to workflow: {wf_file}")
+                except Exception as we:
+                    print(f"Warning: Could not update prompt in {wf_file}: {we}")
+
 
         # 5. Sync clothes_mapping.json for FLF workflow across theme and master
         theme_mapping = {}
@@ -757,6 +912,7 @@ def admin_asset_generator_accept():
         preview_filename = data.get('preview_filename')
         asset_type = data.get('type', 'backdrop')
         asset_name = data.get('name', '').strip()
+        description = data.get('description', '').strip()
         target_theme = data.get('target_theme', 'master')
         prompt_desc = data.get('prompt_desc', '')
         gender = data.get('gender', 'unisex')
@@ -770,7 +926,8 @@ def admin_asset_generator_accept():
             asset_name=asset_name,
             target_theme=target_theme,
             prompt_desc=prompt_desc,
-            gender=gender
+            gender=gender,
+            description=description
         )
         if not res.get('success'):
             return jsonify({'error': res.get('error', 'Failed to store asset')}), 500

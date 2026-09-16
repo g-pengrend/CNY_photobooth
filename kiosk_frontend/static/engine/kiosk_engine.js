@@ -203,12 +203,14 @@ function bindEventHandlers() {
             // Filter clothes by selected gender automatically
             filterClothes(gender);
 
-            // Flow check: if luckyNumber enabled, go to settings, else straight to pose
-            if (state.theme?.features?.luckyNumber) {
-                showScreen('settings');
-            } else {
-                showScreen('pose');
-            }
+            // Immediate transition matching previous themes (280ms delay for feedback)
+            setTimeout(() => {
+                if (state.theme?.features?.luckyNumber) {
+                    showScreen('settings');
+                } else {
+                    showScreen('pose');
+                }
+            }, 280);
         });
     });
 
@@ -268,12 +270,54 @@ function bindEventHandlers() {
         showScreen('camera');
     });
 
-    // Camera Screen
+    // Camera Screen Controls
     document.getElementById('camera-back-btn')?.addEventListener('click', () => {
         stopCamera();
         showScreen('background');
     });
-    document.getElementById('snap-btn')?.addEventListener('click', triggerCountdown);
+
+    // Camera Capture (Both top and bottom capture buttons)
+    ['capture-btn', 'capture-btn-top'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('click', triggerCountdown);
+        }
+    });
+
+    // Upload Photo Handler (always accessible, even when camera is not detected)
+    const uploadTriggerBtn = document.getElementById('upload-trigger-btn');
+    const photoUploadInput = document.getElementById('photo-upload');
+    if (uploadTriggerBtn && photoUploadInput) {
+        uploadTriggerBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            photoUploadInput.click();
+        });
+
+        photoUploadInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                const blob = new Blob([file], { type: file.type });
+                state.photoBlob = blob;
+                stopCamera();
+                displayPreview(blob);
+                photoUploadInput.value = '';
+            }
+        });
+    }
+
+    // Preview Screen Actions
+    document.getElementById('retake-photo-btn')?.addEventListener('click', () => {
+        showScreen('camera');
+        startCamera();
+    });
+
+    document.getElementById('confirm-photo-btn')?.addEventListener('click', () => {
+        if (state.photoBlob) {
+            startProcessing();
+        } else {
+            alert('Please take or upload a photo first!');
+        }
+    });
 
     // Result Screen Actions
     document.getElementById('view-result-btn')?.addEventListener('click', revealResult);
@@ -330,6 +374,11 @@ function renderSelectionGrids(data) {
                 card.classList.add('selected');
                 state.selections.pose = card.dataset.prompt;
                 state.selections.poseCode = card.dataset.code;
+
+                // Immediate transition to next screen (280ms)
+                setTimeout(() => {
+                    showScreen('clothes');
+                }, 280);
             });
         });
     }
@@ -365,6 +414,12 @@ function renderSelectionGrids(data) {
                 card.classList.add('selected');
                 state.selections.background = card.dataset.prompt;
                 state.selections.backgroundCode = card.dataset.code;
+
+                // Start camera and immediately transition (280ms)
+                startCamera();
+                setTimeout(() => {
+                    showScreen('camera');
+                }, 280);
             });
         });
     }
@@ -399,6 +454,11 @@ function renderClothesGrid(clothesList) {
             card.classList.add('selected');
             state.selections.clothesStyle = card.dataset.prompt;
             state.selections.clothesCode = card.dataset.code;
+
+            // Immediate transition to next screen (280ms)
+            setTimeout(() => {
+                showScreen('background');
+            }, 280);
         });
     });
 }
@@ -432,19 +492,58 @@ function filterClothes(category) {
 let videoStream = null;
 
 async function startCamera() {
-    const video = document.getElementById('camera-video');
+    const video = document.getElementById('camera-feed');
+    const errorEl = document.getElementById('camera-error-message');
+    const errorText = document.getElementById('camera-error-text');
+    const captureBtns = document.querySelectorAll('.btn-capture');
+
+    // Reset UI state: hide error, restore capture buttons
+    if (errorEl) errorEl.style.display = 'none';
+    captureBtns.forEach(btn => {
+        btn.style.display = '';
+        btn.disabled = false;
+    });
+
+    stopCamera();
+
     if (!video) return;
 
     try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            throw new Error('Camera access requires HTTPS or localhost');
+        }
+
         videoStream = await navigator.mediaDevices.getUserMedia({
-            video: { width: { ideal: 1280 }, height: { ideal: 960 }, facingMode: 'user' },
+            video: {
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+                facingMode: 'user'
+            },
             audio: false
         });
+
         video.srcObject = videoStream;
-        await video.play();
+        await new Promise((resolve) => {
+            video.onloadedmetadata = () => {
+                video.play();
+                resolve();
+            };
+        });
+
+        console.log('Camera initialized successfully');
     } catch (err) {
-        console.error('Camera access error:', err);
-        alert('Camera could not be accessed. Please check permissions.');
+        console.warn('Camera access error / not detected:', err);
+        // Show camera error overlay in the camera frame
+        if (errorEl) {
+            errorEl.style.display = 'flex';
+            if (errorText) {
+                errorText.textContent = (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError')
+                    ? 'No camera detected. Please connect a camera or upload a photo below.'
+                    : 'Camera not detected. You can upload a photo below.';
+            }
+        }
+        // Hide capture buttons when camera is missing, but upload button is always available!
+        captureBtns.forEach(btn => btn.style.display = 'none');
     }
 }
 
@@ -453,12 +552,14 @@ function stopCamera() {
         videoStream.getTracks().forEach(t => t.stop());
         videoStream = null;
     }
+    const video = document.getElementById('camera-feed');
+    if (video) video.srcObject = null;
 }
 
 function triggerCountdown() {
-    const snapBtn = document.getElementById('snap-btn');
+    const captureBtns = document.querySelectorAll('.btn-capture');
     const countdownEl = document.getElementById('countdown-display');
-    if (snapBtn) snapBtn.disabled = true;
+    captureBtns.forEach(b => b.disabled = true);
 
     let count = 3;
     if (countdownEl) {
@@ -474,16 +575,16 @@ function triggerCountdown() {
             clearInterval(timer);
             if (countdownEl) countdownEl.style.display = 'none';
             capturePhoto();
-            if (snapBtn) snapBtn.disabled = false;
+            captureBtns.forEach(b => b.disabled = false);
         }
     }, 1000);
 }
 
 function capturePhoto() {
-    const video = document.getElementById('camera-video');
-    const canvas = document.getElementById('photo-canvas');
+    const video = document.getElementById('camera-feed');
+    const canvas = document.getElementById('camera-canvas') || document.createElement('canvas');
     const flash = document.getElementById('camera-flash');
-    if (!video || !canvas) return;
+    if (!video) return;
 
     // Flash visual
     if (flash) {
@@ -492,17 +593,43 @@ function capturePhoto() {
         flash.classList.add('flash-animation');
     }
 
-    canvas.width = video.videoWidth || 960;
-    canvas.height = video.videoHeight || 1280;
+    const videoWidth = video.videoWidth || 1280;
+    const videoHeight = video.videoHeight || 720;
+    const frameAspectRatio = 3 / 4;
+    const videoAspectRatio = videoWidth / videoHeight;
+
+    let cropWidth, cropHeight, cropX, cropY;
+    if (videoAspectRatio > frameAspectRatio) {
+        cropHeight = videoHeight;
+        cropWidth = cropHeight * frameAspectRatio;
+        cropX = (videoWidth - cropWidth) / 2;
+        cropY = 0;
+    } else {
+        cropWidth = videoWidth;
+        cropHeight = cropWidth / frameAspectRatio;
+        cropX = 0;
+        cropY = (videoHeight - cropHeight) / 2;
+    }
+
+    canvas.width = cropWidth;
+    canvas.height = cropHeight;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
 
     stopCamera();
 
     canvas.toBlob(blob => {
         state.photoBlob = blob;
-        startProcessing();
+        displayPreview(blob);
     }, 'image/jpeg', 0.95);
+}
+
+function displayPreview(blob) {
+    const previewImg = document.getElementById('preview-image');
+    if (previewImg) {
+        previewImg.src = URL.createObjectURL(blob);
+    }
+    showScreen('preview');
 }
 
 // ==========================================================================

@@ -54,6 +54,19 @@ _default_mode = "remote" if platform.system() == "Linux" else "local"
 DEPLOY_MODE = os.environ.get("DEPLOY_MODE", _default_mode).strip().lower()
 
 
+def _detect_local_comfy_port():
+    """Check if port 8188 or 8189 is active locally for ComfyUI."""
+    import socket
+    for port in [8188, 8189]:
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(0.2)
+                if s.connect_ex(('127.0.0.1', port)) == 0:
+                    return f"127.0.0.1:{port}"
+        except Exception:
+            pass
+    return "127.0.0.1:8188"
+
 # ============================================================
 # DEPLOYMENT PROFILES
 # ============================================================
@@ -66,7 +79,7 @@ PROFILES = {
         "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output" if platform.system() == "Linux" else "C:/Users/Brandon/Documents/comfy/ComfyUI/output",
 
         # ComfyUI API address (same machine)
-        "COMFY_SERVER_ADDRESS": "127.0.0.1:8189",
+        "COMFY_SERVER_ADDRESS": _detect_local_comfy_port(),
     },
     "remote": {
         # Receiver runs on the DGX / Linux machine

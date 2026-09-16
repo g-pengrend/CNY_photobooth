@@ -78,5 +78,21 @@
     ],
     "completionMessage": "Calculations Complete! Ready to manifest."
   },
-  "slug": "hariraya"
+  "slug": "hariraya",
+  "promptTemplate": {
+    "framing": "Extreme Close up shot of",
+    "maleStyle": "charismatic malay idol",
+    "femaleStyle": "charismatic malay idol",
+    "borderStyle": "jawi_raya, The image features a modern graphic design overlay: a translucent frosted-glass border at the top and bottom of the frame.",
+    "topTitle": "سلامت هاري راي",
+    "topTitleStyle": "Integrated into the top of the borders is stylized typography including the jawi characters",
+    "subtitle": "",
+    "subtitleStyle": "",
+    "bottomTitle": "Selamat Hari Raya",
+    "bottomTitleStyle": "Centered at the bottom, the prompt includes the curved stylized text",
+    "typoStyle": "Upper body shot, High-key cinematic lighting, vibrant malay festive color palette, 8k resolution, typography contrast background.",
+    "atmosphere": "",
+    "includeLuckyNum": false,
+    "rawPrompt": "Extreme Close up shot of a \"gender\" charismatic malay idol with \"pose\" for a concept photo, dressed in \"clothes_style\". The setting is \"background\".\n\njawi_raya, The image features a modern graphic design overlay: a translucent frosted-glass border at the top and bottom of the frame. Integrated into the top of the borders is stylized typography including the jawi characters \"سلامت هاري راي\". Centered at the bottom, the prompt includes the curved stylized text \"Selamat Hari Raya\". Upper body shot, High-key cinematic lighting, vibrant malay festive color palette, 8k resolution, typography contrast background."
+  }
 }

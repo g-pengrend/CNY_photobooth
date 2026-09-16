@@ -175,7 +175,7 @@ def generate_asset_name_and_slug(asset_type, asset_name="", prompt_desc=""):
         title = f"{asset_type.title()} {suffix_id}"
     return title, slug
 
-def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_theme="master", prompt_desc="", gender="unisex"):
+def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_theme="master", prompt_desc="", gender="unisex", description=""):
     """
     Accept a generated preview image, autogenerate clean filename, and store into the target theme or master library.
     """
@@ -228,23 +228,36 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
     if category not in master_data:
         master_data[category] = []
 
-    item_count = len(master_data[category])
-    code = f"{cfg['code_prefix']}{item_count + 1:02d}" if cfg['code_prefix'] == 'C' else f"{cfg['code_prefix']}{item_count + 1}"
+    prefix = cfg['code_prefix']
+    max_num = 0
+    for it in master_data.get(category, []):
+        c = str(it.get('code', ''))
+        if c.startswith(prefix):
+            try:
+                num = int(c[len(prefix):])
+                if num > max_num:
+                    max_num = num
+            except ValueError:
+                pass
+    next_num = max(len(master_data[category]), max_num) + 1
+    code = f"{prefix}{next_num:02d}" if prefix == 'C' else f"{prefix}{next_num}"
     item_id = file_slug
 
-    # Extract concise description for the FLF workflow
-    mapping_desc = resolved_title
-    if asset_type == "clothes":
+    # Extract concise description for the FLF workflow / card subtitle
+    final_desc = (description or "").strip()
+    if not final_desc:
         clean_text = prompt_desc or ""
         clean_text = re.sub(r'^.*?featuring\s+', '', clean_text, flags=re.IGNORECASE)
         clean_text = re.sub(r'The outfit is displayed to maintain.*$', '', clean_text, flags=re.IGNORECASE | re.DOTALL)
         clean_text = re.sub(r'No human hands.*$', '', clean_text, flags=re.IGNORECASE)
+        clean_text = re.sub(r'^(A |An |The )', '', clean_text.strip(), flags=re.IGNORECASE)
         first_clause = re.split(r'[.;\n]', clean_text.strip())[0].strip()
         words = first_clause.split()
         if len(words) > 15:
             first_clause = " ".join(words[:15])
-        mapping_desc = first_clause if first_clause else resolved_title
+        final_desc = first_clause if first_clause else resolved_title
 
+    mapping_desc = final_desc
     lighting_desc = "Warm Golden and Scarlet" if "cny" in theme_slug else "Cinematic ambient studio lighting"
 
     # 1. Full Master Asset Definition
@@ -253,7 +266,9 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
         "code": code,
         "title": resolved_title,
         "name": resolved_title,
+        "description": final_desc,
         "image": canonical_web_path,
+        "prompt": prompt_desc or resolved_title,
         "prompt_modifier": prompt_desc or resolved_title,
         "mapping_desc": mapping_desc,
         "lighting": lighting_desc
@@ -282,7 +297,17 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
             target_data[category] = []
         theme_item_count = len(target_data[category])
         theme_code = f"{cfg['code_prefix']}{theme_item_count + 1:02d}" if cfg['code_prefix'] == 'C' else f"{cfg['code_prefix']}{theme_item_count + 1}"
-        pointer = {"id": item_id, "code": theme_code}
+        pointer = {
+            "id": item_id,
+            "code": theme_code,
+            "title": resolved_title,
+            "name": resolved_title,
+            "description": final_desc,
+            "image": canonical_web_path,
+            "prompt": prompt_desc or resolved_title,
+            "prompt_modifier": prompt_desc or resolved_title,
+            "lighting": lighting_desc
+        }
         if asset_type == "clothes" and gender:
             pointer["category"] = gender
         target_data[category].append(pointer)

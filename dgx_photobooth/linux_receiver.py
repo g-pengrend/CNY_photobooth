@@ -135,7 +135,9 @@ def check_comfy_status():
                 pending_jobs = [j for j in JOBS if j['status'] == 'pending']
             
             for job in pending_jobs:
-                prompt_id = job['id']
+                prompt_id = job.get('prompt_id') or job.get('id')
+                if not prompt_id:
+                    continue
                 history = get_history(prompt_id)
                 
                 # Check if history exists for this prompt_id
@@ -170,21 +172,42 @@ status_thread.start()
 # Format: "Code": {"desc": "...", "lighting": "..."}
 # --- Clothes mapping is now loaded dynamically from dgx_photobooth/templates/themes/<theme>/clothes_mapping.json ---
 
-def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_filename, theme="cny"):
+def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_filename, theme="cny", job_entry=None):
     print(f"🚀 Starting Linux Workflow execution for theme {theme}...")
     
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    if theme == "hariraya":
-        workflow_file = os.path.join(base_dir, "templates", "themes", "hariraya", "FLF_workflowAPI(HR).json")
-    elif theme == "uits":
-        workflow_file = os.path.join(base_dir, "templates", "themes", "uits", "FLF_workflowAPI(UITS).json")
-    elif theme == "ndp2026":
-        workflow_file = os.path.join(base_dir, "templates", "themes", "ndp2026", "FLF_workflowAPI(NDP2026).json")
-    else:
+    theme_clean = (theme or "cny").strip().lower()
+    
+    theme_workflow_map = {
+        "hariraya": "FLF_workflowAPI(HR).json",
+        "uits": "FLF_workflowAPI(UITS).json",
+        "ndp2026": "FLF_workflowAPI(NDP2026).json",
+        "cny": "FLF_workflowAPI(CNY).json"
+    }
+
+    workflow_file = None
+    if theme_clean in theme_workflow_map:
+        wf_path = os.path.join(base_dir, "templates", "themes", theme_clean, theme_workflow_map[theme_clean])
+        if os.path.exists(wf_path):
+            workflow_file = wf_path
+
+    if not workflow_file:
+        theme_dir = os.path.join(base_dir, "templates", "themes", theme_clean)
+        if os.path.exists(theme_dir):
+            for fname in os.listdir(theme_dir):
+                if fname.lower().endswith(".json") and ("workflow" in fname.lower()):
+                    workflow_file = os.path.join(theme_dir, fname)
+                    break
+
+    if not workflow_file or not os.path.exists(workflow_file):
         workflow_file = os.path.join(base_dir, "templates", "themes", "cny", "FLF_workflowAPI(CNY).json")
         
     workflow = load_workflow(workflow_file)
     if not workflow:
+        if job_entry:
+            with JOBS_LOCK:
+                job_entry["status"] = "failed"
+                job_entry["error"] = f"Workflow file not found: {workflow_file}"
         return False
     
     try:
@@ -285,25 +308,39 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
             prompt_id = response['prompt_id']
             print(f"✅ Workflow queued! Prompt ID: {prompt_id}")
             
-            new_job = {
-                "id": prompt_id,
-                "status": "pending",
-                "original_filename": orig_filename,
-                "generated_filename": gen_filename,
-                "video_filename": None,
-                "timestamp": time.time()
-            }
-            
-            with JOBS_LOCK:
-                JOBS.append(new_job)
+            if job_entry:
+                with JOBS_LOCK:
+                    job_entry["id"] = prompt_id
+                    job_entry["prompt_id"] = prompt_id
+                    job_entry["status"] = "pending"
+            else:
+                new_job = {
+                    "id": prompt_id,
+                    "prompt_id": prompt_id,
+                    "status": "pending",
+                    "original_filename": orig_filename,
+                    "generated_filename": gen_filename,
+                    "video_filename": None,
+                    "timestamp": time.time()
+                }
+                with JOBS_LOCK:
+                    JOBS.append(new_job)
                 
             return True
         else:
-            print("❌ Failed to queue workflow.")
+            print("❌ Failed to queue workflow to ComfyUI.")
+            if job_entry:
+                with JOBS_LOCK:
+                    job_entry["status"] = "failed"
+                    job_entry["error"] = "Failed to connect to ComfyUI or invalid prompt response."
             return False
             
     except Exception as e:
         print(f"❌ Error preparing workflow: {e}")
+        if job_entry:
+            with JOBS_LOCK:
+                job_entry["status"] = "failed"
+                job_entry["error"] = str(e)
         return False
 
 # get_local_ip is now imported from config.py
@@ -399,12 +436,28 @@ def receive_workflow_data():
     
     print(f"Files received: {orig_filename}, {gen_filename}, Theme: {theme}")
     
-    thread = threading.Thread(target=trigger_linux_workflow, args=(orig_path, gen_path, orig_filename, gen_filename, theme))
+    # Create job entry immediately so it renders on port 5001 gallery right away
+    job_uid = f"job_{timestamp}_{random.randint(1000, 9999)}"
+    job_entry = {
+        "id": job_uid,
+        "prompt_id": None,
+        "status": "pending",
+        "theme": theme,
+        "original_filename": orig_filename,
+        "generated_filename": gen_filename,
+        "video_filename": None,
+        "timestamp": time.time()
+    }
+    with JOBS_LOCK:
+        JOBS.append(job_entry)
+
+    thread = threading.Thread(target=trigger_linux_workflow, args=(orig_path, gen_path, orig_filename, gen_filename, theme, job_entry))
     thread.start()
     
     return jsonify({
         "status": "received",
-        "message": "Images received and workflow started"
+        "message": "Images received and workflow started",
+        "job_id": job_uid
     }), 200
 
 @app.route('/receive_print_only', methods=['POST'])

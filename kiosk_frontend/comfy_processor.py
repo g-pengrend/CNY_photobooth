@@ -21,7 +21,26 @@ def encode_image_to_base64(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
-def update_workflow_with_image(workflow, image_path, gender="female", pose="", clothes_style="", background="", bindings=None):
+def get_theme_gender_style(theme_dir, gender="female"):
+    """Resolve male and female persona style from theme.json or fallback defaults."""
+    male_style = "executive leading man"
+    female_style = "charismatic k-pop idol"
+    if theme_dir and os.path.exists(theme_dir):
+        theme_json_file = os.path.join(theme_dir, "theme.json")
+        if os.path.exists(theme_json_file):
+            try:
+                with open(theme_json_file, 'r', encoding='utf-8') as tjf:
+                    t_data = json.load(tjf)
+                    pt = t_data.get('promptTemplate', {})
+                    if pt.get('maleStyle'):
+                        male_style = pt['maleStyle']
+                    if pt.get('femaleStyle'):
+                        female_style = pt['femaleStyle']
+            except Exception:
+                pass
+    return male_style if str(gender).lower() == "male" else female_style
+
+def update_workflow_with_image(workflow, image_path, gender="female", pose="", clothes_style="", background="", bindings=None, theme_dir=None):
     """Update workflow with uploaded image and all user selections dynamically"""
     bindings = bindings or {}
     image_node = bindings.get("input_image_node", "65")
@@ -32,26 +51,30 @@ def update_workflow_with_image(workflow, image_path, gender="female", pose="", c
     if image_node in workflow and "inputs" in workflow[image_node]:
         workflow[image_node]["inputs"]["base64_data"] = base64_image
     
-    # Logic for gender_style
-    gender_style = "executive leading man" if gender.lower() == "male" else "charismatic k-pop idol"
+    # Logic for gender_style from theme configuration if available
+    gender_style = get_theme_gender_style(theme_dir, gender)
 
-    # Update prompt text with all variables
+    # Update prompt text with all variable syntax forms:
+    # Supports ComfyUI JSON escaped syntax: \"pose\", literal \"pose\", \"gender\", and {pose}
     if prompt_node in workflow and "inputs" in workflow[prompt_node] and "text" in workflow[prompt_node]["inputs"]:
         current_text = workflow[prompt_node]["inputs"]["text"]
-        replacements = {
-            '"gender"': gender,
-            '{gender}': gender,
-            '"gender_style"': gender_style,
-            '{gender_style}': gender_style,
-            '"pose"': pose,
-            '{pose}': pose,
-            '"clothes_style"': clothes_style,
-            '{clothes_style}': clothes_style,
-            '"background"': background,
-            '{background}': background
-        }
-        for token, val in replacements.items():
-            current_text = current_text.replace(token, val)
+        token_map = [
+            ("gender", gender),
+            ("gender_style", gender_style),
+            ("pose", pose),
+            ("clothes_style", clothes_style),
+            ("background", background)
+        ]
+        for key, val in token_map:
+            variants = [
+                f'\\"{key}\\"',        # Literal backslash + quote: \"key\"
+                f'"{key}"',            # Standard double quotes: "key"
+                f'\\\"{{{key}}}\\\"',  # Escaped quote with braces: \"{key}\"
+                f'\"{{{key}}}\"',      # Double quote with braces: "{key}"
+                f'{{{key}}}'           # Plain curly braces: {key}
+            ]
+            for var in variants:
+                current_text = current_text.replace(var, str(val))
         workflow[prompt_node]["inputs"]["text"] = current_text
     
     # Update gender detection fields if node exists
@@ -92,7 +115,8 @@ def update_workflow_with_lucky_number(workflow, enable_lucky_number=True, image_
     prompt_node = (bindings or {}).get("prompt_node", "45")
     if prompt_node in workflow and "inputs" in workflow[prompt_node] and "text" in workflow[prompt_node]["inputs"]:
         current_text = workflow[prompt_node]["inputs"]["text"]
-        current_text = current_text.replace('"lucky_num"', lucky_text).replace('{lucky_num}', lucky_text)
+        for tok in ['\\"lucky_num\\"', '"lucky_num"', '"{lucky_num}"', '{lucky_num}', '\\"{lucky_num}\\"']:
+            current_text = current_text.replace(tok, lucky_text)
         workflow[prompt_node]["inputs"]["text"] = current_text
     return workflow
 
@@ -209,12 +233,13 @@ def process_image(input_image_path, theme="cny", gender="female", pose="", cloth
             
         print(f"Workflow loaded successfully for theme: {theme} ({os.path.basename(workflow_file)})")
 
+        gender_style = get_theme_gender_style(theme_dir, gender)
+
         # Update the workflow with the input image and all selections using dynamic bindings
-        workflow = update_workflow_with_image(workflow, input_image_path, gender, pose, clothes_style, background, bindings=bindings)
+        workflow = update_workflow_with_image(workflow, input_image_path, gender, pose, clothes_style, background, bindings=bindings, theme_dir=theme_dir)
         workflow = update_workflow_with_lucky_number(workflow, enable_lucky_number, input_image_path, bindings=bindings)
-        
-        # Calculate gender_style for logging
-        gender_style = "asian, fit and charismatic" if gender.lower() == "male" else "charismatic k-pop idol"
+
+
         
         print(f"Workflow updated with:")
         print(f"  - Input image")

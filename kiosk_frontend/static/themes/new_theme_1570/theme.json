@@ -1,0 +1,85 @@
+{
+  "slug": "new_theme_1570",
+  "title": "New Event Photobooth",
+  "subtitle": "Virtual Try-On Experience",
+  "badge": "Special Edition",
+  "icon": "🎉",
+  "description": "Celebrate in style with AI-powered festive portrait try-ons.",
+  "cta": "Start Experience",
+  "status": "live",
+  "features": {
+    "luckyNumber": false,
+    "filmStrip": false,
+    "genderFilter": true
+  },
+  "background": {
+    "type": "particles",
+    "floatingIcons": [
+      "✨",
+      "⭐",
+      "🎉",
+      "✦"
+    ],
+    "filmStrip": false
+  },
+  "style": {
+    "fontFamily": "'Outfit', sans-serif",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap",
+    "colors": {
+      "background": "#0a0a12",
+      "accent": "#6366f1",
+      "text": "#ffffff",
+      "primary": "#181926",
+      "accentGlow": "rgba(99, 102, 241, 0.25)",
+      "surface": "rgba(255, 255, 255, 0.05)",
+      "surfaceBorder": "rgba(99, 102, 241, 0.3)"
+    },
+    "gradients": {
+      "radialBackground": "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.25) 0%, transparent 70%)",
+      "primaryButton": "linear-gradient(135deg, #181926 0%, #6366f1 100%)"
+    }
+  },
+  "waitingExperience": {
+    "title": "Creating Magic...",
+    "subtitle": "Processing your photo",
+    "sequence": [
+      {
+        "text": "Analyzing your portrait...",
+        "delay": 500,
+        "color": "#ffffff"
+      },
+      {
+        "text": "Synthesizing festive textures...",
+        "delay": 3500,
+        "color": "#ffffff"
+      },
+      {
+        "text": "Perfecting lighting and aura...",
+        "delay": 7000,
+        "color": "#ffffff"
+      },
+      {
+        "text": "Getting ready to celebrate!",
+        "delay": 11000,
+        "color": "#ffffff"
+      }
+    ],
+    "completionMessage": "Calculations Complete! Ready to manifest."
+  },
+  "promptTemplate": {
+    "framing": "Medium shot, waist up shot of",
+    "maleStyle": "asian, fit and charismatic",
+    "femaleStyle": "charismatic k-pop idol",
+    "borderStyle": "The image features a modern graphic overlay with a translucent frosted-glass border forming a frame.",
+    "topTitle": "The Testing of Amazingness",
+    "topTitleStyle": "rendered in an exquisite blocky popping, fluid hand-drawn script",
+    "subtitle": "Behold the auto generator",
+    "subtitleStyle": "elegantly etched in a smaller, minimalist bubbly serif font directly below it",
+    "bottomTitle": "POWER TO THE PEOPLE",
+    "bottomTitleStyle": "displayed in bold, luminous calligraphy",
+    "typoStyle": "All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders.",
+    "atmosphere": "Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field.",
+    "includeLuckyNum": false,
+    "rawPrompt": "Medium shot, waist up shot of a \"{gender}\" \"{gender_style}\" with \"{pose}\" for a concept photo, dressed in \"{clothes_style}\". The setting is \"{background}\". The image features a modern graphic overlay with a translucent frosted-glass border forming a frame. At the top-center apex, the title \"The Testing of Amazingness\" is rendered in an exquisite blocky popping, fluid hand-drawn script, followed by the years \"Behold the auto generator\" elegantly etched in a smaller, minimalist bubbly serif font directly below it. At the bottom-center, overlayed above the image, anchored within the ornate border, the title \"POWER TO THE PEOPLE\" is displayed in bold, luminous calligraphy. All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field."
+  }
+}

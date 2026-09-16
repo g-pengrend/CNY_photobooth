@@ -79,5 +79,21 @@
     ],
     "completionMessage": "Calculations Complete! Ready to manifest."
   },
-  "slug": "cny"
+  "slug": "cny",
+  "promptTemplate": {
+    "framing": "Extreme Close up shot of",
+    "maleStyle": "asian, fit and charismatic",
+    "femaleStyle": "charismatic k-pop idol",
+    "borderStyle": "The image features a modern graphic design overlay: a translucent frosted-glass border at the top and bottom of the frame.",
+    "topTitle": "新年快乐",
+    "topTitleStyle": "Integrated into these borders is stylized typography including the Chinese characters",
+    "subtitle": "Happy Lunar New Year",
+    "subtitleStyle": "and the English text",
+    "bottomTitle": "",
+    "bottomTitleStyle": "",
+    "typoStyle": "words are vibrant bright colors encased in a border contrasting the background, 8k resolution.",
+    "atmosphere": "High-key cinematic lighting, idol posing, vibrant CNY color palette.",
+    "includeLuckyNum": true,
+    "rawPrompt": "Extreme Close up shot of a \"gender\" \"gender_style\" with \"pose\" for a concept photo, dressed in \"clothes_style\". The setting is \"background\". The image features a modern graphic design overlay: a translucent frosted-glass border at the top and bottom of the frame. Integrated into these borders is stylized typography including the Chinese characters \"新年快乐\" and the English text \"Happy Lunar New Year\". \"lucky_num\". High-key cinematic lighting, idol posing, vibrant CNY color palette, words are vibrant bright colors encased in a border contrasting the background, 8k resolution."
+  }
 }

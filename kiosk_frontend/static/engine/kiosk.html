@@ -134,20 +134,80 @@
     <!-- Screen 7: Camera & Capture -->
     <div id="camera-screen" class="screen">
         <div class="content-wrapper">
-            <h2 class="screen-title">Take Your Photo</h2>
-            <p class="screen-subtitle">Align your face inside the guide oval</p>
             <div class="camera-container">
-                <video id="camera-video" autoplay playsinline></video>
-                <canvas id="photo-canvas" style="display:none;"></canvas>
-                <div class="camera-overlay">
-                    <div class="camera-guide-oval"></div>
-                    <div id="countdown-display" class="countdown-display">3</div>
+                <h2 class="screen-title">Take a photo 📸</h2>
+                <p class="screen-subtitle">Align your face inside the guide frame</p>
+
+                <!-- Top Capture Button for accessibility -->
+                <div class="camera-controls top-controls" style="margin-bottom: 1.5rem;">
+                    <button id="capture-btn-top" class="btn btn-primary btn-capture">
+                        <span class="btn-text">Capture Photo</span>
+                        <span class="btn-icon">📷</span>
+                    </button>
                 </div>
-                <div id="camera-flash" class="camera-flash"></div>
+
+                <div class="camera-frame">
+                    <video id="camera-feed" autoplay playsinline></video>
+                    <div id="camera-error-message"
+                        style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: white; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; z-index: 20;">
+                        <span style="font-size: 3rem; margin-bottom: 1rem;">📷❌</span>
+                        <p id="camera-error-text" style="font-size: 1.2rem; margin-bottom: 0;">Camera not detected</p>
+                    </div>
+                    <canvas id="camera-canvas" style="display: none;"></canvas>
+
+                    <!-- Face Guide Overlay -->
+                    <div class="face-guide-overlay">
+                        <div class="guide-text">Please stand as close as possible</div>
+                        <div class="guide-frame"></div>
+                    </div>
+
+                    <div class="frame-corners">
+                        <div class="corner corner-tl"></div>
+                        <div class="corner corner-tr"></div>
+                        <div class="corner corner-bl"></div>
+                        <div class="corner corner-br"></div>
+                    </div>
+                    <div id="countdown-display" class="countdown-display">3</div>
+                    <div id="camera-flash" class="camera-flash"></div>
+                </div>
+
+                <div class="camera-controls">
+                    <button id="capture-btn" class="btn btn-primary btn-capture">
+                        <span class="btn-text">Capture Photo</span>
+                        <span class="btn-icon">📷</span>
+                    </button>
+                    <div class="upload-container" style="margin-top: 1rem; text-align: center;">
+                        <button id="upload-trigger-btn" class="btn-text"
+                            style="background:none; border:none; color:var(--theme-accent, #ffd700); text-decoration:underline; cursor:pointer; font-size:1.1rem; font-weight: 600;">Or upload a photo 📂</button>
+                        <input type="file" id="photo-upload" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                <button id="camera-back-btn" class="btn btn-secondary" style="margin-top: 1rem;">← Back</button>
             </div>
-            <div class="camera-controls">
-                <button id="camera-back-btn" class="btn btn-secondary">← Back</button>
-                <button id="snap-btn" class="snap-button" title="Capture Photo"></button>
+        </div>
+    </div>
+
+    <!-- Screen 7b: Photo Preview Screen -->
+    <div id="preview-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="preview-container">
+                <h2 class="screen-title">Preview Your Photo 👀</h2>
+                <p class="screen-subtitle">This is the photo that will be processed</p>
+
+                <div class="preview-frame">
+                    <img id="preview-image" alt="Photo preview" />
+                </div>
+
+                <div class="preview-actions">
+                    <button id="retake-photo-btn" class="btn btn-secondary">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Retake</span>
+                    </button>
+                    <button id="confirm-photo-btn" class="btn btn-primary">
+                        <span class="btn-text">Looks Good!</span>
+                        <span class="btn-icon">✓</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

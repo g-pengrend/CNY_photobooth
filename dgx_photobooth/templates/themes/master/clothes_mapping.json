@@ -1,11 +1,11 @@
 {
   "C01": {
-    "desc": "contemporary short-sleeve button-up shirt in red, white chinos",
-    "lighting": "Red and Crisp White"
+    "desc": "Cyber Jacket",
+    "lighting": "Warm cinematic lighting"
   },
   "C02": {
-    "desc": "stylish A-line dress, deep red skirt, and orchid motifs",
-    "lighting": "Red and Crisp White"
+    "desc": "A bold, contemporary jacket blending rich gold brocade with traditional scarlet accents",
+    "lighting": "Golden and Scarlet"
   },
   "C03": {
     "desc": "midnight-black silk with heavy gold-thread dragon-scale embroidery",
@@ -56,7 +56,7 @@
     "lighting": "Tiffany Blue and Golden"
   },
   "C15": {
-    "desc": "royal purple kurta and white dhoti pants",
+    "desc": "Traditional rich royal purple kurta with a mandarin collar paired with white dhoti-style pants with soft gathered drape",
     "lighting": "Amethys and Golden"
   },
   "C16": {
@@ -76,7 +76,7 @@
     "lighting": "Silver and Golden"
   },
   "C20": {
-    "desc": "sleeveless geometric wrap gown in black and champagne",
+    "desc": "Elegant sleeveless evening gown featuring a bold bicolor geometric wrap design in black and champagne cream",
     "lighting": "Golden and Cream"
   },
   "C21": {
