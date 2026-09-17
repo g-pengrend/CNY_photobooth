@@ -55,17 +55,36 @@ DEPLOY_MODE = os.environ.get("DEPLOY_MODE", _default_mode).strip().lower()
 
 
 def _detect_local_comfy_port():
-    """Check if port 8188 or 8189 is active locally for ComfyUI."""
-    import socket
-    for port in [8188, 8189]:
-        try:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.settimeout(0.2)
-                if s.connect_ex(('127.0.0.1', port)) == 0:
-                    return f"127.0.0.1:{port}"
-        except Exception:
-            pass
-    return "127.0.0.1:8188"
+    """
+    Determine the local ComfyUI address for video generation (dgx_photobooth):
+    - On Linux (fully Linux or DGX): Video generator runs on port 8189 (Priority 1 in MPS).
+      (Port 8188 is reserved for Kiosk image generation with Priority 0).
+    - On Windows: Both image and video generation share port 8188.
+    Can be overridden via COMFY_SERVER_ADDRESS or COMFY_PORT environment variables.
+    """
+    env_server = os.environ.get("COMFY_SERVER_ADDRESS")
+    if env_server:
+        return env_server.strip()
+
+    env_port = os.environ.get("COMFY_PORT")
+    if env_port:
+        return f"127.0.0.1:{env_port.strip()}"
+
+    if platform.system() == "Linux":
+        # On Linux, video generation explicitly belongs on port 8189
+        return "127.0.0.1:8189"
+    else:
+        # On Windows, single instance runs on port 8188 (fallback to 8189 if active)
+        import socket
+        for port in [8188, 8189]:
+            try:
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.settimeout(0.2)
+                    if s.connect_ex(('127.0.0.1', port)) == 0:
+                        return f"127.0.0.1:{port}"
+            except Exception:
+                pass
+        return "127.0.0.1:8188"
 
 # ============================================================
 # DEPLOYMENT PROFILES
