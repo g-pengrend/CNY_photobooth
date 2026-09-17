@@ -109,13 +109,65 @@ def list_themes():
     return jsonify(theme_list)
 
 
-@app.route('/api/theme/<theme_slug>')
-def get_theme_config(theme_slug):
-    """Serve theme.json for a given theme."""
+@app.route('/api/theme/<theme_slug>', methods=['GET', 'DELETE'])
+def manage_theme_config(theme_slug):
+    """Serve or delete a theme by slug."""
+    if request.method == 'DELETE':
+        if theme_slug in RESERVED_SLUGS:
+            return jsonify({'error': f'Cannot delete reserved system folder: {theme_slug}'}), 400
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        theme_dir = os.path.join(app.static_folder, 'themes', theme_slug)
+        dgx_theme_dir = os.path.join(base_dir, '..', 'dgx_photobooth', 'templates', 'themes', theme_slug)
+
+        if not os.path.exists(theme_dir):
+            return jsonify({'error': f'Theme "{theme_slug}" not found'}), 404
+
+        try:
+            import shutil
+            if os.path.exists(theme_dir):
+                shutil.rmtree(theme_dir)
+            if os.path.exists(dgx_theme_dir):
+                shutil.rmtree(dgx_theme_dir)
+            print(f"🗑️ [Studio] Deleted theme: {theme_slug}")
+            return jsonify({'status': 'success', 'message': f'Theme "{theme_slug}" deleted successfully'})
+        except Exception as e:
+            print(f"❌ Error deleting theme {theme_slug}: {e}")
+            return jsonify({'error': f'Failed to delete theme: {str(e)}'}), 500
+
+    # GET request
     theme_file = os.path.join(app.static_folder, 'themes', theme_slug, 'theme.json')
     if os.path.exists(theme_file):
         return send_file(theme_file, mimetype='application/json')
     return jsonify({"error": "Theme config not found"}), 404
+
+
+@app.route('/api/admin/theme/delete', methods=['POST'])
+def admin_delete_theme_post():
+    """Delete a theme via POST."""
+    data = request.json or {}
+    theme_slug = (data.get('slug') or '').strip().lower()
+    if not theme_slug or theme_slug in RESERVED_SLUGS:
+        return jsonify({'error': f'Cannot delete reserved theme: {theme_slug}'}), 400
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    theme_dir = os.path.join(app.static_folder, 'themes', theme_slug)
+    dgx_theme_dir = os.path.join(base_dir, '..', 'dgx_photobooth', 'templates', 'themes', theme_slug)
+
+    if not os.path.exists(theme_dir):
+        return jsonify({'error': f'Theme "{theme_slug}" not found'}), 404
+
+    try:
+        import shutil
+        if os.path.exists(theme_dir):
+            shutil.rmtree(theme_dir)
+        if os.path.exists(dgx_theme_dir):
+            shutil.rmtree(dgx_theme_dir)
+        print(f"🗑️ [Studio] Deleted theme via POST: {theme_slug}")
+        return jsonify({'status': 'success', 'message': f'Theme "{theme_slug}" deleted successfully'})
+    except Exception as e:
+        print(f"❌ Error deleting theme {theme_slug}: {e}")
+        return jsonify({'error': f'Failed to delete theme: {str(e)}'}), 500
 
 
 def load_master_data_index():
@@ -210,11 +262,39 @@ def get_theme_data(theme_slug):
 def list_theme_samples(theme_slug):
     """Generic sample image lister for any theme's film strip."""
     samples_dir = os.path.join(app.static_folder, 'themes', theme_slug, 'images', 'samples')
-    if not os.path.exists(samples_dir):
-        return jsonify([])
     valid_ext = ('.png', '.jpg', '.jpeg', '.webp')
-    images = [f for f in os.listdir(samples_dir) if f.lower().endswith(valid_ext)]
-    return jsonify([f"/static/themes/{theme_slug}/images/samples/{img}" for img in images])
+    images = []
+    if os.path.exists(samples_dir):
+        images = [f"/static/themes/{theme_slug}/images/samples/{img}" for img in os.listdir(samples_dir) if img.lower().endswith(valid_ext)]
+
+    # Fallback 1: If samples_dir is empty, check theme's clothes images
+    if not images:
+        theme_clothes_dir = os.path.join(app.static_folder, 'themes', theme_slug, 'images', 'clothes')
+        if os.path.exists(theme_clothes_dir):
+            images = [f"/static/themes/{theme_slug}/images/clothes/{img}" for img in os.listdir(theme_clothes_dir) if img.lower().endswith(valid_ext)]
+
+    # Fallback 2: Check theme's data.json for clothes images
+    if not images:
+        data_file = os.path.join(app.static_folder, 'themes', theme_slug, 'data.json')
+        if os.path.exists(data_file):
+            try:
+                with open(data_file, 'r', encoding='utf-8') as f:
+                    tdata = json.load(f)
+                    for item in tdata.get('clothes', []):
+                        img_path = item.get('image')
+                        if img_path and img_path not in images:
+                            images.append(img_path)
+            except Exception:
+                pass
+
+    # Fallback 3: Master / UITS sample portraits
+    if not images or len(images) < 6:
+        uits_samples_dir = os.path.join(app.static_folder, 'themes', 'uits', 'images', 'samples')
+        if os.path.exists(uits_samples_dir):
+            uits_imgs = [f"/static/themes/uits/images/samples/{img}" for img in os.listdir(uits_samples_dir) if img.lower().endswith(valid_ext)]
+            images = list(images) + [img for img in uits_imgs if img not in images]
+
+    return jsonify(images)
 
 
 @app.route('/static/themes/<theme_slug>/images/<category>/<filename>')
@@ -754,6 +834,19 @@ def admin_save_theme():
         for subdir in ['images/clothes', 'images/poses', 'images/backgrounds', 'images/samples']:
             os.makedirs(os.path.join(theme_dir, subdir), exist_ok=True)
         os.makedirs(dgx_theme_dir, exist_ok=True)
+
+        # Ensure sample portraits exist for rolling film strip
+        target_samples_dir = os.path.join(theme_dir, 'images', 'samples')
+        if os.path.exists(target_samples_dir) and not os.listdir(target_samples_dir):
+            uits_samples_dir = os.path.join(base_dir, 'static', 'themes', 'uits', 'images', 'samples')
+            if os.path.exists(uits_samples_dir):
+                import shutil
+                for sfile in os.listdir(uits_samples_dir):
+                    if sfile.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')):
+                        try:
+                            shutil.copyfile(os.path.join(uits_samples_dir, sfile), os.path.join(target_samples_dir, sfile))
+                        except Exception as ce:
+                            print(f"Notice: Could not copy sample image: {ce}")
 
         # 1. Save theme.json
         theme_json_path = os.path.join(theme_dir, 'theme.json')

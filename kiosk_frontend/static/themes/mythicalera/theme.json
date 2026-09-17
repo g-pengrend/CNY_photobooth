@@ -1,6 +1,6 @@
 {
-  "slug": "new_theme_1570",
-  "title": "New Event Photobooth",
+  "slug": "mythicalera",
+  "title": "Magical Mythical",
   "subtitle": "Virtual Try-On Experience",
   "badge": "Special Edition",
   "icon": "🎉",
@@ -9,7 +9,7 @@
   "status": "live",
   "features": {
     "luckyNumber": false,
-    "filmStrip": false,
+    "filmStrip": true,
     "genderFilter": true
   },
   "background": {
@@ -20,7 +20,7 @@
       "🎉",
       "✦"
     ],
-    "filmStrip": false
+    "filmStrip": true
   },
   "style": {
     "fontFamily": "'Outfit', sans-serif",
@@ -44,42 +44,47 @@
     "subtitle": "Processing your photo",
     "sequence": [
       {
-        "text": "Analyzing your portrait...",
+        "text": "Welcome to Magical Mythical!",
         "delay": 500,
+        "color": "#d4af37"
+      },
+      {
+        "text": "Manifesting your Virtual Try-On Experience look...",
+        "delay": 2500,
         "color": "#ffffff"
       },
       {
-        "text": "Synthesizing festive textures...",
-        "delay": 3500,
+        "text": "Styling custom fabric & intricate embroidery...",
+        "delay": 5500,
         "color": "#ffffff"
       },
       {
-        "text": "Perfecting lighting and aura...",
-        "delay": 7000,
+        "text": "Harmonizing ambient cinematic lighting...",
+        "delay": 8500,
         "color": "#ffffff"
       },
       {
-        "text": "Getting ready to celebrate!",
-        "delay": 11000,
-        "color": "#ffffff"
+        "text": "Ready to shine at Magical Mythical!",
+        "delay": 12000,
+        "color": "#d4af37"
       }
     ],
     "completionMessage": "Calculations Complete! Ready to manifest."
   },
   "promptTemplate": {
     "framing": "Medium shot, waist up shot of",
-    "maleStyle": "asian, fit and charismatic",
+    "maleStyle": "executive leading man",
     "femaleStyle": "charismatic k-pop idol",
     "borderStyle": "The image features a modern graphic overlay with a translucent frosted-glass border forming a frame.",
-    "topTitle": "The Testing of Amazingness",
-    "topTitleStyle": "rendered in an exquisite blocky popping, fluid hand-drawn script",
-    "subtitle": "Behold the auto generator",
-    "subtitleStyle": "elegantly etched in a smaller, minimalist bubbly serif font directly below it",
-    "bottomTitle": "POWER TO THE PEOPLE",
+    "topTitle": "Magical Mythical Wonders",
+    "topTitleStyle": "rendered in an exquisite gold-leaf, fluid hand-drawn script",
+    "subtitle": "Age of Behemoths",
+    "subtitleStyle": "elegantly etched in a smaller, minimalist gold serif font directly below it",
+    "bottomTitle": "You don't know what you got yourself into",
     "bottomTitleStyle": "displayed in bold, luminous calligraphy",
     "typoStyle": "All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders.",
     "atmosphere": "Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field.",
     "includeLuckyNum": false,
-    "rawPrompt": "Medium shot, waist up shot of a \"{gender}\" \"{gender_style}\" with \"{pose}\" for a concept photo, dressed in \"{clothes_style}\". The setting is \"{background}\". The image features a modern graphic overlay with a translucent frosted-glass border forming a frame. At the top-center apex, the title \"The Testing of Amazingness\" is rendered in an exquisite blocky popping, fluid hand-drawn script, followed by the years \"Behold the auto generator\" elegantly etched in a smaller, minimalist bubbly serif font directly below it. At the bottom-center, overlayed above the image, anchored within the ornate border, the title \"POWER TO THE PEOPLE\" is displayed in bold, luminous calligraphy. All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field."
+    "rawPrompt": "Medium shot, waist up shot of a \"gender\" \"gender_style\" with \"pose\" for a concept photo, dressed in \"clothes_style\". The setting is \"background\". The image features a modern graphic overlay with a translucent frosted-glass border forming a frame. At the top-center apex, the title \"Magical Mythical Wonders\" is rendered in an exquisite gold-leaf, fluid hand-drawn script, followed by the years \"Age of Behemoths\" elegantly etched in a smaller, minimalist gold serif font directly below it. At the bottom-center, overlayed above the image, anchored within the ornate border, the title \"You don't know what you got yourself into\" is displayed in bold, luminous calligraphy. All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field."
   }
 }

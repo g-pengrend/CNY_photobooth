@@ -194,16 +194,17 @@ body::before {
 .film-strip-container {
     position: absolute;
     top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(-4deg);
-    width: 140vw; height: 100vh;
+    transform: translate(-50%, -50%) rotate(-5deg);
+    width: 150vw; height: 100vh;
     overflow: hidden;
     z-index: 2;
-    opacity: 0.2;
+    opacity: 0.28;
+    filter: contrast(1.15);
     pointer-events: none;
     display: none;
     flex-direction: column;
     justify-content: center;
-    gap: 30px;
+    gap: 35px;
 }
 
 .film-strip-container.active {
@@ -218,12 +219,13 @@ body::before {
 
 .film-strip-track {
     display: flex;
-    gap: 25px;
+    gap: 28px;
     white-space: nowrap;
+    will-change: transform;
 }
 
-.row-left .film-strip-track { animation: roll-left 50s linear infinite; }
-.row-right .film-strip-track { animation: roll-right 50s linear infinite; }
+.row-left .film-strip-track { animation: roll-left 55s linear infinite; }
+.row-right .film-strip-track { animation: roll-right 55s linear infinite; }
 
 @keyframes roll-left {
     0% { transform: translateX(0); }
@@ -236,17 +238,20 @@ body::before {
 }
 
 .film-item {
-    width: 220px; height: 320px;
+    width: 250px; height: 350px;
     flex-shrink: 0;
-    background: #111;
-    border: 1px solid var(--theme-surface-border);
-    border-radius: var(--radius-sm);
+    background: #151520;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-md);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     overflow: hidden;
+    transform: skewX(-2deg);
 }
 
 .film-item img {
     width: 100%; height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 /* ==========================================================================

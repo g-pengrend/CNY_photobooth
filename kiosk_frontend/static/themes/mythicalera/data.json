@@ -1,0 +1,184 @@
+{
+  "clothes": [
+    {
+      "id": "vanda-miss-joaquim-orchid-dress",
+      "code": "C02",
+      "title": "Vanda Miss Joaquim Orchid Dress",
+      "description": "Women's stylish sleeveless A-line dress with a structured white bodice, deep red skirt, and cascading white Vanda Miss Joaquim orchid motifs",
+      "image": "/static/themes/master/images/clothes/vanda-miss-joaquim-orchid-dress.png",
+      "prompt": "women's outfit, featuring a stylish sleeveless A-line dress that integrates a clean white bodice with a deep Singapore red skirt. The slightly flared skirt is adorned with an elegant, flowing white Vanda Miss Joaquim orchid motif pattern across its surface, balanced against the white bodice for an aesthetically pleasing mix of both colors.",
+      "prompt_modifier": "women's outfit, featuring a stylish sleeveless A-line dress that integrates a clean white bodice with a deep Singapore red skirt. The slightly flared skirt is adorned with an elegant, flowing white Vanda Miss Joaquim orchid motif pattern across its surface, balanced against the white bodice for an aesthetically pleasing mix of both colors.",
+      "category": "female",
+      "lighting": "Red and Crisp White"
+    },
+    {
+      "id": "male-retro-knitted",
+      "code": "C19",
+      "title": "Retro men's knitted outfit",
+      "description": "Men retro short sleeve knit polo with ribbed collar with beige pants",
+      "image": "/static/themes/master/images/clothes/male-retro-knitted.png",
+      "prompt": "retro short sleeve knit polo with ribbed collar and sleeve cuffs in beige, vertical stripe pattern in cream, beige, dusty pink, red, and dark brown tones, soft knitted fabric texture, slightly fitted silhouette, paired with beige tailored trousers, clean minimal styling, modern vintage aesthetic",
+      "prompt_modifier": "retro short sleeve knit polo with ribbed collar and sleeve cuffs in beige, vertical stripe pattern in cream, beige, dusty pink, red, and dark brown tones, soft knitted fabric texture, slightly fitted silhouette, paired with beige tailored trousers, clean minimal styling, modern vintage aesthetic",
+      "category": "male",
+      "lighting": "Silver and Golden"
+    },
+    {
+      "id": "black-suit-white-shirt",
+      "code": "C23",
+      "title": "Black Suit with White Dress Shirt and black necktie",
+      "description": "A modern, slim-fit black suit with a slight sheen",
+      "image": "/static/themes/master/images/clothes/black-suit-white-shirt.png",
+      "prompt": "a modern, slim-fit black suit in premium wool with a slight sheen. Features a two-button jacket with narrow notch lapels and matching tailored trousers. Paired with a crisp, high-thread-count white dress shirt and a slim black silk necktie.",
+      "prompt_modifier": "a modern, slim-fit black suit in premium wool with a slight sheen. Features a two-button jacket with narrow notch lapels and matching tailored trousers. Paired with a crisp, high-thread-count white dress shirt and a slim black silk necktie.",
+      "category": "male",
+      "lighting": "Silver and Golden"
+    },
+    {
+      "id": "silken-power-suit",
+      "code": "C38",
+      "title": "Silken Power Suit",
+      "description": "tailored contemporary suit in champagne silk with peak lapels",
+      "image": "/static/themes/master/images/clothes/silken-power-suit.png",
+      "prompt": "A tailored contemporary silhouette in champagne silk with peak lapels, sharp shoulders, and minimal pearl buttons.",
+      "prompt_modifier": "A tailored contemporary silhouette in champagne silk with peak lapels, sharp shoulders, and minimal pearl buttons.",
+      "category": "unisex",
+      "lighting": "Crisp Editorial Studio"
+    },
+    {
+      "id": "gold-and-blue-evening-gown",
+      "code": "C21",
+      "title": "Gold and Blue Evening Gown",
+      "description": "Evening gown with a sleek champagne-gold satin skirt and a bodice overlaid with delicate, light modern lace with blue and bronze sequins",
+      "image": "/static/themes/master/images/clothes/gold-and-blue-evening-gown.png",
+      "prompt": "Evening gown featuring a sleek champagne-gold satin skirt. The bodice is overlaid with delicate, light modern lace with blue and bronze sequins covering the chest, shoulders, and high neckline for a refined illusion effect.",
+      "prompt_modifier": "Evening gown featuring a sleek champagne-gold satin skirt. The bodice is overlaid with delicate, light modern lace with blue and bronze sequins covering the chest, shoulders, and high neckline for a refined illusion effect.",
+      "category": "female",
+      "lighting": "Golden and sliver"
+    },
+    {
+      "id": "peony-jacquard-dress",
+      "code": "C08",
+      "title": "Peony Jacquard Dress",
+      "description": "Crimson velvet cape over a rich peony-patterned gold-pink gown",
+      "image": "/static/themes/master/images/clothes/peony-jacquard-dress.png",
+      "prompt": "A short, structured shoulder cape in crimson velvet with gold floral embroidery, worn over a simple sleek pink and gold dress featuring a woven peony jacquard pattern and metallic cloud-motif (祥云) accents throughout the fabric.",
+      "prompt_modifier": "A short, structured shoulder cape in crimson velvet with gold floral embroidery, worn over a simple sleek pink and gold dress featuring a woven peony jacquard pattern and metallic cloud-motif (祥云) accents throughout the fabric.",
+      "category": "female",
+      "lighting": "Crimson and Pink"
+    }
+  ],
+  "poses": [
+    {
+      "id": "the-warm-welcome",
+      "code": "P01",
+      "title": "The Warm Welcome",
+      "description": "Wide smile with open arms",
+      "image": "/static/themes/master/images/poses/the-warm-welcome.png",
+      "prompt": "A wide, bright smile with arms slightly spread open, as if greeting the viewer into the New Year,",
+      "prompt_modifier": "A wide, bright smile with arms slightly spread open, as if greeting the viewer into the New Year,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-playful-shrug",
+      "code": "P02",
+      "title": "The Playful Shrug",
+      "description": "Happy expression with arm raise",
+      "image": "/static/themes/master/images/poses/the-playful-shrug.png",
+      "prompt": "A scrunchy-face happy expression with shoulders raised and a slight head tilt to the side,",
+      "prompt_modifier": "A scrunchy-face happy expression with shoulders raised and a slight head tilt to the side,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-eye-smile",
+      "code": "P03",
+      "title": "The Eye-Smile",
+      "description": "Big smile into camera",
+      "image": "/static/themes/master/images/poses/the-eye-smile.png",
+      "prompt": "A gentle, beaming grin that makes the eyes crinkle, looking directly into the lens with a neighborly idol charm,",
+      "prompt_modifier": "A gentle, beaming grin that makes the eyes crinkle, looking directly into the lens with a neighborly idol charm,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-tilt-and-smirk",
+      "code": "P04",
+      "title": "The Tilt & Smirk",
+      "description": "Head tilt with playful smile",
+      "image": "/static/themes/master/images/poses/the-tilt-and-smirk.png",
+      "prompt": "Head tilted slightly to the side with a playful, one-sided smile,",
+      "prompt_modifier": "Head tilted slightly to the side with a playful, one-sided smile,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-k-heart-spark",
+      "code": "P08",
+      "title": "The K-Heart Spark",
+      "description": "Double-hand heart pose",
+      "image": "/static/themes/master/images/poses/the-k-heart-spark.png",
+      "prompt": "Facing forward with a bright expression, hands brought together at chest height to form a delicate finger heart,",
+      "prompt_modifier": "Facing forward with a bright expression, hands brought together at chest height to form a delicate finger heart,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "the-dragons-peak",
+      "code": "B01",
+      "title": "The Dragon's Peak",
+      "description": "Misty mountain with celestial dragon",
+      "image": "/static/themes/master/images/backgrounds/the-dragons-peak.png",
+      "prompt": "A misty mountain summit at dawn, with the silhouette of a massive, glowing celestial dragon weaving through ancient, gnarled pine trees.",
+      "prompt_modifier": "A misty mountain summit at dawn, with the silhouette of a massive, glowing celestial dragon weaving through ancient, gnarled pine trees.",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-enchanted-bamboo-grove",
+      "code": "B04",
+      "title": "The Enchanted Bamboo Grove",
+      "description": "Bamboo with glowing ribbons",
+      "image": "/static/themes/master/images/backgrounds/the-enchanted-bamboo-grove.png",
+      "prompt": "Emerald-green bamboo stalks wrapped in glowing red silk ribbons, with a mystical ground-level fog and floating spirit fire orbs.",
+      "prompt_modifier": "Emerald-green bamboo stalks wrapped in glowing red silk ribbons, with a mystical ground-level fog and floating spirit fire orbs.",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "halo-over-the-jade-ridge",
+      "code": "B08",
+      "title": "Halo Over the Jade Ridge",
+      "description": "Storm clouds part as sun-moon halo crowns the ancient jade mountains.",
+      "image": "/static/themes/master/images/backgrounds/halo-over-the-jade-ridge.png",
+      "prompt": "A remote mountain ridge at night, rendered in ultra-photorealistic detail. Jagged dark-jade cliffs and ancient stone formations fade into mist. In the distant sky, a rare sun-moon halo glows behind layered storm clouds, casting silver-gold light across the landscape.",
+      "prompt_modifier": "A remote mountain ridge at night, rendered in ultra-photorealistic detail. Jagged dark-jade cliffs and ancient stone formations fade into mist. In the distant sky, a rare sun-moon halo glows behind layered storm clouds, casting silver-gold light across the landscape.",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-frozen-sunburst-summit",
+      "code": "B05",
+      "title": "The Frozen Sunburst Summit",
+      "description": "Epic panoramic view of snow-covered mountains with sunburst and ice formations",
+      "image": "/static/themes/master/images/backgrounds/the-frozen-sunburst-summit.png",
+      "prompt": "An epic, ultra-realistic panoramic view of a snow-covered mountain range at dawn. Massive, jagged ice formations in the foreground reflect pale-blue and violet light. A rare sunburst pierces through the heavy cloud cover, casting golden light beams across the frosted landscape.",
+      "prompt_modifier": "An epic, ultra-realistic panoramic view of a snow-covered mountain range at dawn. Massive, jagged ice formations in the foreground reflect pale-blue and violet light. A rare sunburst pierces through the heavy cloud cover, casting golden light beams across the frosted landscape.",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-stonewall-dungeon",
+      "code": "B06",
+      "title": "The Stonewall Dungeon",
+      "description": "Mysterious dungeon with aged stone walls and flickering torchlight",
+      "image": "/static/themes/master/images/backgrounds/the-stonewall-dungeon.png",
+      "prompt": "A dungeon-themed background with aged stone walls covered in flickering, warm-toned torchlight. Faded, hand-drawn maps and ancient-looking scrolls are pinned to the walls. Cobwebs and antique, rusty props like keys and tattered cloaks are artfully placed, creating a mysterious and playful atmosphere.",
+      "prompt_modifier": "A dungeon-themed background with aged stone walls covered in flickering, warm-toned torchlight. Faded, hand-drawn maps and ancient-looking scrolls are pinned to the walls. Cobwebs and antique, rusty props like keys and tattered cloaks are artfully placed, creating a mysterious and playful atmosphere.",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    }
+  ]
+}

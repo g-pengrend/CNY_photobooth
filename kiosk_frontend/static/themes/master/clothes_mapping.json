@@ -4,8 +4,8 @@
     "lighting": "Warm cinematic lighting"
   },
   "C02": {
-    "desc": "A bold, contemporary jacket blending rich gold brocade with traditional scarlet accents",
-    "lighting": "Golden and Scarlet"
+    "desc": "Women's stylish sleeveless A-line dress with a structured white bodice, deep red skirt, and cascading white Vanda Miss Joaquim orchid motifs",
+    "lighting": "Red and Crisp White"
   },
   "C03": {
     "desc": "midnight-black silk with heavy gold-thread dragon-scale embroidery",
@@ -28,8 +28,8 @@
     "lighting": "Crimson and Pink"
   },
   "C08": {
-    "desc": "asymmetrical iridescent silk with 3D geometric textures",
-    "lighting": "Midnight Blue and Silver"
+    "desc": "Crimson velvet cape over a rich peony-patterned gold-pink gown",
+    "lighting": "Crimson and Pink"
   },
   "C09": {
     "desc": "premium matte-finish satin",
@@ -72,7 +72,7 @@
     "lighting": "Silver and Golden"
   },
   "C19": {
-    "desc": "retro multi-tone striped knit polo in beige",
+    "desc": "Men retro short sleeve knit polo with ribbed collar with beige pants",
     "lighting": "Silver and Golden"
   },
   "C20": {
@@ -80,7 +80,7 @@
     "lighting": "Golden and Cream"
   },
   "C21": {
-    "desc": "champagne-gold satin gown with blue and bronze sequined bodice",
+    "desc": "Evening gown with a sleek champagne-gold satin skirt and a bodice overlaid with delicate, light modern lace with blue and bronze sequins",
     "lighting": "Golden and sliver"
   },
   "C22": {
@@ -88,11 +88,15 @@
     "lighting": "Blue and Golden"
   },
   "C23": {
-    "desc": "slim-fit black wool suit with narrow notch lapels",
+    "desc": "A modern, slim-fit black suit with a slight sheen",
     "lighting": "Silver and Golden"
   },
   "A1": {
     "desc": "",
     "lighting": "Warm cinematic lighting"
+  },
+  "C38": {
+    "desc": "tailored contemporary suit in champagne silk with peak lapels",
+    "lighting": "Crisp Editorial Studio"
   }
 }

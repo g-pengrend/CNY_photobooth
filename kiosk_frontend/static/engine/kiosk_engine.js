@@ -96,37 +96,40 @@ function applyThemeStyles(theme) {
 
 async function initAtmosphere(theme) {
     const decoContainer = document.getElementById('persistent-decorations');
-    if (!decoContainer) return;
-
-    // Check if theme has custom decorations.html slot
-    try {
-        const customDecoRes = await fetch(`/static/themes/${state.slug}/decorations.html`);
-        if (customDecoRes.ok) {
-            const html = await customDecoRes.text();
-            decoContainer.innerHTML = html;
-            return;
-        }
-    } catch (e) {
-        // Fall back to built-in atmosphere
-    }
-
-    // Built-in floating particle atmosphere
     const bgConfig = theme.background || {};
-    const icons = bgConfig.floatingIcons || ['✨', '✦', '⭐', '✧'];
 
-    decoContainer.innerHTML = '';
-    for (let i = 0; i < 8; i++) {
-        const p = document.createElement('div');
-        p.className = 'floating-particle';
-        p.textContent = icons[i % icons.length];
-        p.style.top = `${10 + Math.random() * 80}%`;
-        p.style.left = `${5 + Math.random() * 90}%`;
-        p.style.animationDelay = `${Math.random() * 5}s`;
-        p.style.fontSize = `${1.2 + Math.random() * 1.4}rem`;
-        decoContainer.appendChild(p);
+    if (decoContainer) {
+        // Check if theme has custom decorations.html slot
+        let hasCustomDeco = false;
+        try {
+            const customDecoRes = await fetch(`/static/themes/${state.slug}/decorations.html`);
+            if (customDecoRes.ok) {
+                const html = await customDecoRes.text();
+                decoContainer.innerHTML = html;
+                hasCustomDeco = true;
+            }
+        } catch (e) {
+            // Fall back to built-in atmosphere
+        }
+
+        if (!hasCustomDeco) {
+            // Built-in floating particle atmosphere
+            const icons = bgConfig.floatingIcons || ['✨', '✦', '⭐', '✧'];
+            decoContainer.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                const p = document.createElement('div');
+                p.className = 'floating-particle';
+                p.textContent = icons[i % icons.length];
+                p.style.top = `${10 + Math.random() * 80}%`;
+                p.style.left = `${5 + Math.random() * 90}%`;
+                p.style.animationDelay = `${Math.random() * 5}s`;
+                p.style.fontSize = `${1.2 + Math.random() * 1.4}rem`;
+                decoContainer.appendChild(p);
+            }
+        }
     }
 
-    // Rolling Film Strip on Welcome Screen
+    // Rolling Film Strip on Welcome Screen (always evaluated)
     if (theme.features?.filmStrip || bgConfig.filmStrip) {
         initFilmStrip();
     }
@@ -139,21 +142,53 @@ async function initFilmStrip() {
     if (!container || !trackLeft || !trackRight) return;
 
     try {
-        const res = await fetch(`/api/theme/${state.slug}/samples`);
-        if (!res.ok) return;
-        const images = await res.json();
-        if (!images || images.length === 0) return;
+        let images = [];
+        try {
+            const res = await fetch(`/api/theme/${state.slug}/samples`);
+            if (res.ok) {
+                images = await res.json();
+            }
+        } catch (fetchErr) {
+            console.warn('[Kiosk Engine] Theme samples fetch failed:', fetchErr);
+        }
+
+        // Fallback 1: Extract clothes images from loaded theme data
+        if (!images || images.length === 0) {
+            if (state.data && Array.isArray(state.data.clothes)) {
+                images = state.data.clothes.map(c => c.image).filter(Boolean);
+            }
+        }
+
+        // Fallback 2: Universal master sample portraits
+        if (!images || images.length === 0) {
+            images = [
+                '/static/themes/uits/images/samples/generated_image_15.png',
+                '/static/themes/uits/images/samples/generated_image_16.png',
+                '/static/themes/uits/images/samples/generated_image_17.png',
+                '/static/themes/uits/images/samples/generated_image_18.png',
+                '/static/themes/uits/images/samples/generated_image_19.png',
+                '/static/themes/uits/images/samples/generated_image_39.png',
+                '/static/themes/uits/images/samples/generated_image_58.png',
+                '/static/themes/uits/images/samples/generated_image_59.png'
+            ];
+        }
 
         container.classList.add('active');
         const makeItems = (imgs) => imgs.map(src => `
-            <div class="film-item"><img src="${src}" alt="Sample" loading="lazy"></div>
+            <div class="film-item"><img src="${src}" alt="Sample" loading="lazy" onerror="this.parentElement.style.display='none'"></div>
         `).join('');
 
-        // Duplicate to create seamless infinite loop
-        trackLeft.innerHTML = makeItems(images) + makeItems(images);
-        trackRight.innerHTML = makeItems(images.slice().reverse()) + makeItems(images.slice().reverse());
+        // Ensure at least 8 items for a continuous, seamless track roll
+        let trackImgs = images.slice();
+        while (trackImgs.length < 8) {
+            trackImgs = trackImgs.concat(images);
+        }
+
+        // Duplicate to create seamless infinite loop (A + A)
+        trackLeft.innerHTML = makeItems(trackImgs) + makeItems(trackImgs);
+        trackRight.innerHTML = makeItems(trackImgs.slice().reverse()) + makeItems(trackImgs.slice().reverse());
     } catch (err) {
-        console.warn('Film strip samples not available:', err);
+        console.warn('[Kiosk Engine] Film strip init failed:', err);
     }
 }
 

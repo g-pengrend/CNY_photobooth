@@ -1483,11 +1483,28 @@ window.confirmDeleteTheme = async function () {
     if (btn) { btn.textContent = '🗑️ Deleting...'; btn.disabled = true; }
 
     try {
-        const res = await fetch(`/api/theme/${slug}`, { method: 'DELETE' });
+        let res = await fetch(`/api/theme/${slug}`, { method: 'DELETE' });
         if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.error || 'Delete failed');
+            // Try POST fallback endpoint
+            res = await fetch('/api/admin/theme/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ slug })
+            });
         }
+
+        let data = {};
+        try {
+            data = await res.json();
+        } catch (je) {
+            // If response is HTML or plain text, avoid SyntaxError: unexpected token '<'
+            throw new Error(`Server returned HTTP ${res.status}`);
+        }
+
+        if (!res.ok) {
+            throw new Error(data.error || `Delete failed with status ${res.status}`);
+        }
+
         showToast(`Theme "${slug}" permanently deleted.`, 'success');
         closeDeleteThemeModal();
 
