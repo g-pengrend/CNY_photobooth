@@ -1,7 +1,7 @@
 {
   "C01": {
-    "desc": "Cyber Jacket",
-    "lighting": "Warm cinematic lighting"
+    "desc": "contemporary short-sleeve button-up shirt in red, white chinos",
+    "lighting": "Red and Crisp White"
   },
   "C02": {
     "desc": "Women's stylish sleeveless A-line dress with a structured white bodice, deep red skirt, and cascading white Vanda Miss Joaquim orchid motifs",
@@ -72,7 +72,7 @@
     "lighting": "Silver and Golden"
   },
   "C19": {
-    "desc": "Men retro short sleeve knit polo with ribbed collar with beige pants",
+    "desc": "retro multi-tone striped knit polo in beige",
     "lighting": "Silver and Golden"
   },
   "C20": {
@@ -88,7 +88,7 @@
     "lighting": "Blue and Golden"
   },
   "C23": {
-    "desc": "A modern, slim-fit black suit with a slight sheen",
+    "desc": "slim-fit black wool suit with narrow notch lapels",
     "lighting": "Silver and Golden"
   },
   "A1": {
@@ -98,5 +98,9 @@
   "C38": {
     "desc": "tailored contemporary suit in champagne silk with peak lapels",
     "lighting": "Crisp Editorial Studio"
+  },
+  "C37": {
+    "desc": "flowing robe in mist-grey silk with monochrome ink wash art",
+    "lighting": "Soft Daylight Studio"
   }
 }

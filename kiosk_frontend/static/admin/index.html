@@ -879,16 +879,25 @@
                 <button class="modal-close-btn" onclick="closeDeleteThemeModal()">&times;</button>
             </div>
             <div style="padding:2rem;">
-                <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:var(--radius-md);padding:1.2rem;margin-bottom:1.5rem;">
+                <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:var(--radius-md);padding:1.2rem;margin-bottom:1.2rem;">
                     <p style="color:#f87171;font-weight:600;margin-bottom:0.4rem;">⚠️ This action is permanent and cannot be undone!</p>
                     <p style="color:var(--text-muted);font-size:0.88rem;">Deleting this theme will remove all its files, images, and configuration from the server.</p>
                 </div>
-                <p style="margin-bottom:0.5rem;font-size:0.95rem;">You are about to permanently delete:</p>
-                <p style="font-size:1.1rem;font-weight:700;color:var(--text-main);" id="delete-theme-name">Theme Name</p>
-                <p style="font-size:0.82rem;color:var(--text-muted);">Slug: <code id="delete-theme-slug">slug</code></p>
-                <div style="display:flex;justify-content:flex-end;gap:0.8rem;margin-top:2rem;">
+                <p style="margin-bottom:0.3rem;font-size:0.92rem;color:var(--text-muted);">You are about to permanently delete:</p>
+                <p style="font-size:1.15rem;font-weight:700;color:var(--text-main);margin-bottom:0.2rem;" id="delete-theme-name">Theme Name</p>
+                <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1.2rem;">Slug: <code id="delete-theme-slug" style="color:#cbd5e1;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;">slug</code></p>
+
+                <div style="margin-top:1.2rem;margin-bottom:0.4rem;">
+                    <label for="inp-delete-theme-confirm" style="display:block;font-size:0.9rem;color:var(--text-main);margin-bottom:0.6rem;">
+                        To confirm, please type <strong id="delete-theme-target-phrase" style="color:#f87171;background:rgba(239,68,68,0.15);padding:0.2rem 0.5rem;border-radius:4px;font-family:monospace;font-size:0.95rem;user-select:all;">Theme Name</strong> below:
+                    </label>
+                    <input type="text" id="inp-delete-theme-confirm" class="admin-input" placeholder="Type confirmation phrase here..." style="width:100%;border-color:rgba(239,68,68,0.4);padding:0.65rem 0.9rem;font-size:0.95rem;" autocomplete="off" oninput="onDeleteThemePhraseInput()" onkeydown="if(event.key==='Enter'&&!document.getElementById('btn-confirm-delete-theme').disabled)confirmDeleteTheme();">
+                </div>
+                <div id="delete-phrase-hint" style="font-size:0.8rem;color:var(--text-muted);min-height:1.2rem;margin-bottom:0.6rem;"></div>
+
+                <div style="display:flex;justify-content:flex-end;gap:0.8rem;margin-top:1.5rem;">
                     <button class="admin-btn admin-btn-secondary" onclick="closeDeleteThemeModal()">Cancel</button>
-                    <button id="btn-confirm-delete-theme" class="admin-btn admin-btn-danger" onclick="confirmDeleteTheme()">🗑️ Permanently Delete</button>
+                    <button id="btn-confirm-delete-theme" class="admin-btn admin-btn-danger" onclick="confirmDeleteTheme()" disabled style="opacity:0.45;cursor:not-allowed;transition:all 0.2s ease;">🗑️ Permanently Delete</button>
                 </div>
             </div>
         </div>

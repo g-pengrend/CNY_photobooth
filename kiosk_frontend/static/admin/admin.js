@@ -1453,15 +1453,101 @@ window.confirmDeleteAsset = async function () {
 };
 
 // ==========================================================================
-// Delete Theme Modal
+// Delete Theme Modal (with Phrase Confirmation)
 // ==========================================================================
 window.openDeleteThemeModal = function (slug, title) {
     if (!slug) return;
     studio.pendingDeleteSlug = slug;
-    document.getElementById('delete-theme-name').textContent = title || slug;
-    document.getElementById('delete-theme-slug').textContent = slug;
+
+    // Build clean title and phrase similar to the title
+    const rawTitle = title || slug;
+    const cleanTitle = rawTitle.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+                               .replace(/[^\w\s-]/g, '')
+                               .trim() || slug;
+    const targetPhrase = `delete ${cleanTitle.toLowerCase()}`;
+
+    studio.deleteCleanTitle = cleanTitle;
+    studio.deleteTargetPhrase = targetPhrase;
+
+    const nameEl = document.getElementById('delete-theme-name');
+    if (nameEl) nameEl.textContent = rawTitle;
+
+    const slugEl = document.getElementById('delete-theme-slug');
+    if (slugEl) slugEl.textContent = slug;
+
+    const phraseEl = document.getElementById('delete-theme-target-phrase');
+    if (phraseEl) phraseEl.textContent = targetPhrase;
+
+    const input = document.getElementById('inp-delete-theme-confirm');
+    if (input) {
+        input.value = '';
+        input.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+        input.style.boxShadow = 'none';
+    }
+
+    const hint = document.getElementById('delete-phrase-hint');
+    if (hint) hint.innerHTML = '';
+
+    const btn = document.getElementById('btn-confirm-delete-theme');
+    if (btn) {
+        btn.disabled = true;
+        btn.style.opacity = '0.45';
+        btn.style.cursor = 'not-allowed';
+        btn.textContent = '🗑️ Permanently Delete';
+    }
+
     const modal = document.getElementById('delete-theme-modal');
-    if (modal) modal.classList.add('open');
+    if (modal) {
+        modal.classList.add('open');
+        setTimeout(() => { if (input) input.focus(); }, 150);
+    }
+};
+
+window.onDeleteThemePhraseInput = function () {
+    const input = document.getElementById('inp-delete-theme-confirm');
+    const btn = document.getElementById('btn-confirm-delete-theme');
+    const hint = document.getElementById('delete-phrase-hint');
+    if (!input || !btn) return;
+
+    const val = input.value.trim().toLowerCase();
+    const target = (studio.deleteTargetPhrase || '').trim().toLowerCase();
+    const cleanTitle = (studio.deleteCleanTitle || '').trim().toLowerCase();
+    const slug = (studio.pendingDeleteSlug || '').trim().toLowerCase();
+
+    const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    const isMatch = val && (
+        val === target ||
+        val === cleanTitle ||
+        val === `delete ${cleanTitle}` ||
+        val === slug ||
+        val === `delete ${slug}` ||
+        norm(val) === norm(target) ||
+        norm(val) === norm(cleanTitle) ||
+        norm(val) === `delete${norm(cleanTitle)}` ||
+        norm(val) === norm(slug) ||
+        norm(val) === `delete${norm(slug)}`
+    );
+
+    if (isMatch) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        input.style.borderColor = '#10b981';
+        input.style.boxShadow = '0 0 0 2px rgba(16, 185, 129, 0.25)';
+        if (hint) {
+            hint.innerHTML = '<span style="color:#10b981;font-weight:600;">✓ Phrase matched. You can now delete this theme.</span>';
+        }
+    } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.45';
+        btn.style.cursor = 'not-allowed';
+        input.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+        input.style.boxShadow = 'none';
+        if (hint) {
+            hint.innerHTML = val ? '<span style="color:#f87171;">Phrase does not match.</span>' : '';
+        }
+    }
 };
 
 window.openDeleteActiveThemeModal = function () {
@@ -1471,6 +1557,10 @@ window.openDeleteActiveThemeModal = function () {
 
 window.closeDeleteThemeModal = function () {
     studio.pendingDeleteSlug = null;
+    studio.deleteCleanTitle = null;
+    studio.deleteTargetPhrase = null;
+    const input = document.getElementById('inp-delete-theme-confirm');
+    if (input) input.value = '';
     const modal = document.getElementById('delete-theme-modal');
     if (modal) modal.classList.remove('open');
 };
@@ -1480,6 +1570,35 @@ window.confirmDeleteTheme = async function () {
     if (!slug) return;
 
     const btn = document.getElementById('btn-confirm-delete-theme');
+    if (btn && btn.disabled) return;
+
+    const input = document.getElementById('inp-delete-theme-confirm');
+    const val = (input?.value || '').trim().toLowerCase();
+    const target = (studio.deleteTargetPhrase || '').trim().toLowerCase();
+    const cleanTitle = (studio.deleteCleanTitle || '').trim().toLowerCase();
+    const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    const isMatch = val && (
+        val === target ||
+        val === cleanTitle ||
+        val === `delete ${cleanTitle}` ||
+        val === slug ||
+        val === `delete ${slug}` ||
+        norm(val) === norm(target) ||
+        norm(val) === norm(cleanTitle) ||
+        norm(val) === `delete${norm(cleanTitle)}` ||
+        norm(val) === norm(slug) ||
+        norm(val) === `delete${norm(slug)}`
+    );
+
+    if (!isMatch) {
+        if (input) {
+            input.focus();
+            input.style.borderColor = '#ef4444';
+        }
+        return;
+    }
+
     if (btn) { btn.textContent = '🗑️ Deleting...'; btn.disabled = true; }
 
     try {
