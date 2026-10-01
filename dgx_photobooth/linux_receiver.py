@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import base64
 import time
@@ -13,6 +14,13 @@ from flask import Flask, request, jsonify, render_template, send_from_directory,
 from werkzeug.utils import secure_filename
 import platform
 import subprocess
+
+# Fix Windows console encoding for Unicode/emoji characters
+if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if sys.stderr and hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 from config import COMFY_OUTPUT_DIR, COMFY_SERVER_ADDRESS, print_config, get_local_ip
 
 # --- Configuration ---
