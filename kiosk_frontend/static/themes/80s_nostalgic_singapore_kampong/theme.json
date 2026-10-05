@@ -1,0 +1,92 @@
+{
+  "slug": "80s_nostalgic_singapore_kampong",
+  "title": "Kampong Memories '80s",
+  "subtitle": "Warm Heritage & Nostalgic Village Dreams",
+  "badge": "Vintage SG Edition",
+  "icon": "📻",
+  "description": "Step into a golden 1980s Singapore village scene filled with warm zinc-roof charm, wooden attap houses, and vintage nostalgia. Transform your modern portrait into a classic local keepsake.",
+  "cta": "Take Kampong Snap",
+  "status": "live",
+  "isUnsavedDraft": false,
+  "features": {
+    "luckyNumber": false,
+    "filmStrip": false,
+    "genderFilter": true
+  },
+  "background": {
+    "type": "particles",
+    "floatingIcons": [
+      "✨",
+      "⭐",
+      "🎉",
+      "✦"
+    ],
+    "filmStrip": false
+  },
+  "style": {
+    "fontFamily": "'Outfit', sans-serif",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
+    "colors": {
+      "background": "#021a10",
+      "accent": "#eedd82",
+      "text": "#ffffff",
+      "primary": "#0b4627",
+      "accentGlow": "rgba(238, 221, 130, 0.25)",
+      "surface": "rgba(255, 255, 255, 0.05)",
+      "surfaceBorder": "rgba(238, 221, 130, 0.3)"
+    },
+    "gradients": {
+      "radialBackground": "radial-gradient(circle at 50% 50%, rgba(238, 221, 130, 0.25) 0%, transparent 70%)",
+      "primaryButton": "linear-gradient(135deg, #0b4627 0%, #eedd82 100%)"
+    }
+  },
+  "waitingExperience": {
+    "title": "Developing Your Kampong Portrait...",
+    "subtitle": "Recreating 1980s Singapore warmth & village aesthetics",
+    "sequence": [
+      {
+        "text": "Step 1: Scanning facial contours and lighting ambience...",
+        "delay": 500,
+        "color": "#eedd82"
+      },
+      {
+        "text": "Step 2: Infusing 1980s analog film grain & warm attap tones...",
+        "delay": 3500,
+        "color": "#ffffff"
+      },
+      {
+        "text": "Step 3: Rendering retro kampung decorations & zinc roof glow...",
+        "delay": 7000,
+        "color": "#eedd82"
+      },
+      {
+        "text": "Step 4: Harmonizing vintage color tones & nostalgic textures...",
+        "delay": 10500,
+        "color": "#ffffff"
+      },
+      {
+        "text": "Step 5: Nostalgic transformation complete! Preparing your photo...",
+        "delay": 14000,
+        "color": "#eedd82"
+      }
+    ],
+    "completionMessage": "Selamat Datang to the '80s!"
+  },
+  "promptTemplate": {
+    "framing": "Medium shot, waist up shot of",
+    "maleStyle": "executive leading man",
+    "femaleStyle": "charismatic k-pop idol",
+    "borderStyle": "The image features a modern graphic overlay with a translucent frosted-glass border forming a frame.",
+    "topTitle": "Union of ITE Training Staff",
+    "topTitleStyle": "rendered in an exquisite gold-leaf, fluid hand-drawn script",
+    "subtitle": "1976 – 2026",
+    "subtitleStyle": "elegantly etched in a smaller, minimalist gold serif font directly below it",
+    "bottomTitle": "50th Anniversary",
+    "bottomTitleStyle": "displayed in bold, luminous calligraphy",
+    "typoStyle": "All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders.",
+    "atmosphere": "Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field.",
+    "includeLuckyNum": false,
+    "rawPrompt": "Medium shot, waist up shot of a \"gender\" \"gender_style\" with \"pose\" for a concept photo, dressed in \"clothes_style\". The setting is \"background\". The image features a modern graphic overlay with a translucent frosted-glass border forming a frame. At the top-center apex, the title \"Union of ITE Training Staff\" is rendered in an exquisite gold-leaf, fluid hand-drawn script, followed by the years \"1976 – 2026\" elegantly etched in a smaller, minimalist gold serif font directly below it. At the bottom-center, overlayed above the image, anchored within the ornate border, the title \"50th Anniversary\" is displayed in bold, luminous calligraphy. All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field."
+  },
+  "atmosphereMode": "advanced"
+}

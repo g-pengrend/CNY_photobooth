@@ -1,39 +1,39 @@
 {
   "C01": {
-    "desc": "contemporary short-sleeve button-up shirt in red, white chinos",
-    "lighting": "Red and Crisp White"
-  },
-  "C02": {
-    "desc": "Women's stylish sleeveless A-line dress with a structured white bodice, deep red skirt, and cascading white Vanda Miss Joaquim orchid motifs",
-    "lighting": "Red and Crisp White"
-  },
-  "C03": {
-    "desc": "midnight-black silk with heavy gold-thread dragon-scale embroidery",
-    "lighting": "Midnight Blue and Gold"
-  },
-  "C04": {
-    "desc": "deep vermilion robe layered under a black iron chest plate",
-    "lighting": "Vermillion and Steel Grey"
-  },
-  "C05": {
-    "desc": "contemporary knee-length dress crafted from metallic gold floral brocade",
-    "lighting": "Warm Gold and Soft Red"
-  },
-  "C06": {
-    "desc": "multi-layered dress in moonlight silver and soft peach silk",
-    "lighting": "Silver and Peach"
-  },
-  "C07": {
-    "desc": "short, structured shoulder cape in crimson velvet with gold floral embroidery",
-    "lighting": "Crimson and Pink"
-  },
-  "C08": {
-    "desc": "Crimson velvet cape over a rich peony-patterned gold-pink gown",
-    "lighting": "Crimson and Pink"
-  },
-  "C09": {
     "desc": "premium matte-finish satin",
     "lighting": "Emerald Green and Gold"
+  },
+  "C02": {
+    "desc": "textured silk-linen tunic",
+    "lighting": "Matte Silk and Pearl"
+  },
+  "C03": {
+    "desc": "majestic full-set gold Songket Bunga Tabur",
+    "lighting": "Royal Yellow and Gold"
+  },
+  "C04": {
+    "desc": "asymmetrical iridescent silk with 3D geometric textures",
+    "lighting": "Midnight Blue and Silver"
+  },
+  "C05": {
+    "desc": "floral jacquard brocade and metallic emerald songket",
+    "lighting": "Champagne Gold and Emerald"
+  },
+  "C06": {
+    "desc": "structured crepe-silk and a crystal-embellished bawal hijab",
+    "lighting": "Dusty Lavender and Crystal"
+  },
+  "C07": {
+    "desc": "full-set royal yellow songket with a diamond-encrusted crown and ornate gold kerongsang",
+    "lighting": "Royal Yellow and Diamonds"
+  },
+  "C08": {
+    "desc": "structured Duchess satin and a signature heritage pearl",
+    "lighting": "Midnight Teal and Pearl"
+  },
+  "C09": {
+    "desc": "intricate Swiss Voile and hand-drawn Batik",
+    "lighting": "Turquoise and Antique Gold"
   },
   "C10": {
     "desc": "intricate Swiss Voile and hand-drawn Batik",
