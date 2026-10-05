@@ -312,30 +312,71 @@
                         </div>
 
                         <!-- Template Controls Bar -->
-                        <div style="display: flex; gap: 1rem; align-items: flex-end; background: rgba(0,0,0,0.35); padding: 1rem 1.2rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 1.2rem; flex-wrap: wrap;">
-                            <div style="flex: 1; min-width: 260px;">
-                                <label style="font-size: 0.82rem; font-weight: 600; color: #a5b4fc; display: block; margin-bottom: 0.35rem;">
-                                    💡 Theme Intent / Event Concept (Optional — or leave blank to let AI propose):
-                                </label>
-                                <input id="adv-theme-intent" type="text" placeholder="e.g. Vintage Parisian Bistro, Cyberpunk Gala, Mid-Autumn Lanterns (or leave blank)" style="width: 100%; font-size: 0.85rem;" oninput="updateFullSystematicGenAiPrompt()">
+                        <div style="background: rgba(0,0,0,0.35); padding: 1.1rem 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 1.2rem;">
+                            <div style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; margin-bottom: 1rem;">
+                                <div style="flex: 1; min-width: 260px;">
+                                    <label style="font-size: 0.82rem; font-weight: 600; color: #a5b4fc; display: block; margin-bottom: 0.35rem;">
+                                        💡 Theme Intent / Event Concept (Optional — or leave blank to let AI propose):
+                                    </label>
+                                    <input id="adv-theme-intent" type="text" placeholder="e.g. Vintage Parisian Bistro, Cyberpunk Gala, Mid-Autumn Lanterns (or leave blank)" style="width: 100%; font-size: 0.85rem;" oninput="updateFullSystematicGenAiPrompt()">
+                                </div>
+                                <div>
+                                    <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-weight: 600; color: #fff; font-size: 0.88rem; background: rgba(99, 102, 241, 0.15); padding: 0.6rem 1rem; border-radius: var(--radius-sm); border: 1px solid rgba(99, 102, 241, 0.4);">
+                                        <input id="chk-film-strip-adv" type="checkbox" onchange="syncThemeAdvancedIdentity('filmStrip', this.checked)">
+                                        <span>🎞️ Enable Rolling Film Screen</span>
+                                    </label>
+                                </div>
                             </div>
-                            <div>
-                                <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-weight: 600; color: #fff; font-size: 0.88rem; background: rgba(99, 102, 241, 0.15); padding: 0.6rem 1rem; border-radius: var(--radius-sm); border: 1px solid rgba(99, 102, 241, 0.4);">
-                                    <input id="chk-film-strip-adv" type="checkbox" onchange="syncThemeAdvancedIdentity('filmStrip', this.checked)">
-                                    <span>🎞️ Enable Rolling Film Screen</span>
-                                </label>
+
+                            <!-- Dynamic Atmospheric Elements Toggles (Like CNY Banners & Hari Raya Arch) -->
+                            <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.85rem;">
+                                <div style="font-size: 0.78rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem;">
+                                    <span>🎨</span> Dynamic Thematic Elements to Include in Prompt &amp; CSS:
+                                </div>
+                                <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; font-size: 0.82rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer; background: rgba(255,255,255,0.04); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9;">
+                                        <input id="chk-dynamic-banners" type="checkbox" checked onchange="updateFullSystematicGenAiPrompt()">
+                                        <span>🎋 Vertical Side Banners / Couplets (Like CNY)</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer; background: rgba(255,255,255,0.04); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9;">
+                                        <input id="chk-dynamic-arch" type="checkbox" checked onchange="updateFullSystematicGenAiPrompt()">
+                                        <span>🏛️ Top Decorative Arch / Marquee (Like Hari Raya)</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer; background: rgba(255,255,255,0.04); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9;">
+                                        <input id="chk-dynamic-ornaments" type="checkbox" checked onchange="updateFullSystematicGenAiPrompt()">
+                                        <span>🏮 Corner Swaying Ornaments</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer; background: rgba(255,255,255,0.04); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9;">
+                                        <input id="chk-dynamic-particles" type="checkbox" checked onchange="updateFullSystematicGenAiPrompt()">
+                                        <span>✨ Floating Thematic Particles &amp; Badges</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer; background: rgba(255,255,255,0.04); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9;">
+                                        <input id="chk-dynamic-frame" type="checkbox" checked onchange="updateFullSystematicGenAiPrompt()">
+                                        <span>🌌 Thematic Vignette &amp; Borders</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Full Prompt Template Display -->
                         <div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
-                                <label style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin: 0;">
-                                    📄 Prompt Template (Shown in full &amp; ready to copy):
-                                </label>
-                                <span style="font-size: 0.75rem; color: var(--text-dim);">Live updates as options change</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <label style="font-size: 0.85rem; font-weight: 700; color: #a5b4fc; margin: 0; display: flex; align-items: center; gap: 0.4rem;">
+                                        📄 Complete Systematic GenAI Prompt Template:
+                                    </label>
+                                    <span style="font-size: 0.74rem; color: var(--text-dim);">(Ready to copy directly into AI)</span>
+                                </div>
+                                <button type="button" class="admin-btn admin-btn-accent" onclick="copyFullSystematicGenAiPrompt()" style="padding: 0.45rem 1.15rem; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; box-shadow: 0 0 14px rgba(99, 102, 241, 0.45);">
+                                    <span>📋</span> Copy Prompt Template
+                                </button>
                             </div>
-                            <textarea id="adv-systematic-prompt-full" rows="12" readonly style="width: 100%; padding: 1rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #cbd5e1; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.82rem; line-height: 1.5; resize: vertical;" title="Copyable prompt template"></textarea>
+                            <div style="position: relative;">
+                                <textarea id="adv-systematic-prompt-full" rows="13" readonly style="width: 100%; padding: 1rem; padding-right: 5.5rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #cbd5e1; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.82rem; line-height: 1.5; resize: vertical;" title="Copyable prompt template"></textarea>
+                                <button type="button" onclick="copyFullSystematicGenAiPrompt()" title="Click to copy full prompt" style="position: absolute; top: 10px; right: 12px; background: rgba(99, 102, 241, 0.9); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 0.35rem 0.85rem; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; backdrop-filter: blur(4px); box-shadow: 0 4px 10px rgba(0,0,0,0.4);">
+                                    📋 Copy
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -347,7 +388,7 @@
                                 <h3 class="section-title" style="margin: 0; font-size: 1.25rem;">Step 2: Paste GenAI Output &amp; Populate Theme</h3>
                             </div>
                             <p class="section-desc" style="margin-top: 0.4rem;">
-                                After the AI outputs the 3 blocks, follow the instructions below to paste each block into the corresponding editor:
+                                After the AI outputs the 3 blocks, paste each block into its corresponding tab below. Theme details populate automatically in real-time.
                             </p>
                         </div>
 
@@ -355,15 +396,36 @@
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.8rem; margin-bottom: 1.3rem;">
                             <div style="background: rgba(250, 204, 21, 0.08); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
                                 <div style="font-weight: 700; color: #fde047; font-size: 0.85rem; margin-bottom: 0.2rem;">1️⃣ Copy Block 1 (JSON)</div>
-                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>theme_identity.json</strong> tab below and click <em>✨ Apply JSON</em> to auto-fill slug, title, copy, colors, and waiting sequence!</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>theme_identity.json</strong> tab below. Details below auto-fill instantly upon paste!</div>
                             </div>
                             <div style="background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
                                 <div style="font-weight: 700; color: #6ee7b7; font-size: 0.85rem; margin-bottom: 0.2rem;">2️⃣ Copy Block 2 (HTML)</div>
-                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>decorations.html</strong> tab below. Contains swaying ornaments and floating celebratory particles.</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>decorations.html</strong> tab below. Contains swaying ornaments, side banners, and floating particles.</div>
                             </div>
                             <div style="background: rgba(96, 165, 250, 0.08); border: 1px solid rgba(96, 165, 250, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
                                 <div style="font-weight: 700; color: #93c5fd; font-size: 0.85rem; margin-bottom: 0.2rem;">3️⃣ Copy Block 3 (CSS)</div>
-                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>style.css</strong> tab below. Contains design tokens and animations.</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>style.css</strong> tab below. Contains keyframe animations and color tokens.</div>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Sample Templates Quick Buttons -->
+                        <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius-sm); padding: 0.6rem 0.9rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                            <span style="font-size: 0.78rem; color: #cbd5e1; font-weight: 600;">
+                                💡 Explore Dynamic Working Examples (1-Click Load into Editors):
+                            </span>
+                            <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                                <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.76rem; padding: 0.25rem 0.65rem;" onclick="loadQuickAtmosphereTemplate('cny')">
+                                    🏮 CNY (Couplets &amp; Lanterns)
+                                </button>
+                                <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.76rem; padding: 0.25rem 0.65rem;" onclick="loadQuickAtmosphereTemplate('hariraya')">
+                                    🌙 Hari Raya (Top Arch &amp; Ketupats)
+                                </button>
+                                <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.76rem; padding: 0.25rem 0.65rem;" onclick="loadQuickAtmosphereTemplate('cyberpunk')">
+                                    🎆 Cyberpunk (Neon Banners)
+                                </button>
+                                <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.76rem; padding: 0.25rem 0.65rem;" onclick="loadQuickAtmosphereTemplate('gala')">
+                                    ✨ Grand Gala (Ballroom Arch)
+                                </button>
                             </div>
                         </div>
 
@@ -381,9 +443,6 @@
                                 </button>
                             </div>
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.4rem 0.8rem;" onclick="loadQuickAtmosphereTemplate()">
-                                    💡 Load Sample Template
-                                </button>
                                 <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.4rem 0.8rem;" onclick="clearAtmosphereEditors()">
                                     🧹 Clear
                                 </button>

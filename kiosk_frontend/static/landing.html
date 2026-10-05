@@ -279,7 +279,7 @@
                     if (!grid) return;
 
                     const builtInSlugs = ['cny', 'hariraya', 'deepavali', 'uits', 'ndp2026', 'master'];
-                    const customThemes = themes.filter(t => t.slug && !builtInSlugs.includes(t.slug.toLowerCase()) && !document.getElementById(`${t.slug}-card`));
+                    const customThemes = themes.filter(t => t.slug && t.status !== 'draft' && !builtInSlugs.includes(t.slug.toLowerCase()) && !document.getElementById(`${t.slug}-card`));
 
                     customThemes.forEach(t => {
                         const slug = t.slug;

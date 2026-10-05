@@ -83,6 +83,7 @@ function renderThemeSidebar() {
     const themeItemsHtml = studio.themes.map(t => {
         const isActive = isThemeView && studio.activeTheme?.slug === t.slug;
         const isDraft = t.status === 'draft';
+        const isReserved = ['cny', 'hariraya', 'deepavali', 'uits', 'ndp2026', 'master'].includes(t.slug?.toLowerCase());
         return `<div class="theme-item ${isActive ? 'active' : ''} ${isDraft ? 'theme-item-draft' : ''}" data-slug="${t.slug}">
             <div class="theme-item-info">
                 <span class="theme-item-icon">${t.icon || '✨'}</span>
@@ -93,7 +94,7 @@ function renderThemeSidebar() {
             </div>
             <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.3rem;">
                 <span class="${isDraft ? 'badge-draft' : 'badge-live'}">${t.status || 'live'}</span>
-                ${!isDraft ? `<button class="sidebar-delete-btn" title="Delete theme" onclick="openDeleteThemeModal('${t.slug}','${(t.title||'').replace(/'/g,"\\'")}'); event.stopPropagation();">🗑️</button>` : ''}
+                ${!isReserved ? `<button class="sidebar-delete-btn" title="Delete theme" onclick="openDeleteThemeModal('${t.slug}','${(t.title||'').replace(/'/g,"\\'")}'); event.stopPropagation();">🗑️</button>` : ''}
             </div>
         </div>`;
     }).join('');
@@ -116,8 +117,8 @@ async function selectTheme(slug) {
         studio.activeTheme = await themeRes.json();
         studio.activeData = dataRes.ok ? await dataRes.json() : { clothes: [], poses: [], backgrounds: [] };
 
-        // Remove draft placeholder if a real theme is now selected
-        studio.themes = studio.themes.filter(t => !(t.status === 'draft' && t.slug !== slug));
+        // Remove in-memory unsaved draft placeholder if another theme is selected
+        studio.themes = studio.themes.filter(t => !(t.isUnsavedDraft && t.slug !== slug));
 
         renderThemeSidebar();
         populateFormFields(studio.activeTheme);
@@ -158,10 +159,11 @@ function createNewTheme() {
         slug: defaultSlug,
         title: 'Untitled Theme ✨',
         icon: '🎉',
-        status: 'draft'
+        status: 'draft',
+        isUnsavedDraft: true
     };
-    // Remove any existing unsaved draft placeholders first
-    studio.themes = studio.themes.filter(t => t.status !== 'draft');
+    // Remove any existing unsaved in-memory placeholders first
+    studio.themes = studio.themes.filter(t => !t.isUnsavedDraft);
     studio.themes.push(placeholder);
 
     studio.activeTheme = {
@@ -173,6 +175,7 @@ function createNewTheme() {
         description: 'Celebrate in style with AI-powered festive portrait try-ons.',
         cta: 'Start Experience',
         status: 'draft',
+        isUnsavedDraft: true,
         features: { luckyNumber: false, filmStrip: false, genderFilter: true },
         background: { type: 'particles', floatingIcons: ['✨', '⭐', '🎉', '✦'], filmStrip: false },
         style: {
@@ -1667,7 +1670,7 @@ window.confirmDeleteTheme = async function () {
 
     try {
         let res = await fetch(`/api/theme/${slug}`, { method: 'DELETE' });
-        if (!res.ok) {
+        if (!res.ok && res.status !== 404) {
             // Try POST fallback endpoint
             res = await fetch('/api/admin/theme/delete', {
                 method: 'POST',
@@ -1676,16 +1679,13 @@ window.confirmDeleteTheme = async function () {
             });
         }
 
-        let data = {};
-        try {
-            data = await res.json();
-        } catch (je) {
-            // If response is HTML or plain text, avoid SyntaxError: unexpected token '<'
-            throw new Error(`Server returned HTTP ${res.status}`);
-        }
-
-        if (!res.ok) {
-            throw new Error(data.error || `Delete failed with status ${res.status}`);
+        if (!res.ok && res.status !== 404) {
+            let errMsg = `Delete failed with status ${res.status}`;
+            try {
+                const data = await res.json();
+                errMsg = data.error || errMsg;
+            } catch (je) {}
+            throw new Error(errMsg);
         }
 
         // 1. Immediately close the delete prompt modal
@@ -2057,6 +2057,8 @@ const ATMOSPHERE_PRESETS = {
         phrases: "Huat Ah!, 新年快乐, 万事如意, 发",
         texture: "Subtle traditional Chinese geometric fretwork / lattice pattern overlay",
         json: JSON.stringify({
+            slug: "cny_festive_2026",
+            title: "Lunar New Year Prosperity",
             subtitle: "Year of the Horse Celebration",
             badge: "Lunar Special",
             icon: "🏮",
@@ -2064,7 +2066,7 @@ const ATMOSPHERE_PRESETS = {
             description: "Step into an auspicious Lunar New Year portrait transformation with traditional imperial and modern festive aesthetics.",
             style: {
                 fontFamily: "'Outfit', sans-serif",
-                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
+                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Ma+Shan+Zheng&display=swap",
                 colors: {
                     background: "#0c0d14",
                     text: "#ffffff",
@@ -2088,28 +2090,120 @@ const ATMOSPHERE_PRESETS = {
                 completionMessage: "Huat Ah! Ready to celebrate."
             }
         }, null, 2),
-        html: `<!-- CNY Festive Atmosphere -->
+        html: `<!-- CNY Dynamic Atmosphere Decorations -->
+<!-- Imperial Top Archway -->
+<div class="thematic-top-arch">
+    <div class="arch-crest">✦ 新年快乐 • GONG XI FA CAI ✦</div>
+</div>
+
+<!-- Auspicious Chinese Couplet Banners -->
+<div class="thematic-side-banner banner-left">
+    <div class="banner-crest">🏮</div>
+    <div class="banner-content">
+        <span class="banner-char">恭</span>
+        <span class="banner-char">喜</span>
+        <span class="banner-char">发</span>
+        <span class="banner-char">财</span>
+    </div>
+    <div class="banner-tassel">🧧</div>
+</div>
+<div class="thematic-side-banner banner-right">
+    <div class="banner-crest">🏮</div>
+    <div class="banner-content">
+        <span class="banner-char">万</span>
+        <span class="banner-char">事</span>
+        <span class="banner-char">如</span>
+        <span class="banner-char">意</span>
+    </div>
+    <div class="banner-tassel">🧧</div>
+</div>
+
+<!-- Corner Swaying Lanterns -->
 <div class="custom-ornament ornament-left">🏮</div>
 <div class="custom-ornament ornament-right">🏮</div>
+
+<!-- Floating Celebratory Huat Particles -->
 <div class="custom-particle p-1"><span>🧧</span><label>Huat Ah!</label></div>
 <div class="custom-particle p-2"><span>🍊</span><label>发</label></div>
 <div class="custom-particle p-3"><span>💰</span><label>Huat Ah!</label></div>
 <div class="custom-particle p-4"><span>🧨</span><label>发</label></div>
 <div class="custom-particle p-5"><span>🍍</span><label>Huat Ah!</label></div>`,
-        css: `/* CNY Atmosphere Styles */
+        css: `/* CNY Dynamic Atmosphere Styles */
 .persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
-.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; filter: drop-shadow(0 8px 16px rgba(255, 60, 60, 0.4)); transform-origin: top center; animation: cnySwing 3.5s ease-in-out infinite alternate; pointer-events: none; }
+
+/* Top Imperial Arch */
+.thematic-top-arch {
+    position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+    width: 72%; max-width: 820px; height: 75px;
+    background: radial-gradient(ellipse at top, rgba(225, 29, 72, 0.35) 0%, transparent 75%);
+    border-bottom: 2px solid #ffd700; border-radius: 0 0 50% 50%;
+    box-shadow: 0 10px 30px rgba(225, 29, 72, 0.3);
+    display: flex; justify-content: center; align-items: flex-end; padding-bottom: 10px;
+    pointer-events: none; z-index: 10;
+}
+.arch-crest {
+    font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
+    color: #ffd700; text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+/* Vertical Couplet Banners */
+.thematic-side-banner {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 64px; padding: 18px 0; border-radius: 8px;
+    background: linear-gradient(180deg, #8b0000 0%, #d32f2f 50%, #8b0000 100%);
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 22px rgba(255, 215, 0, 0.4), inset 0 0 10px rgba(0, 0, 0, 0.6);
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    z-index: 10; pointer-events: none;
+    animation: bannerBreathe 4s ease-in-out infinite alternate;
+}
+.banner-left { left: 24px; }
+.banner-right { right: 24px; }
+.banner-crest, .banner-tassel { font-size: 1.2rem; }
+.banner-content { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.banner-char {
+    font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+    font-size: 1.8rem; font-weight: 800; color: #ffd700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 12px rgba(255, 215, 0, 0.7);
+    line-height: 1;
+}
+@keyframes bannerBreathe {
+    0% { transform: translateY(-50%) scale(0.98); box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
+    100% { transform: translateY(-50%) scale(1.02); box-shadow: 0 0 28px rgba(255, 215, 0, 0.6); }
+}
+@media (max-width: 900px) { .thematic-side-banner { display: none; } }
+
+/* Corner Swaying Lanterns */
+.custom-ornament {
+    position: absolute; top: -10px; font-size: 3.5rem;
+    filter: drop-shadow(0 8px 16px rgba(255, 60, 60, 0.4));
+    transform-origin: top center; animation: cnySwing 3.5s ease-in-out infinite alternate;
+    pointer-events: none; z-index: 11;
+}
 .ornament-left { left: 24px; }
 .ornament-right { right: 24px; animation-delay: -1.7s; }
 @keyframes cnySwing { 0% { transform: rotate(-8deg); } 100% { transform: rotate(8deg); } }
-.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 9s linear infinite; pointer-events: none; }
-.custom-particle label { font-size: 0.75rem; font-weight: 800; color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.8); margin-top: 4px; }
+
+/* Floating Huat Particles */
+.custom-particle {
+    position: absolute; display: flex; flex-direction: column; align-items: center;
+    bottom: -80px; font-size: 2rem; animation: floatUpward 9s linear infinite; pointer-events: none;
+}
+.custom-particle label {
+    font-size: 0.75rem; font-weight: 800; color: #ffd700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.8); margin-top: 4px;
+}
 .p-1 { left: 10%; animation-delay: 0s; }
 .p-2 { left: 30%; animation-delay: 2s; font-size: 2.4rem; }
 .p-3 { left: 55%; animation-delay: 4.5s; }
 .p-4 { left: 75%; animation-delay: 1.2s; font-size: 1.8rem; }
 .p-5 { left: 88%; animation-delay: 6s; }
-@keyframes floatUpward { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }`
+@keyframes floatUpward {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    15% { opacity: 0.9; }
+    85% { opacity: 0.9; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+}`
     },
     hariraya: {
         concept: "Hari Raya Aidilfitri Warmth & Forgiveness",
@@ -2118,6 +2212,8 @@ const ATMOSPHERE_PRESETS = {
         phrases: "Selamat Hari Raya, Syawal!, Maaf Zahir & Batin",
         texture: "Islamic arabesque geometric star pattern overlay",
         json: JSON.stringify({
+            slug: "hari_raya_syawal",
+            title: "Hari Raya Aidilfitri",
             subtitle: "Syawal Festive Celebration",
             badge: "Hari Raya Edition",
             icon: "🌙",
@@ -2149,203 +2245,120 @@ const ATMOSPHERE_PRESETS = {
                 completionMessage: "Selamat Hari Raya Aidilfitri!"
             }
         }, null, 2),
-        html: `<!-- Hari Raya Festive Atmosphere -->
+        html: `<!-- Hari Raya Dynamic Atmosphere -->
+<!-- Top Mosque Crescent Archway -->
+<div class="thematic-top-arch">
+    <div class="arch-crest">🌙 SELAMAT HARI RAYA AIDILFITRI 🌙</div>
+</div>
+
+<!-- Songket Emerald Banners -->
+<div class="thematic-side-banner banner-left">
+    <div class="banner-crest">⭐</div>
+    <div class="banner-content">
+        <span class="banner-char">S</span>
+        <span class="banner-char">Y</span>
+        <span class="banner-char">A</span>
+        <span class="banner-char">W</span>
+        <span class="banner-char">A</span>
+        <span class="banner-char">L</span>
+    </div>
+    <div class="banner-tassel">🌿</div>
+</div>
+<div class="thematic-side-banner banner-right">
+    <div class="banner-crest">⭐</div>
+    <div class="banner-content">
+        <span class="banner-char">B</span>
+        <span class="banner-char">A</span>
+        <span class="banner-char">T</span>
+        <span class="banner-char">I</span>
+        <span class="banner-char">N</span>
+    </div>
+    <div class="banner-tassel">🌿</div>
+</div>
+
+<!-- Corner Swaying Ketupat Ornaments -->
 <div class="custom-ornament ornament-left">🌿</div>
 <div class="custom-ornament ornament-right">🌿</div>
+
+<!-- Floating Raya Particles -->
 <div class="custom-particle p-1"><span>🌙</span><label>Syawal!</label></div>
 <div class="custom-particle p-2"><span>🕌</span><label>Raya</label></div>
 <div class="custom-particle p-3"><span>⭐</span><label>Maaf</label></div>
 <div class="custom-particle p-4"><span>✨</span><label>Zahir & Batin</label></div>`,
         css: `/* Hari Raya Atmosphere Styles */
 .persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
-.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; filter: drop-shadow(0 8px 16px rgba(16, 185, 129, 0.4)); transform-origin: top center; animation: rayaSwing 4s ease-in-out infinite alternate; pointer-events: none; }
+
+/* Top Mosque Arch */
+.thematic-top-arch {
+    position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+    width: 72%; max-width: 820px; height: 80px;
+    background: radial-gradient(ellipse at top, rgba(16, 185, 129, 0.3) 0%, transparent 75%);
+    border-bottom: 2px solid #34d399; border-radius: 0 0 50% 50%;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.25);
+    display: flex; justify-content: center; align-items: flex-end; padding-bottom: 10px;
+    pointer-events: none; z-index: 10;
+}
+.arch-crest {
+    font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
+    color: #34d399; text-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
+}
+
+/* Vertical Songket Banners */
+.thematic-side-banner {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 60px; padding: 18px 0; border-radius: 8px;
+    background: linear-gradient(180deg, #064e3b 0%, #047857 50%, #064e3b 100%);
+    border: 2px solid #34d399;
+    box-shadow: 0 0 20px rgba(52, 211, 153, 0.35), inset 0 0 8px rgba(0, 0, 0, 0.6);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    z-index: 10; pointer-events: none;
+    animation: bannerBreathe 4s ease-in-out infinite alternate;
+}
+.banner-left { left: 24px; }
+.banner-right { right: 24px; }
+.banner-crest, .banner-tassel { font-size: 1.1rem; }
+.banner-content { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.banner-char {
+    font-size: 1.3rem; font-weight: 800; color: #34d399;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(52, 211, 153, 0.7);
+    line-height: 1;
+}
+@keyframes bannerBreathe {
+    0% { transform: translateY(-50%) scale(0.98); }
+    100% { transform: translateY(-50%) scale(1.02); }
+}
+@media (max-width: 900px) { .thematic-side-banner { display: none; } }
+
+/* Corner Ketupats */
+.custom-ornament {
+    position: absolute; top: -10px; font-size: 3.5rem;
+    filter: drop-shadow(0 8px 16px rgba(16, 185, 129, 0.4));
+    transform-origin: top center; animation: rayaSwing 4s ease-in-out infinite alternate;
+    pointer-events: none; z-index: 11;
+}
 .ornament-left { left: 24px; }
 .ornament-right { right: 24px; animation-delay: -2s; }
 @keyframes rayaSwing { 0% { transform: rotate(-7deg); } 100% { transform: rotate(7deg); } }
-.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 10s linear infinite; pointer-events: none; }
-.custom-particle label { font-size: 0.75rem; font-weight: 700; color: #34d399; text-shadow: 0 0 8px rgba(52, 211, 153, 0.8); margin-top: 4px; }
+
+/* Floating Particles */
+.custom-particle {
+    position: absolute; display: flex; flex-direction: column; align-items: center;
+    bottom: -80px; font-size: 2rem; animation: floatUpward 10s linear infinite; pointer-events: none;
+}
+.custom-particle label {
+    font-size: 0.75rem; font-weight: 700; color: #34d399;
+    text-shadow: 0 0 8px rgba(52, 211, 153, 0.8); margin-top: 4px;
+}
 .p-1 { left: 15%; animation-delay: 0s; }
 .p-2 { left: 40%; animation-delay: 3s; font-size: 2.2rem; }
 .p-3 { left: 65%; animation-delay: 1.5s; }
 .p-4 { left: 85%; animation-delay: 5s; }
-@keyframes floatUpward { 0% { transform: translateY(0) scale(0.8); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh) scale(1.1); opacity: 0; } }`
-    },
-    deepavali: {
-        concept: "Deepavali Festival of Lights & Auspicious Glow",
-        ornaments: "Hanging brass Diya oil lamps with glowing golden flames suspended at top corners",
-        particles: "🪔, 🦚, 🎆, ✨",
-        phrases: "Shubh Deepavali, Festival of Lights, Prosperity, Joy",
-        texture: "Subtle luminous golden Rangoli mandala pattern in background",
-        json: JSON.stringify({
-            subtitle: "Festival of Lights Celebration",
-            badge: "Deepavali Edition",
-            icon: "🪔",
-            cta: "Begin Experience",
-            description: "Experience the brilliance of the Festival of Lights with resplendent silk sarees, sherwanis, and golden rangoli auras.",
-            style: {
-                fontFamily: "'Outfit', sans-serif",
-                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
-                colors: {
-                    background: "#12081d",
-                    text: "#ffffff",
-                    primary: "#2e1065",
-                    accent: "#f59e0b",
-                    accentGlow: "rgba(245, 158, 11, 0.4)",
-                    surface: "rgba(255, 255, 255, 0.05)",
-                    surfaceBorder: "rgba(245, 158, 11, 0.35)"
-                }
-            },
-            waitingExperience: {
-                title: "Lighting the Diyas...",
-                subtitle: "Rendering your radiant Deepavali portrait",
-                sequence: [
-                    { text: "Kindling auspicious oil lamps of wisdom and joy...", delay: 500, color: "#fbbf24" },
-                    { text: "Weaving intricate Banarasi silk and zardozi embroidery...", delay: 3500, color: "#ffffff" },
-                    { text: "Adorning with radiant rangoli lights and peacock auras...", delay: 7000, color: "#f59e0b" },
-                    { text: "Fine-tuning golden luminescence and warmth...", delay: 10500, color: "#fbbf24" },
-                    { text: "Shubh Deepavali! Your luminous portrait is ready...", delay: 14000, color: "#ffffff" }
-                ],
-                completionMessage: "Shubh Deepavali!"
-            }
-        }, null, 2),
-        html: `<!-- Deepavali Festive Atmosphere -->
-<div class="custom-ornament ornament-left">🪔</div>
-<div class="custom-ornament ornament-right">🪔</div>
-<div class="custom-particle p-1"><span>🪔</span><label>Shubh Deepavali</label></div>
-<div class="custom-particle p-2"><span>✨</span><label>Joy & Light</label></div>
-<div class="custom-particle p-3"><span>🦚</span><label>Prosperity</label></div>
-<div class="custom-particle p-4"><span>🎆</span><label>Auspicious</label></div>`,
-        css: `/* Deepavali Atmosphere Styles */
-.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
-.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.8)); transform-origin: top center; animation: diyaSway 3s ease-in-out infinite alternate; pointer-events: none; }
-.ornament-left { left: 24px; }
-.ornament-right { right: 24px; animation-delay: -1.5s; }
-@keyframes diyaSway { 0% { transform: rotate(-6deg) scale(0.98); } 100% { transform: rotate(6deg) scale(1.02); } }
-.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 8.5s ease-in-out infinite; pointer-events: none; }
-.custom-particle label { font-size: 0.75rem; font-weight: 800; color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.9); margin-top: 4px; }
-.p-1 { left: 12%; animation-delay: 0.5s; }
-.p-2 { left: 38%; animation-delay: 2.5s; font-size: 2.2rem; }
-.p-3 { left: 62%; animation-delay: 4.8s; }
-.p-4 { left: 84%; animation-delay: 1.2s; font-size: 2.4rem; }
-@keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh); opacity: 0; } }`
-    },
-    christmas: {
-        concept: "Winter Wonderland & Christmas Joy",
-        ornaments: "Hanging red & gold Christmas baubles with pine needles at top corners",
-        particles: "❄️, ⭐, 🎄, 🎁",
-        phrases: "Merry Christmas, Happy Holidays, Peace & Joy",
-        texture: "Gentle falling snow drift overlay",
-        json: JSON.stringify({
-            subtitle: "Winter Wonderland Edition",
-            badge: "Holiday Special",
-            icon: "🎄",
-            cta: "Enter Wonderland",
-            description: "Transform into cozy, festive holiday elegance with winter velvet, evergreen wreaths, and sparkling snowscapes.",
-            style: {
-                fontFamily: "'Outfit', sans-serif",
-                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
-                colors: {
-                    background: "#08131d",
-                    text: "#ffffff",
-                    primary: "#1e293b",
-                    accent: "#38bdf8",
-                    accentGlow: "rgba(56, 189, 248, 0.35)",
-                    surface: "rgba(255, 255, 255, 0.05)",
-                    surfaceBorder: "rgba(56, 189, 248, 0.3)"
-                }
-            },
-            waitingExperience: {
-                title: "Catching Snowflakes...",
-                subtitle: "Crafting your holiday portrait",
-                sequence: [
-                    { text: "Welcoming winter magic and gentle snowfall...", delay: 500, color: "#38bdf8" },
-                    { text: "Styling cozy holiday knitwear and velvet textures...", delay: 3500, color: "#ffffff" },
-                    { text: "Adding sparkling baubles and twinkling pine needles...", delay: 7000, color: "#38bdf8" },
-                    { text: "Balancing fireside warmth and frosty crystalline glow...", delay: 10500, color: "#ffffff" },
-                    { text: "Merry Christmas! Your holiday portrait is ready...", delay: 14000, color: "#38bdf8" }
-                ],
-                completionMessage: "Merry Christmas & Happy Holidays!"
-            }
-        }, null, 2),
-        html: `<!-- Christmas Atmosphere Decorations -->
-<div class="custom-ornament ornament-left">🎄</div>
-<div class="custom-ornament ornament-right">🎄</div>
-<div class="custom-particle p-1"><span>❄️</span><label>Merry Christmas</label></div>
-<div class="custom-particle p-2"><span>⭐</span><label>Peace</label></div>
-<div class="custom-particle p-3"><span>🎁</span><label>Joy</label></div>
-<div class="custom-particle p-4"><span>❄️</span><label>Holidays</label></div>`,
-        css: `/* Christmas Atmosphere Styles */
-.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
-.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; filter: drop-shadow(0 6px 14px rgba(239, 68, 68, 0.4)); transform-origin: top center; animation: xmasSway 3.2s ease-in-out infinite alternate; pointer-events: none; }
-.ornament-left { left: 24px; }
-.ornament-right { right: 24px; animation-delay: -1.6s; }
-@keyframes xmasSway { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
-.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 9s linear infinite; pointer-events: none; }
-.custom-particle label { font-size: 0.75rem; font-weight: 700; color: #e0f2fe; text-shadow: 0 0 8px rgba(56, 189, 248, 0.8); margin-top: 4px; }
-.p-1 { left: 14%; animation-delay: 0s; }
-.p-2 { left: 35%; animation-delay: 3.2s; }
-.p-3 { left: 60%; animation-delay: 1.8s; }
-.p-4 { left: 82%; animation-delay: 5s; }
-@keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh); opacity: 0; } }`
-    },
-    ndp: {
-        concept: "Singapore National Day Patriotic Celebration",
-        ornaments: "Crimson banners with golden lion head crest and five stars at top corners",
-        particles: "🇸🇬, ⭐, 🎆, ✦",
-        phrases: "Majulah!, Together As One, National Day Celebration",
-        texture: "Subtle geometric crimson & white star lattice pattern overlay",
-        json: JSON.stringify({
-            subtitle: "National Day Parade Gala",
-            badge: "SG Celebration",
-            icon: "🇸🇬",
-            cta: "Celebrate National Day",
-            description: "Celebrate unity and pride with patriotic red-and-white gala attire, skyline fireworks, and Singapore spirit.",
-            style: {
-                fontFamily: "'Outfit', sans-serif",
-                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
-                colors: {
-                    background: "#140a0e",
-                    text: "#ffffff",
-                    primary: "#2d111c",
-                    accent: "#ef4444",
-                    accentGlow: "rgba(239, 68, 68, 0.35)",
-                    surface: "rgba(255, 255, 255, 0.05)",
-                    surfaceBorder: "rgba(239, 68, 68, 0.3)"
-                }
-            },
-            waitingExperience: {
-                title: "Majulah Singapura...",
-                subtitle: "Creating your patriotic celebration portrait",
-                sequence: [
-                    { text: "Celebrating our nation's vibrant story...", delay: 500, color: "#f87171" },
-                    { text: "Styling red-and-white formal threads and crest accents...", delay: 3500, color: "#ffffff" },
-                    { text: "Rendering Marina Bay skyline fireworks and stars...", delay: 7000, color: "#ef4444" },
-                    { text: "Harmonizing festive illumination and unity...", delay: 10500, color: "#ffffff" },
-                    { text: "Majulah! Celebration portrait manifested...", delay: 14000, color: "#f87171" }
-                ],
-                completionMessage: "Majulah Singapura!"
-            }
-        }, null, 2),
-        html: `<!-- National Day Festive Atmosphere -->
-<div class="custom-ornament ornament-left">🇸🇬</div>
-<div class="custom-ornament ornament-right">🇸🇬</div>
-<div class="custom-particle p-1"><span>⭐</span><label>Majulah!</label></div>
-<div class="custom-particle p-2"><span>🎆</span><label>Singapore</label></div>
-<div class="custom-particle p-3"><span>🇸🇬</span><label>Celebrate</label></div>
-<div class="custom-particle p-4"><span>✨</span><label>One Nation</label></div>`,
-        css: `/* NDP Atmosphere Styles */
-.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
-.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; filter: drop-shadow(0 6px 14px rgba(239, 68, 68, 0.4)); transform-origin: top center; animation: ndpSway 3.2s ease-in-out infinite alternate; pointer-events: none; }
-.ornament-left { left: 24px; }
-.ornament-right { right: 24px; animation-delay: -1.6s; }
-@keyframes ndpSway { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
-.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 8.5s linear infinite; pointer-events: none; }
-.custom-particle label { font-size: 0.75rem; font-weight: 700; color: #fee2e2; text-shadow: 0 0 8px rgba(239, 68, 68, 0.8); margin-top: 4px; }
-.p-1 { left: 14%; animation-delay: 0s; }
-.p-2 { left: 38%; animation-delay: 2.8s; }
-.p-3 { left: 65%; animation-delay: 1.4s; }
-.p-4 { left: 85%; animation-delay: 4.5s; }
-@keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh); opacity: 0; } }`
+@keyframes floatUpward {
+    0% { transform: translateY(0) scale(0.8); opacity: 0; }
+    15% { opacity: 0.9; }
+    85% { opacity: 0.9; }
+    100% { transform: translateY(-110vh) scale(1.1); opacity: 0; }
+}`
     },
     cyberpunk: {
         concept: "Cyberpunk Future Gala & Holographic Matrix",
@@ -2354,6 +2367,8 @@ const ATMOSPHERE_PRESETS = {
         phrases: "SYSTEM READY, 4D VISION, CYBER GALA",
         texture: "Subtle digital scanline and holographic matrix grid",
         json: JSON.stringify({
+            slug: "cyberpunk_nexus_2026",
+            title: "Cyberpunk Nexus Gala",
             subtitle: "Neon Nexus Interactive",
             badge: "Cyber Gala",
             icon: "💠",
@@ -2385,26 +2400,263 @@ const ATMOSPHERE_PRESETS = {
                 completionMessage: "UPLINK COMPLETE"
             }
         }, null, 2),
-        html: `<!-- Cyberpunk Atmosphere Decorations -->
+        html: `<!-- Cyberpunk Dynamic Atmosphere -->
+<!-- Holographic Top Marquee -->
+<div class="thematic-top-arch">
+    <div class="arch-crest">⚡ CYBERNETIC MATRIX // UPLINK ONLINE ⚡</div>
+</div>
+
+<!-- Vertical Cyber HUD Banners -->
+<div class="thematic-side-banner banner-left">
+    <div class="banner-crest">💠</div>
+    <div class="banner-content">
+        <span class="banner-char">N</span>
+        <span class="banner-char">E</span>
+        <span class="banner-char">O</span>
+        <span class="banner-char">N</span>
+    </div>
+    <div class="banner-tassel">⚡</div>
+</div>
+<div class="thematic-side-banner banner-right">
+    <div class="banner-crest">💠</div>
+    <div class="banner-content">
+        <span class="banner-char">G</span>
+        <span class="banner-char">A</span>
+        <span class="banner-char">L</span>
+        <span class="banner-char">A</span>
+    </div>
+    <div class="banner-tassel">⚡</div>
+</div>
+
+<!-- Corner Pulsing Cyber Ornaments -->
 <div class="custom-ornament ornament-left">💠</div>
 <div class="custom-ornament ornament-right">💠</div>
+
+<!-- Floating Cyber Particles -->
 <div class="custom-particle p-1"><span>⚡</span><label>SYSTEM ONLINE</label></div>
 <div class="custom-particle p-2"><span>🔮</span><label>4D VISION</label></div>
 <div class="custom-particle p-3"><span>✦</span><label>MANIFEST</label></div>
 <div class="custom-particle p-4"><span>⚡</span><label>CYBER STUDIO</label></div>`,
         css: `/* Cyberpunk Atmosphere Styles */
 .persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
-.custom-ornament { position: absolute; top: 10px; font-size: 3rem; filter: drop-shadow(0 0 16px #6366f1); animation: cyberPulse 2s ease-in-out infinite alternate; pointer-events: none; }
+
+/* Holographic Top Arch */
+.thematic-top-arch {
+    position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+    width: 75%; max-width: 860px; height: 75px;
+    background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.4) 0%, transparent 75%);
+    border-bottom: 2px solid #818cf8; border-radius: 0 0 50% 50%;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
+    display: flex; justify-content: center; align-items: flex-end; padding-bottom: 10px;
+    pointer-events: none; z-index: 10;
+}
+.arch-crest {
+    font-size: 0.8rem; font-family: monospace; font-weight: 800; letter-spacing: 2px;
+    color: #a5b4fc; text-shadow: 0 0 10px rgba(99, 102, 241, 0.9);
+}
+
+/* Vertical Cyber Banners */
+.thematic-side-banner {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 58px; padding: 16px 0; border-radius: 8px;
+    background: rgba(10, 15, 35, 0.85); backdrop-filter: blur(8px);
+    border: 2px solid #6366f1;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4), inset 0 0 12px rgba(99, 102, 241, 0.2);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    z-index: 10; pointer-events: none;
+    animation: cyberPulse 2.5s ease-in-out infinite alternate;
+}
+.banner-left { left: 24px; }
+.banner-right { right: 24px; }
+.banner-content { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.banner-char {
+    font-family: monospace; font-size: 1.3rem; font-weight: 800; color: #818cf8;
+    text-shadow: 0 0 10px #6366f1; line-height: 1;
+}
+@keyframes cyberPulse { 0% { transform: translateY(-50%) scale(0.98); } 100% { transform: translateY(-50%) scale(1.02); } }
+@media (max-width: 900px) { .thematic-side-banner { display: none; } }
+
+/* Corner Cyber Ornaments */
+.custom-ornament {
+    position: absolute; top: 10px; font-size: 3rem;
+    filter: drop-shadow(0 0 16px #6366f1);
+    animation: cyberPulse 2s ease-in-out infinite alternate; pointer-events: none; z-index: 11;
+}
 .ornament-left { left: 24px; }
 .ornament-right { right: 24px; animation-delay: -1s; }
-@keyframes cyberPulse { 0% { transform: scale(0.95); opacity: 0.7; } 100% { transform: scale(1.05); opacity: 1; } }
-.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 7s linear infinite; pointer-events: none; }
-.custom-particle label { font-size: 0.7rem; font-family: monospace; font-weight: 800; color: #a5b4fc; text-shadow: 0 0 8px #6366f1; letter-spacing: 1px; margin-top: 4px; }
+
+/* Floating Particles */
+.custom-particle {
+    position: absolute; display: flex; flex-direction: column; align-items: center;
+    bottom: -80px; font-size: 2rem; animation: floatUpward 7s linear infinite; pointer-events: none;
+}
+.custom-particle label {
+    font-size: 0.7rem; font-family: monospace; font-weight: 800; color: #a5b4fc;
+    text-shadow: 0 0 8px #6366f1; letter-spacing: 1px; margin-top: 4px;
+}
 .p-1 { left: 16%; animation-delay: 0s; }
 .p-2 { left: 42%; animation-delay: 2.2s; }
 .p-3 { left: 68%; animation-delay: 1.1s; }
 .p-4 { left: 88%; animation-delay: 4s; }
-@keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh); opacity: 0; } }`
+@keyframes floatUpward {
+    0% { transform: translateY(0); opacity: 0; }
+    15% { opacity: 0.9; }
+    85% { opacity: 0.9; }
+    100% { transform: translateY(-110vh); opacity: 0; }
+}`
+    },
+    gala: {
+        concept: "Grand Gala Ballroom & Red Carpet Elegance",
+        ornaments: "Swaying crystal chandeliers with golden champagne radiance",
+        particles: "✨, 🥂, 🍾, ✦, 👑",
+        phrases: "NIGHT OF ELEGANCE, GRAND GALA, LUXURY & CELEBRATION",
+        texture: "Subtle stardust and royal velvet gold dust overlay",
+        json: JSON.stringify({
+            slug: "grand_gala_2026",
+            title: "Grand Gala Royale",
+            subtitle: "Night of Elegance & Luxury",
+            badge: "Gala Edition",
+            icon: "✨",
+            cta: "Enter Ballroom",
+            description: "Step onto the red carpet for an evening of luxury, haute couture, tailored black-tie tuxedos, and shimmering gala gowns.",
+            style: {
+                fontFamily: "'Outfit', sans-serif",
+                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap",
+                colors: {
+                    background: "#0a0a0f",
+                    text: "#ffffff",
+                    primary: "#14141e",
+                    accent: "#d4af37",
+                    accentGlow: "rgba(212, 175, 55, 0.35)",
+                    surface: "rgba(255, 255, 255, 0.05)",
+                    surfaceBorder: "rgba(212, 175, 55, 0.3)"
+                }
+            },
+            waitingExperience: {
+                title: "PREPARING HAUTE COUTURE...",
+                subtitle: "Curating your red carpet portrait",
+                sequence: [
+                    { text: "Welcoming you to the Grand Ballroom...", delay: 500, color: "#d4af37" },
+                    { text: "Tailoring black-tie silk lapels and shimmering gala fabric...", delay: 3500, color: "#ffffff" },
+                    { text: "Illuminating crystal chandelier highlights and golden bokeh...", delay: 7000, color: "#d4af37" },
+                    { text: "Fine-tuning studio flash and red-carpet radiance...", delay: 10500, color: "#ffffff" },
+                    { text: "Haute couture masterpiece complete! Step forward...", delay: 14000, color: "#d4af37" }
+                ],
+                completionMessage: "Welcome to the Grand Gala!"
+            }
+        }, null, 2),
+        html: `<!-- Grand Gala Dynamic Atmosphere -->
+<!-- Gilded Ballroom Top Arch -->
+<div class="thematic-top-arch">
+    <div class="arch-crest">✦ GRAND GALA • NIGHT OF ELEGANCE ✦</div>
+</div>
+
+<!-- Royal Column Vertical Banners -->
+<div class="thematic-side-banner banner-left">
+    <div class="banner-crest">👑</div>
+    <div class="banner-content">
+        <span class="banner-char">G</span>
+        <span class="banner-char">A</span>
+        <span class="banner-char">L</span>
+        <span class="banner-char">A</span>
+    </div>
+    <div class="banner-tassel">❖</div>
+</div>
+<div class="thematic-side-banner banner-right">
+    <div class="banner-crest">👑</div>
+    <div class="banner-content">
+        <span class="banner-char">L</span>
+        <span class="banner-char">U</span>
+        <span class="banner-char">X</span>
+        <span class="banner-char">E</span>
+    </div>
+    <div class="banner-tassel">❖</div>
+</div>
+
+<!-- Swaying Crystal Pendants -->
+<div class="custom-ornament ornament-left">💎</div>
+<div class="custom-ornament ornament-right">💎</div>
+
+<!-- Floating Stardust & Champagne Particles -->
+<div class="custom-particle p-1"><span>✨</span><label>ELEGANCE</label></div>
+<div class="custom-particle p-2"><span>🍾</span><label>CELEBRATE</label></div>
+<div class="custom-particle p-3"><span>🥂</span><label>RED CARPET</label></div>
+<div class="custom-particle p-4"><span>✦</span><label>ROYALE</label></div>`,
+        css: `/* Grand Gala Atmosphere Styles */
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+
+/* Gilded Top Arch */
+.thematic-top-arch {
+    position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+    width: 72%; max-width: 840px; height: 80px;
+    background: radial-gradient(ellipse at top, rgba(212, 175, 55, 0.3) 0%, transparent 75%);
+    border-bottom: 2px solid #d4af37; border-radius: 0 0 50% 50%;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.25);
+    display: flex; justify-content: center; align-items: flex-end; padding-bottom: 10px;
+    pointer-events: none; z-index: 10;
+}
+.arch-crest {
+    font-size: 0.85rem; font-weight: 800; letter-spacing: 2px;
+    color: #d4af37; text-shadow: 0 0 12px rgba(212, 175, 55, 0.7);
+}
+
+/* Vertical Column Banners */
+.thematic-side-banner {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 62px; padding: 18px 0; border-radius: 8px;
+    background: linear-gradient(180deg, #14141e 0%, #1f1f2e 50%, #14141e 100%);
+    border: 2px solid #d4af37;
+    box-shadow: 0 0 22px rgba(212, 175, 55, 0.35), inset 0 0 8px rgba(0, 0, 0, 0.7);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    z-index: 10; pointer-events: none;
+    animation: bannerBreathe 4s ease-in-out infinite alternate;
+}
+.banner-left { left: 24px; }
+.banner-right { right: 24px; }
+.banner-crest, .banner-tassel { font-size: 1.1rem; color: #d4af37; }
+.banner-content { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.banner-char {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 800; color: #d4af37;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(212, 175, 55, 0.6);
+    line-height: 1;
+}
+@keyframes bannerBreathe {
+    0% { transform: translateY(-50%) scale(0.98); }
+    100% { transform: translateY(-50%) scale(1.02); }
+}
+@media (max-width: 900px) { .thematic-side-banner { display: none; } }
+
+/* Corner Swaying Crystals */
+.custom-ornament {
+    position: absolute; top: -10px; font-size: 3.2rem;
+    filter: drop-shadow(0 8px 16px rgba(212, 175, 55, 0.45));
+    transform-origin: top center; animation: galaSway 3.6s ease-in-out infinite alternate;
+    pointer-events: none; z-index: 11;
+}
+.ornament-left { left: 24px; }
+.ornament-right { right: 24px; animation-delay: -1.8s; }
+@keyframes galaSway { 0% { transform: rotate(-6deg); } 100% { transform: rotate(6deg); } }
+
+/* Floating Particles */
+.custom-particle {
+    position: absolute; display: flex; flex-direction: column; align-items: center;
+    bottom: -80px; font-size: 2rem; animation: floatUpward 9s linear infinite; pointer-events: none;
+}
+.custom-particle label {
+    font-size: 0.72rem; font-weight: 800; color: #fde047;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.8); margin-top: 4px; letter-spacing: 1px;
+}
+.p-1 { left: 14%; animation-delay: 0s; }
+.p-2 { left: 38%; animation-delay: 2.8s; font-size: 2.2rem; }
+.p-3 { left: 64%; animation-delay: 1.4s; }
+.p-4 { left: 86%; animation-delay: 4.5s; font-size: 2rem; }
+@keyframes floatUpward {
+    0% { transform: translateY(0); opacity: 0; }
+    15% { opacity: 0.9; }
+    85% { opacity: 0.9; }
+    100% { transform: translateY(-110vh); opacity: 0; }
+}`
     }
 };
 
@@ -2527,12 +2779,49 @@ window.generateFullSystematicPromptText = function () {
     const accentCol = document.getElementById('inp-color-accent')?.value || '#d4af37';
     const primaryCol = document.getElementById('inp-color-primary')?.value || '#181926';
 
+    const chkBanners = document.getElementById('chk-dynamic-banners')?.checked ?? true;
+    const chkArch = document.getElementById('chk-dynamic-arch')?.checked ?? true;
+    const chkOrnaments = document.getElementById('chk-dynamic-ornaments')?.checked ?? true;
+    const chkParticles = document.getElementById('chk-dynamic-particles')?.checked ?? true;
+    const chkFrame = document.getElementById('chk-dynamic-frame')?.checked ?? true;
+
     let themeSpecification = "";
     if (concept) {
         themeSpecification = `• Event Theme / Concept: "${concept}"\n• Guidance: Design the entire interface, colors, festive ornaments, and manifestation sequence around this celebration concept.`;
     } else {
         themeSpecification = `• Event Theme / Concept: [NOT SPECIFIED - PLEASE PROPOSE AN EXCITING THEME!]\n  Note to AI: Since no specific theme was provided, please invent an evocative, creative, culturally rich or festive celebration theme (e.g. Vintage Parisian Bistro, Neon Cyberpunk Gala, Lunar New Year, Mid-Autumn Lantern Fest, Royal Masquerade, Tropical Fiesta, Autumn Harvest, etc.). In Block 1, invent an evocative display title and clean URL slug for it!`;
     }
+
+    const dynamicAtmosphereSpecs = [];
+    if (chkBanners) {
+        dynamicAtmosphereSpecs.push(`• Vertical Side Couplets / Banners (.thematic-side-banner.banner-left and .banner-right):
+    - Flank the left and right sides of the kiosk screen (left: 24px; right: 24px; top: 50%; transform: translateY(-50%)).
+    - Include header crest/icon, vertical celebration motto (using individual stacked .banner-char spans or vertical typography), and bottom tassel.
+    - Styled with themed background, border accent glow, and subtle breathing animation (@keyframes bannerBreathe).
+    - Media query rule: @media (max-width: 900px) { .thematic-side-banner { display: none; } } so smaller mobile devices hide them cleanly.`);
+    }
+    if (chkArch) {
+        dynamicAtmosphereSpecs.push(`• Top Decorative Arch / Marquee (.thematic-top-arch):
+    - Positioned gracefully at top center (top: 0; left: 50%; transform: translateX(-50%); width: 72%; max-width: 820px; height: 80px).
+    - Curved bottom border (border-radius: 0 0 50% 50%) or arch contour with glowing gradient and central event badge / celebration motto (.arch-crest).`);
+    }
+    if (chkOrnaments) {
+        dynamicAtmosphereSpecs.push(`• Corner Swaying Physics Ornaments (.custom-ornament.ornament-left and .ornament-right):
+    - Suspended at top corners (e.g. lanterns, ketupats, crystal chandeliers, or neon tokens).
+    - Swaying animation with pendulum physics (@keyframes ornamentSway, transform-origin: top center).`);
+    }
+    if (chkParticles) {
+        dynamicAtmosphereSpecs.push(`• Floating Celebratory Particles (.custom-particle.p-1 through p-5):
+    - Thematic emojis with styled glowing text labels floating upwards with staggered animation delays (@keyframes floatUpward).`);
+    }
+    if (chkFrame) {
+        dynamicAtmosphereSpecs.push(`• Thematic Frame / Vignette:
+    - Subtle glowing edge vignette or decorative corner accents enhancing atmosphere depth.`);
+    }
+
+    const dynamicReqsText = dynamicAtmosphereSpecs.length > 0 
+        ? dynamicAtmosphereSpecs.join('\n')
+        : '• Minimal ambient styling with subtle glow tokens.';
 
     return `You are a world-class UI/UX frontend designer and creative director for an interactive photobooth touchscreen kiosk.
 Your mission is to systematically design and generate the complete interface configuration, marketing copy, color tokens, festive ambience, and waiting manifestation sequence for a photobooth theme.
@@ -2541,8 +2830,11 @@ Your mission is to systematically design and generate the complete interface con
 ${themeSpecification}
 • Welcome Screen Rolling Film Strip: ${filmStripInstruction}
 • Target Screen: Interactive Touchscreen Kiosk (responsive for 9:16 portrait 1080x1920 kiosk as well as 16:9 landscape monitors).
-• Interaction Constraint: All ambient decorations must have "pointer-events: none" so they never block touch clicks on kiosk buttons.
+• Interaction Constraint: ALL ambient decorations MUST have "pointer-events: none" so they never block touch clicks on kiosk buttons.
 • Color Palette Direction: Deep Background ${bgCol}, Brand Accent ${accentCol}, Surface Tone ${primaryCol} (AI may enhance palette to fit the theme).
+
+--- DYNAMIC FESTIVE ATMOSPHERE ELEMENTS TO INCLUDE IN HTML & CSS ---
+${dynamicReqsText}
 
 --- INSTRUCTIONS FOR WHAT TO GENERATE ---
 Please produce EXACTLY THREE clean code blocks for the user to copy directly into the Photobooth Theme Studio:
@@ -2587,28 +2879,48 @@ Generate a JSON object configuring theme identity, marketing copy, Google Font t
 \`\`\`
 
 ### BLOCK 2: decorations.html
-Generate persistent HTML decorations wrapped inside an ambient container:
-• Top left and right swaying festive ornaments (.custom-ornament.ornament-left and .ornament-right)
-• 5 to 7 floating particle elements (.custom-particle) containing festive emojis and glowing text labels
-• Background subtle decorative motif container
-• All elements MUST have pointer-events: none so touchscreen kiosk buttons remain 100% clickable.
+Generate persistent HTML decorations wrapped inside an ambient container, containing the requested dynamic elements:
 \`\`\`html
 <!-- Persistent Festive Decorations -->
-<div class="custom-ornament ornament-left">...</div>
-<div class="custom-ornament ornament-right">...</div>
-<div class="custom-particle p-1"><span>...</span><label>...</label></div>
-<div class="custom-particle p-2"><span>...</span><label>...</label></div>
-<div class="custom-particle p-3"><span>...</span><label>...</label></div>
-<div class="custom-particle p-4"><span>...</span><label>...</label></div>
-<div class="custom-particle p-5"><span>...</span><label>...</label></div>
+${chkArch ? `<!-- Top Decorative Arch -->
+<div class="thematic-top-arch">
+    <div class="arch-crest">✦ CELEBRATION MOTTO ✦</div>
+</div>\n` : ''}${chkBanners ? `<!-- Vertical Side Couplets / Banners -->
+<div class="thematic-side-banner banner-left">
+    <div class="banner-crest">✦</div>
+    <div class="banner-content">
+        <span class="banner-char">W</span>
+        <span class="banner-char">O</span>
+        <span class="banner-char">R</span>
+        <span class="banner-char">D</span>
+    </div>
+    <div class="banner-tassel">❖</div>
+</div>
+<div class="thematic-side-banner banner-right">
+    <div class="banner-crest">✦</div>
+    <div class="banner-content">
+        <span class="banner-char">M</span>
+        <span class="banner-char">O</span>
+        <span class="banner-char">T</span>
+        <span class="banner-char">O</span>
+    </div>
+    <div class="banner-tassel">❖</div>
+</div>\n` : ''}${chkOrnaments ? `<!-- Corner Swaying Ornaments -->
+<div class="custom-ornament ornament-left">🏮</div>
+<div class="custom-ornament ornament-right">🏮</div>\n` : ''}${chkParticles ? `<!-- Floating Celebratory Particles -->
+<div class="custom-particle p-1"><span>✨</span><label>Joy</label></div>
+<div class="custom-particle p-2"><span>🎉</span><label>Celebrate</label></div>
+<div class="custom-particle p-3"><span>⭐</span><label>Magic</label></div>
+<div class="custom-particle p-4"><span>✦</span><label>Memories</label></div>` : ''}
 \`\`\`
 
 ### BLOCK 3: style.css
-Generate standalone, high-performance CSS:
+Generate standalone, high-performance scoped CSS styling and keyframes:
 • :root CSS custom variables matching the design palette
 • .persistent-decorations container fixed to inset: 0 with pointer-events: none and z-index: 12
-• Keyframe animations for corner ornament sway, smooth upward particle floating with staggered delays, and glowing text shadows
-• Fully responsive for both 9:16 portrait touchscreen kiosks (1080x1920) and 16:9 landscape monitors (1920x1080).
+• Keyframe animations (@keyframes bannerBreathe, @keyframes ornamentSway, @keyframes floatUpward)
+• Responsive rules (@media (max-width: 900px) { .thematic-side-banner { display: none; } })
+• High visual quality with drop-shadows and backdrop-filters
 \`\`\`css
 /* Scoped Atmosphere Animations */
 :root {
@@ -2623,7 +2935,7 @@ Generate standalone, high-performance CSS:
   z-index: 12;
   overflow: hidden;
 }
-...
+/* ... Complete CSS for banners, arch, ornaments, and particles ... */
 \`\`\`
 
 Output ONLY these three code blocks with their markdown headers.`;
@@ -2925,9 +3237,14 @@ window.loadQuickAtmosphereTemplate = function (presetKey = 'cny') {
     const jsonEl = document.getElementById('adv-identity-json');
     if (htmlEl) htmlEl.value = preset.html || '';
     if (cssEl) cssEl.value = preset.css || '';
-    if (jsonEl && preset.json) jsonEl.value = preset.json;
+    if (jsonEl && preset.json) {
+        jsonEl.value = preset.json;
+        if (typeof window.autoApplyIdentityJsonOnInput === 'function') {
+            window.autoApplyIdentityJsonOnInput(true);
+        }
+    }
 
-    showToast(`Loaded ${presetKey.toUpperCase()} sample template into editors!`, 'success');
+    showToast(`Loaded ${presetKey.toUpperCase()} dynamic sample template into editors!`, 'success');
 };
 
 window.clearAtmosphereEditors = function () {
@@ -3146,13 +3463,11 @@ window.openAtmospherePreviewModal = async function () {
             throw new Error(err.error || 'Failed to compile theme for preview');
         }
 
-        // Update sidebar draft if present
-        const draftItem = (studio.themes || []).find(th => th.status === 'draft');
-        if (draftItem) {
-            draftItem.slug = slug;
-            draftItem.title = theme.title || draftItem.title;
-            renderThemeSidebar();
-        }
+        // Mark as saved to disk and reload sidebar so draft theme permanently registers in studio
+        studio.activeTheme.isUnsavedDraft = false;
+        await loadThemes();
+        studio.activeTheme = theme;
+        renderThemeSidebar();
 
         // 4. Open Live Preview modal pointing to Universal Engine preview
         const modal = document.getElementById('atmosphere-preview-modal');
