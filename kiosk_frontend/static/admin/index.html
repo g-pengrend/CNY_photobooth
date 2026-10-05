@@ -288,127 +288,101 @@
                 <!-- CONTAINER 2: ADVANCED MODE (GENAI SYSTEMATIC STUDIO)       -->
                 <!-- ========================================================= -->
                 <div id="container-mode-advanced" style="display: none;">
-                    <!-- Core Setup & Feature Options (including Rolling Film Screen) -->
-                    <div class="form-section">
-                        <h3 class="section-title">🏷️ Theme Setup & Core Kiosk Features</h3>
-                        <p class="section-desc">Set your theme's URL identifier, title, and welcome screen display options.</p>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="inp-slug-adv">Theme Slug (URL Identifier)</label>
-                                <input id="inp-slug-adv" type="text" placeholder="e.g. gala2026" oninput="syncThemeAdvancedIdentity('slug', this.value)">
-                            </div>
-                            <div class="form-group">
-                                <label for="inp-title-adv">Display Title</label>
-                                <input id="inp-title-adv" type="text" placeholder="e.g. Jubilee Gala 2026" oninput="syncThemeAdvancedIdentity('title', this.value)">
-                            </div>
-                            <div class="form-group full-width" style="display: flex; gap: 2rem; margin-top: 0.5rem; flex-wrap: wrap; background: rgba(99, 102, 241, 0.08); padding: 1rem 1.2rem; border-radius: var(--radius-sm); border: 1px solid rgba(99, 102, 241, 0.25);">
-                                <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-weight: 600; color: #fff;">
-                                    <input id="chk-film-strip-adv" type="checkbox" onchange="syncThemeAdvancedIdentity('filmStrip', this.checked)">
-                                    <span>🎞️ Enable Rolling Film Strip on Welcome Screen</span>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                    <input id="chk-lucky-number-adv" type="checkbox" onchange="syncThemeAdvancedIdentity('luckyNumber', this.checked)">
-                                    <span>Enable Lucky Number Screen</span>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                    <input id="chk-gender-filter-adv" type="checkbox" checked onchange="syncThemeAdvancedIdentity('genderFilter', this.checked)">
-                                    <span>Enable Gender Filter Tabs</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Step 1: Systematic GenAI Interface Prompt Studio (SHOWN IN FULL) -->
-                    <div class="form-section" style="border: 1px solid rgba(99, 102, 241, 0.35); background: rgba(18, 20, 36, 0.7); position: relative; border-radius: var(--radius-md);">
+                    <!-- STEP 1: Teach & Copy Prompt Template -->
+                    <div class="form-section" style="border: 1px solid rgba(99, 102, 241, 0.4); background: rgba(18, 20, 36, 0.85); border-radius: var(--radius-md); padding: 1.5rem; position: relative;">
                         <div style="position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--primary), #ec4899); color: #fff; font-size: 0.68rem; font-weight: 800; padding: 0.25rem 0.8rem; border-bottom-left-radius: var(--radius-sm); letter-spacing: 0.5px;">
-                            🤖 ALL-IN-ONE GENAI INTERFACE PROMPT
+                            🤖 GENAI PROMPT TEMPLATE
                         </div>
 
-                        <div style="margin-bottom: 1.2rem;">
-                            <h3 class="section-title" style="display: flex; align-items: center; gap: 0.5rem;">
-                                <span>🤖 Step 1: Systematic GenAI Prompt Generator</span>
-                            </h3>
-                            <p class="section-desc">
-                                This comprehensive prompt instructs ChatGPT, Claude, or Gemini to craft your theme's <strong>entire interface</strong>: copywriting, color tokens, festive ambience, animations, and waiting manifestation messages in one shot.
-                            </p>
-                        </div>
-
-                        <!-- Variable Presets Bar -->
-                        <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.2rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1rem;">
-                                <span style="font-weight: 700; font-size: 0.95rem; color: #a5b4fc;">✨ Select Preset or Customize Parameters:</span>
-                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                    <select id="adv-prompt-preset" style="padding: 0.35rem 0.8rem; font-size: 0.84rem; border-radius: var(--radius-sm); background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #fff;" onchange="applyAtmospherePreset(this.value)">
-                                        <option value="custom">Preset: Custom Event Concept</option>
-                                        <option value="cny">🏮 Lunar New Year (Lanterns, Huat Coins, Gold)</option>
-                                        <option value="hariraya">🌙 Hari Raya (Ketupat, Crescent Moon, Emerald)</option>
-                                        <option value="deepavali">🪔 Deepavali (Hanging Diyas, Rangoli, Violet & Gold)</option>
-                                        <option value="christmas">🎄 Christmas & Winter (Snowflakes, Baubles, Pine)</option>
-                                        <option value="ndp">🇸🇬 Singapore National Day (Crimson & White Stars)</option>
-                                        <option value="cyberpunk">🚀 Future Gala (Neon Hexagons, Circuit Orbits)</option>
-                                    </select>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem;">
+                            <div style="max-width: 720px;">
+                                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                    <span style="font-size: 1.4rem;">📖</span>
+                                    <h3 class="section-title" style="margin: 0; font-size: 1.25rem;">Step 1: Copy GenAI Prompt Template</h3>
                                 </div>
+                                <p class="section-desc" style="margin-top: 0.4rem; line-height: 1.5;">
+                                    Use this template to instruct ChatGPT, Claude, or Gemini to systematically build your photobooth interface (theme identity, color tokens, festive decorations, and waiting sequence). 
+                                    <strong>If you don't specify a theme concept below, the AI will propose an exciting creative theme for you!</strong>
+                                </p>
                             </div>
-
-                            <!-- Editable prompt variables grid -->
-                            <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem;">
-                                <div class="form-group">
-                                    <label style="font-size: 0.78rem;">Celebration Concept / Theme</label>
-                                    <input id="adv-var-concept" type="text" placeholder="e.g. Lunar New Year Prosperity" style="font-size: 0.85rem;" oninput="updateFullSystematicGenAiPrompt()">
-                                </div>
-                                <div class="form-group">
-                                    <label style="font-size: 0.78rem;">Corner Ornaments</label>
-                                    <input id="adv-var-ornaments" type="text" placeholder="e.g. Swaying Red Silk Lanterns with Golden Tassels" style="font-size: 0.85rem;" oninput="updateFullSystematicGenAiPrompt()">
-                                </div>
-                                <div class="form-group">
-                                    <label style="font-size: 0.78rem;">Floating Particles & Emojis</label>
-                                    <input id="adv-var-particles" type="text" placeholder="e.g. 🧧, 🍊, 💰, 🍍, ✨" style="font-size: 0.85rem;" oninput="updateFullSystematicGenAiPrompt()">
-                                </div>
-                                <div class="form-group">
-                                    <label style="font-size: 0.78rem;">Celebratory Floating Phrases</label>
-                                    <input id="adv-var-phrases" type="text" placeholder="e.g. Huat Ah!, 新年快乐, 万事如意" style="font-size: 0.85rem;" oninput="updateFullSystematicGenAiPrompt()">
-                                </div>
-                                <div class="form-group full-width">
-                                    <label style="font-size: 0.78rem;">Background Texture / Motif Overlay</label>
-                                    <input id="adv-var-texture" type="text" placeholder="e.g. Traditional geometric lattice pattern with soft radial golden stardust" style="font-size: 0.85rem;" oninput="updateFullSystematicGenAiPrompt()">
-                                </div>
-                            </div>
+                            <button type="button" class="admin-btn admin-btn-accent" onclick="copyFullSystematicGenAiPrompt()" style="padding: 0.55rem 1.3rem; font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);">
+                                <span>📋</span> Copy GenAI Prompt Template
+                            </button>
                         </div>
 
-                        <!-- Full Systematic Prompt Display Box (Shown in Full) -->
-                        <div style="margin-bottom: 1.2rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
-                                <label style="font-size: 0.88rem; font-weight: 700; color: #a5b4fc; margin: 0; display: flex; align-items: center; gap: 0.4rem;">
-                                    <span>📄 Full Systematic GenAI Prompt (Live Preview):</span>
+                        <!-- Template Controls Bar -->
+                        <div style="display: flex; gap: 1rem; align-items: flex-end; background: rgba(0,0,0,0.35); padding: 1rem 1.2rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 1.2rem; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 260px;">
+                                <label style="font-size: 0.82rem; font-weight: 600; color: #a5b4fc; display: block; margin-bottom: 0.35rem;">
+                                    💡 Theme Intent / Event Concept (Optional — or leave blank to let AI propose):
                                 </label>
-                                <button type="button" class="admin-btn admin-btn-accent" onclick="copyFullSystematicGenAiPrompt()" style="padding: 0.45rem 1.1rem; font-size: 0.85rem; font-weight: 700;">
-                                    📋 Copy Full GenAI Prompt
-                                </button>
+                                <input id="adv-theme-intent" type="text" placeholder="e.g. Vintage Parisian Bistro, Cyberpunk Gala, Mid-Autumn Lanterns (or leave blank)" style="width: 100%; font-size: 0.85rem;" oninput="updateFullSystematicGenAiPrompt()">
                             </div>
-                            <textarea id="adv-systematic-prompt-full" rows="14" readonly style="width: 100%; padding: 1rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #cbd5e1; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.82rem; line-height: 1.5; resize: vertical;" title="Full copyable systematic GenAI prompt"></textarea>
-                            <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.4rem;">
-                                💡 <strong>Workflow:</strong> Click <strong>"📋 Copy Full GenAI Prompt"</strong> → paste into ChatGPT / Claude / Gemini → copy the returned code blocks and paste below.
-                            </p>
+                            <div>
+                                <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-weight: 600; color: #fff; font-size: 0.88rem; background: rgba(99, 102, 241, 0.15); padding: 0.6rem 1rem; border-radius: var(--radius-sm); border: 1px solid rgba(99, 102, 241, 0.4);">
+                                    <input id="chk-film-strip-adv" type="checkbox" onchange="syncThemeAdvancedIdentity('filmStrip', this.checked)">
+                                    <span>🎞️ Enable Rolling Film Screen</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Full Prompt Template Display -->
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                                <label style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin: 0;">
+                                    📄 Prompt Template (Shown in full &amp; ready to copy):
+                                </label>
+                                <span style="font-size: 0.75rem; color: var(--text-dim);">Live updates as options change</span>
+                            </div>
+                            <textarea id="adv-systematic-prompt-full" rows="12" readonly style="width: 100%; padding: 1rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #cbd5e1; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.82rem; line-height: 1.5; resize: vertical;" title="Copyable prompt template"></textarea>
                         </div>
                     </div>
 
-                    <!-- Step 2: Code Paste, Config & Live Compiler -->
-                    <div class="form-section" style="margin-top: 1.5rem;">
+                    <!-- STEP 2: Paste Output, Instructions & Review Details Below -->
+                    <div class="form-section" style="margin-top: 1.5rem; border: 1px solid var(--border-subtle); background: rgba(18, 20, 36, 0.7); border-radius: var(--radius-md); padding: 1.5rem;">
+                        <div style="margin-bottom: 1.2rem;">
+                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                <span style="font-size: 1.4rem;">📥</span>
+                                <h3 class="section-title" style="margin: 0; font-size: 1.25rem;">Step 2: Paste GenAI Output &amp; Populate Theme</h3>
+                            </div>
+                            <p class="section-desc" style="margin-top: 0.4rem;">
+                                After the AI outputs the 3 blocks, follow the instructions below to paste each block into the corresponding editor:
+                            </p>
+                        </div>
+
+                        <!-- Instruction Cards on What to Copy -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.8rem; margin-bottom: 1.3rem;">
+                            <div style="background: rgba(250, 204, 21, 0.08); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
+                                <div style="font-weight: 700; color: #fde047; font-size: 0.85rem; margin-bottom: 0.2rem;">1️⃣ Copy Block 1 (JSON)</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>theme_identity.json</strong> tab below and click <em>✨ Apply JSON</em> to auto-fill slug, title, copy, colors, and waiting sequence!</div>
+                            </div>
+                            <div style="background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
+                                <div style="font-weight: 700; color: #6ee7b7; font-size: 0.85rem; margin-bottom: 0.2rem;">2️⃣ Copy Block 2 (HTML)</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>decorations.html</strong> tab below. Contains swaying ornaments and floating celebratory particles.</div>
+                            </div>
+                            <div style="background: rgba(96, 165, 250, 0.08); border: 1px solid rgba(96, 165, 250, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
+                                <div style="font-weight: 700; color: #93c5fd; font-size: 0.85rem; margin-bottom: 0.2rem;">3️⃣ Copy Block 3 (CSS)</div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>style.css</strong> tab below. Contains design tokens and animations.</div>
+                            </div>
+                        </div>
+
+                        <!-- Editor Tabs Navigation & Action Buttons -->
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.6rem;">
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                <button type="button" id="tab-btn-deco-html" class="admin-btn admin-btn-primary" style="font-size: 0.82rem; padding: 0.4rem 0.95rem;" onclick="switchAtmosphereEditorTab('html')">
-                                    📄 decorations.html
+                                <button type="button" id="tab-btn-deco-json" class="admin-btn admin-btn-primary" style="font-size: 0.82rem; padding: 0.4rem 0.95rem;" onclick="switchAtmosphereEditorTab('json')">
+                                    ⚙️ theme_identity.json (Block 1)
+                                </button>
+                                <button type="button" id="tab-btn-deco-html" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.4rem 0.95rem;" onclick="switchAtmosphereEditorTab('html')">
+                                    📄 decorations.html (Block 2)
                                 </button>
                                 <button type="button" id="tab-btn-deco-css" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.4rem 0.95rem;" onclick="switchAtmosphereEditorTab('css')">
-                                    🎨 style.css (Tokens &amp; Animations)
-                                </button>
-                                <button type="button" id="tab-btn-deco-json" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.4rem 0.95rem;" onclick="switchAtmosphereEditorTab('json')">
-                                    ⚙️ theme_identity.json (Optional)
+                                    🎨 style.css (Block 3)
                                 </button>
                             </div>
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
                                 <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.4rem 0.8rem;" onclick="loadQuickAtmosphereTemplate()">
-                                    💡 Load Working Template
+                                    💡 Load Sample Template
                                 </button>
                                 <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.4rem 0.8rem;" onclick="clearAtmosphereEditors()">
                                     🧹 Clear
@@ -419,24 +393,91 @@
                             </div>
                         </div>
 
-                        <!-- HTML Editor -->
-                        <div id="editor-container-html">
-                            <textarea id="adv-decorations-html" rows="12" placeholder="<!-- Paste GenAI Block 2 (decorations.html) here -->&#10;<div class='custom-ornament ornament-left'>🏮</div>&#10;<div class='custom-ornament ornament-right'>🏮</div>&#10;<div class='custom-particle p-1'><span>🧧</span><label>Huat Ah!</label></div>" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #86efac; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
-                        </div>
-
-                        <!-- CSS Editor -->
-                        <div id="editor-container-css" style="display: none;">
-                            <textarea id="adv-custom-css" rows="12" placeholder="/* Paste GenAI Block 3 (style.css) here */&#10;:root { --bg-color: #0c0d14; --accent-color: #d4af37; }&#10;.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }&#10;.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; animation: cnySwing 3.5s ease-in-out infinite alternate; pointer-events: none; }&#10;@keyframes cnySwing { 0% { transform: rotate(-8deg); } 100% { transform: rotate(8deg); } }" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #93c5fd; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
-                        </div>
-
-                        <!-- JSON Editor (Optional auto-filler for subtitle, badge, cta, waiting sequence) -->
-                        <div id="editor-container-json" style="display: none;">
-                            <div style="margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-size: 0.78rem; color: var(--text-dim);">Paste GenAI Block 1 (JSON) to auto-fill subtitle, badge, CTA, and waiting manifestation sequence:</span>
-                                <button type="button" class="admin-btn admin-btn-accent" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;" onclick="applyIdentityJsonConfig()">Apply JSON to Theme</button>
+                        <!-- Tab 1: JSON Editor -->
+                        <div id="editor-container-json">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <span style="font-size: 0.78rem; color: #fde047; font-weight: 600;">
+                                    📋 Instructions: Paste GenAI Block 1 (JSON) below, then click "Apply JSON to Theme":
+                                </span>
+                                <button type="button" class="admin-btn admin-btn-accent" style="padding: 0.35rem 0.9rem; font-size: 0.8rem; font-weight: 700;" onclick="applyIdentityJsonConfig()">
+                                    ✨ Apply JSON to Theme
+                                </button>
                             </div>
-                            <textarea id="adv-identity-json" rows="10" placeholder="{&#10;  &quot;subtitle&quot;: &quot;Festive Try-On Experience&quot;,&#10;  &quot;badge&quot;: &quot;Special Edition&quot;,&#10;  &quot;cta&quot;: &quot;Start Experience&quot;,&#10;  &quot;description&quot;: &quot;Celebrate in style with AI-powered portrait try-ons.&quot;,&#10;  &quot;waitingSequence&quot;: [&#10;    { &quot;text&quot;: &quot;Analyzing portrait...&quot;, &quot;delay&quot;: 500, &quot;color&quot;: &quot;#d4af37&quot; }&#10;  ]&#10;}" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #fde047; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
+                            <textarea id="adv-identity-json" rows="11" placeholder="{ ...paste Block 1 JSON from GenAI here... }" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #fde047; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
                         </div>
+
+                        <!-- Tab 2: HTML Editor -->
+                        <div id="editor-container-html" style="display: none;">
+                            <div style="margin-bottom: 0.5rem;">
+                                <span style="font-size: 0.78rem; color: #86efac; font-weight: 600;">
+                                    📋 Instructions: Paste GenAI Block 2 (HTML) below. Contains swaying ornaments and floating particles:
+                                </span>
+                            </div>
+                            <textarea id="adv-decorations-html" rows="11" placeholder="<!-- Paste GenAI Block 2 (decorations.html) here -->" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #86efac; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- Tab 3: CSS Editor -->
+                        <div id="editor-container-css" style="display: none;">
+                            <div style="margin-bottom: 0.5rem;">
+                                <span style="font-size: 0.78rem; color: #93c5fd; font-weight: 600;">
+                                    📋 Instructions: Paste GenAI Block 3 (CSS) below. Contains scoped keyframe animations and color tokens:
+                                </span>
+                            </div>
+                            <textarea id="adv-custom-css" rows="11" placeholder="/* Paste GenAI Block 3 (style.css) here */" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #93c5fd; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- Theme Details (Populated from GenAI JSON or editable below) -->
+                        <div style="margin-top: 1.5rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.2rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <div>
+                                    <h4 style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0; display: flex; align-items: center; gap: 0.4rem;">
+                                        <span>🏷️</span> Theme Details &amp; Marketing Copy
+                                    </h4>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Populated automatically from GenAI JSON or edit directly here:</span>
+                                </div>
+                                <div style="display: flex; gap: 1.2rem; align-items: center; font-size: 0.8rem;">
+                                    <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                                        <input id="chk-lucky-number-adv" type="checkbox" onchange="syncThemeAdvancedIdentity('luckyNumber', this.checked)">
+                                        <span>Lucky Number Screen</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                                        <input id="chk-gender-filter-adv" type="checkbox" checked onchange="syncThemeAdvancedIdentity('genderFilter', this.checked)">
+                                        <span>Gender Tabs</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="inp-slug-adv">Theme Slug (URL Identifier)</label>
+                                    <input id="inp-slug-adv" type="text" placeholder="e.g. gala2026" oninput="syncThemeAdvancedIdentity('slug', this.value)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-title-adv">Display Title</label>
+                                    <input id="inp-title-adv" type="text" placeholder="e.g. Jubilee Gala 2026" oninput="syncThemeAdvancedIdentity('title', this.value)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-subtitle-adv">Subtitle / Venue</label>
+                                    <input id="inp-subtitle-adv" type="text" placeholder="e.g. Grand Ballroom Edition" oninput="syncThemeAdvancedIdentity('subtitle', this.value)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-badge-adv">Badge Label</label>
+                                    <input id="inp-badge-adv" type="text" placeholder="e.g. Special Edition" oninput="syncThemeAdvancedIdentity('badge', this.value)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-cta-adv">Start Button Text</label>
+                                    <input id="inp-cta-adv" type="text" placeholder="e.g. Start Experience" oninput="syncThemeAdvancedIdentity('cta', this.value)">
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-icon-adv">Emoji / Icon</label>
+                                    <input id="inp-icon-adv" type="text" placeholder="e.g. 🏮" oninput="syncThemeAdvancedIdentity('icon', this.value)">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="inp-desc-adv">Description / Marketing Copy</label>
+                                    <textarea id="inp-desc-adv" rows="2" placeholder="Experience the magical celebration in AI." oninput="syncThemeAdvancedIdentity('description', this.value)"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 

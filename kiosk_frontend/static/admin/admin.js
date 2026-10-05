@@ -242,10 +242,15 @@ function populateFormFields(theme) {
     setValue('inp-title', theme.title || '');
     setValue('inp-title-adv', theme.title || '');
     setValue('inp-subtitle', theme.subtitle || '');
+    setValue('inp-subtitle-adv', theme.subtitle || '');
     setValue('inp-badge', theme.badge || '');
+    setValue('inp-badge-adv', theme.badge || '');
     setValue('inp-icon', theme.icon || '✨');
+    setValue('inp-icon-adv', theme.icon || '✨');
     setValue('inp-cta', theme.cta || 'Start Experience');
+    setValue('inp-cta-adv', theme.cta || 'Start Experience');
     setValue('inp-desc', theme.description || '');
+    setValue('inp-desc-adv', theme.description || '');
 
     // Colors
     const colors = theme.style?.colors || {};
@@ -270,7 +275,7 @@ function populateFormFields(theme) {
     const bg = theme.background || {};
     setValue('sel-bg-type', bg.type || 'particles');
     setValue('inp-floating-icons', (bg.floatingIcons || ['✨', '✦', '⭐']).join(', '));
-    setValue('adv-var-concept', theme.title || '');
+    setValue('adv-theme-intent', (theme.title && theme.title !== 'New Event Photobooth' && theme.title !== 'Untitled Theme ✨') ? theme.title : '');
 
     if (typeof window.setThemeStudioMode === 'function') {
         window.setThemeStudioMode(theme.atmosphereMode === 'advanced' ? 'advanced' : 'basic', false);
@@ -297,14 +302,19 @@ function readFormFields() {
 
     const rawSlug = (isAdv && getValue('inp-slug-adv').trim()) ? getValue('inp-slug-adv') : getValue('inp-slug');
     const rawTitle = (isAdv && getValue('inp-title-adv').trim()) ? getValue('inp-title-adv') : getValue('inp-title');
+    const rawSubtitle = (isAdv && getValue('inp-subtitle-adv').trim()) ? getValue('inp-subtitle-adv') : getValue('inp-subtitle');
+    const rawBadge = (isAdv && getValue('inp-badge-adv').trim()) ? getValue('inp-badge-adv') : getValue('inp-badge');
+    const rawIcon = (isAdv && getValue('inp-icon-adv').trim()) ? getValue('inp-icon-adv') : getValue('inp-icon');
+    const rawCta = (isAdv && getValue('inp-cta-adv').trim()) ? getValue('inp-cta-adv') : getValue('inp-cta');
+    const rawDesc = (isAdv && getValue('inp-desc-adv').trim()) ? getValue('inp-desc-adv') : getValue('inp-desc');
 
     theme.slug = rawSlug.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
     theme.title = rawTitle.trim();
-    theme.subtitle = getValue('inp-subtitle').trim();
-    theme.badge = getValue('inp-badge').trim();
-    theme.icon = getValue('inp-icon').trim() || '✨';
-    theme.cta = getValue('inp-cta').trim() || 'Start';
-    theme.description = getValue('inp-desc').trim();
+    theme.subtitle = rawSubtitle.trim();
+    theme.badge = rawBadge.trim();
+    theme.icon = rawIcon.trim() || '✨';
+    theme.cta = rawCta.trim() || 'Start';
+    theme.description = rawDesc.trim();
     theme.status = 'live';
 
     // Style
@@ -2418,8 +2428,25 @@ window.syncThemeBasicIdentity = function (field, val) {
     } else if (field === 'title') {
         const el = document.getElementById('inp-title-adv');
         if (el && el.value !== val) el.value = val;
-        const conceptEl = document.getElementById('adv-var-concept');
-        if (conceptEl && !conceptEl.value) conceptEl.value = val;
+        const intentEl = document.getElementById('adv-theme-intent');
+        if (intentEl && !intentEl.value && val !== 'New Event Photobooth' && val !== 'Untitled Theme ✨') {
+            intentEl.value = val;
+        }
+    } else if (field === 'subtitle') {
+        const el = document.getElementById('inp-subtitle-adv');
+        if (el && el.value !== val) el.value = val;
+    } else if (field === 'badge') {
+        const el = document.getElementById('inp-badge-adv');
+        if (el && el.value !== val) el.value = val;
+    } else if (field === 'cta') {
+        const el = document.getElementById('inp-cta-adv');
+        if (el && el.value !== val) el.value = val;
+    } else if (field === 'icon') {
+        const el = document.getElementById('inp-icon-adv');
+        if (el && el.value !== val) el.value = val;
+    } else if (field === 'description') {
+        const el = document.getElementById('inp-desc-adv');
+        if (el && el.value !== val) el.value = val;
     } else if (field === 'filmStrip') {
         const el = document.getElementById('chk-film-strip-adv');
         if (el && el.checked !== val) el.checked = val;
@@ -2440,8 +2467,25 @@ window.syncThemeAdvancedIdentity = function (field, val) {
     } else if (field === 'title') {
         const el = document.getElementById('inp-title');
         if (el && el.value !== val) el.value = val;
-        const conceptEl = document.getElementById('adv-var-concept');
-        if (conceptEl && !conceptEl.value) conceptEl.value = val;
+        const intentEl = document.getElementById('adv-theme-intent');
+        if (intentEl && !intentEl.value && val !== 'New Event Photobooth' && val !== 'Untitled Theme ✨') {
+            intentEl.value = val;
+        }
+    } else if (field === 'subtitle') {
+        const el = document.getElementById('inp-subtitle');
+        if (el && el.value !== val) el.value = val;
+    } else if (field === 'badge') {
+        const el = document.getElementById('inp-badge');
+        if (el && el.value !== val) el.value = val;
+    } else if (field === 'cta') {
+        const el = document.getElementById('inp-cta');
+        if (el && el.value !== val) el.value = val;
+    } else if (field === 'icon') {
+        const el = document.getElementById('inp-icon');
+        if (el && el.value !== val) el.value = val;
+    } else if (field === 'description') {
+        const el = document.getElementById('inp-desc');
+        if (el && el.value !== val) el.value = val;
     } else if (field === 'filmStrip') {
         const el = document.getElementById('chk-film-strip');
         if (el && el.checked !== val) el.checked = val;
@@ -2455,53 +2499,53 @@ window.syncThemeAdvancedIdentity = function (field, val) {
     window.updateFullSystematicGenAiPrompt();
 };
 
-// Generate the complete systematic GenAI prompt
+// Generate the complete systematic GenAI prompt template
 window.generateFullSystematicPromptText = function () {
-    const title = document.getElementById('inp-title-adv')?.value.trim() 
-               || document.getElementById('inp-title')?.value.trim() 
-               || studio.activeTheme?.title 
-               || 'Photobooth Theme';
-    const slug = document.getElementById('inp-slug-adv')?.value.trim() 
-              || document.getElementById('inp-slug')?.value.trim() 
-              || studio.activeTheme?.slug 
-              || 'festive_theme';
-    const filmStrip = (document.getElementById('chk-film-strip-adv')?.checked || document.getElementById('chk-film-strip')?.checked);
+    const userIntent = document.getElementById('adv-theme-intent')?.value.trim();
+    const titleVal = document.getElementById('inp-title-adv')?.value.trim() 
+                  || document.getElementById('inp-title')?.value.trim();
+    const isCustomTitle = titleVal && titleVal !== 'New Event Photobooth' && titleVal !== 'Untitled Theme ✨';
     
-    const concept = document.getElementById('adv-var-concept')?.value.trim() || title;
-    const ornaments = document.getElementById('adv-var-ornaments')?.value.trim() || 'Festive hanging corner ornaments';
-    const particles = document.getElementById('adv-var-particles')?.value.trim() || '✨, ✦, ⭐, ✧';
-    const phrases = document.getElementById('adv-var-phrases')?.value.trim() || 'Celebrate, Joy, Welcome';
-    const texture = document.getElementById('adv-var-texture')?.value.trim() || 'Subtle glowing pattern overlay';
+    const concept = userIntent || (isCustomTitle ? titleVal : '');
+    const filmStripChecked = (document.getElementById('chk-film-strip-adv')?.checked || document.getElementById('chk-film-strip')?.checked);
+    const filmStripInstruction = filmStripChecked 
+        ? "ENABLED (The welcome screen will feature an animated rolling camera film strip showcasing guest portraits)"
+        : "DISABLED (Clean welcome screen without rolling film strip)";
 
     const bgCol = document.getElementById('inp-color-bg')?.value || '#0c0d14';
     const accentCol = document.getElementById('inp-color-accent')?.value || '#d4af37';
     const primaryCol = document.getElementById('inp-color-primary')?.value || '#181926';
 
+    let themeSpecification = "";
+    if (concept) {
+        themeSpecification = `• Event Theme / Concept: "${concept}"\n• Guidance: Design the entire interface, colors, festive ornaments, and manifestation sequence around this celebration concept.`;
+    } else {
+        themeSpecification = `• Event Theme / Concept: [NOT SPECIFIED - PLEASE PROPOSE AN EXCITING THEME!]\n  Note to AI: Since no specific theme was provided, please invent an evocative, creative, culturally rich or festive celebration theme (e.g. Vintage Parisian Bistro, Neon Cyberpunk Gala, Lunar New Year, Mid-Autumn Lantern Fest, Royal Masquerade, Tropical Fiesta, Autumn Harvest, etc.). In Block 1, invent an evocative display title and clean URL slug for it!`;
+    }
+
     return `You are a world-class UI/UX frontend designer and creative director for an interactive photobooth touchscreen kiosk.
-Your mission is to systematically design and generate the complete interface configuration, marketing copy, color tokens, festive ambience, and waiting manifestation sequence for a theme called "${title}".
+Your mission is to systematically design and generate the complete interface configuration, marketing copy, color tokens, festive ambience, and waiting manifestation sequence for a photobooth theme.
 
---- EVENT & BRAND IDENTITY ---
-• Theme Name: "${title}"
-• Slug Identifier: "${slug}"
-• Core Concept & Mood: "${concept}"
-• Left & Right Corner Ornaments: ${ornaments}
-• Floating Particle Icons/Emojis: ${particles}
-• Floating Celebratory Phrases: ${phrases}
-• Background Texture / Motif: ${texture}
-• Welcome Screen Rolling Film Strip Feature: ${filmStrip ? 'ENABLED (welcome screen displays rolling camera film strips)' : 'DISABLED (clean aesthetic without film roll)'}
-• Base Palette Guidance: Background ${bgCol}, Accent ${accentCol}, Primary Surface ${primaryCol}
+--- THEME SPECIFICATIONS ---
+${themeSpecification}
+• Welcome Screen Rolling Film Strip: ${filmStripInstruction}
+• Target Screen: Interactive Touchscreen Kiosk (responsive for 9:16 portrait 1080x1920 kiosk as well as 16:9 landscape monitors).
+• Interaction Constraint: All ambient decorations must have "pointer-events: none" so they never block touch clicks on kiosk buttons.
+• Color Palette Direction: Deep Background ${bgCol}, Brand Accent ${accentCol}, Surface Tone ${primaryCol} (AI may enhance palette to fit the theme).
 
---- WHAT YOU MUST GENERATE ---
-Produce EXACTLY THREE clean, well-documented code blocks:
+--- INSTRUCTIONS FOR WHAT TO GENERATE ---
+Please produce EXACTLY THREE clean code blocks for the user to copy directly into the Photobooth Theme Studio:
 
 ### BLOCK 1: theme_identity.json
-Generate a JSON object configuring marketing copy, Google Font typography, complete color palette tokens, and a 5-step sequential waiting screen manifestation sequence tailored to "${concept}":
+Generate a JSON object configuring theme identity, marketing copy, Google Font typography, CSS color tokens, and a 5-step sequential waiting screen manifestation sequence tailored to the theme:
 \`\`\`json
 {
-  "subtitle": "Short captivating subtitle / event venue",
+  "slug": "url_safe_slug_lowercase_with_underscores_e.g_gala_2026",
+  "title": "Evocative Theme Display Title",
+  "subtitle": "Short captivating subtitle or venue",
   "badge": "Short badge tag (e.g. Special Edition)",
   "icon": "A single representative emoji",
-  "cta": "Start button label (e.g. Start Celebration)",
+  "cta": "Start button label (e.g. Start Experience)",
   "description": "2-sentence inspiring description of the AI portrait transformation experience.",
   "style": {
     "fontFamily": "'Outfit', sans-serif",
@@ -2511,9 +2555,9 @@ Generate a JSON object configuring marketing copy, Google Font typography, compl
       "text": "#ffffff",
       "primary": "${primaryCol}",
       "accent": "${accentCol}",
-      "accentGlow": "rgba(...accent with 0.3 opacity...)",
+      "accentGlow": "rgba(...accent with 0.35 opacity...)",
       "surface": "rgba(255, 255, 255, 0.05)",
-      "surfaceBorder": "rgba(...accent with 0.25 opacity...)"
+      "surfaceBorder": "rgba(...accent with 0.3 opacity...)"
     }
   },
   "waitingExperience": {
@@ -2534,15 +2578,18 @@ Generate a JSON object configuring marketing copy, Google Font typography, compl
 ### BLOCK 2: decorations.html
 Generate persistent HTML decorations wrapped inside an ambient container:
 • Top left and right swaying festive ornaments (.custom-ornament.ornament-left and .ornament-right)
-• 5 to 7 floating particle elements (.custom-particle) containing festive emojis and glowing text labels (${phrases})
+• 5 to 7 floating particle elements (.custom-particle) containing festive emojis and glowing text labels
 • Background subtle decorative motif container
 • All elements MUST have pointer-events: none so touchscreen kiosk buttons remain 100% clickable.
 \`\`\`html
-<!-- Persistent Festive Decorations for ${title} -->
+<!-- Persistent Festive Decorations -->
 <div class="custom-ornament ornament-left">...</div>
 <div class="custom-ornament ornament-right">...</div>
 <div class="custom-particle p-1"><span>...</span><label>...</label></div>
-<!-- add remaining particles p-2 through p-5 -->
+<div class="custom-particle p-2"><span>...</span><label>...</label></div>
+<div class="custom-particle p-3"><span>...</span><label>...</label></div>
+<div class="custom-particle p-4"><span>...</span><label>...</label></div>
+<div class="custom-particle p-5"><span>...</span><label>...</label></div>
 \`\`\`
 
 ### BLOCK 3: style.css
@@ -2552,7 +2599,7 @@ Generate standalone, high-performance CSS:
 • Keyframe animations for corner ornament sway, smooth upward particle floating with staggered delays, and glowing text shadows
 • Fully responsive for both 9:16 portrait touchscreen kiosks (1080x1920) and 16:9 landscape monitors (1920x1080).
 \`\`\`css
-/* Style & Animations for ${title} */
+/* Scoped Atmosphere Animations */
 :root {
   --bg-color: ${bgCol};
   --accent-color: ${accentCol};
@@ -2568,7 +2615,7 @@ Generate standalone, high-performance CSS:
 ...
 \`\`\`
 
-Output only the three code blocks with their markdown headers.`;
+Output ONLY these three code blocks with their markdown headers.`;
 };
 
 window.updateFullSystematicGenAiPrompt = function () {
@@ -2582,7 +2629,7 @@ window.copyFullSystematicGenAiPrompt = function () {
     const text = window.generateFullSystematicPromptText();
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {
-            showToast('📋 Full GenAI Prompt copied! Paste into ChatGPT / Claude / Gemini.', 'success');
+            showToast('📋 GenAI Prompt Template copied! Paste into ChatGPT / Claude / Gemini.', 'success');
         }).catch(() => {
             fallbackCopyPromptText(text);
         });
@@ -2597,7 +2644,7 @@ function fallbackCopyPromptText(text) {
         box.value = text;
         box.select();
         document.execCommand('copy');
-        showToast('📋 Full GenAI Prompt copied to clipboard!', 'success');
+        showToast('📋 GenAI Prompt Template copied to clipboard!', 'success');
     }
 }
 
@@ -2615,25 +2662,41 @@ window.applyIdentityJsonConfig = function () {
         const config = JSON.parse(jsonText);
         const t = studio.activeTheme || {};
 
+        if (config.slug) {
+            const cleanSlug = config.slug.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+            t.slug = cleanSlug;
+            setValue('inp-slug', cleanSlug);
+            setValue('inp-slug-adv', cleanSlug);
+        }
+        if (config.title) {
+            t.title = config.title;
+            setValue('inp-title', config.title);
+            setValue('inp-title-adv', config.title);
+        }
         if (config.subtitle) {
             t.subtitle = config.subtitle;
             setValue('inp-subtitle', config.subtitle);
+            setValue('inp-subtitle-adv', config.subtitle);
         }
         if (config.badge) {
             t.badge = config.badge;
             setValue('inp-badge', config.badge);
+            setValue('inp-badge-adv', config.badge);
         }
         if (config.icon) {
             t.icon = config.icon;
             setValue('inp-icon', config.icon);
+            setValue('inp-icon-adv', config.icon);
         }
         if (config.cta) {
             t.cta = config.cta;
             setValue('inp-cta', config.cta);
+            setValue('inp-cta-adv', config.cta);
         }
         if (config.description) {
             t.description = config.description;
             setValue('inp-desc', config.description);
+            setValue('inp-desc-adv', config.description);
         }
         if (config.style) {
             t.style = t.style || {};
@@ -2662,7 +2725,7 @@ window.applyIdentityJsonConfig = function () {
             t.waitingExperience.sequence = seq;
             renderWaitingSequenceList(seq);
         }
-        showToast('✨ Applied theme identity, colors, and waiting sequence from GenAI JSON!', 'success');
+        showToast('✨ Applied theme details, colors, and waiting sequence from GenAI JSON!', 'success');
         window.updateFullSystematicGenAiPrompt();
     } catch (err) {
         showToast('Invalid JSON: ' + err.message, 'error');
@@ -2686,8 +2749,7 @@ window.switchAtmosphereEditorTab = function (tab) {
     if (jsonBtn) jsonBtn.className = tab === 'json' ? 'admin-btn admin-btn-primary' : 'admin-btn admin-btn-secondary';
 };
 
-window.loadQuickAtmosphereTemplate = function () {
-    const presetKey = document.getElementById('adv-prompt-preset')?.value || 'cny';
+window.loadQuickAtmosphereTemplate = function (presetKey = 'cny') {
     const preset = ATMOSPHERE_PRESETS[presetKey] || ATMOSPHERE_PRESETS.cny;
 
     const htmlEl = document.getElementById('adv-decorations-html');
@@ -2697,7 +2759,7 @@ window.loadQuickAtmosphereTemplate = function () {
     if (cssEl) cssEl.value = preset.css || '';
     if (jsonEl && preset.json) jsonEl.value = preset.json;
 
-    showToast(`Loaded ${presetKey.toUpperCase()} template into editors!`, 'success');
+    showToast(`Loaded ${presetKey.toUpperCase()} sample template into editors!`, 'success');
 };
 
 window.clearAtmosphereEditors = function () {
@@ -2738,18 +2800,28 @@ window.setThemeStudioMode = function (mode, userInitiated = true) {
         // Sync basic fields -> advanced
         const slug = document.getElementById('inp-slug')?.value || '';
         const title = document.getElementById('inp-title')?.value || '';
+        const subtitle = document.getElementById('inp-subtitle')?.value || '';
+        const badge = document.getElementById('inp-badge')?.value || '';
+        const cta = document.getElementById('inp-cta')?.value || '';
+        const icon = document.getElementById('inp-icon')?.value || '';
+        const desc = document.getElementById('inp-desc')?.value || '';
         const film = document.getElementById('chk-film-strip')?.checked || false;
         const lucky = document.getElementById('chk-lucky-number')?.checked || false;
         const gender = document.getElementById('chk-gender-filter')?.checked !== false;
 
         if (slug) setValue('inp-slug-adv', slug);
         if (title) setValue('inp-title-adv', title);
+        if (subtitle) setValue('inp-subtitle-adv', subtitle);
+        if (badge) setValue('inp-badge-adv', badge);
+        if (cta) setValue('inp-cta-adv', cta);
+        if (icon) setValue('inp-icon-adv', icon);
+        if (desc) setValue('inp-desc-adv', desc);
         setChecked('chk-film-strip-adv', film);
         setChecked('chk-lucky-number-adv', lucky);
         setChecked('chk-gender-filter-adv', gender);
 
-        if (title && !document.getElementById('adv-var-concept')?.value) {
-            setValue('adv-var-concept', title);
+        if (title && title !== 'New Event Photobooth' && title !== 'Untitled Theme ✨' && !document.getElementById('adv-theme-intent')?.value) {
+            setValue('adv-theme-intent', title);
         }
         window.updateFullSystematicGenAiPrompt();
         if (userInitiated) {
@@ -2771,12 +2843,22 @@ window.setThemeStudioMode = function (mode, userInitiated = true) {
         // Sync advanced fields -> basic
         const slug = document.getElementById('inp-slug-adv')?.value || '';
         const title = document.getElementById('inp-title-adv')?.value || '';
+        const subtitle = document.getElementById('inp-subtitle-adv')?.value || '';
+        const badge = document.getElementById('inp-badge-adv')?.value || '';
+        const cta = document.getElementById('inp-cta-adv')?.value || '';
+        const icon = document.getElementById('inp-icon-adv')?.value || '';
+        const desc = document.getElementById('inp-desc-adv')?.value || '';
         const film = document.getElementById('chk-film-strip-adv')?.checked || false;
         const lucky = document.getElementById('chk-lucky-number-adv')?.checked || false;
         const gender = document.getElementById('chk-gender-filter-adv')?.checked !== false;
 
         if (slug) setValue('inp-slug', slug);
         if (title) setValue('inp-title', title);
+        if (subtitle) setValue('inp-subtitle', subtitle);
+        if (badge) setValue('inp-badge', badge);
+        if (cta) setValue('inp-cta', cta);
+        if (icon) setValue('inp-icon', icon);
+        if (desc) setValue('inp-desc', desc);
         setChecked('chk-film-strip', film);
         setChecked('chk-lucky-number', lucky);
         setChecked('chk-gender-filter', gender);
