@@ -92,6 +92,13 @@ function applyThemeStyles(theme) {
         const fontLink = document.getElementById('theme-font-link');
         if (fontLink) fontLink.href = style.googleFontUrl;
     }
+
+    // Dynamic Custom Theme CSS Loader (style.css)
+    const customCssLink = document.getElementById('custom-theme-css');
+    if (customCssLink && state.slug) {
+        customCssLink.href = `/static/themes/${state.slug}/style.css?v=${Date.now()}`;
+        customCssLink.style.display = 'block';
+    }
 }
 
 async function initAtmosphere(theme) {
@@ -102,11 +109,13 @@ async function initAtmosphere(theme) {
         // Check if theme has custom decorations.html slot
         let hasCustomDeco = false;
         try {
-            const customDecoRes = await fetch(`/static/themes/${state.slug}/decorations.html`);
+            const customDecoRes = await fetch(`/static/themes/${state.slug}/decorations.html?v=${Date.now()}`);
             if (customDecoRes.ok) {
                 const html = await customDecoRes.text();
-                decoContainer.innerHTML = html;
-                hasCustomDeco = true;
+                if (html && html.trim()) {
+                    decoContainer.innerHTML = html;
+                    hasCustomDeco = true;
+                }
             }
         } catch (e) {
             // Fall back to built-in atmosphere

@@ -224,6 +224,100 @@
                     </div>
                 </div>
 
+                <!-- Section 3b: Advanced Atmosphere Studio (GenAI HTML/CSS) -->
+                <div class="form-section" style="border: 1px solid rgba(99, 102, 241, 0.35); background: rgba(18, 20, 36, 0.7); position: relative; overflow: hidden; border-radius: var(--radius-md);">
+                    <div style="position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--primary), #ec4899); color: #fff; font-size: 0.68rem; font-weight: 800; padding: 0.25rem 0.8rem; border-bottom-left-radius: var(--radius-sm); letter-spacing: 0.5px;">
+                        ✨ PRO / GENAI ATMOSPHERE
+                    </div>
+
+                    <div style="margin-bottom: 1.2rem;">
+                        <h3 class="section-title" style="display: flex; align-items: center; gap: 0.5rem;">
+                            🏮 Festive Atmosphere & CSS Animations (Advanced Mode)
+                        </h3>
+                        <p class="section-desc">
+                            Give your theme rich visual layers like CNY swinging lanterns or Hari Raya ketupats, side banners, and floating particles. Use the prompt generator to get code from ChatGPT, Claude, or Gemini, then paste it here and compile!
+                        </p>
+                    </div>
+
+                    <!-- Step 1: GenAI Prompt Generator Box -->
+                    <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1rem;">
+                            <div style="font-weight: 700; font-size: 0.95rem; color: #a5b4fc; display: flex; align-items: center; gap: 0.4rem;">
+                                <span>🤖 Step 1: Generate AI Prompt</span>
+                                <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-dim);">(Fill in blanks or pick a preset)</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <select id="adv-prompt-preset" style="padding: 0.35rem 0.8rem; font-size: 0.82rem; border-radius: var(--radius-sm); background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #fff;" onchange="applyAtmospherePreset(this.value)">
+                                    <option value="custom">Preset: Custom / Current Palette</option>
+                                    <option value="cny">🏮 Lunar New Year (Lanterns, Huat Coins, Gold)</option>
+                                    <option value="hariraya">🌙 Hari Raya (Ketupat, Crescent Moon, Emerald)</option>
+                                    <option value="deepavali">🪔 Deepavali (Hanging Diyas, Rangoli, Violet & Gold)</option>
+                                    <option value="christmas">🎄 Christmas & Winter (Snowflakes, Baubles, Pine)</option>
+                                    <option value="cyberpunk">🚀 Future Gala (Neon Hexagons, Circuit Orbits)</option>
+                                </select>
+                                <button type="button" class="admin-btn admin-btn-accent" onclick="copyGenAiAtmospherePrompt()" style="padding: 0.35rem 0.9rem; font-size: 0.82rem;">
+                                    📋 Copy GenAI Prompt
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Editable prompt variables grid -->
+                        <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem;">
+                            <div class="form-group">
+                                <label style="font-size: 0.78rem;">Corner Ornaments</label>
+                                <input id="adv-var-ornaments" type="text" placeholder="e.g. Hanging Brass Diya Lamps" style="font-size: 0.85rem;">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size: 0.78rem;">Floating Particle Icons</label>
+                                <input id="adv-var-particles" type="text" placeholder="e.g. 🪔, 🦚, 🎆, ✨" style="font-size: 0.85rem;">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size: 0.78rem;">Floating Text Phrases</label>
+                                <input id="adv-var-phrases" type="text" placeholder="e.g. Shubh Deepavali, Joy, Prosperity" style="font-size: 0.85rem;">
+                            </div>
+                            <div class="form-group">
+                                <label style="font-size: 0.78rem;">Texture / Background Overlay</label>
+                                <input id="adv-var-texture" type="text" placeholder="e.g. Golden Rangoli Mandala pattern" style="font-size: 0.85rem;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Code Paste & Compile Area -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button type="button" id="tab-btn-deco-html" class="admin-btn admin-btn-primary" style="font-size: 0.82rem; padding: 0.35rem 0.9rem;" onclick="switchAtmosphereEditorTab('html')">
+                                    📄 decorations.html
+                                </button>
+                                <button type="button" id="tab-btn-deco-css" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.9rem;" onclick="switchAtmosphereEditorTab('css')">
+                                    🎨 style.css (Animations)
+                                </button>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.8rem;" onclick="loadQuickAtmosphereTemplate()">
+                                    💡 Load Working Template
+                                </button>
+                                <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.8rem;" onclick="clearAtmosphereEditors()">
+                                    🧹 Clear
+                                </button>
+                                <button type="button" class="admin-btn admin-btn-accent" style="font-size: 0.82rem; padding: 0.35rem 1rem;" onclick="openAtmospherePreviewModal()">
+                                    ⚡ Compile & Live Preview
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- HTML Editor -->
+                        <div id="editor-container-html">
+                            <textarea id="adv-decorations-html" rows="10" placeholder="<!-- Paste GenAI Block 1 (decorations.html) here -->&#10;<div class='custom-ornament ornament-left'>🪔</div>&#10;<div class='custom-ornament ornament-right'>🪔</div>" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #86efac; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- CSS Editor -->
+                        <div id="editor-container-css" style="display: none;">
+                            <textarea id="adv-custom-css" rows="10" placeholder="/* Paste GenAI Block 2 (style.css) here */&#10;.custom-ornament { position: fixed; top: 0; z-index: 10; pointer-events: none; }&#10;@keyframes ornamentSway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #93c5fd; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Waiting Screen Sequence -->
                 <div class="form-section">
                     <div
@@ -950,6 +1044,26 @@
                     <button class="admin-btn admin-btn-secondary" onclick="closeDeleteAssetModal()">Cancel</button>
                     <button id="btn-confirm-delete-asset" class="admin-btn admin-btn-danger" onclick="confirmDeleteAsset()">🗑️ Delete Permanently</button>
                 </div>
+            </div>
+        </div>
+    <!-- Atmosphere Live Preview Modal -->
+    <div id="atmosphere-preview-modal" class="modal-overlay" style="display: none; align-items: center; justify-content: center; z-index: 9999;">
+        <div class="asset-picker-dialog" style="max-width: 960px; width: 92vw; height: 86vh; display: flex; flex-direction: column; overflow: hidden; padding: 0;">
+            <div class="modal-header" style="padding: 0.9rem 1.4rem;">
+                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                    <span style="font-size: 1.1rem;">⚡</span>
+                    <h3 style="margin: 0; font-size: 1.05rem;">Live Atmosphere Simulation</h3>
+                    <span class="binding-tag" style="background: rgba(99,102,241,0.2); color: #a5b4fc;">Live Kiosk Engine</span>
+                </div>
+                <div style="display: flex; gap: 0.6rem; align-items: center;">
+                    <button type="button" class="admin-btn admin-btn-accent" style="padding: 0.35rem 0.9rem; font-size: 0.8rem;" onclick="saveAtmosphereDirectly()">
+                        💾 Save to Theme
+                    </button>
+                    <button class="modal-close-btn" onclick="closeAtmospherePreviewModal()">&times;</button>
+                </div>
+            </div>
+            <div style="flex: 1; position: relative; background: #000; overflow: hidden;">
+                <iframe id="atmosphere-preview-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
             </div>
         </div>
     </div>

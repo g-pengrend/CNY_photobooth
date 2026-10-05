@@ -111,6 +111,7 @@ async function selectTheme(slug) {
         populateFormFields(studio.activeTheme);
         renderAssetsList();
         loadExistingBindings(slug);
+        loadExistingAtmosphere(slug);
 
         document.getElementById('current-theme-heading').textContent = studio.activeTheme.title;
         const sub = document.getElementById('current-theme-subheading');
@@ -1162,7 +1163,9 @@ async function saveAndPublishTheme() {
         theme: theme,
         data: studio.activeData,
         bindings: studio.activeBindings,
-        workflow: studio.uploadedWorkflow
+        workflow: studio.uploadedWorkflow,
+        decorations_html: document.getElementById('adv-decorations-html')?.value || '',
+        custom_css: document.getElementById('adv-custom-css')?.value || ''
     };
 
     try {
@@ -1961,3 +1964,333 @@ window.autoFillShortDesc = function (silent = false) {
     descInput.value = clean;
     if (!silent) showToast('Short description auto-extracted!', 'success');
 };
+
+// ==========================================================================
+// 8. Advanced Atmosphere Studio & GenAI Prompt Assistant
+// ==========================================================================
+const ATMOSPHERE_PRESETS = {
+    cny: {
+        ornaments: "Swaying red silk lanterns with golden tassels at top corners",
+        particles: "🧧, 🍍, 🍊, 🧨, 💰",
+        phrases: "Huat Ah!, 新年快乐, 万事如意, 发",
+        texture: "Subtle traditional Chinese geometric fretwork / lattice pattern overlay",
+        html: `<!-- CNY Festive Atmosphere -->
+<div class="custom-ornament ornament-left">🏮</div>
+<div class="custom-ornament ornament-right">🏮</div>
+<div class="custom-particle p-1"><span>🧧</span><label>Huat Ah!</label></div>
+<div class="custom-particle p-2"><span>🍊</span><label>发</label></div>
+<div class="custom-particle p-3"><span>💰</span><label>Huat Ah!</label></div>
+<div class="custom-particle p-4"><span>🧨</span><label>发</label></div>
+<div class="custom-particle p-5"><span>🍍</span><label>Huat Ah!</label></div>`,
+        css: `/* CNY Atmosphere Styles */
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; filter: drop-shadow(0 8px 16px rgba(255, 60, 60, 0.4)); transform-origin: top center; animation: cnySwing 3.5s ease-in-out infinite alternate; pointer-events: none; }
+.ornament-left { left: 24px; }
+.ornament-right { right: 24px; animation-delay: -1.7s; }
+@keyframes cnySwing { 0% { transform: rotate(-8deg); } 100% { transform: rotate(8deg); } }
+.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 9s linear infinite; pointer-events: none; }
+.custom-particle label { font-size: 0.75rem; font-weight: 800; color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.8); margin-top: 4px; }
+.p-1 { left: 10%; animation-delay: 0s; }
+.p-2 { left: 30%; animation-delay: 2s; font-size: 2.4rem; }
+.p-3 { left: 55%; animation-delay: 4.5s; }
+.p-4 { left: 75%; animation-delay: 1.2s; font-size: 1.8rem; }
+.p-5 { left: 88%; animation-delay: 6s; }
+@keyframes floatUpward { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }`
+    },
+    hariraya: {
+        ornaments: "Woven emerald green ketupat decorations swaying at top corners with golden crescent",
+        particles: "🌙, 🕌, ⭐, ✨",
+        phrases: "Selamat Hari Raya, Syawal!, Maaf Zahir & Batin",
+        texture: "Islamic arabesque geometric star pattern overlay",
+        html: `<!-- Hari Raya Festive Atmosphere -->
+<div class="custom-ornament ornament-left">🌿</div>
+<div class="custom-ornament ornament-right">🌿</div>
+<div class="custom-particle p-1"><span>🌙</span><label>Syawal!</label></div>
+<div class="custom-particle p-2"><span>🕌</span><label>Raya</label></div>
+<div class="custom-particle p-3"><span>⭐</span><label>Maaf</label></div>
+<div class="custom-particle p-4"><span>✨</span><label>Zahir & Batin</label></div>`,
+        css: `/* Hari Raya Atmosphere Styles */
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; filter: drop-shadow(0 8px 16px rgba(16, 185, 129, 0.4)); transform-origin: top center; animation: rayaSwing 4s ease-in-out infinite alternate; pointer-events: none; }
+.ornament-left { left: 24px; }
+.ornament-right { right: 24px; animation-delay: -2s; }
+@keyframes rayaSwing { 0% { transform: rotate(-7deg); } 100% { transform: rotate(7deg); } }
+.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 10s linear infinite; pointer-events: none; }
+.custom-particle label { font-size: 0.75rem; font-weight: 700; color: #34d399; text-shadow: 0 0 8px rgba(52, 211, 153, 0.8); margin-top: 4px; }
+.p-1 { left: 15%; animation-delay: 0s; }
+.p-2 { left: 40%; animation-delay: 3s; font-size: 2.2rem; }
+.p-3 { left: 65%; animation-delay: 1.5s; }
+.p-4 { left: 85%; animation-delay: 5s; }
+@keyframes floatUpward { 0% { transform: translateY(0) scale(0.8); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh) scale(1.1); opacity: 0; } }`
+    },
+    deepavali: {
+        ornaments: "Hanging brass Diya oil lamps with glowing golden flames suspended at top corners",
+        particles: "🪔, 🦚, 🎆, ✨",
+        phrases: "Shubh Deepavali, Festival of Lights, Prosperity, Joy",
+        texture: "Subtle luminous golden Rangoli mandala pattern in background",
+        html: `<!-- Deepavali Festive Atmosphere -->
+<div class="custom-ornament ornament-left">🪔</div>
+<div class="custom-ornament ornament-right">🪔</div>
+<div class="custom-particle p-1"><span>🪔</span><label>Shubh Deepavali</label></div>
+<div class="custom-particle p-2"><span>✨</span><label>Joy & Light</label></div>
+<div class="custom-particle p-3"><span>🦚</span><label>Prosperity</label></div>
+<div class="custom-particle p-4"><span>🎆</span><label>Auspicious</label></div>`,
+        css: `/* Deepavali Atmosphere Styles */
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.8)); transform-origin: top center; animation: diyaSway 3s ease-in-out infinite alternate; pointer-events: none; }
+.ornament-left { left: 24px; }
+.ornament-right { right: 24px; animation-delay: -1.5s; }
+@keyframes diyaSway { 0% { transform: rotate(-6deg) scale(0.98); } 100% { transform: rotate(6deg) scale(1.02); } }
+.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 8.5s ease-in-out infinite; pointer-events: none; }
+.custom-particle label { font-size: 0.75rem; font-weight: 800; color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.9); margin-top: 4px; }
+.p-1 { left: 12%; animation-delay: 0.5s; }
+.p-2 { left: 38%; animation-delay: 2.5s; font-size: 2.2rem; }
+.p-3 { left: 62%; animation-delay: 4.8s; }
+.p-4 { left: 84%; animation-delay: 1.2s; font-size: 2.4rem; }
+@keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh); opacity: 0; } }`
+    },
+    christmas: {
+        ornaments: "Hanging red & gold Christmas baubles with pine needles at top corners",
+        particles: "❄️, ⭐, 🎄, 🎁",
+        phrases: "Merry Christmas, Happy Holidays, Peace & Joy",
+        texture: "Gentle falling snow drift overlay",
+        html: `<!-- Christmas Atmosphere Decorations -->
+<div class="custom-ornament ornament-left">🎄</div>
+<div class="custom-ornament ornament-right">🎄</div>
+<div class="custom-particle p-1"><span>❄️</span><label>Merry Christmas</label></div>
+<div class="custom-particle p-2"><span>⭐</span><label>Peace</label></div>
+<div class="custom-particle p-3"><span>🎁</span><label>Joy</label></div>
+<div class="custom-particle p-4"><span>❄️</span><label>Holidays</label></div>`,
+        css: `/* Christmas Atmosphere Styles */
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; filter: drop-shadow(0 6px 14px rgba(239, 68, 68, 0.4)); transform-origin: top center; animation: xmasSway 3.2s ease-in-out infinite alternate; pointer-events: none; }
+.ornament-left { left: 24px; }
+.ornament-right { right: 24px; animation-delay: -1.6s; }
+@keyframes xmasSway { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
+.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 9s linear infinite; pointer-events: none; }
+.custom-particle label { font-size: 0.75rem; font-weight: 700; color: #e0f2fe; text-shadow: 0 0 8px rgba(56, 189, 248, 0.8); margin-top: 4px; }
+.p-1 { left: 14%; animation-delay: 0s; }
+.p-2 { left: 35%; animation-delay: 3.2s; }
+.p-3 { left: 60%; animation-delay: 1.8s; }
+.p-4 { left: 82%; animation-delay: 5s; }
+@keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh); opacity: 0; } }`
+    },
+    cyberpunk: {
+        ornaments: "Futuristic neon cybernetic crests with pulsing edge lighting",
+        particles: "⚡, 💠, 🔮, ✦",
+        phrases: "SYSTEM READY, 4D VISION, CYBER GALA",
+        texture: "Subtle digital scanline and holographic matrix grid",
+        html: `<!-- Cyberpunk Atmosphere Decorations -->
+<div class="custom-ornament ornament-left">💠</div>
+<div class="custom-ornament ornament-right">💠</div>
+<div class="custom-particle p-1"><span>⚡</span><label>SYSTEM ONLINE</label></div>
+<div class="custom-particle p-2"><span>🔮</span><label>4D VISION</label></div>
+<div class="custom-particle p-3"><span>✦</span><label>MANIFEST</label></div>
+<div class="custom-particle p-4"><span>⚡</span><label>CYBER STUDIO</label></div>`,
+        css: `/* Cyberpunk Atmosphere Styles */
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+.custom-ornament { position: absolute; top: 10px; font-size: 3rem; filter: drop-shadow(0 0 16px #6366f1); animation: cyberPulse 2s ease-in-out infinite alternate; pointer-events: none; }
+.ornament-left { left: 24px; }
+.ornament-right { right: 24px; animation-delay: -1s; }
+@keyframes cyberPulse { 0% { transform: scale(0.95); opacity: 0.7; } 100% { transform: scale(1.05); opacity: 1; } }
+.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 7s linear infinite; pointer-events: none; }
+.custom-particle label { font-size: 0.7rem; font-family: monospace; font-weight: 800; color: #a5b4fc; text-shadow: 0 0 8px #6366f1; letter-spacing: 1px; margin-top: 4px; }
+.p-1 { left: 16%; animation-delay: 0s; }
+.p-2 { left: 42%; animation-delay: 2.2s; }
+.p-3 { left: 68%; animation-delay: 1.1s; }
+.p-4 { left: 88%; animation-delay: 4s; }
+@keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh); opacity: 0; } }`
+    }
+};
+
+window.applyAtmospherePreset = function (key) {
+    if (key === 'custom') {
+        const title = document.getElementById('inp-title')?.value || 'Custom Event';
+        document.getElementById('adv-var-ornaments').value = 'Festive corner ornaments';
+        document.getElementById('adv-var-particles').value = '✨, ✦, ⭐, ✧';
+        document.getElementById('adv-var-phrases').value = `${title}, Celebrate, Joy`;
+        document.getElementById('adv-var-texture').value = 'Subtle radial glowing stardust overlay';
+        return;
+    }
+    const preset = ATMOSPHERE_PRESETS[key];
+    if (!preset) return;
+    document.getElementById('adv-var-ornaments').value = preset.ornaments;
+    document.getElementById('adv-var-particles').value = preset.particles;
+    document.getElementById('adv-var-phrases').value = preset.phrases;
+    document.getElementById('adv-var-texture').value = preset.texture;
+    showToast(`Loaded ${key.toUpperCase()} preset variables!`, 'info');
+};
+
+window.copyGenAiAtmospherePrompt = function () {
+    const title = document.getElementById('inp-title')?.value.trim() || studio.activeTheme?.title || 'Photobooth Theme';
+    const bgCol = document.getElementById('inp-color-bg')?.value || '#0a0a12';
+    const accentCol = document.getElementById('inp-color-accent')?.value || '#d4af37';
+    const primaryCol = document.getElementById('inp-color-primary')?.value || '#6366f1';
+
+    const ornaments = document.getElementById('adv-var-ornaments')?.value.trim() || 'Festive hanging corner ornaments';
+    const particles = document.getElementById('adv-var-particles')?.value.trim() || '✨, ✦, ⭐, ✧';
+    const phrases = document.getElementById('adv-var-phrases')?.value.trim() || 'Celebrate, Joy, Welcome';
+    const texture = document.getElementById('adv-var-texture')?.value.trim() || 'Subtle glowing pattern overlay';
+
+    const promptText = `You are an expert UI/UX frontend designer specializing in interactive photobooth touchscreen kiosk atmospheres.
+Please generate custom, festive HTML and CSS animations for the following theme:
+
+--- THEME SPECIFICATIONS ---
+• Theme Name: "${title}"
+• Primary Theme Color: ${primaryCol}
+• Accent / Highlight Color: ${accentCol}
+• Background Color: ${bgCol}
+• Left & Right Top Corner Ornaments: ${ornaments}
+• Floating Particle Icons/Emojis: ${particles}
+• Floating Festive Text Phrases: ${phrases}
+• Background Motif / Texture: ${texture}
+
+--- TECHNICAL REQUIREMENTS ---
+1. All elements must have "pointer-events: none" so they never block touch clicks on buttons or cards.
+2. The root container is ".persistent-decorations" which has "position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden;".
+3. Provide smooth CSS keyframe animations (e.g. swaying pendulum at top corners, upward floating particles with staggered animation-delay, glowing text shadows).
+4. Responsive: looks beautiful on 1080x1920 (9:16 portrait kiosk) as well as 1920x1080 (landscape).
+5. Clean, standalone code without external JavaScript or third-party libraries.
+
+--- OUTPUT FORMAT ---
+Please output EXACTLY two clean code blocks:
+
+### Block 1: decorations.html
+\`\`\`html
+<!-- Persistent Festive Decorations -->
+<div class="custom-ornament ornament-left">...</div>
+<div class="custom-ornament ornament-right">...</div>
+<!-- (Staggered floating particle elements with text labels) -->
+\`\`\`
+
+### Block 2: style.css
+\`\`\`css
+/* Scoped Atmosphere Animations */
+.persistent-decorations { ... }
+.custom-ornament { ... }
+@keyframes ... { ... }
+\`\`\``;
+
+    navigator.clipboard.writeText(promptText).then(() => {
+        showToast('📋 GenAI prompt copied to clipboard! Paste into ChatGPT / Claude.', 'success');
+    }).catch(err => {
+        showToast('Could not copy automatically: ' + err.message, 'error');
+    });
+};
+
+window.switchAtmosphereEditorTab = function (tab) {
+    const htmlCont = document.getElementById('editor-container-html');
+    const cssCont = document.getElementById('editor-container-css');
+    const htmlBtn = document.getElementById('tab-btn-deco-html');
+    const cssBtn = document.getElementById('tab-btn-deco-css');
+
+    if (tab === 'html') {
+        htmlCont.style.display = 'block';
+        cssCont.style.display = 'none';
+        htmlBtn.className = 'admin-btn admin-btn-primary';
+        cssBtn.className = 'admin-btn admin-btn-secondary';
+    } else {
+        htmlCont.style.display = 'none';
+        cssCont.style.display = 'block';
+        htmlBtn.className = 'admin-btn admin-btn-secondary';
+        cssBtn.className = 'admin-btn admin-btn-primary';
+    }
+};
+
+window.loadQuickAtmosphereTemplate = function () {
+    const presetKey = document.getElementById('adv-prompt-preset')?.value || 'deepavali';
+    const preset = ATMOSPHERE_PRESETS[presetKey] || ATMOSPHERE_PRESETS.deepavali;
+
+    const htmlEl = document.getElementById('adv-decorations-html');
+    const cssEl = document.getElementById('adv-custom-css');
+    if (htmlEl) htmlEl.value = preset.html;
+    if (cssEl) cssEl.value = preset.css;
+
+    showToast(`Loaded ${presetKey.toUpperCase()} template into editors!`, 'success');
+};
+
+window.clearAtmosphereEditors = function () {
+    const htmlEl = document.getElementById('adv-decorations-html');
+    const cssEl = document.getElementById('adv-custom-css');
+    if (htmlEl) htmlEl.value = '';
+    if (cssEl) cssEl.value = '';
+    showToast('Atmosphere editors cleared.', 'info');
+};
+
+window.loadExistingAtmosphere = async function (slug) {
+    try {
+        const res = await fetch(`/api/admin/theme/${slug}/atmosphere`);
+        if (res.ok) {
+            const data = await res.json();
+            const htmlEl = document.getElementById('adv-decorations-html');
+            const cssEl = document.getElementById('adv-custom-css');
+            if (htmlEl) htmlEl.value = data.decorations_html || '';
+            if (cssEl) cssEl.value = data.custom_css || '';
+        }
+    } catch (e) {
+        console.warn('[Studio] Failed loading atmosphere:', e);
+    }
+};
+
+window.saveAtmosphereDirectly = async function () {
+    const slug = studio.activeTheme?.slug;
+    if (!slug) {
+        showToast('Please select or create a theme first.', 'error');
+        return;
+    }
+
+    const htmlContent = document.getElementById('adv-decorations-html')?.value || '';
+    const cssContent = document.getElementById('adv-custom-css')?.value || '';
+
+    try {
+        const res = await fetch(`/api/admin/theme/${slug}/atmosphere`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                decorations_html: htmlContent,
+                custom_css: cssContent
+            })
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Failed to save atmosphere');
+        }
+
+        showToast('💾 Atmosphere files (decorations.html & style.css) saved!', 'success');
+
+        // If preview modal is open, reload the iframe
+        const iframe = document.getElementById('atmosphere-preview-iframe');
+        if (iframe && iframe.src) {
+            iframe.src = `/${slug}?engine=universal&preview=atmosphere&t=${Date.now()}`;
+        }
+    } catch (err) {
+        showToast('Save error: ' + err.message, 'error');
+    }
+};
+
+window.openAtmospherePreviewModal = async function () {
+    const slug = studio.activeTheme?.slug;
+    if (!slug) {
+        showToast('Please select or create a theme first.', 'error');
+        return;
+    }
+
+    // Save atmosphere first so iframe serves updated assets
+    await saveAtmosphereDirectly();
+
+    const modal = document.getElementById('atmosphere-preview-modal');
+    const iframe = document.getElementById('atmosphere-preview-iframe');
+    if (modal && iframe) {
+        iframe.src = `/${slug}?engine=universal&preview=atmosphere&t=${Date.now()}`;
+        modal.style.display = 'flex';
+    }
+};
+
+window.closeAtmospherePreviewModal = function () {
+    const modal = document.getElementById('atmosphere-preview-modal');
+    const iframe = document.getElementById('atmosphere-preview-iframe');
+    if (modal) modal.style.display = 'none';
+    if (iframe) iframe.src = '';
+};
+

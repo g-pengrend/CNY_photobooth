@@ -956,6 +956,20 @@ def admin_save_theme():
             with open(m_path, 'w', encoding='utf-8') as mf:
                 json.dump(m_data, mf, indent=2, ensure_ascii=False)
 
+        # 6. Save custom atmosphere decorations.html and style.css if provided
+        decorations_html = payload.get('decorations_html')
+        custom_css = payload.get('custom_css')
+        if decorations_html is not None:
+            deco_path = os.path.join(theme_dir, 'decorations.html')
+            with open(deco_path, 'w', encoding='utf-8') as f:
+                f.write(decorations_html)
+            print(f"✅ [Studio] Saved custom decorations.html for theme: {slug}")
+        if custom_css is not None:
+            css_path = os.path.join(theme_dir, 'style.css')
+            with open(css_path, 'w', encoding='utf-8') as f:
+                f.write(custom_css)
+            print(f"✅ [Studio] Saved custom style.css for theme: {slug}")
+
         print(f"✅ [Studio] Successfully saved theme package and FLF clothes mapping for: '{slug}'")
         return jsonify({
             'status': 'success',
@@ -966,6 +980,54 @@ def admin_save_theme():
     except Exception as e:
         print(f"❌ [Studio] Error saving theme: {e}")
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/admin/theme/<theme_slug>/atmosphere', methods=['GET', 'POST'])
+def admin_theme_atmosphere(theme_slug):
+    """Get or save custom decorations.html and style.css for a theme."""
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    theme_dir = os.path.join(base_dir, 'static', 'themes', theme_slug.strip().lower())
+    if not os.path.exists(theme_dir):
+        return jsonify({'error': f'Theme "{theme_slug}" not found'}), 404
+
+    deco_path = os.path.join(theme_dir, 'decorations.html')
+    css_path = os.path.join(theme_dir, 'style.css')
+
+    if request.method == 'POST':
+        payload = request.json or {}
+        deco_content = payload.get('decorations_html', '')
+        css_content = payload.get('custom_css', '')
+        try:
+            with open(deco_path, 'w', encoding='utf-8') as f:
+                f.write(deco_content)
+            with open(css_path, 'w', encoding='utf-8') as f:
+                f.write(css_content)
+            return jsonify({'status': 'success', 'message': 'Atmosphere files saved successfully'})
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    # GET request
+    deco_content = ""
+    css_content = ""
+    if os.path.exists(deco_path):
+        try:
+            with open(deco_path, 'r', encoding='utf-8') as f:
+                deco_content = f.read()
+        except Exception:
+            pass
+    if os.path.exists(css_path):
+        try:
+            with open(css_path, 'r', encoding='utf-8') as f:
+                css_content = f.read()
+        except Exception:
+            pass
+
+    return jsonify({
+        'status': 'success',
+        'theme': theme_slug,
+        'decorations_html': deco_content,
+        'custom_css': css_content
+    })
 
 
 # ============================================================
