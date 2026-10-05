@@ -70,7 +70,17 @@ function renderThemeSidebar() {
 
     const isThemeView = studio.currentView === 'theme-editor';
 
-    listEl.innerHTML = studio.themes.map(t => {
+    const createCardHtml = `
+        <div class="sidebar-create-card" onclick="createNewTheme()" title="Create a new theme">
+            <div class="create-card-icon-wrap">➕</div>
+            <div>
+                <div class="create-card-title">Create New Theme</div>
+                <div class="create-card-sub">Basic Form or GenAI Studio</div>
+            </div>
+        </div>
+    `;
+
+    const themeItemsHtml = studio.themes.map(t => {
         const isActive = isThemeView && studio.activeTheme?.slug === t.slug;
         const isDraft = t.status === 'draft';
         return `<div class="theme-item ${isActive ? 'active' : ''} ${isDraft ? 'theme-item-draft' : ''}" data-slug="${t.slug}">
@@ -87,6 +97,8 @@ function renderThemeSidebar() {
             </div>
         </div>`;
     }).join('');
+
+    listEl.innerHTML = createCardHtml + themeItemsHtml;
 
     listEl.querySelectorAll('.theme-item').forEach(item => {
         item.addEventListener('click', () => selectTheme(item.dataset.slug));
@@ -201,16 +213,21 @@ function createNewTheme() {
     populateFormFields(studio.activeTheme);
     const htmlEl = document.getElementById('adv-decorations-html');
     const cssEl = document.getElementById('adv-custom-css');
+    const jsonEl = document.getElementById('adv-identity-json');
     if (htmlEl) htmlEl.value = '';
     if (cssEl) cssEl.value = '';
+    if (jsonEl) jsonEl.value = '';
     renderAssetsList();
     document.getElementById('workflow-inspection-card').style.display = 'none';
     document.getElementById('current-theme-heading').textContent = '✨ New Theme';
     const sub = document.getElementById('current-theme-subheading');
-    if (sub) sub.textContent = 'Fill in the details below and publish when ready.';
+    if (sub) sub.textContent = 'Choose Basic or Advanced Mode below to build this theme, then Publish.';
 
     switchToThemeEditor();
-    showToast('Created new draft theme. Fill in Identity & Style, then Publish!', 'success');
+    if (typeof window.setThemeStudioMode === 'function') {
+        window.setThemeStudioMode('basic', false);
+    }
+    showToast('Created new draft theme. Choose Basic or Advanced Mode to begin!', 'success');
 }
 
 // ==========================================================================
@@ -219,9 +236,11 @@ function createNewTheme() {
 function populateFormFields(theme) {
     if (!theme) return;
 
-    // Identity
+    // Identity (Basic and Advanced sync)
     setValue('inp-slug', theme.slug || '');
+    setValue('inp-slug-adv', theme.slug || '');
     setValue('inp-title', theme.title || '');
+    setValue('inp-title-adv', theme.title || '');
     setValue('inp-subtitle', theme.subtitle || '');
     setValue('inp-badge', theme.badge || '');
     setValue('inp-icon', theme.icon || '✨');
@@ -239,16 +258,23 @@ function populateFormFields(theme) {
     setValue('inp-font', theme.style?.fontFamily || "'Outfit', sans-serif");
     setValue('inp-google-font', theme.style?.googleFontUrl || '');
 
-    // Features
+    // Features (Basic and Advanced sync)
     setChecked('chk-lucky-number', theme.features?.luckyNumber || false);
+    setChecked('chk-lucky-number-adv', theme.features?.luckyNumber || false);
     setChecked('chk-film-strip', theme.features?.filmStrip || false);
+    setChecked('chk-film-strip-adv', theme.features?.filmStrip || false);
     setChecked('chk-gender-filter', theme.features?.genderFilter !== false);
+    setChecked('chk-gender-filter-adv', theme.features?.genderFilter !== false);
 
     // Atmosphere
     const bg = theme.background || {};
     setValue('sel-bg-type', bg.type || 'particles');
     setValue('inp-floating-icons', (bg.floatingIcons || ['✨', '✦', '⭐']).join(', '));
-    if (typeof window.setAtmosphereBuilderMode === 'function') {
+    setValue('adv-var-concept', theme.title || '');
+
+    if (typeof window.setThemeStudioMode === 'function') {
+        window.setThemeStudioMode(theme.atmosphereMode === 'advanced' ? 'advanced' : 'basic', false);
+    } else if (typeof window.setAtmosphereBuilderMode === 'function') {
         window.setAtmosphereBuilderMode(theme.atmosphereMode === 'advanced' ? 'advanced' : 'basic', false);
     }
 
@@ -257,13 +283,23 @@ function populateFormFields(theme) {
 
     // Prompt Designer
     populatePromptDesigner(theme);
+
+    // Update Full Systematic GenAI Prompt preview
+    if (typeof window.updateFullSystematicGenAiPrompt === 'function') {
+        window.updateFullSystematicGenAiPrompt();
+    }
 }
 
 function readFormFields() {
     const theme = studio.activeTheme || {};
 
-    theme.slug = getValue('inp-slug').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
-    theme.title = getValue('inp-title').trim();
+    const isAdv = studio.currentThemeMode === 'advanced' || studio.currentAtmosphereMode === 'advanced';
+
+    const rawSlug = (isAdv && getValue('inp-slug-adv').trim()) ? getValue('inp-slug-adv') : getValue('inp-slug');
+    const rawTitle = (isAdv && getValue('inp-title-adv').trim()) ? getValue('inp-title-adv') : getValue('inp-title');
+
+    theme.slug = rawSlug.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+    theme.title = rawTitle.trim();
     theme.subtitle = getValue('inp-subtitle').trim();
     theme.badge = getValue('inp-badge').trim();
     theme.icon = getValue('inp-icon').trim() || '✨';
@@ -290,10 +326,14 @@ function readFormFields() {
     };
 
     // Features
+    const filmVal = isAdv ? getChecked('chk-film-strip-adv') : getChecked('chk-film-strip');
+    const luckyVal = isAdv ? getChecked('chk-lucky-number-adv') : getChecked('chk-lucky-number');
+    const genderVal = isAdv ? getChecked('chk-gender-filter-adv') : getChecked('chk-gender-filter');
+
     theme.features = {
-        luckyNumber: getChecked('chk-lucky-number'),
-        filmStrip: getChecked('chk-film-strip'),
-        genderFilter: getChecked('chk-gender-filter')
+        luckyNumber: luckyVal,
+        filmStrip: filmVal,
+        genderFilter: genderVal
     };
 
     // Background
@@ -303,12 +343,12 @@ function readFormFields() {
         floatingIcons: icons.length > 0 ? icons : ['✨', '✦', '⭐'],
         filmStrip: theme.features.filmStrip
     };
-    theme.atmosphereMode = studio.currentAtmosphereMode || 'basic';
+    theme.atmosphereMode = studio.currentThemeMode || studio.currentAtmosphereMode || 'basic';
 
     // Waiting Sequence
     theme.waitingExperience = theme.waitingExperience || {};
-    theme.waitingExperience.title = 'Creating Magic...';
-    theme.waitingExperience.subtitle = 'Processing your photo';
+    theme.waitingExperience.title = theme.waitingExperience.title || 'Creating Magic...';
+    theme.waitingExperience.subtitle = theme.waitingExperience.subtitle || 'Processing your photo';
     theme.waitingExperience.sequence = collectWaitingSequence();
 
     // Prompt Designer
@@ -1531,15 +1571,7 @@ window.onDeleteThemePhraseInput = function () {
 
     const isMatch = val && (
         val === target ||
-        val === cleanTitle ||
-        val === `delete ${cleanTitle}` ||
-        val === slug ||
-        val === `delete ${slug}` ||
-        norm(val) === norm(target) ||
-        norm(val) === norm(cleanTitle) ||
-        norm(val) === `delete${norm(cleanTitle)}` ||
-        norm(val) === norm(slug) ||
-        norm(val) === `delete${norm(slug)}`
+        norm(val) === norm(target)
     );
 
     if (isMatch) {
@@ -1606,15 +1638,7 @@ window.confirmDeleteTheme = async function () {
 
     const isMatch = val && (
         val === target ||
-        val === cleanTitle ||
-        val === `delete ${cleanTitle}` ||
-        val === slug ||
-        val === `delete ${slug}` ||
-        norm(val) === norm(target) ||
-        norm(val) === norm(cleanTitle) ||
-        norm(val) === `delete${norm(cleanTitle)}` ||
-        norm(val) === norm(slug) ||
-        norm(val) === `delete${norm(slug)}`
+        norm(val) === norm(target)
     );
 
     if (!isMatch) {
@@ -2002,14 +2026,47 @@ window.autoFillShortDesc = function (silent = false) {
 };
 
 // ==========================================================================
-// 8. Advanced Atmosphere Studio & GenAI Prompt Assistant
+// 8. Advanced Theme Studio & GenAI Systematic Prompt Assistant
 // ==========================================================================
 const ATMOSPHERE_PRESETS = {
     cny: {
+        concept: "Lunar New Year Prosperity & Spring Festival",
         ornaments: "Swaying red silk lanterns with golden tassels at top corners",
         particles: "🧧, 🍍, 🍊, 🧨, 💰",
         phrases: "Huat Ah!, 新年快乐, 万事如意, 发",
         texture: "Subtle traditional Chinese geometric fretwork / lattice pattern overlay",
+        json: JSON.stringify({
+            subtitle: "Year of the Horse Celebration",
+            badge: "Lunar Special",
+            icon: "🏮",
+            cta: "Begin Celebration",
+            description: "Step into an auspicious Lunar New Year portrait transformation with traditional imperial and modern festive aesthetics.",
+            style: {
+                fontFamily: "'Outfit', sans-serif",
+                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
+                colors: {
+                    background: "#0c0d14",
+                    text: "#ffffff",
+                    primary: "#181926",
+                    accent: "#e11d48",
+                    accentGlow: "rgba(225, 29, 72, 0.35)",
+                    surface: "rgba(255, 255, 255, 0.05)",
+                    surfaceBorder: "rgba(225, 29, 72, 0.3)"
+                }
+            },
+            waitingExperience: {
+                title: "Summoning Prosperity...",
+                subtitle: "Manifesting your festive Lunar New Year portrait",
+                sequence: [
+                    { text: "Welcoming prosperity and auspicious energy...", delay: 500, color: "#ffd700" },
+                    { text: "Crafting festive silk embroidery and jade textures...", delay: 3500, color: "#ffffff" },
+                    { text: "Infusing radiant golden aura and lantern glow...", delay: 7000, color: "#e11d48" },
+                    { text: "Harmonizing studio lighting with celestial blessings...", delay: 10500, color: "#ffd700" },
+                    { text: "Huat Ah! Manifestation complete! Preparing reveal...", delay: 14000, color: "#ffffff" }
+                ],
+                completionMessage: "Huat Ah! Ready to celebrate."
+            }
+        }, null, 2),
         html: `<!-- CNY Festive Atmosphere -->
 <div class="custom-ornament ornament-left">🏮</div>
 <div class="custom-ornament ornament-right">🏮</div>
@@ -2034,10 +2091,43 @@ const ATMOSPHERE_PRESETS = {
 @keyframes floatUpward { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }`
     },
     hariraya: {
+        concept: "Hari Raya Aidilfitri Warmth & Forgiveness",
         ornaments: "Woven emerald green ketupat decorations swaying at top corners with golden crescent",
         particles: "🌙, 🕌, ⭐, ✨",
         phrases: "Selamat Hari Raya, Syawal!, Maaf Zahir & Batin",
         texture: "Islamic arabesque geometric star pattern overlay",
+        json: JSON.stringify({
+            subtitle: "Syawal Festive Celebration",
+            badge: "Hari Raya Edition",
+            icon: "🌙",
+            cta: "Mula Pengalaman",
+            description: "Celebrate the warmth of Hari Raya with bespoke traditional Songket and Baju Melayu digital transformations.",
+            style: {
+                fontFamily: "'Outfit', sans-serif",
+                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
+                colors: {
+                    background: "#081611",
+                    text: "#ffffff",
+                    primary: "#064e3b",
+                    accent: "#10b981",
+                    accentGlow: "rgba(16, 185, 129, 0.35)",
+                    surface: "rgba(255, 255, 255, 0.05)",
+                    surfaceBorder: "rgba(16, 185, 129, 0.3)"
+                }
+            },
+            waitingExperience: {
+                title: "Mencipta Keajaiban...",
+                subtitle: "Menyediakan potret Hari Raya anda",
+                sequence: [
+                    { text: "Menyambut kedatangan Syawal yang mulia...", delay: 500, color: "#34d399" },
+                    { text: "Menenun tekstur songket dan kilauan benang emas...", delay: 3500, color: "#ffffff" },
+                    { text: "Menyinari pencahayaan pelita dan bulan sabit...", delay: 7000, color: "#10b981" },
+                    { text: "Menyempurnakan perincian busana tradisional...", delay: 10500, color: "#34d399" },
+                    { text: "Selamat Hari Raya! Potret bersedia untuk ditatap...", delay: 14000, color: "#ffffff" }
+                ],
+                completionMessage: "Selamat Hari Raya Aidilfitri!"
+            }
+        }, null, 2),
         html: `<!-- Hari Raya Festive Atmosphere -->
 <div class="custom-ornament ornament-left">🌿</div>
 <div class="custom-ornament ornament-right">🌿</div>
@@ -2060,10 +2150,43 @@ const ATMOSPHERE_PRESETS = {
 @keyframes floatUpward { 0% { transform: translateY(0) scale(0.8); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh) scale(1.1); opacity: 0; } }`
     },
     deepavali: {
+        concept: "Deepavali Festival of Lights & Auspicious Glow",
         ornaments: "Hanging brass Diya oil lamps with glowing golden flames suspended at top corners",
         particles: "🪔, 🦚, 🎆, ✨",
         phrases: "Shubh Deepavali, Festival of Lights, Prosperity, Joy",
         texture: "Subtle luminous golden Rangoli mandala pattern in background",
+        json: JSON.stringify({
+            subtitle: "Festival of Lights Celebration",
+            badge: "Deepavali Edition",
+            icon: "🪔",
+            cta: "Begin Experience",
+            description: "Experience the brilliance of the Festival of Lights with resplendent silk sarees, sherwanis, and golden rangoli auras.",
+            style: {
+                fontFamily: "'Outfit', sans-serif",
+                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
+                colors: {
+                    background: "#12081d",
+                    text: "#ffffff",
+                    primary: "#2e1065",
+                    accent: "#f59e0b",
+                    accentGlow: "rgba(245, 158, 11, 0.4)",
+                    surface: "rgba(255, 255, 255, 0.05)",
+                    surfaceBorder: "rgba(245, 158, 11, 0.35)"
+                }
+            },
+            waitingExperience: {
+                title: "Lighting the Diyas...",
+                subtitle: "Rendering your radiant Deepavali portrait",
+                sequence: [
+                    { text: "Kindling auspicious oil lamps of wisdom and joy...", delay: 500, color: "#fbbf24" },
+                    { text: "Weaving intricate Banarasi silk and zardozi embroidery...", delay: 3500, color: "#ffffff" },
+                    { text: "Adorning with radiant rangoli lights and peacock auras...", delay: 7000, color: "#f59e0b" },
+                    { text: "Fine-tuning golden luminescence and warmth...", delay: 10500, color: "#fbbf24" },
+                    { text: "Shubh Deepavali! Your luminous portrait is ready...", delay: 14000, color: "#ffffff" }
+                ],
+                completionMessage: "Shubh Deepavali!"
+            }
+        }, null, 2),
         html: `<!-- Deepavali Festive Atmosphere -->
 <div class="custom-ornament ornament-left">🪔</div>
 <div class="custom-ornament ornament-right">🪔</div>
@@ -2086,10 +2209,43 @@ const ATMOSPHERE_PRESETS = {
 @keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh); opacity: 0; } }`
     },
     christmas: {
+        concept: "Winter Wonderland & Christmas Joy",
         ornaments: "Hanging red & gold Christmas baubles with pine needles at top corners",
         particles: "❄️, ⭐, 🎄, 🎁",
         phrases: "Merry Christmas, Happy Holidays, Peace & Joy",
         texture: "Gentle falling snow drift overlay",
+        json: JSON.stringify({
+            subtitle: "Winter Wonderland Edition",
+            badge: "Holiday Special",
+            icon: "🎄",
+            cta: "Enter Wonderland",
+            description: "Transform into cozy, festive holiday elegance with winter velvet, evergreen wreaths, and sparkling snowscapes.",
+            style: {
+                fontFamily: "'Outfit', sans-serif",
+                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
+                colors: {
+                    background: "#08131d",
+                    text: "#ffffff",
+                    primary: "#1e293b",
+                    accent: "#38bdf8",
+                    accentGlow: "rgba(56, 189, 248, 0.35)",
+                    surface: "rgba(255, 255, 255, 0.05)",
+                    surfaceBorder: "rgba(56, 189, 248, 0.3)"
+                }
+            },
+            waitingExperience: {
+                title: "Catching Snowflakes...",
+                subtitle: "Crafting your holiday portrait",
+                sequence: [
+                    { text: "Welcoming winter magic and gentle snowfall...", delay: 500, color: "#38bdf8" },
+                    { text: "Styling cozy holiday knitwear and velvet textures...", delay: 3500, color: "#ffffff" },
+                    { text: "Adding sparkling baubles and twinkling pine needles...", delay: 7000, color: "#38bdf8" },
+                    { text: "Balancing fireside warmth and frosty crystalline glow...", delay: 10500, color: "#ffffff" },
+                    { text: "Merry Christmas! Your holiday portrait is ready...", delay: 14000, color: "#38bdf8" }
+                ],
+                completionMessage: "Merry Christmas & Happy Holidays!"
+            }
+        }, null, 2),
         html: `<!-- Christmas Atmosphere Decorations -->
 <div class="custom-ornament ornament-left">🎄</div>
 <div class="custom-ornament ornament-right">🎄</div>
@@ -2111,11 +2267,103 @@ const ATMOSPHERE_PRESETS = {
 .p-4 { left: 82%; animation-delay: 5s; }
 @keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh); opacity: 0; } }`
     },
+    ndp: {
+        concept: "Singapore National Day Patriotic Celebration",
+        ornaments: "Crimson banners with golden lion head crest and five stars at top corners",
+        particles: "🇸🇬, ⭐, 🎆, ✦",
+        phrases: "Majulah!, Together As One, National Day Celebration",
+        texture: "Subtle geometric crimson & white star lattice pattern overlay",
+        json: JSON.stringify({
+            subtitle: "National Day Parade Gala",
+            badge: "SG Celebration",
+            icon: "🇸🇬",
+            cta: "Celebrate National Day",
+            description: "Celebrate unity and pride with patriotic red-and-white gala attire, skyline fireworks, and Singapore spirit.",
+            style: {
+                fontFamily: "'Outfit', sans-serif",
+                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
+                colors: {
+                    background: "#140a0e",
+                    text: "#ffffff",
+                    primary: "#2d111c",
+                    accent: "#ef4444",
+                    accentGlow: "rgba(239, 68, 68, 0.35)",
+                    surface: "rgba(255, 255, 255, 0.05)",
+                    surfaceBorder: "rgba(239, 68, 68, 0.3)"
+                }
+            },
+            waitingExperience: {
+                title: "Majulah Singapura...",
+                subtitle: "Creating your patriotic celebration portrait",
+                sequence: [
+                    { text: "Celebrating our nation's vibrant story...", delay: 500, color: "#f87171" },
+                    { text: "Styling red-and-white formal threads and crest accents...", delay: 3500, color: "#ffffff" },
+                    { text: "Rendering Marina Bay skyline fireworks and stars...", delay: 7000, color: "#ef4444" },
+                    { text: "Harmonizing festive illumination and unity...", delay: 10500, color: "#ffffff" },
+                    { text: "Majulah! Celebration portrait manifested...", delay: 14000, color: "#f87171" }
+                ],
+                completionMessage: "Majulah Singapura!"
+            }
+        }, null, 2),
+        html: `<!-- National Day Festive Atmosphere -->
+<div class="custom-ornament ornament-left">🇸🇬</div>
+<div class="custom-ornament ornament-right">🇸🇬</div>
+<div class="custom-particle p-1"><span>⭐</span><label>Majulah!</label></div>
+<div class="custom-particle p-2"><span>🎆</span><label>Singapore</label></div>
+<div class="custom-particle p-3"><span>🇸🇬</span><label>Celebrate</label></div>
+<div class="custom-particle p-4"><span>✨</span><label>One Nation</label></div>`,
+        css: `/* NDP Atmosphere Styles */
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+.custom-ornament { position: absolute; top: -10px; font-size: 3.5rem; filter: drop-shadow(0 6px 14px rgba(239, 68, 68, 0.4)); transform-origin: top center; animation: ndpSway 3.2s ease-in-out infinite alternate; pointer-events: none; }
+.ornament-left { left: 24px; }
+.ornament-right { right: 24px; animation-delay: -1.6s; }
+@keyframes ndpSway { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
+.custom-particle { position: absolute; display: flex; flex-direction: column; align-items: center; bottom: -80px; font-size: 2rem; animation: floatUpward 8.5s linear infinite; pointer-events: none; }
+.custom-particle label { font-size: 0.75rem; font-weight: 700; color: #fee2e2; text-shadow: 0 0 8px rgba(239, 68, 68, 0.8); margin-top: 4px; }
+.p-1 { left: 14%; animation-delay: 0s; }
+.p-2 { left: 38%; animation-delay: 2.8s; }
+.p-3 { left: 65%; animation-delay: 1.4s; }
+.p-4 { left: 85%; animation-delay: 4.5s; }
+@keyframes floatUpward { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.9; } 85% { opacity: 0.9; } 100% { transform: translateY(-110vh); opacity: 0; } }`
+    },
     cyberpunk: {
+        concept: "Cyberpunk Future Gala & Holographic Matrix",
         ornaments: "Futuristic neon cybernetic crests with pulsing edge lighting",
         particles: "⚡, 💠, 🔮, ✦",
         phrases: "SYSTEM READY, 4D VISION, CYBER GALA",
         texture: "Subtle digital scanline and holographic matrix grid",
+        json: JSON.stringify({
+            subtitle: "Neon Nexus Interactive",
+            badge: "Cyber Gala",
+            icon: "💠",
+            cta: "Initialize Uplink",
+            description: "Immerse yourself into a futuristic high-tech universe with cyberpunk augmented apparel, neon trims, and cybernetic glows.",
+            style: {
+                fontFamily: "'Outfit', sans-serif",
+                googleFontUrl: "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
+                colors: {
+                    background: "#050714",
+                    text: "#ffffff",
+                    primary: "#111827",
+                    accent: "#6366f1",
+                    accentGlow: "rgba(99, 102, 241, 0.4)",
+                    surface: "rgba(255, 255, 255, 0.05)",
+                    surfaceBorder: "rgba(99, 102, 241, 0.35)"
+                }
+            },
+            waitingExperience: {
+                title: "INITIALIZING MATRIX...",
+                subtitle: "Synthesizing neural cybernetic portrait",
+                sequence: [
+                    { text: "Establishing quantum neural interface...", delay: 500, color: "#818cf8" },
+                    { text: "Synthesizing carbon-fiber meshes and luminescent filaments...", delay: 3500, color: "#ffffff" },
+                    { text: "Projecting holographic aura and cybernetic accents...", delay: 7000, color: "#6366f1" },
+                    { text: "Calibrating neon shaders and raytracing buffers...", delay: 10500, color: "#a5b4fc" },
+                    { text: "SYSTEM READY: Cyber portrait manifested...", delay: 14000, color: "#ffffff" }
+                ],
+                completionMessage: "UPLINK COMPLETE"
+            }
+        }, null, 2),
         html: `<!-- Cyberpunk Atmosphere Decorations -->
 <div class="custom-ornament ornament-left">💠</div>
 <div class="custom-ornament ornament-right">💠</div>
@@ -2142,105 +2390,312 @@ const ATMOSPHERE_PRESETS = {
 window.applyAtmospherePreset = function (key) {
     if (key === 'custom') {
         const title = document.getElementById('inp-title')?.value || 'Custom Event';
+        document.getElementById('adv-var-concept').value = `${title} Celebration`;
         document.getElementById('adv-var-ornaments').value = 'Festive corner ornaments';
         document.getElementById('adv-var-particles').value = '✨, ✦, ⭐, ✧';
         document.getElementById('adv-var-phrases').value = `${title}, Celebrate, Joy`;
         document.getElementById('adv-var-texture').value = 'Subtle radial glowing stardust overlay';
+        window.updateFullSystematicGenAiPrompt();
         return;
     }
     const preset = ATMOSPHERE_PRESETS[key];
     if (!preset) return;
-    document.getElementById('adv-var-ornaments').value = preset.ornaments;
-    document.getElementById('adv-var-particles').value = preset.particles;
-    document.getElementById('adv-var-phrases').value = preset.phrases;
-    document.getElementById('adv-var-texture').value = preset.texture;
+    if (document.getElementById('adv-var-concept')) document.getElementById('adv-var-concept').value = preset.concept || '';
+    if (document.getElementById('adv-var-ornaments')) document.getElementById('adv-var-ornaments').value = preset.ornaments || '';
+    if (document.getElementById('adv-var-particles')) document.getElementById('adv-var-particles').value = preset.particles || '';
+    if (document.getElementById('adv-var-phrases')) document.getElementById('adv-var-phrases').value = preset.phrases || '';
+    if (document.getElementById('adv-var-texture')) document.getElementById('adv-var-texture').value = preset.texture || '';
+    
+    window.updateFullSystematicGenAiPrompt();
     showToast(`Loaded ${key.toUpperCase()} preset variables!`, 'info');
 };
 
-window.copyGenAiAtmospherePrompt = function () {
-    const title = document.getElementById('inp-title')?.value.trim() || studio.activeTheme?.title || 'Photobooth Theme';
-    const bgCol = document.getElementById('inp-color-bg')?.value || '#0a0a12';
-    const accentCol = document.getElementById('inp-color-accent')?.value || '#d4af37';
-    const primaryCol = document.getElementById('inp-color-primary')?.value || '#6366f1';
+// Two-way synchronization helpers
+window.syncThemeBasicIdentity = function (field, val) {
+    if (field === 'slug') {
+        const el = document.getElementById('inp-slug-adv');
+        if (el && el.value !== val) el.value = val;
+    } else if (field === 'title') {
+        const el = document.getElementById('inp-title-adv');
+        if (el && el.value !== val) el.value = val;
+        const conceptEl = document.getElementById('adv-var-concept');
+        if (conceptEl && !conceptEl.value) conceptEl.value = val;
+    } else if (field === 'filmStrip') {
+        const el = document.getElementById('chk-film-strip-adv');
+        if (el && el.checked !== val) el.checked = val;
+    } else if (field === 'luckyNumber') {
+        const el = document.getElementById('chk-lucky-number-adv');
+        if (el && el.checked !== val) el.checked = val;
+    } else if (field === 'genderFilter') {
+        const el = document.getElementById('chk-gender-filter-adv');
+        if (el && el.checked !== val) el.checked = val;
+    }
+    window.updateFullSystematicGenAiPrompt();
+};
 
+window.syncThemeAdvancedIdentity = function (field, val) {
+    if (field === 'slug') {
+        const el = document.getElementById('inp-slug');
+        if (el && el.value !== val) el.value = val;
+    } else if (field === 'title') {
+        const el = document.getElementById('inp-title');
+        if (el && el.value !== val) el.value = val;
+        const conceptEl = document.getElementById('adv-var-concept');
+        if (conceptEl && !conceptEl.value) conceptEl.value = val;
+    } else if (field === 'filmStrip') {
+        const el = document.getElementById('chk-film-strip');
+        if (el && el.checked !== val) el.checked = val;
+    } else if (field === 'luckyNumber') {
+        const el = document.getElementById('chk-lucky-number');
+        if (el && el.checked !== val) el.checked = val;
+    } else if (field === 'genderFilter') {
+        const el = document.getElementById('chk-gender-filter');
+        if (el && el.checked !== val) el.checked = val;
+    }
+    window.updateFullSystematicGenAiPrompt();
+};
+
+// Generate the complete systematic GenAI prompt
+window.generateFullSystematicPromptText = function () {
+    const title = document.getElementById('inp-title-adv')?.value.trim() 
+               || document.getElementById('inp-title')?.value.trim() 
+               || studio.activeTheme?.title 
+               || 'Photobooth Theme';
+    const slug = document.getElementById('inp-slug-adv')?.value.trim() 
+              || document.getElementById('inp-slug')?.value.trim() 
+              || studio.activeTheme?.slug 
+              || 'festive_theme';
+    const filmStrip = (document.getElementById('chk-film-strip-adv')?.checked || document.getElementById('chk-film-strip')?.checked);
+    
+    const concept = document.getElementById('adv-var-concept')?.value.trim() || title;
     const ornaments = document.getElementById('adv-var-ornaments')?.value.trim() || 'Festive hanging corner ornaments';
     const particles = document.getElementById('adv-var-particles')?.value.trim() || '✨, ✦, ⭐, ✧';
     const phrases = document.getElementById('adv-var-phrases')?.value.trim() || 'Celebrate, Joy, Welcome';
     const texture = document.getElementById('adv-var-texture')?.value.trim() || 'Subtle glowing pattern overlay';
 
-    const promptText = `You are an expert UI/UX frontend designer specializing in interactive photobooth touchscreen kiosk atmospheres.
-Please generate custom, festive HTML and CSS animations for the following theme:
+    const bgCol = document.getElementById('inp-color-bg')?.value || '#0c0d14';
+    const accentCol = document.getElementById('inp-color-accent')?.value || '#d4af37';
+    const primaryCol = document.getElementById('inp-color-primary')?.value || '#181926';
 
---- THEME SPECIFICATIONS ---
+    return `You are a world-class UI/UX frontend designer and creative director for an interactive photobooth touchscreen kiosk.
+Your mission is to systematically design and generate the complete interface configuration, marketing copy, color tokens, festive ambience, and waiting manifestation sequence for a theme called "${title}".
+
+--- EVENT & BRAND IDENTITY ---
 • Theme Name: "${title}"
-• Primary Theme Color: ${primaryCol}
-• Accent / Highlight Color: ${accentCol}
-• Background Color: ${bgCol}
-• Left & Right Top Corner Ornaments: ${ornaments}
+• Slug Identifier: "${slug}"
+• Core Concept & Mood: "${concept}"
+• Left & Right Corner Ornaments: ${ornaments}
 • Floating Particle Icons/Emojis: ${particles}
-• Floating Festive Text Phrases: ${phrases}
-• Background Motif / Texture: ${texture}
+• Floating Celebratory Phrases: ${phrases}
+• Background Texture / Motif: ${texture}
+• Welcome Screen Rolling Film Strip Feature: ${filmStrip ? 'ENABLED (welcome screen displays rolling camera film strips)' : 'DISABLED (clean aesthetic without film roll)'}
+• Base Palette Guidance: Background ${bgCol}, Accent ${accentCol}, Primary Surface ${primaryCol}
 
---- TECHNICAL REQUIREMENTS ---
-1. All elements must have "pointer-events: none" so they never block touch clicks on buttons or cards.
-2. The root container is ".persistent-decorations" which has "position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden;".
-3. Provide smooth CSS keyframe animations (e.g. swaying pendulum at top corners, upward floating particles with staggered animation-delay, glowing text shadows).
-4. Responsive: looks beautiful on 1080x1920 (9:16 portrait kiosk) as well as 1920x1080 (landscape).
-5. Clean, standalone code without external JavaScript or third-party libraries.
+--- WHAT YOU MUST GENERATE ---
+Produce EXACTLY THREE clean, well-documented code blocks:
 
---- OUTPUT FORMAT ---
-Please output EXACTLY two clean code blocks:
-
-### Block 1: decorations.html
-\`\`\`html
-<!-- Persistent Festive Decorations -->
-<div class="custom-ornament ornament-left">...</div>
-<div class="custom-ornament ornament-right">...</div>
-<!-- (Staggered floating particle elements with text labels) -->
+### BLOCK 1: theme_identity.json
+Generate a JSON object configuring marketing copy, Google Font typography, complete color palette tokens, and a 5-step sequential waiting screen manifestation sequence tailored to "${concept}":
+\`\`\`json
+{
+  "subtitle": "Short captivating subtitle / event venue",
+  "badge": "Short badge tag (e.g. Special Edition)",
+  "icon": "A single representative emoji",
+  "cta": "Start button label (e.g. Start Celebration)",
+  "description": "2-sentence inspiring description of the AI portrait transformation experience.",
+  "style": {
+    "fontFamily": "'Outfit', sans-serif",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
+    "colors": {
+      "background": "${bgCol}",
+      "text": "#ffffff",
+      "primary": "${primaryCol}",
+      "accent": "${accentCol}",
+      "accentGlow": "rgba(...accent with 0.3 opacity...)",
+      "surface": "rgba(255, 255, 255, 0.05)",
+      "surfaceBorder": "rgba(...accent with 0.25 opacity...)"
+    }
+  },
+  "waitingExperience": {
+    "title": "Creating Magic...",
+    "subtitle": "Transforming your photo into a festive masterpiece",
+    "sequence": [
+      { "text": "Step 1: Welcoming phrase or scanning photo...", "delay": 500, "color": "${accentCol}" },
+      { "text": "Step 2: AI synthesis step matching theme concept...", "delay": 3500, "color": "#ffffff" },
+      { "text": "Step 3: Rendering ornaments and thematic aura...", "delay": 7000, "color": "${accentCol}" },
+      { "text": "Step 4: Harmonizing lighting and textures...", "delay": 10500, "color": "#ffffff" },
+      { "text": "Step 5: Manifestation complete! Preparing reveal...", "delay": 14000, "color": "${accentCol}" }
+    ],
+    "completionMessage": "Ready to Celebrate!"
+  }
+}
 \`\`\`
 
-### Block 2: style.css
-\`\`\`css
-/* Scoped Atmosphere Animations */
-.persistent-decorations { ... }
-.custom-ornament { ... }
-@keyframes ... { ... }
-\`\`\``;
+### BLOCK 2: decorations.html
+Generate persistent HTML decorations wrapped inside an ambient container:
+• Top left and right swaying festive ornaments (.custom-ornament.ornament-left and .ornament-right)
+• 5 to 7 floating particle elements (.custom-particle) containing festive emojis and glowing text labels (${phrases})
+• Background subtle decorative motif container
+• All elements MUST have pointer-events: none so touchscreen kiosk buttons remain 100% clickable.
+\`\`\`html
+<!-- Persistent Festive Decorations for ${title} -->
+<div class="custom-ornament ornament-left">...</div>
+<div class="custom-ornament ornament-right">...</div>
+<div class="custom-particle p-1"><span>...</span><label>...</label></div>
+<!-- add remaining particles p-2 through p-5 -->
+\`\`\`
 
-    navigator.clipboard.writeText(promptText).then(() => {
-        showToast('📋 GenAI prompt copied to clipboard! Paste into ChatGPT / Claude.', 'success');
-    }).catch(err => {
-        showToast('Could not copy automatically: ' + err.message, 'error');
-    });
+### BLOCK 3: style.css
+Generate standalone, high-performance CSS:
+• :root CSS custom variables matching the design palette
+• .persistent-decorations container fixed to inset: 0 with pointer-events: none and z-index: 12
+• Keyframe animations for corner ornament sway, smooth upward particle floating with staggered delays, and glowing text shadows
+• Fully responsive for both 9:16 portrait touchscreen kiosks (1080x1920) and 16:9 landscape monitors (1920x1080).
+\`\`\`css
+/* Style & Animations for ${title} */
+:root {
+  --bg-color: ${bgCol};
+  --accent-color: ${accentCol};
+  --primary-color: ${primaryCol};
+}
+.persistent-decorations {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 12;
+  overflow: hidden;
+}
+...
+\`\`\`
+
+Output only the three code blocks with their markdown headers.`;
+};
+
+window.updateFullSystematicGenAiPrompt = function () {
+    const box = document.getElementById('adv-systematic-prompt-full');
+    if (box) {
+        box.value = window.generateFullSystematicPromptText();
+    }
+};
+
+window.copyFullSystematicGenAiPrompt = function () {
+    const text = window.generateFullSystematicPromptText();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('📋 Full GenAI Prompt copied! Paste into ChatGPT / Claude / Gemini.', 'success');
+        }).catch(() => {
+            fallbackCopyPromptText(text);
+        });
+    } else {
+        fallbackCopyPromptText(text);
+    }
+};
+
+function fallbackCopyPromptText(text) {
+    const box = document.getElementById('adv-systematic-prompt-full');
+    if (box) {
+        box.value = text;
+        box.select();
+        document.execCommand('copy');
+        showToast('📋 Full GenAI Prompt copied to clipboard!', 'success');
+    }
+}
+
+// Backward-compatible alias
+window.copyGenAiAtmospherePrompt = window.copyFullSystematicGenAiPrompt;
+
+// Apply pasted JSON from external GenAI to theme configuration
+window.applyIdentityJsonConfig = function () {
+    const jsonText = document.getElementById('adv-identity-json')?.value.trim();
+    if (!jsonText) {
+        showToast('Please paste theme_identity.json first.', 'error');
+        return;
+    }
+    try {
+        const config = JSON.parse(jsonText);
+        const t = studio.activeTheme || {};
+
+        if (config.subtitle) {
+            t.subtitle = config.subtitle;
+            setValue('inp-subtitle', config.subtitle);
+        }
+        if (config.badge) {
+            t.badge = config.badge;
+            setValue('inp-badge', config.badge);
+        }
+        if (config.icon) {
+            t.icon = config.icon;
+            setValue('inp-icon', config.icon);
+        }
+        if (config.cta) {
+            t.cta = config.cta;
+            setValue('inp-cta', config.cta);
+        }
+        if (config.description) {
+            t.description = config.description;
+            setValue('inp-desc', config.description);
+        }
+        if (config.style) {
+            t.style = t.style || {};
+            if (config.style.fontFamily) {
+                t.style.fontFamily = config.style.fontFamily;
+                setValue('inp-font', config.style.fontFamily);
+            }
+            if (config.style.googleFontUrl) {
+                t.style.googleFontUrl = config.style.googleFontUrl;
+                setValue('inp-google-font', config.style.googleFontUrl);
+            }
+            if (config.style.colors) {
+                t.style.colors = Object.assign(t.style.colors || {}, config.style.colors);
+                if (config.style.colors.background) setColor('inp-color-bg', config.style.colors.background);
+                if (config.style.colors.accent) setColor('inp-color-accent', config.style.colors.accent);
+                if (config.style.colors.text) setColor('inp-color-text', config.style.colors.text);
+                if (config.style.colors.primary) setColor('inp-color-primary', config.style.colors.primary);
+            }
+        }
+        const seq = config.waitingExperience?.sequence || config.waitingSequence;
+        if (Array.isArray(seq) && seq.length > 0) {
+            t.waitingExperience = t.waitingExperience || {};
+            if (config.waitingExperience?.title) t.waitingExperience.title = config.waitingExperience.title;
+            if (config.waitingExperience?.subtitle) t.waitingExperience.subtitle = config.waitingExperience.subtitle;
+            if (config.waitingExperience?.completionMessage) t.waitingExperience.completionMessage = config.waitingExperience.completionMessage;
+            t.waitingExperience.sequence = seq;
+            renderWaitingSequenceList(seq);
+        }
+        showToast('✨ Applied theme identity, colors, and waiting sequence from GenAI JSON!', 'success');
+        window.updateFullSystematicGenAiPrompt();
+    } catch (err) {
+        showToast('Invalid JSON: ' + err.message, 'error');
+    }
 };
 
 window.switchAtmosphereEditorTab = function (tab) {
     const htmlCont = document.getElementById('editor-container-html');
     const cssCont = document.getElementById('editor-container-css');
+    const jsonCont = document.getElementById('editor-container-json');
     const htmlBtn = document.getElementById('tab-btn-deco-html');
     const cssBtn = document.getElementById('tab-btn-deco-css');
+    const jsonBtn = document.getElementById('tab-btn-deco-json');
 
-    if (tab === 'html') {
-        htmlCont.style.display = 'block';
-        cssCont.style.display = 'none';
-        htmlBtn.className = 'admin-btn admin-btn-primary';
-        cssBtn.className = 'admin-btn admin-btn-secondary';
-    } else {
-        htmlCont.style.display = 'none';
-        cssCont.style.display = 'block';
-        htmlBtn.className = 'admin-btn admin-btn-secondary';
-        cssBtn.className = 'admin-btn admin-btn-primary';
-    }
+    if (htmlCont) htmlCont.style.display = tab === 'html' ? 'block' : 'none';
+    if (cssCont) cssCont.style.display = tab === 'css' ? 'block' : 'none';
+    if (jsonCont) jsonCont.style.display = tab === 'json' ? 'block' : 'none';
+
+    if (htmlBtn) htmlBtn.className = tab === 'html' ? 'admin-btn admin-btn-primary' : 'admin-btn admin-btn-secondary';
+    if (cssBtn) cssBtn.className = tab === 'css' ? 'admin-btn admin-btn-primary' : 'admin-btn admin-btn-secondary';
+    if (jsonBtn) jsonBtn.className = tab === 'json' ? 'admin-btn admin-btn-primary' : 'admin-btn admin-btn-secondary';
 };
 
 window.loadQuickAtmosphereTemplate = function () {
-    const presetKey = document.getElementById('adv-prompt-preset')?.value || 'deepavali';
-    const preset = ATMOSPHERE_PRESETS[presetKey] || ATMOSPHERE_PRESETS.deepavali;
+    const presetKey = document.getElementById('adv-prompt-preset')?.value || 'cny';
+    const preset = ATMOSPHERE_PRESETS[presetKey] || ATMOSPHERE_PRESETS.cny;
 
     const htmlEl = document.getElementById('adv-decorations-html');
     const cssEl = document.getElementById('adv-custom-css');
-    if (htmlEl) htmlEl.value = preset.html;
-    if (cssEl) cssEl.value = preset.css;
+    const jsonEl = document.getElementById('adv-identity-json');
+    if (htmlEl) htmlEl.value = preset.html || '';
+    if (cssEl) cssEl.value = preset.css || '';
+    if (jsonEl && preset.json) jsonEl.value = preset.json;
 
     showToast(`Loaded ${presetKey.toUpperCase()} template into editors!`, 'success');
 };
@@ -2248,25 +2703,30 @@ window.loadQuickAtmosphereTemplate = function () {
 window.clearAtmosphereEditors = function () {
     const htmlEl = document.getElementById('adv-decorations-html');
     const cssEl = document.getElementById('adv-custom-css');
+    const jsonEl = document.getElementById('adv-identity-json');
     if (htmlEl) htmlEl.value = '';
     if (cssEl) cssEl.value = '';
+    if (jsonEl) jsonEl.value = '';
     showToast('Atmosphere editors cleared.', 'info');
 };
 
-window.setAtmosphereBuilderMode = function (mode, userInitiated = true) {
+// 2-Option Mode Switcher: Basic vs Advanced
+window.setThemeStudioMode = function (mode, userInitiated = true) {
+    studio.currentThemeMode = mode;
     studio.currentAtmosphereMode = mode;
+
     const basicCard = document.getElementById('mode-card-basic');
     const advCard = document.getElementById('mode-card-advanced');
-    const basicSec = document.getElementById('section-atmosphere-basic');
-    const advSec = document.getElementById('section-atmosphere-advanced');
+    const basicContainer = document.getElementById('container-mode-basic');
+    const advContainer = document.getElementById('container-mode-advanced');
     const basicStatus = document.getElementById('status-text-basic');
     const advStatus = document.getElementById('status-text-advanced');
 
     if (mode === 'advanced') {
         if (basicCard) basicCard.classList.remove('active');
         if (advCard) advCard.classList.add('active');
-        if (basicSec) basicSec.style.display = 'none';
-        if (advSec) advSec.style.display = 'block';
+        if (basicContainer) basicContainer.style.display = 'none';
+        if (advContainer) advContainer.style.display = 'block';
         if (basicStatus) {
             basicStatus.textContent = 'Switch to Basic';
             basicStatus.style.color = 'var(--text-dim)';
@@ -2275,14 +2735,31 @@ window.setAtmosphereBuilderMode = function (mode, userInitiated = true) {
             advStatus.textContent = '● Active Studio';
             advStatus.style.color = '#34d399';
         }
+        // Sync basic fields -> advanced
+        const slug = document.getElementById('inp-slug')?.value || '';
+        const title = document.getElementById('inp-title')?.value || '';
+        const film = document.getElementById('chk-film-strip')?.checked || false;
+        const lucky = document.getElementById('chk-lucky-number')?.checked || false;
+        const gender = document.getElementById('chk-gender-filter')?.checked !== false;
+
+        if (slug) setValue('inp-slug-adv', slug);
+        if (title) setValue('inp-title-adv', title);
+        setChecked('chk-film-strip-adv', film);
+        setChecked('chk-lucky-number-adv', lucky);
+        setChecked('chk-gender-filter-adv', gender);
+
+        if (title && !document.getElementById('adv-var-concept')?.value) {
+            setValue('adv-var-concept', title);
+        }
+        window.updateFullSystematicGenAiPrompt();
         if (userInitiated) {
-            showToast('🏮 Advanced Atmosphere Studio activated', 'info');
+            showToast('🏮 Advanced GenAI Studio activated', 'info');
         }
     } else {
         if (basicCard) basicCard.classList.add('active');
         if (advCard) advCard.classList.remove('active');
-        if (basicSec) basicSec.style.display = 'block';
-        if (advSec) advSec.style.display = 'none';
+        if (basicContainer) basicContainer.style.display = 'block';
+        if (advContainer) advContainer.style.display = 'none';
         if (basicStatus) {
             basicStatus.textContent = '● Active Builder';
             basicStatus.style.color = '#34d399';
@@ -2291,11 +2768,26 @@ window.setAtmosphereBuilderMode = function (mode, userInitiated = true) {
             advStatus.textContent = 'Click to build with GenAI';
             advStatus.style.color = 'var(--text-dim)';
         }
+        // Sync advanced fields -> basic
+        const slug = document.getElementById('inp-slug-adv')?.value || '';
+        const title = document.getElementById('inp-title-adv')?.value || '';
+        const film = document.getElementById('chk-film-strip-adv')?.checked || false;
+        const lucky = document.getElementById('chk-lucky-number-adv')?.checked || false;
+        const gender = document.getElementById('chk-gender-filter-adv')?.checked !== false;
+
+        if (slug) setValue('inp-slug', slug);
+        if (title) setValue('inp-title', title);
+        setChecked('chk-film-strip', film);
+        setChecked('chk-lucky-number', lucky);
+        setChecked('chk-gender-filter', gender);
+
         if (userInitiated) {
-            showToast('🌟 Basic Atmosphere mode active', 'info');
+            showToast('🌟 Basic Mode active', 'info');
         }
     }
 };
+
+window.setAtmosphereBuilderMode = window.setThemeStudioMode;
 
 window.loadExistingAtmosphere = async function (slug) {
     try {
@@ -2310,16 +2802,16 @@ window.loadExistingAtmosphere = async function (slug) {
             const hasCustomAtmosphere = (data.decorations_html && data.decorations_html.trim().length > 0) ||
                                        (data.custom_css && data.custom_css.trim().length > 0);
             if (studio.activeTheme?.atmosphereMode === 'advanced' || hasCustomAtmosphere) {
-                window.setAtmosphereBuilderMode('advanced', false);
+                window.setThemeStudioMode('advanced', false);
             } else {
-                window.setAtmosphereBuilderMode('basic', false);
+                window.setThemeStudioMode('basic', false);
             }
         } else {
-            window.setAtmosphereBuilderMode('basic', false);
+            window.setThemeStudioMode('basic', false);
         }
     } catch (e) {
         console.warn('[Studio] Failed loading atmosphere:', e);
-        window.setAtmosphereBuilderMode('basic', false);
+        window.setThemeStudioMode('basic', false);
     }
 };
 
