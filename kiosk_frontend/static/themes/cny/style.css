@@ -943,23 +943,38 @@ body::before {
 /* Selection Screens (Pose, Clothes, Background) */
 .selection-grid {
     display: grid;
-    gap: var(--spacing-sm);
+    gap: 1rem;
     margin: var(--spacing-md) 0;
     width: 100%;
     max-width: 1200px;
+    max-height: 64vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.5rem 0.5rem 0.5rem 0;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
-.pose-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+.selection-grid::-webkit-scrollbar {
+    width: 7px;
+}
+.selection-grid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+.selection-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.4);
+    border-radius: 10px;
+}
+.selection-grid::-webkit-scrollbar-thumb:hover {
+    background: var(--cny-gold);
 }
 
-.clothes-grid {
-    grid-template-columns: repeat(3, 1fr);
-    max-width: 100%;
-}
-
+.pose-grid,
+.clothes-grid,
 .background-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    max-width: 100%;
 }
 
 .selection-card {
@@ -1760,8 +1775,8 @@ body::before {
 }
 
 .card-thumbnail {
-    width: 80px;
-    height: 80px;
+    width: 95px;
+    height: 125px;
     border-radius: 8px;
     overflow: hidden;
     flex-shrink: 0;
@@ -1769,6 +1784,15 @@ body::before {
     cursor: zoom-in;
     border: 1px solid rgba(255, 215, 0, 0.3);
     transition: transform var(--transition-fast);
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, rgba(15, 0, 0, 0.8) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.background-grid .card-thumbnail {
+    width: 130px;
+    height: 90px;
 }
 
 .card-thumbnail:hover {
@@ -1779,7 +1803,7 @@ body::before {
 .card-thumbnail img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* Full picture, never cropped! */
 }
 
 .expand-icon {

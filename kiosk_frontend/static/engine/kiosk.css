@@ -440,21 +440,35 @@ input:checked + .slider:before { transform: translateX(24px); }
 
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.2rem;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 1.1rem;
     width: 100%;
-    max-width: 1000px;
-    max-height: 58vh;
+    max-width: 1100px;
+    max-height: 64vh;
     overflow-y: auto;
-    padding: 0.5rem;
+    overflow-x: hidden;
+    padding: 0.6rem;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+#background-grid.cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 }
 
 .cards-grid::-webkit-scrollbar {
-    width: 6px;
+    width: 7px;
+}
+.cards-grid::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-full);
 }
 .cards-grid::-webkit-scrollbar-thumb {
     background: var(--theme-surface-border);
     border-radius: var(--radius-full);
+}
+.cards-grid::-webkit-scrollbar-thumb:hover {
+    background: var(--theme-accent);
 }
 
 .selection-card {
@@ -485,12 +499,21 @@ input:checked + .slider:before { transform: translateX(24px); }
     width: 100%;
     aspect-ratio: 3/4;
     overflow: hidden;
-    background: #000;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, rgba(5, 5, 12, 0.85) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#background-grid .card-image-wrap {
+    aspect-ratio: 16/10;
 }
 
 .card-image-wrap img {
-    width: 100%; height: 100%;
-    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Full picture displayed, never cropped! */
     transition: transform var(--transition-normal);
 }
 
@@ -968,5 +991,16 @@ input:checked + .slider:before { transform: translateX(24px); }
     }
     .watermark-separator {
         height: 18px;
+    }
+}
+
+@media (orientation: portrait), (max-width: 900px) {
+    .cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        max-height: 66vh;
+        gap: 0.9rem;
+    }
+    #background-grid.cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
 }
