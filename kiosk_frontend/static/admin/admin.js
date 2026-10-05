@@ -24,7 +24,7 @@ const studio = {
 document.addEventListener('DOMContentLoaded', async () => {
     initTabs();
     initEventListeners();
-    await loadThemes();
+    await loadThemes(null, true);
     await loadMasterAssets();
     await loadAssetGenConfigs();
 });
@@ -48,15 +48,32 @@ async function loadMasterAssets() {
 // ==========================================================================
 // 1. Theme Loading & Sidebar
 // ==========================================================================
-async function loadThemes() {
+async function loadThemes(targetSlug = null, autoSelectFirst = false) {
     try {
         const res = await fetch('/api/themes');
         if (!res.ok) throw new Error('Failed to load themes');
         const allThemes = await res.json();
+
+        // 1. Maintain in-memory unsaved drafts if not yet listed in /api/themes
+        const unsavedDrafts = (studio.themes || []).filter(t => t.isUnsavedDraft);
         studio.themes = allThemes.filter(t => t.slug !== 'master');
+        for (const draft of unsavedDrafts) {
+            if (!studio.themes.some(t => t.slug === draft.slug)) {
+                studio.themes.push(draft);
+            }
+        }
 
         renderThemeSidebar();
-        if (studio.themes.length > 0) {
+
+        const activeSlug = targetSlug || studio.activeTheme?.slug;
+        const matchingTheme = activeSlug ? studio.themes.find(t => t.slug === activeSlug) : null;
+
+        if (matchingTheme) {
+            // Keep the active theme highlighted without wiping form inputs or switching themes
+            return;
+        }
+
+        if (autoSelectFirst && studio.themes.length > 0) {
             selectTheme(studio.themes[0].slug);
         }
     } catch (err) {
@@ -107,6 +124,9 @@ function renderThemeSidebar() {
 }
 
 async function selectTheme(slug) {
+    if (studio.activeTheme?.slug === slug && studio.activeTheme?.isUnsavedDraft) {
+        return;
+    }
     try {
         const [themeRes, dataRes] = await Promise.all([
             fetch(`/api/theme/${slug}`),
@@ -3434,9 +3454,26 @@ window.openAtmospherePreviewModal = async function () {
     }
     slug = slug.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
     theme.slug = slug;
+    if (!theme.title) {
+        theme.title = 'Untitled Draft ✨';
+    }
+
+    // Keep inputs synced
+    setValue('inp-slug', slug);
+    setValue('inp-slug-adv', slug);
+    setValue('inp-title', theme.title);
+    setValue('inp-title-adv', theme.title);
+
+    // If active theme had a placeholder slug that changed, remove old placeholder
+    const prevSlug = studio.activeTheme?.slug;
+    if (prevSlug && prevSlug !== slug && studio.themes) {
+        studio.themes = studio.themes.filter(t => t.slug !== prevSlug);
+    }
 
     studio.activeTheme = Object.assign(studio.activeTheme || {}, theme);
     studio.activeTheme.slug = slug;
+    studio.activeTheme.status = 'draft';
+    studio.activeTheme.isUnsavedDraft = false;
 
     // 3. Compile and save the full theme package to disk so backend directories, theme.json, data.json, and atmosphere files exist
     const decorations_html = document.getElementById('adv-decorations-html')?.value || '';
@@ -3463,10 +3500,12 @@ window.openAtmospherePreviewModal = async function () {
             throw new Error(err.error || 'Failed to compile theme for preview');
         }
 
-        // Mark as saved to disk and reload sidebar so draft theme permanently registers in studio
-        studio.activeTheme.isUnsavedDraft = false;
-        await loadThemes();
+        // Register compiled draft in sidebar and keep it selected
+        await loadThemes(slug, false);
         studio.activeTheme = theme;
+        studio.activeTheme.slug = slug;
+        studio.activeTheme.status = 'draft';
+        studio.activeTheme.isUnsavedDraft = false;
         renderThemeSidebar();
 
         // 4. Open Live Preview modal pointing to Universal Engine preview
