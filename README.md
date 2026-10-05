@@ -87,6 +87,72 @@ On your Linux machine, run:
 
 ---
 
+
+---
+
+## 💻 Running Kiosk Client Only (On a Secondary PC or Laptop)
+
+If you are setting up the photobooth at an event or testing from another PC, **you do NOT need a powerful GPU or CUDA on this client machine**. The client machine only handles:
+- The web camera capture and UI (`kiosk_frontend/app.py` on port 5000)
+- Local printer spooling (`dgx_photobooth/linux_receiver.py` on port 5001)
+- Cloudflare Tunnel (`cloudflared`) to generate mobile download QR codes
+
+All AI inference and video generation happen remotely on the backend GPU machine (e.g. `breadnbiscuit`).
+
+### 1. Prerequisites on the Kiosk Client PC
+Before running `start_kiosk_client.bat`, ensure you have installed:
+
+1. **Python 3.10+**:
+   - Install the lightweight client dependencies (NO PyTorch/CUDA required):
+     ```cmd
+     pip install -r requirements_client.txt
+     ```
+2. **Tailscale (Crucial for remote connection)**:
+   - If your ComfyUI backend is on another network, **Tailscale MUST be installed and signed in on this PC**.
+   - Download for Windows: [tailscale.com/download/windows](https://tailscale.com/download/windows)
+   - Ensure you log into the **same Tailscale account** as the backend PC.
+   - *Alternative*: If both machines are on the **same local Wi-Fi router**, you do not need Tailscale. You can use the backend PC's local Wi-Fi IP (e.g., `192.168.1.50`).
+3. **Cloudflare Tunnel (`cloudflared`) (For Mobile QR Codes)**:
+   - Required so event guests can scan the QR code on the kiosk screen with their phones to download their photos.
+   - **Windows Install**: Run in PowerShell or Command Prompt:
+     ```cmd
+     winget install --id Cloudflare.cloudflared
+     ```
+   - *Manual Install*: Download `cloudflared-windows-amd64.exe` from [Cloudflare Releases](https://github.com/cloudflare/cloudflared/releases), rename it to `cloudflared.exe`, and place it in the `dgx_photobooth/` folder or the project root.
+
+---
+
+### 2. Launching the Client
+Double-click:
+```cmd
+start_kiosk_client.bat
+```
+
+The script will automatically check for Python, Tailscale, and `cloudflared`, then prompt you for the backend host:
+```text
+The currently configured remote backend host is: [breadnbiscuit]
+
+  Options:
+    1) Tailscale hostname: breadnbiscuit (Requires Tailscale running on this PC)
+    2) Tailscale direct IP: 100.x.y.z (Bypasses DNS, recommended if hostname fails)
+    3) Local Wi-Fi IP: 192.168.x.x (If both PCs on same router, no Tailscale needed)
+    4) Localhost: 127.0.0.1 (If ComfyUI is running on THIS PC)
+
+Press ENTER to keep [breadnbiscuit], or type a new Host/IP:
+```
+- The chosen host is remembered in `.receiver_address`.
+- Your browser will open automatically at `http://localhost:5000`.
+
+---
+
+### 3. Common Kiosk Client Issues & Fixes
+
+| Issue | Cause | Fix |
+|---|---|---|
+| `[Errno 11001] getaddrinfo failed` | Client PC cannot resolve `breadnbiscuit` via DNS. | 1. Ensure Tailscale is installed and connected on **this client PC**.<br>2. Or open `.receiver_address` and replace `breadnbiscuit` with the backend's Tailscale `100.x.x.x` IP or local Wi-Fi IP. |
+| `cloudflared is not installed or found in PATH` | Mobile QR codes cannot be generated without Cloudflare tunnel. | Run `winget install --id Cloudflare.cloudflared` or download `cloudflared.exe` into `dgx_photobooth/`. |
+| `Camera access denied` | Browser blocked webcam permissions. | The kiosk runs on `http://localhost:5000` which allows camera access by default. Make sure camera permissions are granted in browser settings. |
+
 ## 📷 Troubleshooting Camera Access
 Browsers restrict camera access on insecure HTTP connections. Since the kiosk UI runs on `http://localhost:5000` (or `http://localhost:5005` on macOS) in Mode 1 and 2, it is treated as secure and works out of the box. 
 

@@ -9,11 +9,13 @@ echo     - Kiosk Frontend (port 5000)
 echo     - Local Receiver (port 5001) for local printing
 echo     - Cloudflare Tunnel (for mobile QR codes)
 echo.
-echo   All ComfyUI processing will run on the remote machine.
+echo   All ComfyUI processing runs on the remote machine.
 echo ========================================================
 echo.
 
-:: Detect Python / Conda environment automatically
+:: ---------------------------------------------------------
+:: 1. Check Python / Conda environment
+:: ---------------------------------------------------------
 set "ENV_CMD="
 if exist "%USERPROFILE%\anaconda3\Scripts\activate.bat" (
     set "ENV_CMD=call "%USERPROFILE%\anaconda3\Scripts\activate.bat" comfyui"
@@ -31,19 +33,73 @@ if exist "%USERPROFILE%\anaconda3\Scripts\activate.bat" (
     set "ENV_CMD=call conda activate comfyui 2>nul || ver >nul"
 )
 
+:: ---------------------------------------------------------
+:: 2. Check Tailscale Installation / Status
+:: ---------------------------------------------------------
+set "TAILSCALE_FOUND=0"
+where tailscale >nul 2>nul
+if %errorlevel%==0 set "TAILSCALE_FOUND=1"
+if exist "%ProgramFiles%\Tailscale\tailscale.exe" set "TAILSCALE_FOUND=1"
+if exist "%LOCALAPPDATA%\Tailscale\tailscale.exe" set "TAILSCALE_FOUND=1"
+
+if "!TAILSCALE_FOUND!"=="0" (
+    echo [REMINDER - TAILSCALE]
+    echo   Tailscale is NOT detected in PATH or standard folders on this PC.
+    echo   - If your ComfyUI backend is on a remote machine (e.g. breadnbiscuit),
+    echo     Tailscale MUST be installed and CONNECTED on this PC:
+    echo     Download: https://tailscale.com/download/windows
+    echo   - If both PCs are on the SAME local Wi-Fi, you do not need Tailscale;
+    echo     just use the remote PC's local Wi-Fi IP (e.g. 192.168.x.x).
+    echo.
+) else (
+    echo [OK] Tailscale detected. (Make sure it is CONNECTED to the same Tailnet!)
+)
+
+:: ---------------------------------------------------------
+:: 3. Check Cloudflare Tunnel (cloudflared)
+:: ---------------------------------------------------------
+set "CLOUDFLARED_FOUND=0"
+where cloudflared >nul 2>nul
+if %errorlevel%==0 set "CLOUDFLARED_FOUND=1"
+if exist "%~dp0dgx_photobooth\cloudflared.exe" set "CLOUDFLARED_FOUND=1"
+if exist "%~dp0cloudflared.exe" set "CLOUDFLARED_FOUND=1"
+
+if "!CLOUDFLARED_FOUND!"=="0" (
+    echo [REMINDER - CLOUDFLARED]
+    echo   Cloudflare Tunnel CLI (cloudflared) is NOT installed or found in PATH!
+    echo   * Mobile QR codes for photo downloads will NOT work without it.
+    echo   * Quick install (run in PowerShell / CMD):
+    echo       winget install --id Cloudflare.cloudflared
+    echo     Or download cloudflared-windows-amd64.exe from GitHub, rename to
+    echo     cloudflared.exe and place it in this folder.
+    echo.
+) else (
+    echo [OK] Cloudflare Tunnel (cloudflared) is found.
+)
+echo --------------------------------------------------------
+echo.
+
+:: ---------------------------------------------------------
+:: 4. Resolve Remote Backend Host / IP
+:: ---------------------------------------------------------
 set "CACHE_FILE=%~dp0.receiver_address"
 set "DEFAULT_HOST=breadnbiscuit"
 
 :: Read cached address if exists
 if exist "%CACHE_FILE%" (
     set /p CACHED_VAL=<"%CACHE_FILE%"
-    set "DEFAULT_HOST=!CACHED_VAL!"
+    if defined CACHED_VAL set "DEFAULT_HOST=!CACHED_VAL!"
 )
 
-echo The current configured remote backend host is: !DEFAULT_HOST!
-echo To use a different host or IP (e.g. Tailscale IP), type it below.
-echo Otherwise, press ENTER to keep [!DEFAULT_HOST!].
+echo The currently configured remote backend host is: [!DEFAULT_HOST!]
 echo.
+echo   Options:
+echo     1) Tailscale hostname: breadnbiscuit (Requires Tailscale running on this PC)
+echo     2) Tailscale direct IP: 100.x.y.z (Bypasses DNS, recommended if name fails)
+echo     3) Local Wi-Fi IP: 192.168.x.x (If both PCs on same router, no Tailscale needed)
+echo     4) Localhost: 127.0.0.1 (If ComfyUI is running on THIS PC)
+echo.
+echo Press ENTER to keep [!DEFAULT_HOST!], or type a new Host/IP:
 set /p USER_INPUT="Remote Host/IP: "
 
 if defined USER_INPUT (
@@ -58,7 +114,6 @@ echo !REMOTE_HOST!> "!CACHE_FILE!"
 echo.
 echo ========================================================
 echo   Connecting Kiosk to Remote Backend: !REMOTE_HOST!
-echo   Make sure Tailscale is connected and remote backend is running!
 echo ========================================================
 echo.
 
@@ -77,7 +132,7 @@ timeout /t 2 /nobreak >nul
 
 echo 3. Starting Cloudflare Tunnel...
 del /q "%~dp0dgx_photobooth\tunnel.log" 2>nul
-start "Cloudflare Tunnel" cmd /k "cd /d %~dp0dgx_photobooth && (where cloudflared >nul 2>nul && cloudflared tunnel --url http://localhost:5001 > tunnel.log 2>&1 || echo [ERROR] cloudflared is not installed or not in PATH! Please install cloudflared or place cloudflared.exe in this folder.)"
+start "Cloudflare Tunnel" cmd /k "cd /d %~dp0dgx_photobooth && (where cloudflared >nul 2>nul && cloudflared tunnel --url http://localhost:5001 > tunnel.log 2>&1 || if exist cloudflared.exe (cloudflared.exe tunnel --url http://localhost:5001 > tunnel.log 2>&1) else (echo. && echo ======================================================== && echo [WARNING] cloudflared is NOT installed or found in PATH! && echo Mobile QR codes will NOT generate until cloudflared is installed. && echo Install via: winget install --id Cloudflare.cloudflared && echo Or download cloudflared.exe into this folder. && echo ======================================================== && echo.))"
 
 timeout /t 3 /nobreak >nul
 echo Opening Kiosk Browser (http://localhost:5000)...

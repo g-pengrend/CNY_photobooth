@@ -237,6 +237,18 @@ def resolve_theme_data(theme_slug):
 
             if not item.get('prompt') and item.get('prompt_modifier'):
                 item['prompt'] = item['prompt_modifier']
+            if item.get('prompt'):
+                try:
+                    from asset_generator import sanitize_asset_prompt
+                    item['prompt'] = sanitize_asset_prompt(item['prompt'], 'clothes' if cat == 'clothes' else ('pose' if cat == 'poses' else 'backdrop'))
+                except Exception:
+                    pass
+            if item.get('prompt_modifier'):
+                try:
+                    from asset_generator import sanitize_asset_prompt
+                    item['prompt_modifier'] = sanitize_asset_prompt(item['prompt_modifier'], 'clothes' if cat == 'clothes' else ('pose' if cat == 'poses' else 'backdrop'))
+                except Exception:
+                    pass
             if not item.get('title') and item.get('name'):
                 item['title'] = item['name']
             if not item.get('description') and item.get('mapping_desc'):
@@ -1029,6 +1041,52 @@ def admin_asset_generator_accept():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+def auto_heal_theme_data_files():
+    """
+    Auto-heal any existing theme data.json files (and master data.json) created
+    with legacy asset generator code that baked studio prefixes/suffixes into prompts.
+    """
+    try:
+        from asset_generator import sanitize_asset_prompt
+        themes_dir = os.path.join(app.static_folder, 'themes')
+        if not os.path.exists(themes_dir):
+            return
+
+        for theme_slug in os.listdir(themes_dir):
+            t_dir = os.path.join(themes_dir, theme_slug)
+            if not os.path.isdir(t_dir):
+                continue
+            data_path = os.path.join(t_dir, 'data.json')
+            if not os.path.exists(data_path):
+                continue
+            try:
+                with open(data_path, 'r', encoding='utf-8') as f:
+                    d = json.load(f)
+                changed = False
+                for cat, asset_type in [('clothes', 'clothes'), ('poses', 'pose'), ('backgrounds', 'backdrop')]:
+                    for item in d.get(cat, []):
+                        if not isinstance(item, dict):
+                            continue
+                        for p_key in ['prompt', 'prompt_modifier']:
+                            val = item.get(p_key)
+                            if val:
+                                cleaned = sanitize_asset_prompt(val, asset_type)
+                                if cleaned != val:
+                                    item[p_key] = cleaned
+                                    changed = True
+                if changed:
+                    with open(data_path, 'w', encoding='utf-8') as f:
+                        json.dump(d, f, indent=2, ensure_ascii=False)
+                    print(f"✨ [AutoHeal] Automatically scrubbed legacy prompt boilerplate in: {theme_slug}/data.json")
+            except Exception as e:
+                print(f"⚠️ [AutoHeal] Notice: could not check {data_path}: {e}")
+    except Exception as ge:
+        print(f"⚠️ [AutoHeal] Skipping auto-heal check: {ge}")
+
+
+# Run once on server startup
+auto_heal_theme_data_files()
 
 if __name__ == '__main__':
     print("SEIT 4D Vision Studio - Starting...")

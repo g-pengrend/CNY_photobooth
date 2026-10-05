@@ -131,6 +131,7 @@ def generate_asset_image(asset_type, middle_prompt, gender="unisex", seed=None):
             "preview_url": preview_url,
             "preview_filename": preview_filename,
             "seed": gen_seed,
+            "middle_prompt": clean_middle,
             "full_prompt": full_prompt
         }
 
@@ -175,6 +176,33 @@ def generate_asset_name_and_slug(asset_type, asset_name="", prompt_desc=""):
         title = f"{asset_type.title()} {suffix_id}"
     return title, slug
 
+def sanitize_asset_prompt(prompt_text, asset_type="backdrop"):
+    """
+    Remove studio template prefixes and suffixes from prompt_text so that only
+    the clean, descriptive subject prompt is stored for live kiosk generation.
+    """
+    if not prompt_text:
+        return ""
+    text = str(prompt_text).strip()
+    
+    # Backdrop prefixes/suffixes
+    text = re.sub(r'^A professional studio asset of a background environment,\s*featuring\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'Wide-angle cinematic perspective,\s*daylight atmospheric lighting,\s*high-detail textures,\s*centered composition.*$', '', text, flags=re.IGNORECASE | re.DOTALL)
+    
+    # Clothes prefixes/suffixes
+    text = re.sub(r'^A professional studio product shot of a standalone\s+\w+\s+outfit,\s*featuring\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'^A professional studio product shot of an?\s+outfit,\s*featuring\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'The outfit is displayed to maintain a 3D shape.*$', '', text, flags=re.IGNORECASE | re.DOTALL)
+    text = re.sub(r'No human hands.*$', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'isolated on a solid black background.*$', '', text, flags=re.IGNORECASE | re.DOTALL)
+
+    # Pose prefixes/suffixes
+    text = re.sub(r'^A high-quality 3D Chibi-style character asset with a large head and small,\s*rounded body\.\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'Soft studio lighting with clean ambient occlusion,\s*centered composition,\s*isolated on a solid white background.*$', '', text, flags=re.IGNORECASE | re.DOTALL)
+    text = re.sub(r'isolated on a solid white background for easy transparency masking\.*$', '', text, flags=re.IGNORECASE | re.DOTALL)
+
+    return text.strip()
+
 def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_theme="master", prompt_desc="", gender="unisex", description=""):
     """
     Accept a generated preview image, autogenerate clean filename, and store into the target theme or master library.
@@ -188,9 +216,15 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
     if not os.path.exists(src_path):
         return {"success": False, "error": "Preview image file no longer exists"}
 
+    # Sanitize prompt description to strip any studio generator prefixes/suffixes
+    clean_prompt = sanitize_asset_prompt(prompt_desc, asset_type)
+
     # Determine title and filename
-    resolved_title, file_slug = generate_asset_name_and_slug(asset_type, asset_name, prompt_desc)
+    resolved_title, file_slug = generate_asset_name_and_slug(asset_type, asset_name, clean_prompt or prompt_desc)
     final_filename = f"{file_slug}.png"
+
+    if not clean_prompt:
+        clean_prompt = resolved_title
 
     # Always copy to canonical master images
     master_dir = os.path.join(BASE_DIR, "static", "themes", "master")
@@ -246,10 +280,7 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
     # Extract concise description for the FLF workflow / card subtitle
     final_desc = (description or "").strip()
     if not final_desc:
-        clean_text = prompt_desc or ""
-        clean_text = re.sub(r'^.*?featuring\s+', '', clean_text, flags=re.IGNORECASE)
-        clean_text = re.sub(r'The outfit is displayed to maintain.*$', '', clean_text, flags=re.IGNORECASE | re.DOTALL)
-        clean_text = re.sub(r'No human hands.*$', '', clean_text, flags=re.IGNORECASE)
+        clean_text = clean_prompt
         clean_text = re.sub(r'^(A |An |The )', '', clean_text.strip(), flags=re.IGNORECASE)
         first_clause = re.split(r'[.;\n]', clean_text.strip())[0].strip()
         words = first_clause.split()
@@ -268,8 +299,8 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
         "name": resolved_title,
         "description": final_desc,
         "image": canonical_web_path,
-        "prompt": prompt_desc or resolved_title,
-        "prompt_modifier": prompt_desc or resolved_title,
+        "prompt": clean_prompt,
+        "prompt_modifier": clean_prompt,
         "mapping_desc": mapping_desc,
         "lighting": lighting_desc
     }
@@ -304,8 +335,8 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
             "name": resolved_title,
             "description": final_desc,
             "image": canonical_web_path,
-            "prompt": prompt_desc or resolved_title,
-            "prompt_modifier": prompt_desc or resolved_title,
+            "prompt": clean_prompt,
+            "prompt_modifier": clean_prompt,
             "lighting": lighting_desc
         }
         if asset_type == "clothes" and gender:

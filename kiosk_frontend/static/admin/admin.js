@@ -1890,6 +1890,10 @@ window.acceptGeneratedAsset = async function () {
     btn.innerHTML = '💾 Saving to Asset Library...';
     btn.disabled = true;
 
+    const cleanPrompt = studio.lastGenResult?.middle_prompt ||
+                        document.getElementById('gen-middle-prompt')?.value.trim() ||
+                        studio.lastGenResult?.full_prompt || '';
+
     try {
         const res = await fetch('/api/admin/asset-generator/accept', {
             method: 'POST',
@@ -1900,7 +1904,7 @@ window.acceptGeneratedAsset = async function () {
                 name: name,
                 description: description,
                 target_theme: targetTheme,
-                prompt_desc: studio.lastGenResult.full_prompt,
+                prompt_desc: cleanPrompt,
                 gender: gender
             })
         });

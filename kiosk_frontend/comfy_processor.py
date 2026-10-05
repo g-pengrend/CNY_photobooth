@@ -54,6 +54,15 @@ def update_workflow_with_image(workflow, image_path, gender="female", pose="", c
     # Logic for gender_style from theme configuration if available
     gender_style = get_theme_gender_style(theme_dir, gender)
 
+    # Runtime defensive sanitization: strip any legacy studio boilerplate if present in theme data
+    try:
+        from asset_generator import sanitize_asset_prompt
+        pose = sanitize_asset_prompt(pose, "pose")
+        clothes_style = sanitize_asset_prompt(clothes_style, "clothes")
+        background = sanitize_asset_prompt(background, "backdrop")
+    except Exception:
+        pass
+
     # Update prompt text with all variable syntax forms:
     # Supports ComfyUI JSON escaped syntax: \"pose\", literal \"pose\", \"gender\", and {pose}
     if prompt_node in workflow and "inputs" in workflow[prompt_node] and "text" in workflow[prompt_node]["inputs"]:
@@ -134,6 +143,10 @@ def queue_prompt(prompt, workflow=None):
         print(f"HTTP Error {e.code}: {e.reason}")
         print(f"Response body: {e.read().decode('utf-8')}")
         raise
+    except urllib.error.URLError as e:
+        msg = f"Cannot reach ComfyUI backend at http://{server_address} ({e.reason}). Make sure the backend server is running and Tailscale is CONNECTED on this PC (or enter the host's direct IP in .receiver_address)."
+        print(f"[ERROR] {msg}")
+        raise RuntimeError(msg) from e
 
 def get_image(prompt_id):
     import time

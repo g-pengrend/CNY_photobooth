@@ -330,7 +330,7 @@ export const backgrounds = [
         code: "B28",
         title: "Jewel HSBC Rain Vortex",
         description: "Dramatic indoor waterfall and lush tropical forest at Jewel Changi",
-        prompt: "A cinematic, low-angle view looking up at the HSBC Rain Vortex, the world’s tallest indoor waterfall, cascades dramatically from a vaulted glass-and-steel ceiling. Surrounding the waterfall, the lush, multi-tiered indoor forest of the Shiseido Forest Valley creates a grand, tropical backdrop, with soft mist and hidden accent lights reflecting shimmering colors across the dense canopy. Wide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+        prompt: "A cinematic, low-angle view looking up at the HSBC Rain Vortex, the world’s tallest indoor waterfall, cascades dramatically from a vaulted glass-and-steel ceiling. Surrounding the waterfall, the lush, multi-tiered indoor forest of the Shiseido Forest Valley creates a grand, tropical backdrop, with soft mist and hidden accent lights reflecting shimmering colors across the dense canopy.",
         image: "/static/themes/master/images/backgrounds/jewel-rain-vortex.png"
     }
 ];

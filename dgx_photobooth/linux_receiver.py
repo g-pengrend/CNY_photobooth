@@ -262,6 +262,11 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
             
             if style_data:
                 style_desc = style_data.get("desc", "")
+                # Defensively strip any studio boilerplate if legacy descriptions exist
+                style_desc = re.sub(r'^.*?featuring\s+', '', style_desc, flags=re.IGNORECASE)
+                style_desc = re.sub(r'The outfit is displayed to maintain.*$', '', style_desc, flags=re.IGNORECASE | re.DOTALL)
+                style_desc = re.sub(r'No human hands.*$', '', style_desc, flags=re.IGNORECASE)
+                style_desc = re.sub(r'isolated on a solid.*$', '', style_desc, flags=re.IGNORECASE | re.DOTALL).strip()
                 lighting_desc = style_data.get("lighting", "Cinematic lighting")
                 print(f"  - Detected Style Code: {raw_code} (Resolved as {padded_code})")
                 print(f"    -> Desc: '{style_desc}'")
