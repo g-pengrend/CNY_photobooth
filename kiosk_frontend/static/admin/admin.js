@@ -199,6 +199,10 @@ function createNewTheme() {
 
     renderThemeSidebar();
     populateFormFields(studio.activeTheme);
+    const htmlEl = document.getElementById('adv-decorations-html');
+    const cssEl = document.getElementById('adv-custom-css');
+    if (htmlEl) htmlEl.value = '';
+    if (cssEl) cssEl.value = '';
     renderAssetsList();
     document.getElementById('workflow-inspection-card').style.display = 'none';
     document.getElementById('current-theme-heading').textContent = '✨ New Theme';
@@ -244,6 +248,9 @@ function populateFormFields(theme) {
     const bg = theme.background || {};
     setValue('sel-bg-type', bg.type || 'particles');
     setValue('inp-floating-icons', (bg.floatingIcons || ['✨', '✦', '⭐']).join(', '));
+    if (typeof window.setAtmosphereBuilderMode === 'function') {
+        window.setAtmosphereBuilderMode(theme.atmosphereMode === 'advanced' ? 'advanced' : 'basic', false);
+    }
 
     // Waiting Screen Sequence
     renderWaitingSequenceList(theme.waitingExperience?.sequence || []);
@@ -296,6 +303,7 @@ function readFormFields() {
         floatingIcons: icons.length > 0 ? icons : ['✨', '✦', '⭐'],
         filmStrip: theme.features.filmStrip
     };
+    theme.atmosphereMode = studio.currentAtmosphereMode || 'basic';
 
     // Waiting Sequence
     theme.waitingExperience = theme.waitingExperience || {};
@@ -1456,11 +1464,12 @@ window.confirmDeleteAsset = async function () {
 };
 
 // ==========================================================================
-// Delete Theme Modal (with Phrase Confirmation)
+// Delete Theme Modal (with Phrase Confirmation & Success Popup)
 // ==========================================================================
 window.openDeleteThemeModal = function (slug, title) {
     if (!slug) return;
     studio.pendingDeleteSlug = slug;
+    studio.pendingDeleteTitle = title || slug;
 
     // Build clean title and phrase similar to the title
     const rawTitle = title || slug;
@@ -1501,8 +1510,19 @@ window.openDeleteThemeModal = function (slug, title) {
 
     const modal = document.getElementById('delete-theme-modal');
     if (modal) {
+        modal.style.display = 'flex';
         modal.classList.add('open');
         setTimeout(() => { if (input) input.focus(); }, 150);
+    }
+};
+
+window.quickFillDeletePhrase = function () {
+    const input = document.getElementById('inp-delete-theme-confirm');
+    const targetPhrase = studio.deleteTargetPhrase || studio.pendingDeleteSlug || '';
+    if (input) {
+        input.value = targetPhrase;
+        window.onDeleteThemePhraseInput();
+        input.focus();
     }
 };
 
@@ -1525,11 +1545,13 @@ window.onDeleteThemePhraseInput = function () {
         val === `delete ${cleanTitle}` ||
         val === slug ||
         val === `delete ${slug}` ||
+        val === 'delete' ||
         norm(val) === norm(target) ||
         norm(val) === norm(cleanTitle) ||
         norm(val) === `delete${norm(cleanTitle)}` ||
         norm(val) === norm(slug) ||
-        norm(val) === `delete${norm(slug)}`
+        norm(val) === `delete${norm(slug)}` ||
+        norm(val) === 'delete'
     );
 
     if (isMatch) {
@@ -1555,21 +1577,34 @@ window.onDeleteThemePhraseInput = function () {
 
 window.openDeleteActiveThemeModal = function () {
     if (!studio.activeTheme?.slug) return;
-    openDeleteThemeModal(studio.activeTheme.slug, studio.activeTheme.title);
+    window.openDeleteThemeModal(studio.activeTheme.slug, studio.activeTheme.title);
 };
 
 window.closeDeleteThemeModal = function () {
     studio.pendingDeleteSlug = null;
+    studio.pendingDeleteTitle = null;
     studio.deleteCleanTitle = null;
     studio.deleteTargetPhrase = null;
     const input = document.getElementById('inp-delete-theme-confirm');
     if (input) input.value = '';
     const modal = document.getElementById('delete-theme-modal');
-    if (modal) modal.classList.remove('open');
+    if (modal) {
+        modal.classList.remove('open');
+        modal.style.display = 'none';
+    }
+};
+
+window.closeDeleteSuccessModal = function () {
+    const successModal = document.getElementById('delete-success-modal');
+    if (successModal) {
+        successModal.classList.remove('open');
+        successModal.style.display = 'none';
+    }
 };
 
 window.confirmDeleteTheme = async function () {
     const slug = studio.pendingDeleteSlug;
+    const deletedTitle = studio.pendingDeleteTitle || slug;
     if (!slug) return;
 
     const btn = document.getElementById('btn-confirm-delete-theme');
@@ -1587,11 +1622,13 @@ window.confirmDeleteTheme = async function () {
         val === `delete ${cleanTitle}` ||
         val === slug ||
         val === `delete ${slug}` ||
+        val === 'delete' ||
         norm(val) === norm(target) ||
         norm(val) === norm(cleanTitle) ||
         norm(val) === `delete${norm(cleanTitle)}` ||
         norm(val) === norm(slug) ||
-        norm(val) === `delete${norm(slug)}`
+        norm(val) === `delete${norm(slug)}` ||
+        norm(val) === 'delete'
     );
 
     if (!isMatch) {
@@ -1627,10 +1664,23 @@ window.confirmDeleteTheme = async function () {
             throw new Error(data.error || `Delete failed with status ${res.status}`);
         }
 
-        showToast(`Theme "${slug}" permanently deleted.`, 'success');
-        closeDeleteThemeModal();
+        // 1. Immediately close the delete prompt modal
+        window.closeDeleteThemeModal();
 
-        // Remove from sidebar and reload
+        // 2. Open explicit success popup confirmation dialog
+        const successDesc = document.getElementById('delete-success-desc');
+        if (successDesc) {
+            successDesc.innerHTML = `Theme <strong>"${deletedTitle}"</strong> (<code>/${slug}</code>) has been permanently deleted from the system.`;
+        }
+        const successModal = document.getElementById('delete-success-modal');
+        if (successModal) {
+            successModal.style.display = 'flex';
+            successModal.classList.add('open');
+        }
+
+        showToast(`Theme "${slug}" permanently deleted.`, 'success');
+
+        // 3. Remove from sidebar and reload
         studio.themes = studio.themes.filter(t => t.slug !== slug);
         if (studio.activeTheme?.slug === slug) {
             studio.activeTheme = null;
@@ -2217,6 +2267,50 @@ window.clearAtmosphereEditors = function () {
     showToast('Atmosphere editors cleared.', 'info');
 };
 
+window.setAtmosphereBuilderMode = function (mode, userInitiated = true) {
+    studio.currentAtmosphereMode = mode;
+    const basicCard = document.getElementById('mode-card-basic');
+    const advCard = document.getElementById('mode-card-advanced');
+    const basicSec = document.getElementById('section-atmosphere-basic');
+    const advSec = document.getElementById('section-atmosphere-advanced');
+    const basicStatus = document.getElementById('status-text-basic');
+    const advStatus = document.getElementById('status-text-advanced');
+
+    if (mode === 'advanced') {
+        if (basicCard) basicCard.classList.remove('active');
+        if (advCard) advCard.classList.add('active');
+        if (basicSec) basicSec.style.display = 'none';
+        if (advSec) advSec.style.display = 'block';
+        if (basicStatus) {
+            basicStatus.textContent = 'Switch to Basic';
+            basicStatus.style.color = 'var(--text-dim)';
+        }
+        if (advStatus) {
+            advStatus.textContent = '● Active Studio';
+            advStatus.style.color = '#34d399';
+        }
+        if (userInitiated) {
+            showToast('🏮 Advanced Atmosphere Studio activated', 'info');
+        }
+    } else {
+        if (basicCard) basicCard.classList.add('active');
+        if (advCard) advCard.classList.remove('active');
+        if (basicSec) basicSec.style.display = 'block';
+        if (advSec) advSec.style.display = 'none';
+        if (basicStatus) {
+            basicStatus.textContent = '● Active Builder';
+            basicStatus.style.color = '#34d399';
+        }
+        if (advStatus) {
+            advStatus.textContent = 'Click to build with GenAI';
+            advStatus.style.color = 'var(--text-dim)';
+        }
+        if (userInitiated) {
+            showToast('🌟 Basic Atmosphere mode active', 'info');
+        }
+    }
+};
+
 window.loadExistingAtmosphere = async function (slug) {
     try {
         const res = await fetch(`/api/admin/theme/${slug}/atmosphere`);
@@ -2226,9 +2320,20 @@ window.loadExistingAtmosphere = async function (slug) {
             const cssEl = document.getElementById('adv-custom-css');
             if (htmlEl) htmlEl.value = data.decorations_html || '';
             if (cssEl) cssEl.value = data.custom_css || '';
+
+            const hasCustomAtmosphere = (data.decorations_html && data.decorations_html.trim().length > 0) ||
+                                       (data.custom_css && data.custom_css.trim().length > 0);
+            if (studio.activeTheme?.atmosphereMode === 'advanced' || hasCustomAtmosphere) {
+                window.setAtmosphereBuilderMode('advanced', false);
+            } else {
+                window.setAtmosphereBuilderMode('basic', false);
+            }
+        } else {
+            window.setAtmosphereBuilderMode('basic', false);
         }
     } catch (e) {
         console.warn('[Studio] Failed loading atmosphere:', e);
+        window.setAtmosphereBuilderMode('basic', false);
     }
 };
 

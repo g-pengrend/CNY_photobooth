@@ -191,129 +191,171 @@
                     </div>
                 </div>
 
-                <!-- Atmosphere & Features -->
+                <!-- Atmosphere & Ambient Effects (Mode-Switched: Basic vs Advanced) -->
                 <div class="form-section">
-                    <h3 class="section-title">🌌 Atmosphere & Ambient Effects</h3>
-                    <p class="section-desc">Configure floating particle icons, film strips, and feature steps.</p>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="sel-bg-type">Background Visual Preset</label>
-                            <select id="sel-bg-type">
-                                <option value="particles">Floating Particle Icons</option>
-                                <option value="minimal">Minimal Clean Glow</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="inp-floating-icons">Floating Icons (comma-separated)</label>
-                            <input id="inp-floating-icons" type="text" value="✨, ✦, ⭐, ✧">
-                        </div>
-                        <div class="form-group full-width" style="display: flex; gap: 2rem; margin-top: 0.5rem;">
-                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <input id="chk-film-strip" type="checkbox">
-                                <span>Enable Rolling Film Strip on Welcome Screen</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <input id="chk-lucky-number" type="checkbox">
-                                <span>Enable Lucky Number / Auspicious Numbers Screen</span>
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                                <input id="chk-gender-filter" type="checkbox" checked>
-                                <span>Enable Gender Filter Tabs on Clothes</span>
-                            </label>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.8rem;">
+                        <div>
+                            <h3 class="section-title">🌌 Atmosphere & Ambient Effects</h3>
+                            <p class="section-desc">Select how you want to build this theme's atmosphere. Choose Basic Mode for simple presets, or Advanced Mode for full GenAI festive decorations.</p>
                         </div>
                     </div>
-                </div>
 
-                <!-- Section 3b: Advanced Atmosphere Studio (GenAI HTML/CSS) -->
-                <div class="form-section" style="border: 1px solid rgba(99, 102, 241, 0.35); background: rgba(18, 20, 36, 0.7); position: relative; overflow: hidden; border-radius: var(--radius-md);">
-                    <div style="position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--primary), #ec4899); color: #fff; font-size: 0.68rem; font-weight: 800; padding: 0.25rem 0.8rem; border-bottom-left-radius: var(--radius-sm); letter-spacing: 0.5px;">
-                        ✨ PRO / GENAI ATMOSPHERE
-                    </div>
-
-                    <div style="margin-bottom: 1.2rem;">
-                        <h3 class="section-title" style="display: flex; align-items: center; gap: 0.5rem;">
-                            🏮 Festive Atmosphere & CSS Animations (Advanced Mode)
-                        </h3>
-                        <p class="section-desc">
-                            Give your theme rich visual layers like CNY swinging lanterns or Hari Raya ketupats, side banners, and floating particles. Use the prompt generator to get code from ChatGPT, Claude, or Gemini, then paste it here and compile!
-                        </p>
-                    </div>
-
-                    <!-- Step 1: GenAI Prompt Generator Box -->
-                    <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.5rem;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1rem;">
-                            <div style="font-weight: 700; font-size: 0.95rem; color: #a5b4fc; display: flex; align-items: center; gap: 0.4rem;">
-                                <span>🤖 Step 1: Generate AI Prompt</span>
-                                <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-dim);">(Fill in blanks or pick a preset)</span>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                <select id="adv-prompt-preset" style="padding: 0.35rem 0.8rem; font-size: 0.82rem; border-radius: var(--radius-sm); background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #fff;" onchange="applyAtmospherePreset(this.value)">
-                                    <option value="custom">Preset: Custom / Current Palette</option>
-                                    <option value="cny">🏮 Lunar New Year (Lanterns, Huat Coins, Gold)</option>
-                                    <option value="hariraya">🌙 Hari Raya (Ketupat, Crescent Moon, Emerald)</option>
-                                    <option value="deepavali">🪔 Deepavali (Hanging Diyas, Rangoli, Violet & Gold)</option>
-                                    <option value="christmas">🎄 Christmas & Winter (Snowflakes, Baubles, Pine)</option>
-                                    <option value="cyberpunk">🚀 Future Gala (Neon Hexagons, Circuit Orbits)</option>
-                                </select>
-                                <button type="button" class="admin-btn admin-btn-accent" onclick="copyGenAiAtmospherePrompt()" style="padding: 0.35rem 0.9rem; font-size: 0.82rem;">
-                                    📋 Copy GenAI Prompt
-                                </button>
+                    <!-- 2-Option Mode Selection Cards -->
+                    <div class="builder-mode-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-top: 1rem; margin-bottom: 1.5rem;">
+                        <!-- Basic Option Card -->
+                        <div id="mode-card-basic" class="builder-mode-card active" onclick="setAtmosphereBuilderMode('basic')">
+                            <span class="mode-card-badge">⚡ Quick & Simple</span>
+                            <div class="mode-card-icon">🌟</div>
+                            <div class="mode-card-title">Basic Mode</div>
+                            <div class="mode-card-desc">No-code ambient styling with floating particles, clean glow presets, and welcome screen feature toggles.</div>
+                            <div class="mode-card-status">
+                                <span id="status-text-basic" class="mode-status-indicator">● Active Builder</span>
                             </div>
                         </div>
 
-                        <!-- Editable prompt variables grid -->
-                        <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem;">
-                            <div class="form-group">
-                                <label style="font-size: 0.78rem;">Corner Ornaments</label>
-                                <input id="adv-var-ornaments" type="text" placeholder="e.g. Hanging Brass Diya Lamps" style="font-size: 0.85rem;">
-                            </div>
-                            <div class="form-group">
-                                <label style="font-size: 0.78rem;">Floating Particle Icons</label>
-                                <input id="adv-var-particles" type="text" placeholder="e.g. 🪔, 🦚, 🎆, ✨" style="font-size: 0.85rem;">
-                            </div>
-                            <div class="form-group">
-                                <label style="font-size: 0.78rem;">Floating Text Phrases</label>
-                                <input id="adv-var-phrases" type="text" placeholder="e.g. Shubh Deepavali, Joy, Prosperity" style="font-size: 0.85rem;">
-                            </div>
-                            <div class="form-group">
-                                <label style="font-size: 0.78rem;">Texture / Background Overlay</label>
-                                <input id="adv-var-texture" type="text" placeholder="e.g. Golden Rangoli Mandala pattern" style="font-size: 0.85rem;">
+                        <!-- Advanced Option Card -->
+                        <div id="mode-card-advanced" class="builder-mode-card" onclick="setAtmosphereBuilderMode('advanced')">
+                            <span class="mode-card-badge">✨ Pro / GenAI</span>
+                            <div class="mode-card-icon">🏮</div>
+                            <div class="mode-card-title">Advanced Mode (GenAI Studio)</div>
+                            <div class="mode-card-desc">Multi-layered festive decorations (e.g. swaying lanterns, ketupats, banners) powered by ChatGPT/Claude prompts and live HTML/CSS compilation.</div>
+                            <div class="mode-card-status">
+                                <span id="status-text-advanced" class="mode-status-indicator" style="color: var(--text-dim);">Click to build with GenAI</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 2: Code Paste & Compile Area -->
-                    <div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button type="button" id="tab-btn-deco-html" class="admin-btn admin-btn-primary" style="font-size: 0.82rem; padding: 0.35rem 0.9rem;" onclick="switchAtmosphereEditorTab('html')">
-                                    📄 decorations.html
-                                </button>
-                                <button type="button" id="tab-btn-deco-css" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.9rem;" onclick="switchAtmosphereEditorTab('css')">
-                                    🎨 style.css (Animations)
-                                </button>
-                            </div>
-                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.8rem;" onclick="loadQuickAtmosphereTemplate()">
-                                    💡 Load Working Template
-                                </button>
-                                <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.8rem;" onclick="clearAtmosphereEditors()">
-                                    🧹 Clear
-                                </button>
-                                <button type="button" class="admin-btn admin-btn-accent" style="font-size: 0.82rem; padding: 0.35rem 1rem;" onclick="openAtmospherePreviewModal()">
-                                    ⚡ Compile & Live Preview
-                                </button>
+                    <!-- Container 1: Basic Mode Content (Revealed when Basic is selected) -->
+                    <div id="section-atmosphere-basic">
+                        <div style="border-top: 1px solid var(--border-subtle); padding-top: 1.2rem;">
+                            <h4 style="font-size: 1rem; font-weight: 700; color: #a5b4fc; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
+                                <span>🌟 Basic Ambient Presets & Controls</span>
+                            </h4>
+                            <p class="section-desc" style="margin-bottom: 1.2rem;">Quickly tune ambient particles and toggles without writing code.</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="sel-bg-type">Background Visual Preset</label>
+                                    <select id="sel-bg-type">
+                                        <option value="particles">Floating Particle Icons</option>
+                                        <option value="minimal">Minimal Clean Glow</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inp-floating-icons">Floating Icons (comma-separated)</label>
+                                    <input id="inp-floating-icons" type="text" value="✨, ✦, ⭐, ✧">
+                                </div>
+                                <div class="form-group full-width" style="display: flex; gap: 2rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input id="chk-film-strip" type="checkbox">
+                                        <span>Enable Rolling Film Strip on Welcome Screen</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input id="chk-lucky-number" type="checkbox">
+                                        <span>Enable Lucky Number / Auspicious Numbers Screen</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input id="chk-gender-filter" type="checkbox" checked>
+                                        <span>Enable Gender Filter Tabs on Clothes</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- HTML Editor -->
-                        <div id="editor-container-html">
-                            <textarea id="adv-decorations-html" rows="10" placeholder="<!-- Paste GenAI Block 1 (decorations.html) here -->&#10;<div class='custom-ornament ornament-left'>🪔</div>&#10;<div class='custom-ornament ornament-right'>🪔</div>" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #86efac; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
-                        </div>
+                    <!-- Container 2: Advanced GenAI Mode Content (Revealed when Advanced is selected) -->
+                    <div id="section-atmosphere-advanced" style="display: none;">
+                        <div style="border: 1px solid rgba(99, 102, 241, 0.35); background: rgba(18, 20, 36, 0.7); position: relative; overflow: hidden; border-radius: var(--radius-md); padding: 1.5rem; margin-top: 0.5rem;">
+                            <div style="position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--primary), #ec4899); color: #fff; font-size: 0.68rem; font-weight: 800; padding: 0.25rem 0.8rem; border-bottom-left-radius: var(--radius-sm); letter-spacing: 0.5px;">
+                                ✨ PRO / GENAI ATMOSPHERE
+                            </div>
 
-                        <!-- CSS Editor -->
-                        <div id="editor-container-css" style="display: none;">
-                            <textarea id="adv-custom-css" rows="10" placeholder="/* Paste GenAI Block 2 (style.css) here */&#10;.custom-ornament { position: fixed; top: 0; z-index: 10; pointer-events: none; }&#10;@keyframes ornamentSway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #93c5fd; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
+                            <div style="margin-bottom: 1.2rem;">
+                                <h3 class="section-title" style="display: flex; align-items: center; gap: 0.5rem;">
+                                    🏮 Festive Atmosphere & CSS Animations (Advanced Studio)
+                                </h3>
+                                <p class="section-desc">
+                                    Give your theme rich visual layers like CNY swinging lanterns or Hari Raya ketupats, side banners, and floating particles. Use the prompt generator to get code from ChatGPT, Claude, or Gemini, then paste it here and compile!
+                                </p>
+                            </div>
+
+                            <!-- Step 1: GenAI Prompt Generator Box -->
+                            <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.5rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1rem;">
+                                    <div style="font-weight: 700; font-size: 0.95rem; color: #a5b4fc; display: flex; align-items: center; gap: 0.4rem;">
+                                        <span>🤖 Step 1: Generate AI Prompt</span>
+                                        <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-dim);">(Fill in blanks or pick a preset)</span>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                        <select id="adv-prompt-preset" style="padding: 0.35rem 0.8rem; font-size: 0.82rem; border-radius: var(--radius-sm); background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #fff;" onchange="applyAtmospherePreset(this.value)">
+                                            <option value="custom">Preset: Custom / Current Palette</option>
+                                            <option value="cny">🏮 Lunar New Year (Lanterns, Huat Coins, Gold)</option>
+                                            <option value="hariraya">🌙 Hari Raya (Ketupat, Crescent Moon, Emerald)</option>
+                                            <option value="deepavali">🪔 Deepavali (Hanging Diyas, Rangoli, Violet & Gold)</option>
+                                            <option value="christmas">🎄 Christmas & Winter (Snowflakes, Baubles, Pine)</option>
+                                            <option value="cyberpunk">🚀 Future Gala (Neon Hexagons, Circuit Orbits)</option>
+                                        </select>
+                                        <button type="button" class="admin-btn admin-btn-accent" onclick="copyGenAiAtmospherePrompt()" style="padding: 0.35rem 0.9rem; font-size: 0.82rem;">
+                                            📋 Copy GenAI Prompt
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Editable prompt variables grid -->
+                                <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem;">
+                                    <div class="form-group">
+                                        <label style="font-size: 0.78rem;">Corner Ornaments</label>
+                                        <input id="adv-var-ornaments" type="text" placeholder="e.g. Hanging Brass Diya Lamps" style="font-size: 0.85rem;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="font-size: 0.78rem;">Floating Particle Icons</label>
+                                        <input id="adv-var-particles" type="text" placeholder="e.g. 🪔, 🦚, 🎆, ✨" style="font-size: 0.85rem;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="font-size: 0.78rem;">Floating Text Phrases</label>
+                                        <input id="adv-var-phrases" type="text" placeholder="e.g. Shubh Deepavali, Joy, Prosperity" style="font-size: 0.85rem;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="font-size: 0.78rem;">Texture / Background Overlay</label>
+                                        <input id="adv-var-texture" type="text" placeholder="e.g. Golden Rangoli Mandala pattern" style="font-size: 0.85rem;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Code Paste & Compile Area -->
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <button type="button" id="tab-btn-deco-html" class="admin-btn admin-btn-primary" style="font-size: 0.82rem; padding: 0.35rem 0.9rem;" onclick="switchAtmosphereEditorTab('html')">
+                                            📄 decorations.html
+                                        </button>
+                                        <button type="button" id="tab-btn-deco-css" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.9rem;" onclick="switchAtmosphereEditorTab('css')">
+                                            🎨 style.css (Animations)
+                                        </button>
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                        <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.8rem;" onclick="loadQuickAtmosphereTemplate()">
+                                            💡 Load Working Template
+                                        </button>
+                                        <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.35rem 0.8rem;" onclick="clearAtmosphereEditors()">
+                                            🧹 Clear
+                                        </button>
+                                        <button type="button" class="admin-btn admin-btn-accent" style="font-size: 0.82rem; padding: 0.35rem 1rem;" onclick="openAtmospherePreviewModal()">
+                                            ⚡ Compile & Live Preview
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- HTML Editor -->
+                                <div id="editor-container-html">
+                                    <textarea id="adv-decorations-html" rows="10" placeholder="<!-- Paste GenAI Block 1 (decorations.html) here -->&#10;<div class='custom-ornament ornament-left'>🪔</div>&#10;<div class='custom-ornament ornament-right'>🪔</div>" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #86efac; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
+                                </div>
+
+                                <!-- CSS Editor -->
+                                <div id="editor-container-css" style="display: none;">
+                                    <textarea id="adv-custom-css" rows="10" placeholder="/* Paste GenAI Block 2 (style.css) here */&#10;.custom-ornament { position: fixed; top: 0; z-index: 10; pointer-events: none; }&#10;@keyframes ornamentSway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #93c5fd; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -967,7 +1009,7 @@
 
     <!-- Delete Theme Confirmation Modal -->
     <div id="delete-theme-modal" class="modal-overlay">
-        <div class="asset-picker-dialog danger-dialog" style="max-width:480px;">
+        <div class="asset-picker-dialog danger-dialog" style="max-width:480px;height:auto;max-height:90vh;">
             <div class="modal-header">
                 <h3>🗑️ Delete Theme</h3>
                 <button class="modal-close-btn" onclick="closeDeleteThemeModal()">&times;</button>
@@ -982,9 +1024,14 @@
                 <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1.2rem;">Slug: <code id="delete-theme-slug" style="color:#cbd5e1;background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;">slug</code></p>
 
                 <div style="margin-top:1.2rem;margin-bottom:0.4rem;">
-                    <label for="inp-delete-theme-confirm" style="display:block;font-size:0.9rem;color:var(--text-main);margin-bottom:0.6rem;">
-                        To confirm, please type <strong id="delete-theme-target-phrase" style="color:#f87171;background:rgba(239,68,68,0.15);padding:0.2rem 0.5rem;border-radius:4px;font-family:monospace;font-size:0.95rem;user-select:all;">Theme Name</strong> below:
-                    </label>
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;">
+                        <label for="inp-delete-theme-confirm" style="font-size:0.9rem;color:var(--text-main);margin:0;">
+                            To confirm, type <strong id="delete-theme-target-phrase" style="color:#f87171;background:rgba(239,68,68,0.15);padding:0.2rem 0.5rem;border-radius:4px;font-family:monospace;font-size:0.95rem;user-select:all;">Theme Name</strong>:
+                        </label>
+                        <button type="button" class="admin-btn admin-btn-secondary" style="font-size:0.75rem;padding:0.2rem 0.6rem;white-space:nowrap;" onclick="quickFillDeletePhrase()" title="Auto-fill confirmation phrase">
+                            📋 Quick Fill
+                        </button>
+                    </div>
                     <input type="text" id="inp-delete-theme-confirm" class="admin-input" placeholder="Type confirmation phrase here..." style="width:100%;border-color:rgba(239,68,68,0.4);padding:0.65rem 0.9rem;font-size:0.95rem;" autocomplete="off" oninput="onDeleteThemePhraseInput()" onkeydown="if(event.key==='Enter'&&!document.getElementById('btn-confirm-delete-theme').disabled)confirmDeleteTheme();">
                 </div>
                 <div id="delete-phrase-hint" style="font-size:0.8rem;color:var(--text-muted);min-height:1.2rem;margin-bottom:0.6rem;"></div>
@@ -994,6 +1041,22 @@
                     <button id="btn-confirm-delete-theme" class="admin-btn admin-btn-danger" onclick="confirmDeleteTheme()" disabled style="opacity:0.45;cursor:not-allowed;transition:all 0.2s ease;">🗑️ Permanently Delete</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Delete Theme Success Popup Modal -->
+    <div id="delete-success-modal" class="modal-overlay" style="z-index: 2500; display: none;">
+        <div class="asset-picker-dialog" style="max-width: 440px; height: auto; max-height: 90vh; text-align: center; padding: 2.2rem 2rem; border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 35px rgba(16, 185, 129, 0.2);">
+            <div style="width: 64px; height: 64px; margin: 0 auto 1.2rem; border-radius: 50%; background: rgba(16, 185, 129, 0.15); border: 2px solid #10b981; display: flex; align-items: center; justify-content: center; font-size: 2rem;">
+                ✅
+            </div>
+            <h3 style="font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 0.6rem;">Theme Deleted Successfully</h3>
+            <p id="delete-success-desc" style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.8rem;">
+                The theme has been permanently removed from the system.
+            </p>
+            <button class="admin-btn admin-btn-primary" style="width: 100%; justify-content: center; font-weight: 600; padding: 0.75rem 1rem; font-size: 0.95rem;" onclick="closeDeleteSuccessModal()">
+                OK, Got It
+            </button>
         </div>
     </div>
 
