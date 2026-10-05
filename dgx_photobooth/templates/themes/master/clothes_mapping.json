@@ -158,5 +158,29 @@
   "O3": {
     "desc": "Reinterprets traditional court attire through a structured, double-breasted coat featuring an expansive pleated lower flare and rich jewel-toned silk.",
     "lighting": "Cinematic ambient studio lighting"
+  },
+  "C52": {
+    "desc": "high-fashion festive ensemble in burnished gold and midnight violet",
+    "lighting": "Cinematic ambient studio lighting"
+  },
+  "C54": {
+    "desc": "Reimagines the traditional angrakha wrap into a structured floor-length gown featuring a dramatic waterfall drape at the side.",
+    "lighting": "Cinematic ambient studio lighting"
+  },
+  "C55": {
+    "desc": "A lively festival silhouette defined by an exaggerated peplum waist paired with dramatically flared, multi-tiered gharara pants.",
+    "lighting": "Cinematic ambient studio lighting"
+  },
+  "C56": {
+    "desc": "A contemporary take on the royal crossover silhouette, trading soft ties for sharp angular hems and metallic hardware over slim-cut trousers.",
+    "lighting": "Cinematic ambient studio lighting"
+  },
+  "C57": {
+    "desc": "Pairs an asymmetric, draped cowl-neck silk tunic with a sharply structured, bronze-embroidered sleeveless vest.",
+    "lighting": "Cinematic ambient studio lighting"
+  },
+  "C58": {
+    "desc": "Combines rigid sherwani tailoring with a kinetic pleated side drape and sculptural, spiral-folded dhoti trousers.",
+    "lighting": "Cinematic ambient studio lighting"
   }
 }

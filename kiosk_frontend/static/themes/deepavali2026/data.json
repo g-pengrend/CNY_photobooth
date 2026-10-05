@@ -20,8 +20,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Focuses on the grand scale and geometrical symmetry of the empty festive road canopy, contrasting historic shophouse facades with crisp, dense LED light patterns, with a single couple providing a sense of scale and quiet joy.",
       "name": "Starlight Corridor: The Midnight Light Canopy of Serangoon",
-      "prompt": "A professional studio asset of a background environment, featuring \n\nPrompt: A clean, eye-level street landscape down the dead-center median of Serangoon Road at 3:00 AM, completely devoid of vehicles, pedestrians, and moving traffic, save for a lone elderly couple in traditional Indian wear slowly walking arm-in-arm along the far sidewalk. An uninterrupted, long-exposure tunnel of massive overhead light arches spans across the two-lane road, vanishing into a single point on the horizon. The glowing installations are composed of thousands of dense, brilliant LED bulbs shaped into sprawling golden peacock feathers, lotus flowers, and traditional clay lamp motifs in saturated amber, gold, violet, and turquoise. The clean, asphalt roadway reflects streaks of amber and magenta from the overhead canopy. On either side, empty two-story heritage shophouses with painted timber shutters and covered five-foot ways sit silent beneath the festive wash of warm light. Ultra-detailed, cinematic wide shot, sharp focus from foreground to background.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
-      "prompt_modifier": "A professional studio asset of a background environment, featuring \n\nPrompt: A clean, eye-level street landscape down the dead-center median of Serangoon Road at 3:00 AM, completely devoid of vehicles, pedestrians, and moving traffic, save for a lone elderly couple in traditional Indian wear slowly walking arm-in-arm along the far sidewalk. An uninterrupted, long-exposure tunnel of massive overhead light arches spans across the two-lane road, vanishing into a single point on the horizon. The glowing installations are composed of thousands of dense, brilliant LED bulbs shaped into sprawling golden peacock feathers, lotus flowers, and traditional clay lamp motifs in saturated amber, gold, violet, and turquoise. The clean, asphalt roadway reflects streaks of amber and magenta from the overhead canopy. On either side, empty two-story heritage shophouses with painted timber shutters and covered five-foot ways sit silent beneath the festive wash of warm light. Ultra-detailed, cinematic wide shot, sharp focus from foreground to background.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "prompt": "Prompt: A clean, eye-level street landscape down the dead-center median of Serangoon Road at 3:00 AM, completely devoid of vehicles, pedestrians, and moving traffic, save for a lone elderly couple in traditional Indian wear slowly walking arm-in-arm along the far sidewalk. An uninterrupted, long-exposure tunnel of massive overhead light arches spans across the two-lane road, vanishing into a single point on the horizon. The glowing installations are composed of thousands of dense, brilliant LED bulbs shaped into sprawling golden peacock feathers, lotus flowers, and traditional clay lamp motifs in saturated amber, gold, violet, and turquoise. The clean, asphalt roadway reflects streaks of amber and magenta from the overhead canopy. On either side, empty two-story heritage shophouses with painted timber shutters and covered five-foot ways sit silent beneath the festive wash of warm light. Ultra-detailed, cinematic wide shot, sharp focus from foreground to background.",
+      "prompt_modifier": "Prompt: A clean, eye-level street landscape down the dead-center median of Serangoon Road at 3:00 AM, completely devoid of vehicles, pedestrians, and moving traffic, save for a lone elderly couple in traditional Indian wear slowly walking arm-in-arm along the far sidewalk. An uninterrupted, long-exposure tunnel of massive overhead light arches spans across the two-lane road, vanishing into a single point on the horizon. The glowing installations are composed of thousands of dense, brilliant LED bulbs shaped into sprawling golden peacock feathers, lotus flowers, and traditional clay lamp motifs in saturated amber, gold, violet, and turquoise. The clean, asphalt roadway reflects streaks of amber and magenta from the overhead canopy. On either side, empty two-story heritage shophouses with painted timber shutters and covered five-foot ways sit silent beneath the festive wash of warm light. Ultra-detailed, cinematic wide shot, sharp focus from foreground to background.",
       "title": "Starlight Corridor: The Midnight Light Canopy of Serangoon"
     },
     {
@@ -33,8 +33,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Highlights the quieter, atmospheric heritage charm of traditional shophouses adorned for the festival away from the main thoroughfare.",
       "name": "Shophouse Glow: Quiet Festivities of Dunlop Street",
-      "prompt": "A professional studio asset of a background environment, featuring \n\nPrompt: A cinematic mid-distance street shot at twilight along Dunlop Street, showcasing two-story heritage shophouses with pastel-painted louvered shutters and ornate plaster reliefs. Traditional brass oil lamps and strings of warm lights adorn the five-foot ways, casting a cozy reflection onto wet cobblestone pavements after a brief evening shower. Small groups of residents and visitors sit outside open-fronted cafes and textile shops, surrounded by the subtle glow of festival paper lanterns swaying in the gentle breeze.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
-      "prompt_modifier": "A professional studio asset of a background environment, featuring \n\nPrompt: A cinematic mid-distance street shot at twilight along Dunlop Street, showcasing two-story heritage shophouses with pastel-painted louvered shutters and ornate plaster reliefs. Traditional brass oil lamps and strings of warm lights adorn the five-foot ways, casting a cozy reflection onto wet cobblestone pavements after a brief evening shower. Small groups of residents and visitors sit outside open-fronted cafes and textile shops, surrounded by the subtle glow of festival paper lanterns swaying in the gentle breeze.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "prompt": "Prompt: A cinematic mid-distance street shot at twilight along Dunlop Street, showcasing two-story heritage shophouses with pastel-painted louvered shutters and ornate plaster reliefs. Traditional brass oil lamps and strings of warm lights adorn the five-foot ways, casting a cozy reflection onto wet cobblestone pavements after a brief evening shower. Small groups of residents and visitors sit outside open-fronted cafes and textile shops, surrounded by the subtle glow of festival paper lanterns swaying in the gentle breeze.",
+      "prompt_modifier": "Prompt: A cinematic mid-distance street shot at twilight along Dunlop Street, showcasing two-story heritage shophouses with pastel-painted louvered shutters and ornate plaster reliefs. Traditional brass oil lamps and strings of warm lights adorn the five-foot ways, casting a cozy reflection onto wet cobblestone pavements after a brief evening shower. Small groups of residents and visitors sit outside open-fronted cafes and textile shops, surrounded by the subtle glow of festival paper lanterns swaying in the gentle breeze.",
       "title": "Shophouse Glow: Quiet Festivities of Dunlop Street"
     },
     {
@@ -46,8 +46,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Highlights the bustling sights, colors, and textures of a festive night market packed with traditional sweets, flowers, and handcrafted decor.",
       "name": "Campbell Lane Deepavali Festive Bazaar",
-      "prompt": "A professional studio asset of a background environment, featuring \n\nA vibrant, eye-level tracking view through the bustling Campbell Lane pedestrian bazaar during the peak of Deepavali evening celebrations. Canopies overhead are draped with glowing paper lanterns, glittering tinsel, and peacock feather ornaments. Stalls on both sides spill over with piles of aromatic jasmine flower strings, stacked pyramid boxes of traditional Indian sweets (mithai), and trays of painted clay diyas. A warm, ambient, festive bokeh surrounds market-goers browsing through racks of embroidered textiles.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
-      "prompt_modifier": "A professional studio asset of a background environment, featuring \n\nA vibrant, eye-level tracking view through the bustling Campbell Lane pedestrian bazaar during the peak of Deepavali evening celebrations. Canopies overhead are draped with glowing paper lanterns, glittering tinsel, and peacock feather ornaments. Stalls on both sides spill over with piles of aromatic jasmine flower strings, stacked pyramid boxes of traditional Indian sweets (mithai), and trays of painted clay diyas. A warm, ambient, festive bokeh surrounds market-goers browsing through racks of embroidered textiles.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "prompt": "A vibrant, eye-level tracking view through the bustling Campbell Lane pedestrian bazaar during the peak of Deepavali evening celebrations. Canopies overhead are draped with glowing paper lanterns, glittering tinsel, and peacock feather ornaments. Stalls on both sides spill over with piles of aromatic jasmine flower strings, stacked pyramid boxes of traditional Indian sweets (mithai), and trays of painted clay diyas. A warm, ambient, festive bokeh surrounds market-goers browsing through racks of embroidered textiles.",
+      "prompt_modifier": "A vibrant, eye-level tracking view through the bustling Campbell Lane pedestrian bazaar during the peak of Deepavali evening celebrations. Canopies overhead are draped with glowing paper lanterns, glittering tinsel, and peacock feather ornaments. Stalls on both sides spill over with piles of aromatic jasmine flower strings, stacked pyramid boxes of traditional Indian sweets (mithai), and trays of painted clay diyas. A warm, ambient, festive bokeh surrounds market-goers browsing through racks of embroidered textiles.",
       "title": "Campbell Lane Deepavali Festive Bazaar"
     },
     {
@@ -59,9 +59,61 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Captures the lively spirit and intricate light installations of Little India, showcasing the radiant heritage streets celebrating the Festival of Lights.",
       "name": "Radiant Little India: Deepavali Street of Lights",
-      "prompt": "A professional studio asset of a background environment, featuring \n\nA cinematic, wide eye-level shot at dusk looking down Serangoon Road during the Deepavali festival. Elaborate, towering arches of golden, purple, and magenta light canopies stretch overhead, casting a warm, celebratory glow onto the bustling street below. Intricate glowing motifs of peacocks, lotus blossoms, and traditional clay oil lamps (diyas) illuminate the historic shophouse facades. Crowds of visitors dressed in vibrant festive attire stroll along the sidewalks, with streaks of vehicle tail lights blurring along the asphalt under the brilliant canopy of festive illuminations.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
-      "prompt_modifier": "A professional studio asset of a background environment, featuring \n\nA cinematic, wide eye-level shot at dusk looking down Serangoon Road during the Deepavali festival. Elaborate, towering arches of golden, purple, and magenta light canopies stretch overhead, casting a warm, celebratory glow onto the bustling street below. Intricate glowing motifs of peacocks, lotus blossoms, and traditional clay oil lamps (diyas) illuminate the historic shophouse facades. Crowds of visitors dressed in vibrant festive attire stroll along the sidewalks, with streaks of vehicle tail lights blurring along the asphalt under the brilliant canopy of festive illuminations.\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+      "prompt": "A cinematic, wide eye-level shot at dusk looking down Serangoon Road during the Deepavali festival. Elaborate, towering arches of golden, purple, and magenta light canopies stretch overhead, casting a warm, celebratory glow onto the bustling street below. Intricate glowing motifs of peacocks, lotus blossoms, and traditional clay oil lamps (diyas) illuminate the historic shophouse facades. Crowds of visitors dressed in vibrant festive attire stroll along the sidewalks, with streaks of vehicle tail lights blurring along the asphalt under the brilliant canopy of festive illuminations.",
+      "prompt_modifier": "A cinematic, wide eye-level shot at dusk looking down Serangoon Road during the Deepavali festival. Elaborate, towering arches of golden, purple, and magenta light canopies stretch overhead, casting a warm, celebratory glow onto the bustling street below. Intricate glowing motifs of peacocks, lotus blossoms, and traditional clay oil lamps (diyas) illuminate the historic shophouse facades. Crowds of visitors dressed in vibrant festive attire stroll along the sidewalks, with streaks of vehicle tail lights blurring along the asphalt under the brilliant canopy of festive illuminations.",
       "title": "Radiant Little India: Deepavali Street of Lights"
+    },
+    {
+      "category": "unisex",
+      "code": "B37",
+      "description": "Captures a panoramic rooftop terrace glowing with handmade festival paper lanterns and clay lamps overlooking a decorated historic neighborhood.",
+      "id": "rooftop-lantern-vista",
+      "image": "/static/themes/master/images/backgrounds/rooftop-lantern-vista.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "Captures a panoramic rooftop terrace glowing with handmade festival paper lanterns and clay lamps overlooking a decorated historic neighborhood.",
+      "name": "Rooftop Lantern Vista",
+      "prompt": "A cinematic, wide-angle view across an empty tiled rooftop terrace at deep twilight. Colorful handcrafted paper festival lanterns (kandils) in geometric diamond and star shapes hang from overhead bamboo canopies, glowing softly from within in shades of crimson, saffron, and magenta. The terrace parapet is lined with small burning clay diyas that trace the outer perimeter. Below in the soft-focus distance, the vibrant, blurred glow of festive streetlights illuminates the silhouettes of historic shophouse roofs beneath a clear night sky.",
+      "prompt_modifier": "A cinematic, wide-angle view across an empty tiled rooftop terrace at deep twilight. Colorful handcrafted paper festival lanterns (kandils) in geometric diamond and star shapes hang from overhead bamboo canopies, glowing softly from within in shades of crimson, saffron, and magenta. The terrace parapet is lined with small burning clay diyas that trace the outer perimeter. Below in the soft-focus distance, the vibrant, blurred glow of festive streetlights illuminates the silhouettes of historic shophouse roofs beneath a clear night sky.",
+      "title": "Rooftop Lantern Vista"
+    },
+    {
+      "category": "unisex",
+      "code": "B34",
+      "description": "Highlights an architectural corridor framed by tiered traditional standing lamps and festive doorway garlands.",
+      "id": "the-lamp-lit-hallway",
+      "image": "/static/themes/master/images/backgrounds/the-lamp-lit-hallway.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "Highlights an architectural corridor framed by tiered traditional standing lamps and festive doorway garlands.",
+      "name": "The Lamp-Lit Hallway",
+      "prompt": "A symmetrical, eye-level corridor perspective looking down a long, open-air stone colonnade decorated for Deepavali. Tall, tiered brass oil lamps (kuthu vilakku) line each side of the corridor, burning steadily with multiple wicks that cast deep amber light across carved granite pillars. Swags of fresh green mango leaves and strands of yellow chrysanthemums hang between the arches overhead. The walkway is clean and deserted, leading toward a softly glowing, misty night backdrop.",
+      "prompt_modifier": "A symmetrical, eye-level corridor perspective looking down a long, open-air stone colonnade decorated for Deepavali. Tall, tiered brass oil lamps (kuthu vilakku) line each side of the corridor, burning steadily with multiple wicks that cast deep amber light across carved granite pillars. Swags of fresh green mango leaves and strands of yellow chrysanthemums hang between the arches overhead. The walkway is clean and deserted, leading toward a softly glowing, misty night backdrop.",
+      "title": "The Lamp-Lit Hallway"
+    },
+    {
+      "category": "unisex",
+      "code": "B35",
+      "description": "Emphasizes an immersive, walk-through festival light installation with dense overhead florals and reflective stone paving.",
+      "id": "festival-light-tunnel",
+      "image": "/static/themes/master/images/backgrounds/festival-light-tunnel.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "Emphasizes an immersive, walk-through festival light installation with dense overhead florals and reflective stone paving.",
+      "name": "Festival Light Tunnel",
+      "prompt": "A straight-on, symmetrical wide shot down a grand pedestrian archway glowing with thousands of warm golden and deep violet fairy lights. Curved overhead wooden lattice panels support dense curtains of marigold flowers and micro-LEDs, forming an immersive tunnel of festive warmth. The ground below features clean, wet cobblestones mirroring the intense golden hues from the ceiling installations, fading into a gentle focal blur in the distance.",
+      "prompt_modifier": "A straight-on, symmetrical wide shot down a grand pedestrian archway glowing with thousands of warm golden and deep violet fairy lights. Curved overhead wooden lattice panels support dense curtains of marigold flowers and micro-LEDs, forming an immersive tunnel of festive warmth. The ground below features clean, wet cobblestones mirroring the intense golden hues from the ceiling installations, fading into a gentle focal blur in the distance.",
+      "title": "Festival Light Tunnel"
+    },
+    {
+      "category": "unisex",
+      "code": "B36",
+      "description": "Focuses on the lush texture of fresh marigold floral installations paired with delicate micro-LEDs across a grand traditional entrance.",
+      "id": "marigold-toran-arch",
+      "image": "/static/themes/master/images/backgrounds/marigold-toran-arch.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "Focuses on the lush texture of fresh marigold floral installations paired with delicate micro-LEDs across a grand traditional entrance.",
+      "name": "Marigold Toran Arch",
+      "prompt": "A straight-on, medium-distance architectural shot framing a massive stone entrance archway decorated for the festival. The entire stone facade is enveloped in dense, cascading curtains of vibrant orange and golden-yellow marigold flowers intertwined with tiny, warm-white fairy lights. Flanking the heavy brass-studded wooden doors are two towering multi-tiered brass standing lamps, each tier holding a ring of glowing wicks. The smooth stone threshold below is clean and polished, catching the golden spill of the festive lights. Intricate floral density, balanced lighting, completely empty of people.",
+      "prompt_modifier": "A straight-on, medium-distance architectural shot framing a massive stone entrance archway decorated for the festival. The entire stone facade is enveloped in dense, cascading curtains of vibrant orange and golden-yellow marigold flowers intertwined with tiny, warm-white fairy lights. Flanking the heavy brass-studded wooden doors are two towering multi-tiered brass standing lamps, each tier holding a ring of glowing wicks. The smooth stone threshold below is clean and polished, catching the golden spill of the festive lights. Intricate floral density, balanced lighting, completely empty of people.",
+      "title": "Marigold Toran Arch"
     }
   ],
   "clothes": [
@@ -99,8 +151,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Reinterprets traditional court attire through a structured, double-breasted coat featuring an expansive pleated lower flare and rich jewel-toned silk.",
       "name": "Flared Achkan & Churidar",
-      "prompt": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A regal, full-length festive menswear look in deep malachite green and antique gold. The mid-calf achkan coat is crafted from structured raw silk, featuring a sharp standing Nehru collar, padded shoulders, and full-length tailored sleeves with gold bullion wirework at the cuffs. The upper torso fastens with a double-breasted closure using carved brass buttons, while the skirt of the coat breaks into crisp, flared vertical knife pleats from the waist down, reminiscent of royal Mughal court attire. Draped across one shoulder is a pleated silk-tissue dupatta in dull gold, pinned firmly with a jeweled crest brooch. Paired with slim-cut ivory churidar trousers tailored cleanly over traditional leather juttis. High-contrast illumination, sharp tailoring, and rich, heavy textile weight.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A regal, full-length festive menswear look in deep malachite green and antique gold. The mid-calf achkan coat is crafted from structured raw silk, featuring a sharp standing Nehru collar, padded shoulders, and full-length tailored sleeves with gold bullion wirework at the cuffs. The upper torso fastens with a double-breasted closure using carved brass buttons, while the skirt of the coat breaks into crisp, flared vertical knife pleats from the waist down, reminiscent of royal Mughal court attire. Draped across one shoulder is a pleated silk-tissue dupatta in dull gold, pinned firmly with a jeweled crest brooch. Paired with slim-cut ivory churidar trousers tailored cleanly over traditional leather juttis. High-contrast illumination, sharp tailoring, and rich, heavy textile weight.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A regal, full-length festive menswear look in deep malachite green and antique gold. The mid-calf achkan coat is crafted from structured raw silk, featuring a sharp standing Nehru collar, padded shoulders, and full-length tailored sleeves with gold bullion wirework at the cuffs. The upper torso fastens with a double-breasted closure using carved brass buttons, while the skirt of the coat breaks into crisp, flared vertical knife pleats from the waist down, reminiscent of royal Mughal court attire. Draped across one shoulder is a pleated silk-tissue dupatta in dull gold, pinned firmly with a jeweled crest brooch. Paired with slim-cut ivory churidar trousers tailored cleanly over traditional leather juttis. High-contrast illumination, sharp tailoring, and rich, heavy textile weight.",
+      "prompt_modifier": "Prompt: A regal, full-length festive menswear look in deep malachite green and antique gold. The mid-calf achkan coat is crafted from structured raw silk, featuring a sharp standing Nehru collar, padded shoulders, and full-length tailored sleeves with gold bullion wirework at the cuffs. The upper torso fastens with a double-breasted closure using carved brass buttons, while the skirt of the coat breaks into crisp, flared vertical knife pleats from the waist down, reminiscent of royal Mughal court attire. Draped across one shoulder is a pleated silk-tissue dupatta in dull gold, pinned firmly with a jeweled crest brooch. Paired with slim-cut ivory churidar trousers tailored cleanly over traditional leather juttis. High-contrast illumination, sharp tailoring, and rich, heavy textile weight.",
       "title": "Flared Achkan & Churidar"
     },
     {
@@ -113,8 +165,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Delivers a powerful, structured silhouette rooted in classic northwestern festive wear, featuring military-inspired shoulders, buttoned cuffs, and pleated salwars.",
       "name": "Structured Modern Pathani Suit",
-      "prompt": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A full-length, sharp studio shot of an architectural men's festive Pathani suit in deep ruby red and antique gunmetal. The thigh-length kurta features structured epaulets on the shoulders, a sharp standing shirt collar, and cuffed full-length sleeves rolled sharply to the mid-forearm. The front placket is fastened with metallic oxidized coin buttons, cutting into an angular, slightly curved hemline. Paired below with classic voluminous salwar trousers tailored with deep, flowing pleats that taper into fitted ankle cuffs. The heavy raw silk fabric carries a subtle, matte textured weave with high contrast along the stitched seams.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A full-length, sharp studio shot of an architectural men's festive Pathani suit in deep ruby red and antique gunmetal. The thigh-length kurta features structured epaulets on the shoulders, a sharp standing shirt collar, and cuffed full-length sleeves rolled sharply to the mid-forearm. The front placket is fastened with metallic oxidized coin buttons, cutting into an angular, slightly curved hemline. Paired below with classic voluminous salwar trousers tailored with deep, flowing pleats that taper into fitted ankle cuffs. The heavy raw silk fabric carries a subtle, matte textured weave with high contrast along the stitched seams.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A full-length, sharp studio shot of an architectural men's festive Pathani suit in deep ruby red and antique gunmetal. The thigh-length kurta features structured epaulets on the shoulders, a sharp standing shirt collar, and cuffed full-length sleeves rolled sharply to the mid-forearm. The front placket is fastened with metallic oxidized coin buttons, cutting into an angular, slightly curved hemline. Paired below with classic voluminous salwar trousers tailored with deep, flowing pleats that taper into fitted ankle cuffs. The heavy raw silk fabric carries a subtle, matte textured weave with high contrast along the stitched seams.",
+      "prompt_modifier": "Prompt: A full-length, sharp studio shot of an architectural men's festive Pathani suit in deep ruby red and antique gunmetal. The thigh-length kurta features structured epaulets on the shoulders, a sharp standing shirt collar, and cuffed full-length sleeves rolled sharply to the mid-forearm. The front placket is fastened with metallic oxidized coin buttons, cutting into an angular, slightly curved hemline. Paired below with classic voluminous salwar trousers tailored with deep, flowing pleats that taper into fitted ankle cuffs. The heavy raw silk fabric carries a subtle, matte textured weave with high contrast along the stitched seams.",
       "title": "Structured Modern Pathani Suit"
     },
     {
@@ -127,8 +179,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Blends modern streetwear geometry with classic festive wear, using an asymmetric tunic hem beneath a sharp, contrasting sleeveless vest.",
       "name": "Geometric Nehru Jacket & Asymmetric Kurta",
-      "prompt": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A contemporary, fashion-forward ethnic menswear set in rich saffron orange, warm charcoal, and champagne gold. The base layer is a knee-length silk kurta with a high band collar, long sleeves, and a sharp, diagonal asymmetric hemline that falls lower on the left side. Layered over the top is a sleeveless, hip-length structured Nehru jacket tailored from textured raw matka silk in deep charcoal gray. The vest features a standing band collar, sharp besom pockets, and concealed front fastenings accented by three visible geometric silver toggle buttons at the neck. Paired below are slim-fit cigarette trousers in matte champagne silk, cropped cleanly just above the ankle. Clean minimalist lines, modern geometry, and high-contrast color-blocking.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A contemporary, fashion-forward ethnic menswear set in rich saffron orange, warm charcoal, and champagne gold. The base layer is a knee-length silk kurta with a high band collar, long sleeves, and a sharp, diagonal asymmetric hemline that falls lower on the left side. Layered over the top is a sleeveless, hip-length structured Nehru jacket tailored from textured raw matka silk in deep charcoal gray. The vest features a standing band collar, sharp besom pockets, and concealed front fastenings accented by three visible geometric silver toggle buttons at the neck. Paired below are slim-fit cigarette trousers in matte champagne silk, cropped cleanly just above the ankle. Clean minimalist lines, modern geometry, and high-contrast color-blocking.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A contemporary, fashion-forward ethnic menswear set in rich saffron orange, warm charcoal, and champagne gold. The base layer is a knee-length silk kurta with a high band collar, long sleeves, and a sharp, diagonal asymmetric hemline that falls lower on the left side. Layered over the top is a sleeveless, hip-length structured Nehru jacket tailored from textured raw matka silk in deep charcoal gray. The vest features a standing band collar, sharp besom pockets, and concealed front fastenings accented by three visible geometric silver toggle buttons at the neck. Paired below are slim-fit cigarette trousers in matte champagne silk, cropped cleanly just above the ankle. Clean minimalist lines, modern geometry, and high-contrast color-blocking.",
+      "prompt_modifier": "Prompt: A contemporary, fashion-forward ethnic menswear set in rich saffron orange, warm charcoal, and champagne gold. The base layer is a knee-length silk kurta with a high band collar, long sleeves, and a sharp, diagonal asymmetric hemline that falls lower on the left side. Layered over the top is a sleeveless, hip-length structured Nehru jacket tailored from textured raw matka silk in deep charcoal gray. The vest features a standing band collar, sharp besom pockets, and concealed front fastenings accented by three visible geometric silver toggle buttons at the neck. Paired below are slim-fit cigarette trousers in matte champagne silk, cropped cleanly just above the ankle. Clean minimalist lines, modern geometry, and high-contrast color-blocking.",
       "title": "Geometric Nehru Jacket & Asymmetric Kurta"
     },
     {
@@ -141,8 +193,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Highlights heritage South Indian festival tradition through unstitched draping, natural raw tussar silk, and authentic gold temple borders.",
       "name": "Ivory Raw Silk Kurta & Kasavu Veshti",
-      "prompt": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A traditional South Indian festive menswear set in rich ivory and molten gold. The upper piece is a knee-length, straight-cut kurta crafted from raw tussar silk with a natural slub texture, featuring a modest band collar and full-length cuffed sleeves with small brass loop buttons. Draped on the lower half is a traditional handwoven cream cotton-silk veshti (dhoti), wrapped securely around the waist with crisp, vertical accordion pleats running down the front center. The veshti is bordered by a wide, three-inch metallic gold zari border (kasavu) that gleams along the bottom hem and side fold. Folded over the right shoulder is a matching silk angavastram shawl featuring identical gold temple borders. Organic fabric sheen, crisp pressed pleats, and authentic heritage simplicity.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A traditional South Indian festive menswear set in rich ivory and molten gold. The upper piece is a knee-length, straight-cut kurta crafted from raw tussar silk with a natural slub texture, featuring a modest band collar and full-length cuffed sleeves with small brass loop buttons. Draped on the lower half is a traditional handwoven cream cotton-silk veshti (dhoti), wrapped securely around the waist with crisp, vertical accordion pleats running down the front center. The veshti is bordered by a wide, three-inch metallic gold zari border (kasavu) that gleams along the bottom hem and side fold. Folded over the right shoulder is a matching silk angavastram shawl featuring identical gold temple borders. Organic fabric sheen, crisp pressed pleats, and authentic heritage simplicity.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A traditional South Indian festive menswear set in rich ivory and molten gold. The upper piece is a knee-length, straight-cut kurta crafted from raw tussar silk with a natural slub texture, featuring a modest band collar and full-length cuffed sleeves with small brass loop buttons. Draped on the lower half is a traditional handwoven cream cotton-silk veshti (dhoti), wrapped securely around the waist with crisp, vertical accordion pleats running down the front center. The veshti is bordered by a wide, three-inch metallic gold zari border (kasavu) that gleams along the bottom hem and side fold. Folded over the right shoulder is a matching silk angavastram shawl featuring identical gold temple borders. Organic fabric sheen, crisp pressed pleats, and authentic heritage simplicity.",
+      "prompt_modifier": "Prompt: A traditional South Indian festive menswear set in rich ivory and molten gold. The upper piece is a knee-length, straight-cut kurta crafted from raw tussar silk with a natural slub texture, featuring a modest band collar and full-length cuffed sleeves with small brass loop buttons. Draped on the lower half is a traditional handwoven cream cotton-silk veshti (dhoti), wrapped securely around the waist with crisp, vertical accordion pleats running down the front center. The veshti is bordered by a wide, three-inch metallic gold zari border (kasavu) that gleams along the bottom hem and side fold. Folded over the right shoulder is a matching silk angavastram shawl featuring identical gold temple borders. Organic fabric sheen, crisp pressed pleats, and authentic heritage simplicity.",
       "title": "Ivory Raw Silk Kurta & Kasavu Veshti"
     },
     {
@@ -155,8 +207,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Features historic royal crossover tailoring with an asymmetric front wrap, paired with a heavy contrasting stole and woven Banarasi motifs.",
       "name": "Layered Brocade Angrakha Sherwani",
-      "prompt": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A dynamic, full-length festive menswear ensemble in warm ochre, burnt amber, and antique gold. The knee-length angrakha sherwani is tailored from heavy Banarasi brocade featuring subtle self-weave paisley motifs. It features an asymmetric, overlapping diagonal chest closure tied at the right torso with braided golden silk cords and heavy metallic bell-tassels. Underneath, a straight-cut raw silk under-kurta extends an inch past the coat hem. Draped over the left shoulder is a broad, gathered silk organza stole (doshala) in deep crimson, edged with dense zardozi gold bullion fringes. The look is completed with tailored ivory silk trousers that drape straight down to the instep. Rich fabric weight, sharp folds, and tactile weaving.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A dynamic, full-length festive menswear ensemble in warm ochre, burnt amber, and antique gold. The knee-length angrakha sherwani is tailored from heavy Banarasi brocade featuring subtle self-weave paisley motifs. It features an asymmetric, overlapping diagonal chest closure tied at the right torso with braided golden silk cords and heavy metallic bell-tassels. Underneath, a straight-cut raw silk under-kurta extends an inch past the coat hem. Draped over the left shoulder is a broad, gathered silk organza stole (doshala) in deep crimson, edged with dense zardozi gold bullion fringes. The look is completed with tailored ivory silk trousers that drape straight down to the instep. Rich fabric weight, sharp folds, and tactile weaving.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A dynamic, full-length festive menswear ensemble in warm ochre, burnt amber, and antique gold. The knee-length angrakha sherwani is tailored from heavy Banarasi brocade featuring subtle self-weave paisley motifs. It features an asymmetric, overlapping diagonal chest closure tied at the right torso with braided golden silk cords and heavy metallic bell-tassels. Underneath, a straight-cut raw silk under-kurta extends an inch past the coat hem. Draped over the left shoulder is a broad, gathered silk organza stole (doshala) in deep crimson, edged with dense zardozi gold bullion fringes. The look is completed with tailored ivory silk trousers that drape straight down to the instep. Rich fabric weight, sharp folds, and tactile weaving.",
+      "prompt_modifier": "Prompt: A dynamic, full-length festive menswear ensemble in warm ochre, burnt amber, and antique gold. The knee-length angrakha sherwani is tailored from heavy Banarasi brocade featuring subtle self-weave paisley motifs. It features an asymmetric, overlapping diagonal chest closure tied at the right torso with braided golden silk cords and heavy metallic bell-tassels. Underneath, a straight-cut raw silk under-kurta extends an inch past the coat hem. Draped over the left shoulder is a broad, gathered silk organza stole (doshala) in deep crimson, edged with dense zardozi gold bullion fringes. The look is completed with tailored ivory silk trousers that drape straight down to the instep. Rich fabric weight, sharp folds, and tactile weaving.",
       "title": "Layered Brocade Angrakha Sherwani"
     },
     {
@@ -169,8 +221,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "A classic regal ensemble combining architectural military-inspired tailoring with luxurious velvet and delicate gold accents for formal evening celebrations.",
       "name": "Imperial Velvet Bandhgala",
-      "prompt": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A sharp, full-length portrait of a male festive Jodhpuri bandhgala suit in rich midnight navy velvet. The structured jacket features a stiff mandarin standing collar, structured padded shoulders, and tailored full-length sleeves finished with matte brass crested buttons at the cuffs. A diagonal placket is fastened with five ornate carved antique-gold buttons down the chest, complemented by a neatly folded ivory silk pocket square in the welt breast pocket. Delicate gold zari wirework outlines the outer rim of the collar and shoulder epaulets. The jacket is paired with tapered, fitted churidar trousers in ivory raw silk, tailored snugly around the calves and ankles. High-end menswear tailoring, crisp structural lines, and rich light-catching velvet texture.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone male outfit, featuring \n\nPrompt: A sharp, full-length portrait of a male festive Jodhpuri bandhgala suit in rich midnight navy velvet. The structured jacket features a stiff mandarin standing collar, structured padded shoulders, and tailored full-length sleeves finished with matte brass crested buttons at the cuffs. A diagonal placket is fastened with five ornate carved antique-gold buttons down the chest, complemented by a neatly folded ivory silk pocket square in the welt breast pocket. Delicate gold zari wirework outlines the outer rim of the collar and shoulder epaulets. The jacket is paired with tapered, fitted churidar trousers in ivory raw silk, tailored snugly around the calves and ankles. High-end menswear tailoring, crisp structural lines, and rich light-catching velvet texture.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A sharp, full-length portrait of a male festive Jodhpuri bandhgala suit in rich midnight navy velvet. The structured jacket features a stiff mandarin standing collar, structured padded shoulders, and tailored full-length sleeves finished with matte brass crested buttons at the cuffs. A diagonal placket is fastened with five ornate carved antique-gold buttons down the chest, complemented by a neatly folded ivory silk pocket square in the welt breast pocket. Delicate gold zari wirework outlines the outer rim of the collar and shoulder epaulets. The jacket is paired with tapered, fitted churidar trousers in ivory raw silk, tailored snugly around the calves and ankles. High-end menswear tailoring, crisp structural lines, and rich light-catching velvet texture.",
+      "prompt_modifier": "Prompt: A sharp, full-length portrait of a male festive Jodhpuri bandhgala suit in rich midnight navy velvet. The structured jacket features a stiff mandarin standing collar, structured padded shoulders, and tailored full-length sleeves finished with matte brass crested buttons at the cuffs. A diagonal placket is fastened with five ornate carved antique-gold buttons down the chest, complemented by a neatly folded ivory silk pocket square in the welt breast pocket. Delicate gold zari wirework outlines the outer rim of the collar and shoulder epaulets. The jacket is paired with tapered, fitted churidar trousers in ivory raw silk, tailored snugly around the calves and ankles. High-end menswear tailoring, crisp structural lines, and rich light-catching velvet texture.",
       "title": "Imperial Velvet Bandhgala"
     },
     {
@@ -183,8 +235,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Features a dramatic split-back floating cape and deep, spiraling dhoti drapes that create bold, sweeping silhouettes in motion.",
       "name": "Split-Cape Kurti & Swirling Dhoti",
-      "prompt": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A dynamic, fashion-forward festive set in vivid imperial purple and antique pewter. The focal piece is a knee-length, high-neck tunic crafted from structured silk jacquard with full-length fitted sleeves. Draped across both shoulders is a sweeping, floor-length split cape made of crisp, metallic-threaded organza that divides down the center back, billowing dramatically outward like wings with movement. Below, the bottom piece is a hybrid dhoti-skirt featuring voluminous, spiraling cowls of fluid modal satin that wrap around the legs in sweeping concentric folds down to the structured ankle bands. Delicate pewter wire embroidery tracing geometric peacock feather fractals details the mandarin collar and the outer edges of the split cape.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A dynamic, fashion-forward festive set in vivid imperial purple and antique pewter. The focal piece is a knee-length, high-neck tunic crafted from structured silk jacquard with full-length fitted sleeves. Draped across both shoulders is a sweeping, floor-length split cape made of crisp, metallic-threaded organza that divides down the center back, billowing dramatically outward like wings with movement. Below, the bottom piece is a hybrid dhoti-skirt featuring voluminous, spiraling cowls of fluid modal satin that wrap around the legs in sweeping concentric folds down to the structured ankle bands. Delicate pewter wire embroidery tracing geometric peacock feather fractals details the mandarin collar and the outer edges of the split cape.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A dynamic, fashion-forward festive set in vivid imperial purple and antique pewter. The focal piece is a knee-length, high-neck tunic crafted from structured silk jacquard with full-length fitted sleeves. Draped across both shoulders is a sweeping, floor-length split cape made of crisp, metallic-threaded organza that divides down the center back, billowing dramatically outward like wings with movement. Below, the bottom piece is a hybrid dhoti-skirt featuring voluminous, spiraling cowls of fluid modal satin that wrap around the legs in sweeping concentric folds down to the structured ankle bands. Delicate pewter wire embroidery tracing geometric peacock feather fractals details the mandarin collar and the outer edges of the split cape.",
+      "prompt_modifier": "Prompt: A dynamic, fashion-forward festive set in vivid imperial purple and antique pewter. The focal piece is a knee-length, high-neck tunic crafted from structured silk jacquard with full-length fitted sleeves. Draped across both shoulders is a sweeping, floor-length split cape made of crisp, metallic-threaded organza that divides down the center back, billowing dramatically outward like wings with movement. Below, the bottom piece is a hybrid dhoti-skirt featuring voluminous, spiraling cowls of fluid modal satin that wrap around the legs in sweeping concentric folds down to the structured ankle bands. Delicate pewter wire embroidery tracing geometric peacock feather fractals details the mandarin collar and the outer edges of the split cape.",
       "title": "Split-Cape Kurti & Swirling Dhoti"
     },
     {
@@ -197,8 +249,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Replaces traditional soft drapes with rigid, origami-style pleating and metallic-sheen silk, transforming the classic saree into a sculptural gown.",
       "name": "Architectural Saree Gown",
-      "prompt": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A futuristic, high-fashion reinterpretation of the traditional saree in deep midnight indigo and holographic silver foil. The structured silhouette is crafted as a continuous gown with a high, sculpted mock-neck collar and full-length fitted sleeves that end in sharp diagonal cuffs over the knuckles. Across the bodice and descending diagonally to the hip are sharp, origami-inspired geometric folds that simulate a pleated pallu, transitioning into a dramatic, rigid trail that floats cleanly off the left shoulder down to the floor. The long skirt features crisp, vertical accordion micro-pleats that flare slightly at the floor-grazing hem, fully opaque and structured to maintain its shape while walking. Accents of gunmetal metallic piping outline each angular fold.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A futuristic, high-fashion reinterpretation of the traditional saree in deep midnight indigo and holographic silver foil. The structured silhouette is crafted as a continuous gown with a high, sculpted mock-neck collar and full-length fitted sleeves that end in sharp diagonal cuffs over the knuckles. Across the bodice and descending diagonally to the hip are sharp, origami-inspired geometric folds that simulate a pleated pallu, transitioning into a dramatic, rigid trail that floats cleanly off the left shoulder down to the floor. The long skirt features crisp, vertical accordion micro-pleats that flare slightly at the floor-grazing hem, fully opaque and structured to maintain its shape while walking. Accents of gunmetal metallic piping outline each angular fold.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A futuristic, high-fashion reinterpretation of the traditional saree in deep midnight indigo and holographic silver foil. The structured silhouette is crafted as a continuous gown with a high, sculpted mock-neck collar and full-length fitted sleeves that end in sharp diagonal cuffs over the knuckles. Across the bodice and descending diagonally to the hip are sharp, origami-inspired geometric folds that simulate a pleated pallu, transitioning into a dramatic, rigid trail that floats cleanly off the left shoulder down to the floor. The long skirt features crisp, vertical accordion micro-pleats that flare slightly at the floor-grazing hem, fully opaque and structured to maintain its shape while walking. Accents of gunmetal metallic piping outline each angular fold.",
+      "prompt_modifier": "Prompt: A futuristic, high-fashion reinterpretation of the traditional saree in deep midnight indigo and holographic silver foil. The structured silhouette is crafted as a continuous gown with a high, sculpted mock-neck collar and full-length fitted sleeves that end in sharp diagonal cuffs over the knuckles. Across the bodice and descending diagonally to the hip are sharp, origami-inspired geometric folds that simulate a pleated pallu, transitioning into a dramatic, rigid trail that floats cleanly off the left shoulder down to the floor. The long skirt features crisp, vertical accordion micro-pleats that flare slightly at the floor-grazing hem, fully opaque and structured to maintain its shape while walking. Accents of gunmetal metallic piping outline each angular fold.",
       "title": "Architectural Saree Gown"
     },
     {
@@ -211,8 +263,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Reinterprets traditional royalty through a sharp, tailored trench silhouette that opens to show off opulent brocade trousers beneath.",
       "name": "Structured Trench Kurta & Banarasi Trousers",
-      "prompt": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A fashion-forward festive fusion look combining a tailored floor-length trench-style kurta with slim-cut trousers. The outer coat-kurta is crafted from rich cobalt-blue raw silk, featuring a sharp standing bandhgala collar, structured padded shoulders, and full-length straight sleeves. An asymmetric, double-breasted overlap is fastened with ornate filigree brass buttons. The lower half of the coat splits into dramatic, high-slit panels lined with contrast saffron silk, revealing tailored ankle-length cigarette pants made from heavy Banarasi brocade woven with intricate golden marigold motifs. A broad, laser-cut metallic belt cinches the waist firmly over the structured coat.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A fashion-forward festive fusion look combining a tailored floor-length trench-style kurta with slim-cut trousers. The outer coat-kurta is crafted from rich cobalt-blue raw silk, featuring a sharp standing bandhgala collar, structured padded shoulders, and full-length straight sleeves. An asymmetric, double-breasted overlap is fastened with ornate filigree brass buttons. The lower half of the coat splits into dramatic, high-slit panels lined with contrast saffron silk, revealing tailored ankle-length cigarette pants made from heavy Banarasi brocade woven with intricate golden marigold motifs. A broad, laser-cut metallic belt cinches the waist firmly over the structured coat.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A fashion-forward festive fusion look combining a tailored floor-length trench-style kurta with slim-cut trousers. The outer coat-kurta is crafted from rich cobalt-blue raw silk, featuring a sharp standing bandhgala collar, structured padded shoulders, and full-length straight sleeves. An asymmetric, double-breasted overlap is fastened with ornate filigree brass buttons. The lower half of the coat splits into dramatic, high-slit panels lined with contrast saffron silk, revealing tailored ankle-length cigarette pants made from heavy Banarasi brocade woven with intricate golden marigold motifs. A broad, laser-cut metallic belt cinches the waist firmly over the structured coat.",
+      "prompt_modifier": "Prompt: A fashion-forward festive fusion look combining a tailored floor-length trench-style kurta with slim-cut trousers. The outer coat-kurta is crafted from rich cobalt-blue raw silk, featuring a sharp standing bandhgala collar, structured padded shoulders, and full-length straight sleeves. An asymmetric, double-breasted overlap is fastened with ornate filigree brass buttons. The lower half of the coat splits into dramatic, high-slit panels lined with contrast saffron silk, revealing tailored ankle-length cigarette pants made from heavy Banarasi brocade woven with intricate golden marigold motifs. A broad, laser-cut metallic belt cinches the waist firmly over the structured coat.",
       "title": "Structured Trench Kurta & Banarasi Trousers"
     },
     {
@@ -225,8 +277,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Merges structured modern tailoring with traditional draping, featuring a flowing one-shoulder cape paired with pleated dhoti pants.",
       "name": "Solar Eclipse: Sculptural Cape & Pleated Dhoti Set",
-      "prompt": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A dynamic, avant-garde festive Indo-western outfit in molten copper and rich jet black. The top piece is an architectural, structured asymmetric high-neck bodice with full-length fitted sleeves, connected to a long, sweeping floor-length cape that billows from one shoulder. The cape is crafted from micro-pleated metallic tissue silk that catches the light in liquid gold and copper tones. Paired with sharply draped, tulip-style black silk dhoti trousers featuring crisp, cowl-like origami folds down to the tapered ankles. Intricate geometric wirework embroidery lines the cape’s collar and outer perimeter, contrasting sharp tailoring against sweeping, fluid drapes.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A dynamic, avant-garde festive Indo-western outfit in molten copper and rich jet black. The top piece is an architectural, structured asymmetric high-neck bodice with full-length fitted sleeves, connected to a long, sweeping floor-length cape that billows from one shoulder. The cape is crafted from micro-pleated metallic tissue silk that catches the light in liquid gold and copper tones. Paired with sharply draped, tulip-style black silk dhoti trousers featuring crisp, cowl-like origami folds down to the tapered ankles. Intricate geometric wirework embroidery lines the cape’s collar and outer perimeter, contrasting sharp tailoring against sweeping, fluid drapes.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A dynamic, avant-garde festive Indo-western outfit in molten copper and rich jet black. The top piece is an architectural, structured asymmetric high-neck bodice with full-length fitted sleeves, connected to a long, sweeping floor-length cape that billows from one shoulder. The cape is crafted from micro-pleated metallic tissue silk that catches the light in liquid gold and copper tones. Paired with sharply draped, tulip-style black silk dhoti trousers featuring crisp, cowl-like origami folds down to the tapered ankles. Intricate geometric wirework embroidery lines the cape’s collar and outer perimeter, contrasting sharp tailoring against sweeping, fluid drapes.",
+      "prompt_modifier": "Prompt: A dynamic, avant-garde festive Indo-western outfit in molten copper and rich jet black. The top piece is an architectural, structured asymmetric high-neck bodice with full-length fitted sleeves, connected to a long, sweeping floor-length cape that billows from one shoulder. The cape is crafted from micro-pleated metallic tissue silk that catches the light in liquid gold and copper tones. Paired with sharply draped, tulip-style black silk dhoti trousers featuring crisp, cowl-like origami folds down to the tapered ankles. Intricate geometric wirework embroidery lines the cape’s collar and outer perimeter, contrasting sharp tailoring against sweeping, fluid drapes.",
       "title": "Solar Eclipse: Sculptural Cape & Pleated Dhoti Set"
     },
     {
@@ -239,8 +291,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Highlights heritage South Indian craftsmanship through pure mulberry silk, pairing elaborate temple-border weaving with a structured, long-sleeved silhouette.",
       "name": "Full-Sleeve Kanjeevaram Saree",
-      "prompt": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A traditional South Indian Kanjeevaram silk saree in deep vermilion red, paired with a matching tailored full-sleeve blouse. The blouse is designed with a high boat neckline, full-length opaque silk sleeves reaching the wrists with gold temple-patterned borders, and a high-cut back. The heavy silk saree features woven miniature gold peacocks across the body, with a wide, opulent pallu draped securely across the front torso in classic Nivi pleats and pinned neatly at the shoulder. The fabric displays a heavy, lustrous sheen of authentic mulberry silk, falling gracefully to cover the ankles.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A traditional South Indian Kanjeevaram silk saree in deep vermilion red, paired with a matching tailored full-sleeve blouse. The blouse is designed with a high boat neckline, full-length opaque silk sleeves reaching the wrists with gold temple-patterned borders, and a high-cut back. The heavy silk saree features woven miniature gold peacocks across the body, with a wide, opulent pallu draped securely across the front torso in classic Nivi pleats and pinned neatly at the shoulder. The fabric displays a heavy, lustrous sheen of authentic mulberry silk, falling gracefully to cover the ankles.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A traditional South Indian Kanjeevaram silk saree in deep vermilion red, paired with a matching tailored full-sleeve blouse. The blouse is designed with a high boat neckline, full-length opaque silk sleeves reaching the wrists with gold temple-patterned borders, and a high-cut back. The heavy silk saree features woven miniature gold peacocks across the body, with a wide, opulent pallu draped securely across the front torso in classic Nivi pleats and pinned neatly at the shoulder. The fabric displays a heavy, lustrous sheen of authentic mulberry silk, falling gracefully to cover the ankles.",
+      "prompt_modifier": "Prompt: A traditional South Indian Kanjeevaram silk saree in deep vermilion red, paired with a matching tailored full-sleeve blouse. The blouse is designed with a high boat neckline, full-length opaque silk sleeves reaching the wrists with gold temple-patterned borders, and a high-cut back. The heavy silk saree features woven miniature gold peacocks across the body, with a wide, opulent pallu draped securely across the front torso in classic Nivi pleats and pinned neatly at the shoulder. The fabric displays a heavy, lustrous sheen of authentic mulberry silk, falling gracefully to cover the ankles.",
       "title": "Full-Sleeve Kanjeevaram Saree"
     },
     {
@@ -253,8 +305,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Focuses on dynamic movement and geometric tailoring, presenting a comfortable yet striking silhouette for festive family gatherings.",
       "name": "Modern Peplum Sharara Set",
-      "prompt": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A stylish festive sharara suit combining warm mustard saffron and ivory. The fitted, short peplum kurti features three-quarter sleeves, an angular sweetheart neckline, and vertical panels of fine silver gota lace detailing down the front bodice. Below, the tiered sharara pants flare dramatically from the knees downward, finished with wide borders of silver threadwork and small hanging latkan tassels. A sheer ivory chiffon scarf with metallic sequin dots rests lightly across the chest, balancing the bold saffron palette.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone female outfit, featuring \n\nPrompt: A stylish festive sharara suit combining warm mustard saffron and ivory. The fitted, short peplum kurti features three-quarter sleeves, an angular sweetheart neckline, and vertical panels of fine silver gota lace detailing down the front bodice. Below, the tiered sharara pants flare dramatically from the knees downward, finished with wide borders of silver threadwork and small hanging latkan tassels. A sheer ivory chiffon scarf with metallic sequin dots rests lightly across the chest, balancing the bold saffron palette.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "Prompt: A stylish festive sharara suit combining warm mustard saffron and ivory. The fitted, short peplum kurti features three-quarter sleeves, an angular sweetheart neckline, and vertical panels of fine silver gota lace detailing down the front bodice. Below, the tiered sharara pants flare dramatically from the knees downward, finished with wide borders of silver threadwork and small hanging latkan tassels. A sheer ivory chiffon scarf with metallic sequin dots rests lightly across the chest, balancing the bold saffron palette.",
+      "prompt_modifier": "Prompt: A stylish festive sharara suit combining warm mustard saffron and ivory. The fitted, short peplum kurti features three-quarter sleeves, an angular sweetheart neckline, and vertical panels of fine silver gota lace detailing down the front bodice. Below, the tiered sharara pants flare dramatically from the knees downward, finished with wide borders of silver threadwork and small hanging latkan tassels. A sheer ivory chiffon scarf with metallic sequin dots rests lightly across the chest, balancing the bold saffron palette.",
       "title": "Modern Peplum Sharara Set"
     },
     {
@@ -267,9 +319,93 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "Merges regal traditional hand-embroidery with a sleek, contemporary gown silhouette suited for evening festival banquets.",
       "name": "Midnight Peacock: Modern Silk Anarkali Gown",
-      "prompt": "A professional studio product shot of a standalone female outfit, featuring \n\nA floor-length, flared Indo-western Anarkali gown in rich midnight navy and metallic gold. The fitted, sleeveless bodice is tailored from raw silk, featuring a high mandarin collar and delicate gold zardozi embroidery framing the neckline. The voluminous, layered georgette skirt cascades into soft pleats, embellished with hand-embroidered peacock-feather filigree in fine gold thread along the wide hemline. A sheer navy dupatta with a slender scalloped gold foil border is draped neatly across one shoulder, pinned with a subtle brass brooch.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
-      "prompt_modifier": "A professional studio product shot of a standalone female outfit, featuring \n\nA floor-length, flared Indo-western Anarkali gown in rich midnight navy and metallic gold. The fitted, sleeveless bodice is tailored from raw silk, featuring a high mandarin collar and delicate gold zardozi embroidery framing the neckline. The voluminous, layered georgette skirt cascades into soft pleats, embellished with hand-embroidered peacock-feather filigree in fine gold thread along the wide hemline. A sheer navy dupatta with a slender scalloped gold foil border is draped neatly across one shoulder, pinned with a subtle brass brooch.\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+      "prompt": "A floor-length, flared Indo-western Anarkali gown in rich midnight navy and metallic gold. The fitted, sleeveless bodice is tailored from raw silk, featuring a high mandarin collar and delicate gold zardozi embroidery framing the neckline. The voluminous, layered georgette skirt cascades into soft pleats, embellished with hand-embroidered peacock-feather filigree in fine gold thread along the wide hemline. A sheer navy dupatta with a slender scalloped gold foil border is draped neatly across one shoulder, pinned with a subtle brass brooch.",
+      "prompt_modifier": "A floor-length, flared Indo-western Anarkali gown in rich midnight navy and metallic gold. The fitted, sleeveless bodice is tailored from raw silk, featuring a high mandarin collar and delicate gold zardozi embroidery framing the neckline. The voluminous, layered georgette skirt cascades into soft pleats, embellished with hand-embroidered peacock-feather filigree in fine gold thread along the wide hemline. A sheer navy dupatta with a slender scalloped gold foil border is draped neatly across one shoulder, pinned with a subtle brass brooch.",
       "title": "Midnight Peacock: Modern Silk Anarkali Gown"
+    },
+    {
+      "category": "male",
+      "code": "C58",
+      "description": "Combines rigid sherwani tailoring with a kinetic pleated side drape and sculptural, spiral-folded dhoti trousers.",
+      "gender": "male",
+      "id": "sculptural-sherwani-pleated-dhoti",
+      "image": "/static/themes/master/images/clothes/sculptural-sherwani-pleated-dhoti.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "Combines rigid sherwani tailoring with a kinetic pleated side drape and sculptural, spiral-folded dhoti trousers.",
+      "name": "Sculptural Sherwani & Pleated Dhoti",
+      "prompt": "An avant-garde festive menswear outfit in rich obsidian navy and liquid silver. The upper piece is a knee-length, structured bandhgala sherwani coat tailored with a high standing collar, structured epaulets, and full-length sleeves. Extending from the right waist seam is an attached, structured side-flap of crisp micro-pleated silver-threaded organza that fans outward with movement. Paired beneath is a modern pre-stitched silk dhoti trouser, tailored with dramatic, spiraling cowl folds wrapping around the thighs before tapering tightly into structured ankle cuffs. Silver metallic piping outlines the collar, cuffs, and asymmetrical pleated side drape.",
+      "prompt_modifier": "An avant-garde festive menswear outfit in rich obsidian navy and liquid silver. The upper piece is a knee-length, structured bandhgala sherwani coat tailored with a high standing collar, structured epaulets, and full-length sleeves. Extending from the right waist seam is an attached, structured side-flap of crisp micro-pleated silver-threaded organza that fans outward with movement. Paired beneath is a modern pre-stitched silk dhoti trouser, tailored with dramatic, spiraling cowl folds wrapping around the thighs before tapering tightly into structured ankle cuffs. Silver metallic piping outlines the collar, cuffs, and asymmetrical pleated side drape.",
+      "title": "Sculptural Sherwani & Pleated Dhoti"
+    },
+    {
+      "category": "male",
+      "code": "C57",
+      "description": "Pairs an asymmetric, draped cowl-neck silk tunic with a sharply structured, bronze-embroidered sleeveless vest.",
+      "gender": "male",
+      "id": "cowl-kurta-geometric-nehru-vest",
+      "image": "/static/themes/master/images/clothes/cowl-kurta-geometric-nehru-vest.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "Pairs an asymmetric, draped cowl-neck silk tunic with a sharply structured, bronze-embroidered sleeveless vest.",
+      "name": "Cowl Kurta & Geometric Nehru Vest",
+      "prompt": "A dynamic, full-length menswear silhouette in warm copper, rich terracotta, and antique bronze. The base piece is a knee-length mulberry silk kurta featuring long fitted sleeves and an asymmetrical, draped cowl neck that swoops fluidly across the collarbone and pools softly along the left torso. Layered over top is a sleeveless, hip-length structured Nehru vest in heavy raw silk, detailed with vertical panels of antique bronze pita threadwork and sharp welt pockets. The look is grounded with slim, straight-cut terracotta silk trousers tailored precisely to break cleanly at the instep. High tactile contrast between fluid cowl draping and rigid vest panels.",
+      "prompt_modifier": "A dynamic, full-length menswear silhouette in warm copper, rich terracotta, and antique bronze. The base piece is a knee-length mulberry silk kurta featuring long fitted sleeves and an asymmetrical, draped cowl neck that swoops fluidly across the collarbone and pools softly along the left torso. Layered over top is a sleeveless, hip-length structured Nehru vest in heavy raw silk, detailed with vertical panels of antique bronze pita threadwork and sharp welt pockets. The look is grounded with slim, straight-cut terracotta silk trousers tailored precisely to break cleanly at the instep. High tactile contrast between fluid cowl draping and rigid vest panels.",
+      "title": "Cowl Kurta & Geometric Nehru Vest"
+    },
+    {
+      "category": "male",
+      "code": "C56",
+      "description": "A contemporary take on the royal crossover silhouette, trading soft ties for sharp angular hems and metallic hardware over slim-cut trousers.",
+      "gender": "male",
+      "id": "modern-asymmetric-angrakha-set",
+      "image": "/static/themes/master/images/clothes/modern-asymmetric-angrakha-set.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "A contemporary take on the royal crossover silhouette, trading soft ties for sharp angular hems and metallic hardware over slim-cut trousers.",
+      "name": "Modern Asymmetric Angrakha Set",
+      "prompt": "A sharp, full-length menswear portrait showcasing a modern festive angrakha suit in burnt amber and deep charcoal. The knee-length coat is tailored from textured matka silk, featuring a high, structured mandarin collar and full-length tailored sleeves with brass buttoned cuffs. The front panel cuts diagonally across the chest in an angular wrap, fastening at the right ribcage with geometric brass clasps instead of traditional ties. The hemline of the coat drops into a sharp, pointed asymmetric front fold. Paired below are sleek, tailored raw silk cigarette trousers in deep charcoal, cropped neatly just above the ankles. Rich fabric sheen, clean architectural lines, and dynamic diagonal tailoring.",
+      "prompt_modifier": "A sharp, full-length menswear portrait showcasing a modern festive angrakha suit in burnt amber and deep charcoal. The knee-length coat is tailored from textured matka silk, featuring a high, structured mandarin collar and full-length tailored sleeves with brass buttoned cuffs. The front panel cuts diagonally across the chest in an angular wrap, fastening at the right ribcage with geometric brass clasps instead of traditional ties. The hemline of the coat drops into a sharp, pointed asymmetric front fold. Paired below are sleek, tailored raw silk cigarette trousers in deep charcoal, cropped neatly just above the ankles. Rich fabric sheen, clean architectural lines, and dynamic diagonal tailoring.",
+      "title": "Modern Asymmetric Angrakha Set"
+    },
+    {
+      "category": "female",
+      "code": "C55",
+      "description": "A lively festival silhouette defined by an exaggerated peplum waist paired with dramatically flared, multi-tiered gharara pants.",
+      "gender": "female",
+      "id": "flared-peplum-pleated-gharara",
+      "image": "/static/themes/master/images/clothes/flared-peplum-pleated-gharara.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "A lively festival silhouette defined by an exaggerated peplum waist paired with dramatically flared, multi-tiered gharara pants.",
+      "name": "Flared Peplum & Pleated Gharara",
+      "prompt": "A dynamic three-piece festive set in rich forest emerald and antique bronze. The top is a tailored, high-neck peplum kurti made of stiff raw silk, featuring a modest band collar, long straight sleeves, and an exaggerated flared peplum waist that swoops cleanly around the hips. Below, dramatic tiered gharara pants are fitted to the knees before bursting into voluminous, multi-layered crushed tissue silk flares that brush the floor. Draped cleanly over both shoulders is an opaque, matching silk scarf held flat across the upper chest with fine bronze foil borders.",
+      "prompt_modifier": "A dynamic three-piece festive set in rich forest emerald and antique bronze. The top is a tailored, high-neck peplum kurti made of stiff raw silk, featuring a modest band collar, long straight sleeves, and an exaggerated flared peplum waist that swoops cleanly around the hips. Below, dramatic tiered gharara pants are fitted to the knees before bursting into voluminous, multi-layered crushed tissue silk flares that brush the floor. Draped cleanly over both shoulders is an opaque, matching silk scarf held flat across the upper chest with fine bronze foil borders.",
+      "title": "Flared Peplum & Pleated Gharara"
+    },
+    {
+      "category": "female",
+      "code": "C54",
+      "description": "Reimagines the traditional angrakha wrap into a structured floor-length gown featuring a dramatic waterfall drape at the side.",
+      "gender": "female",
+      "id": "sculptural-angrakha-floor-gown",
+      "image": "/static/themes/master/images/clothes/sculptural-angrakha-floor-gown.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "Reimagines the traditional angrakha wrap into a structured floor-length gown featuring a dramatic waterfall drape at the side.",
+      "name": "Sculptural Angrakha Floor Gown",
+      "prompt": "A sweeping, floor-length festive angrakha gown in deep ruby red silk moire. The gown features a high, structured crew neckline and full-length slender sleeves with functional covered button plackets at the wrists. The bodice overlaps diagonally across the chest, tying at the left ribcage with heavy braided silk cords ending in brass bell tassels. From the tie-point, an exaggerated pleated cascade of lightweight pleated georgette falls down the side seam, introducing fluid movement against the structured, opaque A-line sweep of the main skirt. Detailed with fine antique zardozi vine embroidery framing the neckline and cuffs.",
+      "prompt_modifier": "A sweeping, floor-length festive angrakha gown in deep ruby red silk moire. The gown features a high, structured crew neckline and full-length slender sleeves with functional covered button plackets at the wrists. The bodice overlaps diagonally across the chest, tying at the left ribcage with heavy braided silk cords ending in brass bell tassels. From the tie-point, an exaggerated pleated cascade of lightweight pleated georgette falls down the side seam, introducing fluid movement against the structured, opaque A-line sweep of the main skirt. Detailed with fine antique zardozi vine embroidery framing the neckline and cuffs.",
+      "title": "Sculptural Angrakha Floor Gown"
+    },
+    {
+      "category": "female",
+      "code": "C52",
+      "description": "high-fashion festive ensemble in burnished gold and midnight violet",
+      "gender": "female",
+      "id": "layered-banarasi-robe-pleated-skirt",
+      "image": "/static/themes/master/images/clothes/layered-banarasi-robe-pleated-skirt.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "high-fashion festive ensemble in burnished gold and midnight violet",
+      "name": "Layered Banarasi Robe & Pleated Skirt",
+      "prompt": "A high-fashion festive ensemble in burnished gold and midnight violet. The upper layer is a structured, ankle-length overlap robe crafted from heavy Banarasi brocade, featuring a high standing bandhgala collar, structured shoulders, and tailored full-length sleeves with turned-up cuffs. The coat wraps diagonally across the bodice, secured at the waist with an ornate metallic link belt, and splays open from the waist down. Beneath, a voluminous kalidar silk skirt falls in heavy, fluid vertical accordion pleats straight to the floor. Intricate self-woven floral jaal patterns shimmer across the coat, accented by deep violet silk piping along the hems.",
+      "prompt_modifier": "A high-fashion festive ensemble in burnished gold and midnight violet. The upper layer is a structured, ankle-length overlap robe crafted from heavy Banarasi brocade, featuring a high standing bandhgala collar, structured shoulders, and tailored full-length sleeves with turned-up cuffs. The coat wraps diagonally across the bodice, secured at the waist with an ornate metallic link belt, and splays open from the waist down. Beneath, a voluminous kalidar silk skirt falls in heavy, fluid vertical accordion pleats straight to the floor. Intricate self-woven floral jaal patterns shimmer across the coat, accented by deep violet silk piping along the hems.",
+      "title": "Layered Banarasi Robe & Pleated Skirt"
     }
   ],
   "poses": [
@@ -293,8 +429,8 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "An iconic hero victory stance standing tall with a single fist thrust high toward the sky and feet planted firmly apart.",
       "name": "Skyward Fist of Triumph",
-      "prompt": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nPrompt: Facing the camera with one arm raised straight up into the air with a tightly clenched fist held high, while the other arm hangs straight down at the side with a loose, relaxed hand. Feet are planted firmly shoulder-width apart in a solid, unmoving stance, chest pushed out proudly, chin raised high with eyes looking forward in quiet, exhausted triumph.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "prompt_modifier": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nPrompt: Facing the camera with one arm raised straight up into the air with a tightly clenched fist held high, while the other arm hangs straight down at the side with a loose, relaxed hand. Feet are planted firmly shoulder-width apart in a solid, unmoving stance, chest pushed out proudly, chin raised high with eyes looking forward in quiet, exhausted triumph.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
+      "prompt": "Prompt: Facing the camera with one arm raised straight up into the air with a tightly clenched fist held high, while the other arm hangs straight down at the side with a loose, relaxed hand. Feet are planted firmly shoulder-width apart in a solid, unmoving stance, chest pushed out proudly, chin raised high with eyes looking forward in quiet, exhausted triumph.",
+      "prompt_modifier": "Prompt: Facing the camera with one arm raised straight up into the air with a tightly clenched fist held high, while the other arm hangs straight down at the side with a loose, relaxed hand. Feet are planted firmly shoulder-width apart in a solid, unmoving stance, chest pushed out proudly, chin raised high with eyes looking forward in quiet, exhausted triumph.",
       "title": "Skyward Fist of Triumph"
     },
     {
@@ -306,75 +442,152 @@
       "lighting": "Cinematic ambient studio lighting",
       "mapping_desc": "A triumphant victory pose with one arm held high pointing up with the index finger and the other hand resting on the hip.",
       "name": "Number One",
-      "prompt": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nPrompt: Facing the camera with one arm raised straight up, index finger pointing upward to make a number \"one\" sign, while the other hand rests naturally on the hip. Feet are set shoulder-width apart with a slight upward tilt of the chin and a proud, confident open smile.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "prompt_modifier": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nPrompt: Facing the camera with one arm raised straight up, index finger pointing upward to make a number \"one\" sign, while the other hand rests naturally on the hip. Feet are set shoulder-width apart with a slight upward tilt of the chin and a proud, confident open smile.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
+      "prompt": "Prompt: Facing the camera with one arm raised straight up, index finger pointing upward to make a number \"one\" sign, while the other hand rests naturally on the hip. Feet are set shoulder-width apart with a slight upward tilt of the chin and a proud, confident open smile.",
+      "prompt_modifier": "Prompt: Facing the camera with one arm raised straight up, index finger pointing upward to make a number \"one\" sign, while the other hand rests naturally on the hip. Feet are set shoulder-width apart with a slight upward tilt of the chin and a proud, confident open smile.",
       "title": "Number One"
     },
     {
-      "id": "playful-spark",
+      "category": "unisex",
       "code": "P27",
-      "title": "Playful Spark",
       "description": "A lively, interactive pose pointing directly at the camera with a wink and one hand on the hip.",
+      "id": "playful-spark",
       "image": "/static/themes/master/images/poses/playful-spark.png",
-      "prompt": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nFacing the camera with one arm extended forward, pointing an index finger straight ahead toward the viewer, while the other hand rests neatly on the hip. Standing upright with a slight head tilt, one eye winking playfully, and a lively, charming open-mouthed grin.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "prompt_modifier": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nFacing the camera with one arm extended forward, pointing an index finger straight ahead toward the viewer, while the other hand rests neatly on the hip. Standing upright with a slight head tilt, one eye winking playfully, and a lively, charming open-mouthed grin.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "category": "unisex",
-      "lighting": "Cinematic ambient studio lighting"
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "A lively, interactive pose pointing directly at the camera with a wink and one hand on the hip.",
+      "name": "Playful Spark",
+      "prompt": "Facing the camera with one arm extended forward, pointing an index finger straight ahead toward the viewer, while the other hand rests neatly on the hip. Standing upright with a slight head tilt, one eye winking playfully, and a lively, charming open-mouthed grin.",
+      "prompt_modifier": "Facing the camera with one arm extended forward, pointing an index finger straight ahead toward the viewer, while the other hand rests neatly on the hip. Standing upright with a slight head tilt, one eye winking playfully, and a lively, charming open-mouthed grin.",
+      "title": "Playful Spark"
     },
     {
-      "id": "rosy-gasp",
+      "category": "unisex",
       "code": "P26",
-      "title": "Rosy Gasp",
       "description": "An expressive pose with both hands framing the cheeks and a pleasantly surprised expression.",
+      "id": "rosy-gasp",
       "image": "/static/themes/master/images/poses/rosy-gasp.png",
-      "prompt": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nFacing the camera with both hands cupping the sides of the cheeks, elbows flared gently outward. Eyes opened wide and round, with a small, rounded \"o\" mouth showing soft surprise and delight.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "prompt_modifier": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nFacing the camera with both hands cupping the sides of the cheeks, elbows flared gently outward. Eyes opened wide and round, with a small, rounded \"o\" mouth showing soft surprise and delight.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "category": "unisex",
-      "lighting": "Cinematic ambient studio lighting"
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "An expressive pose with both hands framing the cheeks and a pleasantly surprised expression.",
+      "name": "Rosy Gasp",
+      "prompt": "Facing the camera with both hands cupping the sides of the cheeks, elbows flared gently outward. Eyes opened wide and round, with a small, rounded \"o\" mouth showing soft surprise and delight.",
+      "prompt_modifier": "Facing the camera with both hands cupping the sides of the cheeks, elbows flared gently outward. Eyes opened wide and round, with a small, rounded \"o\" mouth showing soft surprise and delight.",
+      "title": "Rosy Gasp"
     },
     {
-      "id": "crisp-salute",
+      "category": "unisex",
       "code": "P25",
-      "title": "Crisp Salute",
       "description": "A playful standing pose making a one-handed salute to the side of the forehead.",
+      "id": "crisp-salute",
       "image": "/static/themes/master/images/poses/crisp-salute.png",
-      "prompt": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nFacing the camera with one hand held up to the temple in a cute, flat-palm salute, the other hand resting straight against the outer thigh. Standing tall with chin slightly raised and a crisp, friendly smile.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "prompt_modifier": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nFacing the camera with one hand held up to the temple in a cute, flat-palm salute, the other hand resting straight against the outer thigh. Standing tall with chin slightly raised and a crisp, friendly smile.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "category": "unisex",
-      "lighting": "Cinematic ambient studio lighting"
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "A playful standing pose making a one-handed salute to the side of the forehead.",
+      "name": "Crisp Salute",
+      "prompt": "Facing the camera with one hand held up to the temple in a cute, flat-palm salute, the other hand resting straight against the outer thigh. Standing tall with chin slightly raised and a crisp, friendly smile.",
+      "prompt_modifier": "Facing the camera with one hand held up to the temple in a cute, flat-palm salute, the other hand resting straight against the outer thigh. Standing tall with chin slightly raised and a crisp, friendly smile.",
+      "title": "Crisp Salute"
     },
     {
-      "id": "gentle-wonder",
+      "category": "unisex",
       "code": "P24",
-      "title": "Gentle Wonder",
       "description": "A simple standing pose with arms at the sides.",
+      "id": "gentle-wonder",
       "image": "/static/themes/master/images/poses/gentle-wonder.png",
-      "prompt": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nFacing the camera with both arms hanging loosely and naturally at the sides. Head tilted distinctly to one side, looking forward with large curious eyes and a tiny, gentle smile.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "prompt_modifier": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nFacing the camera with both arms hanging loosely and naturally at the sides. Head tilted distinctly to one side, looking forward with large curious eyes and a tiny, gentle smile.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "category": "unisex",
-      "lighting": "Cinematic ambient studio lighting"
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "A simple standing pose with arms at the sides.",
+      "name": "Gentle Wonder",
+      "prompt": "Facing the camera with both arms hanging loosely and naturally at the sides. Head tilted distinctly to one side, looking forward with large curious eyes and a tiny, gentle smile.",
+      "prompt_modifier": "Facing the camera with both arms hanging loosely and naturally at the sides. Head tilted distinctly to one side, looking forward with large curious eyes and a tiny, gentle smile.",
+      "title": "Gentle Wonder"
     },
     {
-      "id": "double-approval",
+      "category": "unisex",
       "code": "P23",
-      "title": "Double Approval",
       "description": "An encouraging pose giving a two-handed thumbs-up gesture at chest level.",
+      "id": "double-approval",
       "image": "/static/themes/master/images/poses/double-approval.png",
-      "prompt": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nPrompt: Facing the camera with both fists held forward at chest height, sticking both thumbs straight up. Standing centered and upright with shoulders level, a broad open smile, and wide cheerful eyes.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "prompt_modifier": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nPrompt: Facing the camera with both fists held forward at chest height, sticking both thumbs straight up. Standing centered and upright with shoulders level, a broad open smile, and wide cheerful eyes.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "category": "unisex",
-      "lighting": "Cinematic ambient studio lighting"
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "An encouraging pose giving a two-handed thumbs-up gesture at chest level.",
+      "name": "Double Approval",
+      "prompt": "Prompt: Facing the camera with both fists held forward at chest height, sticking both thumbs straight up. Standing centered and upright with shoulders level, a broad open smile, and wide cheerful eyes.",
+      "prompt_modifier": "Prompt: Facing the camera with both fists held forward at chest height, sticking both thumbs straight up. Standing centered and upright with shoulders level, a broad open smile, and wide cheerful eyes.",
+      "title": "Double Approval"
     },
     {
-      "id": "joyful-clasp",
-      "code": "P22",
-      "title": "Joyful Clasp",
-      "description": "Facing the camera with both hands brought together flat against the chest",
-      "image": "/static/themes/master/images/poses/joyful-clasp.png",
-      "prompt": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nFacing the camera with both hands brought together flat against the chest in a neat, happy clap, elbows tucked close to the torso. Head held straight with an open-mouthed, beaming smile and bright, rounded eyes.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
-      "prompt_modifier": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\nFacing the camera with both hands brought together flat against the chest in a neat, happy clap, elbows tucked close to the torso. Head held straight with an open-mouthed, beaming smile and bright, rounded eyes.\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
       "category": "unisex",
-      "lighting": "Cinematic ambient studio lighting"
+      "code": "P22",
+      "description": "Facing the camera with both hands brought together flat against the chest",
+      "id": "joyful-clasp",
+      "image": "/static/themes/master/images/poses/joyful-clasp.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "Facing the camera with both hands brought together flat against the chest",
+      "name": "Joyful Clasp",
+      "prompt": "Facing the camera with both hands brought together flat against the chest in a neat, happy clap, elbows tucked close to the torso. Head held straight with an open-mouthed, beaming smile and bright, rounded eyes.",
+      "prompt_modifier": "Facing the camera with both hands brought together flat against the chest in a neat, happy clap, elbows tucked close to the torso. Head held straight with an open-mouthed, beaming smile and bright, rounded eyes.",
+      "title": "Joyful Clasp"
+    },
+    {
+      "category": "unisex",
+      "code": "P32",
+      "description": "An eager, motivated pose holding both fists up by the chest in excitement.",
+      "id": "ready-to-go",
+      "image": "/static/themes/master/images/poses/ready-to-go.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "An eager, motivated pose holding both fists up by the chest in excitement.",
+      "name": "Ready to Go",
+      "prompt": "Facing the camera with both hands balled into small fists held up near the collarbones, elbows tucked against the ribs. Standing firmly with feet slightly apart, head held high with a spirited, enthusiastic open grin.",
+      "prompt_modifier": "Facing the camera with both hands balled into small fists held up near the collarbones, elbows tucked against the ribs. Standing firmly with feet slightly apart, head held high with a spirited, enthusiastic open grin.",
+      "title": "Ready to Go"
+    },
+    {
+      "category": "unisex",
+      "code": "P31",
+      "description": "A refreshing standing pose with both arms reaching straight up into the air.",
+      "id": "sunny-stretch",
+      "image": "/static/themes/master/images/poses/sunny-stretch.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "A refreshing standing pose with both arms reaching straight up into the air.",
+      "name": "Sunny Stretch",
+      "prompt": "Facing the camera with both arms stretched straight up toward the ceiling, fingers spread wide open. Standing tall on the toes, head tilted slightly back with eyes closed and a contented, happy yawn-like smile.",
+      "prompt_modifier": "Facing the camera with both arms stretched straight up toward the ceiling, fingers spread wide open. Standing tall on the toes, head tilted slightly back with eyes closed and a contented, happy yawn-like smile.",
+      "title": "Sunny Stretch"
+    },
+    {
+      "category": "unisex",
+      "code": "P30",
+      "description": "An amused pose with both hands cupped over the mouth in a bashful giggle.",
+      "id": "giggling-whisper",
+      "image": "/static/themes/master/images/poses/giggling-whisper.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "An amused pose with both hands cupped over the mouth in a bashful giggle.",
+      "name": "Giggling Whisper",
+      "prompt": "Facing the camera with both small hands raised to lightly cover the mouth, elbows pointing downward close to the body. Eyes crinkled into happy crescent shapes, showing an amused, suppressed giggle.",
+      "prompt_modifier": "Facing the camera with both small hands raised to lightly cover the mouth, elbows pointing downward close to the body. Eyes crinkled into happy crescent shapes, showing an amused, suppressed giggle.",
+      "title": "Giggling Whisper"
+    },
+    {
+      "category": "unisex",
+      "code": "P29",
+      "description": "A playful, slightly stubborn pose with arms crossed over the chest and puffed cheeks.",
+      "id": "sassy-pout",
+      "image": "/static/themes/master/images/poses/sassy-pout.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "A playful, slightly stubborn pose with arms crossed over the chest and puffed cheeks.",
+      "name": "Sassy Pout",
+      "prompt": "Facing the camera with both arms crossed tightly across the chest, shoulders drawn slightly back. Head turned just a fraction away from center while glancing back at the viewer with puffed-up cheeks and a playful, tiny pout.",
+      "prompt_modifier": "Facing the camera with both arms crossed tightly across the chest, shoulders drawn slightly back. Head turned just a fraction away from center while glancing back at the viewer with puffed-up cheeks and a playful, tiny pout.",
+      "title": "Sassy Pout"
+    },
+    {
+      "category": "unisex",
+      "code": "P28",
+      "description": "A slightly perplexed standing pose scratching the head with a tilted expression.",
+      "id": "confused-scratch",
+      "image": "/static/themes/master/images/poses/confused-scratch.png",
+      "lighting": "Cinematic ambient studio lighting",
+      "mapping_desc": "A slightly perplexed standing pose scratching the head with a tilted expression.",
+      "name": "Confused Scratch",
+      "prompt": "Facing the camera with one hand raised to scratch the top of the head, the other arm hanging relaxed at the side. Head tilted slightly to the side with one eyebrow raised, looking forward with a quizzical, slightly sheepish smile.",
+      "prompt_modifier": "Facing the camera with one hand raised to scratch the top of the head, the other arm hanging relaxed at the side. Head tilted slightly to the side with one eyebrow raised, looking forward with a quizzical, slightly sheepish smile.",
+      "title": "Confused Scratch"
     }
   ]
 }
