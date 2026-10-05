@@ -1516,16 +1516,6 @@ window.openDeleteThemeModal = function (slug, title) {
     }
 };
 
-window.quickFillDeletePhrase = function () {
-    const input = document.getElementById('inp-delete-theme-confirm');
-    const targetPhrase = studio.deleteTargetPhrase || studio.pendingDeleteSlug || '';
-    if (input) {
-        input.value = targetPhrase;
-        window.onDeleteThemePhraseInput();
-        input.focus();
-    }
-};
-
 window.onDeleteThemePhraseInput = function () {
     const input = document.getElementById('inp-delete-theme-confirm');
     const btn = document.getElementById('btn-confirm-delete-theme');
@@ -1545,13 +1535,11 @@ window.onDeleteThemePhraseInput = function () {
         val === `delete ${cleanTitle}` ||
         val === slug ||
         val === `delete ${slug}` ||
-        val === 'delete' ||
         norm(val) === norm(target) ||
         norm(val) === norm(cleanTitle) ||
         norm(val) === `delete${norm(cleanTitle)}` ||
         norm(val) === norm(slug) ||
-        norm(val) === `delete${norm(slug)}` ||
-        norm(val) === 'delete'
+        norm(val) === `delete${norm(slug)}`
     );
 
     if (isMatch) {
@@ -1622,13 +1610,11 @@ window.confirmDeleteTheme = async function () {
         val === `delete ${cleanTitle}` ||
         val === slug ||
         val === `delete ${slug}` ||
-        val === 'delete' ||
         norm(val) === norm(target) ||
         norm(val) === norm(cleanTitle) ||
         norm(val) === `delete${norm(cleanTitle)}` ||
         norm(val) === norm(slug) ||
-        norm(val) === `delete${norm(slug)}` ||
-        norm(val) === 'delete'
+        norm(val) === `delete${norm(slug)}`
     );
 
     if (!isMatch) {
