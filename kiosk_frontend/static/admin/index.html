@@ -397,13 +397,13 @@
                         <div id="editor-container-json">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
                                 <span style="font-size: 0.78rem; color: #fde047; font-weight: 600;">
-                                    📋 Instructions: Paste GenAI Block 1 (JSON) below, then click "Apply JSON to Theme":
+                                    📋 Instructions: Paste GenAI Block 1 (JSON) below (Details below will auto-populate instantly):
                                 </span>
                                 <button type="button" class="admin-btn admin-btn-accent" style="padding: 0.35rem 0.9rem; font-size: 0.8rem; font-weight: 700;" onclick="applyIdentityJsonConfig()">
                                     ✨ Apply JSON to Theme
                                 </button>
                             </div>
-                            <textarea id="adv-identity-json" rows="11" placeholder="{ ...paste Block 1 JSON from GenAI here... }" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #fde047; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
+                            <textarea id="adv-identity-json" rows="11" placeholder="{ ...paste Block 1 JSON from GenAI here... }" oninput="autoApplyIdentityJsonOnInput(true)" onpaste="setTimeout(function(){ autoApplyIdentityJsonOnInput(true); }, 50)" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #fde047; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
                         </div>
 
                         <!-- Tab 2: HTML Editor -->
@@ -430,8 +430,9 @@
                         <div style="margin-top: 1.5rem; background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1.2rem;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
                                 <div>
-                                    <h4 style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0; display: flex; align-items: center; gap: 0.4rem;">
+                                    <h4 style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                                         <span>🏷️</span> Theme Details &amp; Marketing Copy
+                                        <span id="json-auto-status" style="display: none; font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; background: rgba(52, 211, 153, 0.15); border: 1px solid rgba(52, 211, 153, 0.4); color: #34d399; font-weight: 600;">✓ Auto-Synced from JSON</span>
                                     </h4>
                                     <span style="font-size: 0.75rem; color: var(--text-muted);">Populated automatically from GenAI JSON or edit directly here:</span>
                                 </div>

@@ -139,7 +139,15 @@ def manage_theme_config(theme_slug):
     theme_file = os.path.join(app.static_folder, 'themes', theme_slug, 'theme.json')
     if os.path.exists(theme_file):
         return send_file(theme_file, mimetype='application/json')
-    return jsonify({"error": "Theme config not found"}), 404
+    # Fallback config for drafts being compiled or previewed
+    return jsonify({
+        "slug": theme_slug,
+        "title": theme_slug.replace('_', ' ').title(),
+        "status": "draft",
+        "atmosphereMode": "advanced",
+        "features": { "luckyNumber": False, "filmStrip": False, "genderFilter": True },
+        "style": { "colors": { "background": "#0a0a12", "text": "#ffffff", "accent": "#6366f1" } }
+    }), 200
 
 
 @app.route('/api/admin/theme/delete', methods=['POST'])
@@ -264,7 +272,7 @@ def get_theme_data(theme_slug):
     """Serve resolved data.json for a given theme."""
     data_file = os.path.join(app.static_folder, 'themes', theme_slug, 'data.json')
     if not os.path.exists(data_file):
-        return jsonify({"poses": [], "clothes": [], "backgrounds": []}), 404
+        return jsonify({"poses": [], "clothes": [], "backgrounds": []}), 200
     resolved = resolve_theme_data(theme_slug)
     return jsonify(resolved)
 
@@ -327,11 +335,14 @@ def serve_theme(theme_slug):
     if theme_slug in RESERVED_SLUGS:
         return "Not Found", 404
         
+    use_engine_preview = request.args.get('engine') == 'universal'
     theme_dir = os.path.join(app.static_folder, 'themes', theme_slug)
     if not os.path.exists(theme_dir):
+        if use_engine_preview:
+            engine_html = os.path.join(app.static_folder, 'engine', 'kiosk.html')
+            if os.path.exists(engine_html):
+                return send_from_directory(os.path.join(app.static_folder, 'engine'), 'kiosk.html')
         return "Theme Not Found", 404
-        
-    use_engine_preview = request.args.get('engine') == 'universal'
     custom_index = os.path.join(theme_dir, 'index.html')
 
     # PRIORITY 1: If custom index.html exists and not explicitly asking for universal engine, serve bespoke theme page
@@ -986,14 +997,48 @@ def admin_save_theme():
 def admin_theme_atmosphere(theme_slug):
     """Get or save custom decorations.html and style.css for a theme."""
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    theme_dir = os.path.join(base_dir, 'static', 'themes', theme_slug.strip().lower())
-    if not os.path.exists(theme_dir):
-        return jsonify({'error': f'Theme "{theme_slug}" not found'}), 404
-
-    deco_path = os.path.join(theme_dir, 'decorations.html')
-    css_path = os.path.join(theme_dir, 'style.css')
+    theme_slug_clean = theme_slug.strip().lower()
+    theme_dir = os.path.join(base_dir, 'static', 'themes', theme_slug_clean)
 
     if request.method == 'POST':
+        # If theme directory does not exist yet (e.g. creating/testing a draft theme),
+        # initialize directory and base scaffold so compile/preview works smoothly
+        if not os.path.exists(theme_dir):
+            os.makedirs(theme_dir, exist_ok=True)
+            for subdir in ['images/clothes', 'images/poses', 'images/backgrounds', 'images/samples']:
+                os.makedirs(os.path.join(theme_dir, subdir), exist_ok=True)
+
+            # Copy sample portraits from uits for rolling film strip
+            target_samples_dir = os.path.join(theme_dir, 'images', 'samples')
+            uits_samples_dir = os.path.join(base_dir, 'static', 'themes', 'uits', 'images', 'samples')
+            if os.path.exists(uits_samples_dir) and not os.listdir(target_samples_dir):
+                import shutil
+                for sfile in os.listdir(uits_samples_dir):
+                    if sfile.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')):
+                        try:
+                            shutil.copyfile(os.path.join(uits_samples_dir, sfile), os.path.join(target_samples_dir, sfile))
+                        except Exception:
+                            pass
+
+            # Create fallback theme.json if missing
+            theme_json_path = os.path.join(theme_dir, 'theme.json')
+            if not os.path.exists(theme_json_path):
+                with open(theme_json_path, 'w', encoding='utf-8') as f:
+                    json.dump({
+                        'slug': theme_slug_clean,
+                        'title': theme_slug_clean.replace('_', ' ').title(),
+                        'status': 'draft',
+                        'atmosphereMode': 'advanced'
+                    }, f, indent=2)
+
+            # Create fallback data.json if missing
+            data_json_path = os.path.join(theme_dir, 'data.json')
+            if not os.path.exists(data_json_path):
+                with open(data_json_path, 'w', encoding='utf-8') as f:
+                    json.dump({'clothes': [], 'poses': [], 'backgrounds': []}, f, indent=2)
+
+        deco_path = os.path.join(theme_dir, 'decorations.html')
+        css_path = os.path.join(theme_dir, 'style.css')
         payload = request.json or {}
         deco_content = payload.get('decorations_html', '')
         css_content = payload.get('custom_css', '')
@@ -1007,6 +1052,16 @@ def admin_theme_atmosphere(theme_slug):
             return jsonify({'error': str(e)}), 500
 
     # GET request
+    if not os.path.exists(theme_dir):
+        return jsonify({
+            'status': 'success',
+            'theme': theme_slug_clean,
+            'decorations_html': '',
+            'custom_css': ''
+        })
+
+    deco_path = os.path.join(theme_dir, 'decorations.html')
+    css_path = os.path.join(theme_dir, 'style.css')
     deco_content = ""
     css_content = ""
     if os.path.exists(deco_path):
@@ -1024,7 +1079,7 @@ def admin_theme_atmosphere(theme_slug):
 
     return jsonify({
         'status': 'success',
-        'theme': theme_slug,
+        'theme': theme_slug_clean,
         'decorations_html': deco_content,
         'custom_css': css_content
     })

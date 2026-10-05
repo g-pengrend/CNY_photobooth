@@ -217,6 +217,9 @@ function createNewTheme() {
     if (htmlEl) htmlEl.value = '';
     if (cssEl) cssEl.value = '';
     if (jsonEl) jsonEl.value = '';
+    window._lastAutoAppliedJson = '';
+    const autoStatusEl = document.getElementById('json-auto-status');
+    if (autoStatusEl) autoStatusEl.style.display = 'none';
     renderAssetsList();
     document.getElementById('workflow-inspection-card').style.display = 'none';
     document.getElementById('current-theme-heading').textContent = '✨ New Theme';
@@ -315,7 +318,7 @@ function readFormFields() {
     theme.icon = rawIcon.trim() || '✨';
     theme.cta = rawCta.trim() || 'Start';
     theme.description = rawDesc.trim();
-    theme.status = 'live';
+    theme.status = studio.activeTheme?.status || 'draft';
 
     // Style
     theme.style = theme.style || {};
@@ -1212,6 +1215,7 @@ window.confirmImportTheme = async function () {
 // ==========================================================================
 async function saveAndPublishTheme() {
     const theme = readFormFields();
+    theme.status = 'live';
     if (!theme.slug || !theme.title) {
         showToast('Please specify a Theme Slug and Title!', 'error');
         return;
@@ -1734,6 +1738,13 @@ function initEventListeners() {
 
     initWorkflowDropzone();
     initPromptDesignerListeners();
+
+    // Auto-populate theme identity from GenAI JSON upon paste/input
+    const jsonArea = document.getElementById('adv-identity-json');
+    if (jsonArea) {
+        jsonArea.addEventListener('input', () => window.autoApplyIdentityJsonOnInput(true));
+        jsonArea.addEventListener('paste', () => setTimeout(() => window.autoApplyIdentityJsonOnInput(true), 50));
+    }
 }
 
 // Card size toggle for picker modal
@@ -2651,85 +2662,242 @@ function fallbackCopyPromptText(text) {
 // Backward-compatible alias
 window.copyGenAiAtmospherePrompt = window.copyFullSystematicGenAiPrompt;
 
-// Apply pasted JSON from external GenAI to theme configuration
-window.applyIdentityJsonConfig = function () {
-    const jsonText = document.getElementById('adv-identity-json')?.value.trim();
-    if (!jsonText) {
-        showToast('Please paste theme_identity.json first.', 'error');
-        return;
-    }
-    try {
-        const config = JSON.parse(jsonText);
-        const t = studio.activeTheme || {};
+let _autoApplyDebounceTimer = null;
+window._lastAutoAppliedJson = '';
 
-        if (config.slug) {
-            const cleanSlug = config.slug.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+// Extract clean JSON from user pasted text (resilient to markdown fences, trailing commas, surrounding comments, and multi-block paste)
+function extractJsonFromText(rawText) {
+    if (!rawText || typeof rawText !== 'string') return null;
+    let text = rawText.trim();
+    if (!text) return null;
+
+    // Detect if user pasted the entire multi-block GenAI response into Block 1 box:
+    // If so, automatically extract HTML and CSS and populate them into tabs 2 & 3!
+    const htmlFenceMatch = text.match(/```(?:html|xml)?\s*([\s\S]*?)```/i);
+    const cssFenceMatch = text.match(/```(?:css)?\s*([\s\S]*?)```/i);
+    const jsonFenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+
+    if (htmlFenceMatch && htmlFenceMatch[1]) {
+        const htmlEl = document.getElementById('adv-decorations-html');
+        if (htmlEl && (!htmlEl.value || !htmlEl.value.trim())) {
+            htmlEl.value = htmlFenceMatch[1].trim();
+        }
+    }
+    if (cssFenceMatch && cssFenceMatch[1]) {
+        const cssEl = document.getElementById('adv-custom-css');
+        if (cssEl && (!cssEl.value || !cssEl.value.trim())) {
+            cssEl.value = cssFenceMatch[1].trim();
+        }
+    }
+
+    let candidate = '';
+    if (jsonFenceMatch && jsonFenceMatch[1]) {
+        candidate = jsonFenceMatch[1].trim();
+    } else {
+        const firstBrace = text.indexOf('{');
+        const lastBrace = text.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace > firstBrace) {
+            candidate = text.substring(firstBrace, lastBrace + 1).trim();
+        } else {
+            candidate = text;
+        }
+    }
+
+    let parsed = null;
+    try {
+        parsed = JSON.parse(candidate);
+    } catch (e) {
+        // Try stripping trailing commas which GenAI models sometimes leave
+        try {
+            const cleaned = candidate.replace(/,\s*([\]}])/g, '$1');
+            parsed = JSON.parse(cleaned);
+        } catch (e2) {
+            parsed = null;
+        }
+    }
+
+    if (parsed && typeof parsed === 'object') {
+        if (parsed.theme && typeof parsed.theme === 'object' && (parsed.theme.slug || parsed.theme.title)) {
+            parsed = parsed.theme;
+        } else if (parsed.theme_identity && typeof parsed.theme_identity === 'object') {
+            parsed = parsed.theme_identity;
+        } else if (parsed.Block1 && typeof parsed.Block1 === 'object') {
+            parsed = parsed.Block1;
+        } else if (parsed.block1 && typeof parsed.block1 === 'object') {
+            parsed = parsed.block1;
+        }
+    }
+
+    return parsed;
+}
+
+window.applyConfigToThemeFields = function (config, silent = true) {
+    if (!config || typeof config !== 'object') return false;
+
+    const t = studio.activeTheme || {};
+
+    // 1. Slug
+    const rawSlug = config.slug || config.theme_slug || config.id || '';
+    if (rawSlug) {
+        const cleanSlug = rawSlug.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+        if (cleanSlug) {
             t.slug = cleanSlug;
             setValue('inp-slug', cleanSlug);
             setValue('inp-slug-adv', cleanSlug);
         }
-        if (config.title) {
-            t.title = config.title;
-            setValue('inp-title', config.title);
-            setValue('inp-title-adv', config.title);
-        }
-        if (config.subtitle) {
-            t.subtitle = config.subtitle;
-            setValue('inp-subtitle', config.subtitle);
-            setValue('inp-subtitle-adv', config.subtitle);
-        }
-        if (config.badge) {
-            t.badge = config.badge;
-            setValue('inp-badge', config.badge);
-            setValue('inp-badge-adv', config.badge);
-        }
-        if (config.icon) {
-            t.icon = config.icon;
-            setValue('inp-icon', config.icon);
-            setValue('inp-icon-adv', config.icon);
-        }
-        if (config.cta) {
-            t.cta = config.cta;
-            setValue('inp-cta', config.cta);
-            setValue('inp-cta-adv', config.cta);
-        }
-        if (config.description) {
-            t.description = config.description;
-            setValue('inp-desc', config.description);
-            setValue('inp-desc-adv', config.description);
-        }
-        if (config.style) {
-            t.style = t.style || {};
-            if (config.style.fontFamily) {
-                t.style.fontFamily = config.style.fontFamily;
-                setValue('inp-font', config.style.fontFamily);
-            }
-            if (config.style.googleFontUrl) {
-                t.style.googleFontUrl = config.style.googleFontUrl;
-                setValue('inp-google-font', config.style.googleFontUrl);
-            }
-            if (config.style.colors) {
-                t.style.colors = Object.assign(t.style.colors || {}, config.style.colors);
-                if (config.style.colors.background) setColor('inp-color-bg', config.style.colors.background);
-                if (config.style.colors.accent) setColor('inp-color-accent', config.style.colors.accent);
-                if (config.style.colors.text) setColor('inp-color-text', config.style.colors.text);
-                if (config.style.colors.primary) setColor('inp-color-primary', config.style.colors.primary);
-            }
-        }
-        const seq = config.waitingExperience?.sequence || config.waitingSequence;
-        if (Array.isArray(seq) && seq.length > 0) {
-            t.waitingExperience = t.waitingExperience || {};
-            if (config.waitingExperience?.title) t.waitingExperience.title = config.waitingExperience.title;
-            if (config.waitingExperience?.subtitle) t.waitingExperience.subtitle = config.waitingExperience.subtitle;
-            if (config.waitingExperience?.completionMessage) t.waitingExperience.completionMessage = config.waitingExperience.completionMessage;
-            t.waitingExperience.sequence = seq;
-            renderWaitingSequenceList(seq);
-        }
-        showToast('✨ Applied theme details, colors, and waiting sequence from GenAI JSON!', 'success');
-        window.updateFullSystematicGenAiPrompt();
-    } catch (err) {
-        showToast('Invalid JSON: ' + err.message, 'error');
     }
+
+    // 2. Title & Heading
+    if (config.title) {
+        t.title = config.title;
+        setValue('inp-title', config.title);
+        setValue('inp-title-adv', config.title);
+        const heading = document.getElementById('current-theme-heading');
+        if (heading) heading.textContent = (config.icon ? config.icon + ' ' : '✨ ') + config.title;
+    }
+
+    // 3. Subtitle, Badge, Icon, CTA, Description
+    if (config.subtitle) {
+        t.subtitle = config.subtitle;
+        setValue('inp-subtitle', config.subtitle);
+        setValue('inp-subtitle-adv', config.subtitle);
+    }
+    if (config.badge) {
+        t.badge = config.badge;
+        setValue('inp-badge', config.badge);
+        setValue('inp-badge-adv', config.badge);
+    }
+    if (config.icon) {
+        t.icon = config.icon;
+        setValue('inp-icon', config.icon);
+        setValue('inp-icon-adv', config.icon);
+    }
+    if (config.cta) {
+        t.cta = config.cta;
+        setValue('inp-cta', config.cta);
+        setValue('inp-cta-adv', config.cta);
+    }
+    if (config.description) {
+        t.description = config.description;
+        setValue('inp-desc', config.description);
+        setValue('inp-desc-adv', config.description);
+    }
+
+    // 4. Style: Typography & Colors
+    if (config.style) {
+        t.style = t.style || {};
+        if (config.style.fontFamily) {
+            t.style.fontFamily = config.style.fontFamily;
+            setValue('inp-font', config.style.fontFamily);
+        }
+        if (config.style.googleFontUrl) {
+            t.style.googleFontUrl = config.style.googleFontUrl;
+            setValue('inp-google-font', config.style.googleFontUrl);
+        }
+        if (config.style.colors) {
+            t.style.colors = Object.assign(t.style.colors || {}, config.style.colors);
+            if (config.style.colors.background) setColor('inp-color-bg', config.style.colors.background);
+            if (config.style.colors.accent) setColor('inp-color-accent', config.style.colors.accent);
+            if (config.style.colors.text) setColor('inp-color-text', config.style.colors.text);
+            if (config.style.colors.primary) setColor('inp-color-primary', config.style.colors.primary);
+        }
+    }
+
+    // 5. Waiting Sequence
+    const seq = config.waitingExperience?.sequence || config.waitingSequence || config.sequence;
+    if (Array.isArray(seq) && seq.length > 0) {
+        t.waitingExperience = t.waitingExperience || {};
+        if (config.waitingExperience?.title) t.waitingExperience.title = config.waitingExperience.title;
+        if (config.waitingExperience?.subtitle) t.waitingExperience.subtitle = config.waitingExperience.subtitle;
+        if (config.waitingExperience?.completionMessage) t.waitingExperience.completionMessage = config.waitingExperience.completionMessage;
+        t.waitingExperience.sequence = seq;
+        renderWaitingSequenceList(seq);
+    }
+
+    // 6. Features
+    if (config.features) {
+        if (typeof config.features.filmStrip === 'boolean') {
+            setChecked('chk-film-strip-adv', config.features.filmStrip);
+            setChecked('chk-film-strip', config.features.filmStrip);
+        }
+        if (typeof config.features.luckyNumber === 'boolean') {
+            setChecked('chk-lucky-number-adv', config.features.luckyNumber);
+            setChecked('chk-lucky-number', config.features.luckyNumber);
+        }
+        if (typeof config.features.genderFilter === 'boolean') {
+            setChecked('chk-gender-filter-adv', config.features.genderFilter);
+            setChecked('chk-gender-filter', config.features.genderFilter);
+        }
+    }
+
+    // 7. Update activeTheme & draft item in sidebar
+    studio.activeTheme = t;
+    const draftItem = (studio.themes || []).find(th => th.status === 'draft');
+    if (draftItem) {
+        if (t.slug) draftItem.slug = t.slug;
+        if (t.title) draftItem.title = t.title;
+        if (t.icon) draftItem.icon = t.icon;
+        renderThemeSidebar();
+    }
+
+    // 8. Update UI sync badge
+    const statusEl = document.getElementById('json-auto-status');
+    if (statusEl) {
+        statusEl.textContent = `✓ Auto-Synced: "${t.title || t.slug || 'Theme Details'}"`;
+        statusEl.style.display = 'inline-flex';
+    }
+
+    // 9. Feedback Toast
+    const displayLabel = t.title || t.slug || 'Theme Details';
+    if (!silent) {
+        showToast(`✨ Applied theme details, colors, and waiting sequence for "${displayLabel}"!`, 'success');
+    } else {
+        clearTimeout(_autoApplyDebounceTimer);
+        _autoApplyDebounceTimer = setTimeout(() => {
+            showToast(`✓ Auto-populated Theme Details from GenAI JSON: "${displayLabel}"`, 'info');
+        }, 350);
+    }
+
+    if (typeof window.updateFullSystematicGenAiPrompt === 'function') {
+        window.updateFullSystematicGenAiPrompt();
+    }
+
+    return true;
+};
+
+// Real-time automatic populator triggered upon user input or paste
+window.autoApplyIdentityJsonOnInput = function (silent = true) {
+    const textarea = document.getElementById('adv-identity-json');
+    if (!textarea) return;
+    const rawText = textarea.value.trim();
+    if (!rawText) {
+        const statusEl = document.getElementById('json-auto-status');
+        if (statusEl) statusEl.style.display = 'none';
+        return;
+    }
+
+    if (rawText === window._lastAutoAppliedJson) {
+        if (!silent) {
+            showToast('✨ Theme details already up to date from this JSON.', 'info');
+        }
+        return;
+    }
+
+    const config = extractJsonFromText(rawText);
+    if (!config) {
+        if (!silent) {
+            showToast('Invalid JSON: Could not extract valid theme JSON. Please check formatting.', 'error');
+        }
+        return;
+    }
+
+    window._lastAutoAppliedJson = rawText;
+    window.applyConfigToThemeFields(config, silent);
+};
+
+// Manual button trigger
+window.applyIdentityJsonConfig = function () {
+    window.autoApplyIdentityJsonOnInput(false);
 };
 
 window.switchAtmosphereEditorTab = function (tab) {
@@ -2898,7 +3066,8 @@ window.loadExistingAtmosphere = async function (slug) {
 };
 
 window.saveAtmosphereDirectly = async function () {
-    const slug = studio.activeTheme?.slug;
+    const theme = readFormFields();
+    const slug = theme.slug || studio.activeTheme?.slug;
     if (!slug) {
         showToast('Please select or create a theme first.', 'error');
         return;
@@ -2935,20 +3104,66 @@ window.saveAtmosphereDirectly = async function () {
 };
 
 window.openAtmospherePreviewModal = async function () {
-    const slug = studio.activeTheme?.slug;
-    if (!slug) {
-        showToast('Please select or create a theme first.', 'error');
-        return;
+    // 1. If user pasted JSON in Block 1 editor, ensure it is parsed and applied
+    if (typeof window.autoApplyIdentityJsonOnInput === 'function') {
+        window.autoApplyIdentityJsonOnInput(true);
     }
 
-    // Save atmosphere first so iframe serves updated assets
-    await saveAtmosphereDirectly();
+    // 2. Read latest inputs from the form
+    const theme = readFormFields();
+    let slug = theme.slug || studio.activeTheme?.slug;
+    if (!slug) {
+        slug = 'new_theme_' + Math.floor(Date.now() % 10000);
+    }
+    slug = slug.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+    theme.slug = slug;
 
-    const modal = document.getElementById('atmosphere-preview-modal');
-    const iframe = document.getElementById('atmosphere-preview-iframe');
-    if (modal && iframe) {
-        iframe.src = `/${slug}?engine=universal&preview=atmosphere&t=${Date.now()}`;
-        modal.style.display = 'flex';
+    studio.activeTheme = Object.assign(studio.activeTheme || {}, theme);
+    studio.activeTheme.slug = slug;
+
+    // 3. Compile and save the full theme package to disk so backend directories, theme.json, data.json, and atmosphere files exist
+    const decorations_html = document.getElementById('adv-decorations-html')?.value || '';
+    const custom_css = document.getElementById('adv-custom-css')?.value || '';
+
+    const payload = {
+        theme: studio.activeTheme,
+        data: studio.activeData || { clothes: [], poses: [], backgrounds: [] },
+        bindings: studio.activeBindings || null,
+        workflow: studio.uploadedWorkflow || null,
+        decorations_html: decorations_html,
+        custom_css: custom_css
+    };
+
+    try {
+        const res = await fetch('/api/admin/theme/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Failed to compile theme for preview');
+        }
+
+        // Update sidebar draft if present
+        const draftItem = (studio.themes || []).find(th => th.status === 'draft');
+        if (draftItem) {
+            draftItem.slug = slug;
+            draftItem.title = theme.title || draftItem.title;
+            renderThemeSidebar();
+        }
+
+        // 4. Open Live Preview modal pointing to Universal Engine preview
+        const modal = document.getElementById('atmosphere-preview-modal');
+        const iframe = document.getElementById('atmosphere-preview-iframe');
+        if (modal && iframe) {
+            iframe.src = `/${slug}?engine=universal&preview=atmosphere&t=${Date.now()}`;
+            modal.style.display = 'flex';
+            showToast(`⚡ Live Preview compiled for "${theme.title || slug}"!`, 'success');
+        }
+    } catch (err) {
+        showToast('Compile preview error: ' + err.message, 'error');
     }
 };
 
