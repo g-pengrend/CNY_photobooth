@@ -2149,7 +2149,7 @@ const ATMOSPHERE_PRESETS = {
 <div class="custom-particle p-4"><span>🧨</span><label>发</label></div>
 <div class="custom-particle p-5"><span>🍍</span><label>Huat Ah!</label></div>`,
         css: `/* CNY Dynamic Atmosphere Styles */
-.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
 
 /* Top Imperial Arch */
 .thematic-top-arch {
@@ -2306,7 +2306,7 @@ const ATMOSPHERE_PRESETS = {
 <div class="custom-particle p-3"><span>⭐</span><label>Maaf</label></div>
 <div class="custom-particle p-4"><span>✨</span><label>Zahir & Batin</label></div>`,
         css: `/* Hari Raya Atmosphere Styles */
-.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
 
 /* Top Mosque Arch */
 .thematic-top-arch {
@@ -2458,7 +2458,7 @@ const ATMOSPHERE_PRESETS = {
 <div class="custom-particle p-3"><span>✦</span><label>MANIFEST</label></div>
 <div class="custom-particle p-4"><span>⚡</span><label>CYBER STUDIO</label></div>`,
         css: `/* Cyberpunk Atmosphere Styles */
-.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
 
 /* Holographic Top Arch */
 .thematic-top-arch {
@@ -2603,7 +2603,7 @@ const ATMOSPHERE_PRESETS = {
 <div class="custom-particle p-3"><span>🥂</span><label>RED CARPET</label></div>
 <div class="custom-particle p-4"><span>✦</span><label>ROYALE</label></div>`,
         css: `/* Grand Gala Atmosphere Styles */
-.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 12; overflow: hidden; }
+.persistent-decorations { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
 
 /* Gilded Top Arch */
 .thematic-top-arch {
@@ -2799,6 +2799,7 @@ window.generateFullSystematicPromptText = function () {
     const accentCol = document.getElementById('inp-color-accent')?.value || '#d4af37';
     const primaryCol = document.getElementById('inp-color-primary')?.value || '#181926';
 
+    const customObjects = document.getElementById('adv-custom-objects')?.value?.trim();
     const chkBanners = document.getElementById('chk-dynamic-banners')?.checked ?? true;
     const chkArch = document.getElementById('chk-dynamic-arch')?.checked ?? true;
     const chkOrnaments = document.getElementById('chk-dynamic-ornaments')?.checked ?? true;
@@ -2813,6 +2814,14 @@ window.generateFullSystematicPromptText = function () {
     }
 
     const dynamicAtmosphereSpecs = [];
+
+    if (customObjects) {
+        dynamicAtmosphereSpecs.push(`• CUSTOM USER INTERFACE & ATMOSPHERIC OBJECTS (CRITICAL REQUIREMENT):
+    - The user specifically requested to design and manifest these custom interface elements: "${customObjects}"
+    - In BLOCK 2 (decorations.html): Construct complete, semantic HTML markup for these custom objects inside the persistent atmosphere container (e.g. glowing neon sign, marquee ticker, floating lotus, holographic badge). Use descriptive classes.
+    - In BLOCK 3 (style.css): Provide complete styling, exact fixed/absolute coordinate placement, glassmorphism, responsive rules, and fluid keyframe animations for each custom object.`);
+    }
+
     if (chkBanners) {
         dynamicAtmosphereSpecs.push(`• Vertical Side Couplets / Banners (.thematic-side-banner.banner-left and .banner-right):
     - Flank the left and right sides of the kiosk screen (left: 24px; right: 24px; top: 50%; transform: translateY(-50%)).
@@ -2832,7 +2841,7 @@ window.generateFullSystematicPromptText = function () {
     }
     if (chkParticles) {
         dynamicAtmosphereSpecs.push(`• Floating Celebratory Particles (.custom-particle.p-1 through p-5):
-    - Thematic emojis with styled glowing text labels floating upwards with staggered animation delays (@keyframes floatUpward).`);
+    - Thematic emojis with styled glowing text labels floating upwards with staggered animation delays (@keyframes floatUpward). Keep strictly outside center text.`);
     }
     if (chkFrame) {
         dynamicAtmosphereSpecs.push(`• Thematic Frame / Vignette:
@@ -2937,7 +2946,7 @@ ${chkArch ? `<!-- Top Decorative Arch -->
 ### BLOCK 3: style.css
 Generate standalone, high-performance scoped CSS styling and keyframes:
 • :root CSS custom variables matching the design palette
-• .persistent-decorations container fixed to inset: 0 with pointer-events: none and z-index: 12
+• .persistent-decorations container fixed to inset: 0 with pointer-events: none and z-index: 1 (keeps decorations behind screen text and buttons)
 • Keyframe animations (@keyframes bannerBreathe, @keyframes ornamentSway, @keyframes floatUpward)
 • Responsive rules (@media (max-width: 900px) { .thematic-side-banner { display: none; } })
 • High visual quality with drop-shadows and backdrop-filters
@@ -2952,7 +2961,7 @@ Generate standalone, high-performance scoped CSS styling and keyframes:
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 12;
+  z-index: 1;
   overflow: hidden;
 }
 /* ... Complete CSS for banners, arch, ornaments, and particles ... */
@@ -2993,6 +3002,99 @@ function fallbackCopyPromptText(text) {
 
 // Backward-compatible alias
 window.copyGenAiAtmospherePrompt = window.copyFullSystematicGenAiPrompt;
+
+window.addCustomObjectChip = function (objectText) {
+    const inp = document.getElementById('adv-custom-objects');
+    if (!inp) return;
+    const current = inp.value.trim();
+    if (current) {
+        if (!current.toLowerCase().includes(objectText.toLowerCase())) {
+            inp.value = current + ', ' + objectText;
+        }
+    } else {
+        inp.value = objectText;
+    }
+    window.updateFullSystematicGenAiPrompt();
+    showToast(`Added: ${objectText}`, 'info');
+};
+
+window.copyCustomObjectGenAiPrompt = function () {
+    const concept = document.getElementById('adv-theme-intent')?.value?.trim() || state.theme?.title || 'Interactive Festive Kiosk';
+    const customObjects = document.getElementById('adv-custom-objects')?.value?.trim() || 'Custom festive interface elements, banners, animated header marquee, and ambient particle objects';
+    const bgCol = document.getElementById('inp-color-bg')?.value || '#0c0d14';
+    const accentCol = document.getElementById('inp-color-accent')?.value || '#d4af37';
+    const primaryCol = document.getElementById('inp-color-primary')?.value || '#181926';
+
+    const promptText = `You are an expert creative UI/UX frontend designer and animator for an interactive photobooth touchscreen kiosk.
+
+EVENT THEME CONCEPT: "${concept}"
+COLOR TOKENS: Background ${bgCol}, Brand Accent ${accentCol}, Surface ${primaryCol}
+
+USER'S CUSTOM INTERFACE & ATMOSPHERIC OBJECTS:
+"${customObjects}"
+
+Your task is to design and generate the complete HTML structure and CSS animations for these custom objects.
+Please output EXACTLY TWO CODE BLOCKS to paste into the Photobooth Theme Studio:
+
+### BLOCK 2: decorations.html
+Generate persistent HTML markup for these custom objects wrapped inside <div class="persistent-decorations">:
+\`\`\`html
+<!-- Persistent Custom Interface & Atmospheric Objects -->
+<div class="persistent-decorations">
+    <!-- Place semantic HTML elements for each requested custom object here -->
+    <!-- (e.g. custom neon signs, marquee bars, ticker banners, swaying ornaments, corner crests, particle items) -->
+</div>
+\`\`\`
+
+### BLOCK 3: style.css
+Generate high-performance CSS styling, positioning, and fluid keyframe animations for the custom objects:
+\`\`\`css
+/* Custom Interface Objects Styling */
+:root {
+  --bg-color: ${bgCol};
+  --accent-color: ${accentCol};
+  --primary-color: ${primaryCol};
+}
+
+.persistent-decorations {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1; /* Keeps decorations in background so screen text & kiosk buttons are 100% accessible */
+  overflow: hidden;
+}
+
+/* Specific fixed or absolute positioning, glassmorphism, and keyframe animations for each custom object */
+/* Include pointer-events: none on ambient items so touch clicks on kiosk buttons are never blocked */
+/* Include responsive rules (@media (max-width: 900px)) to hide or scale large side elements cleanly */
+\`\`\`
+
+Output ONLY these two code blocks with their markdown headers.`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(promptText).then(() => {
+            showToast('🎨 Custom Objects GenAI Prompt copied! Paste into ChatGPT / Claude / Gemini.', 'success');
+        }).catch(() => {
+            fallbackCopyPromptText(promptText);
+        });
+    } else {
+        fallbackCopyPromptText(promptText);
+    }
+};
+
+window.syncAtmospherePreset = function (elementKey, isChecked) {
+    const advMap = {
+        'banners': 'chk-dynamic-banners',
+        'arch': 'chk-dynamic-arch',
+        'ornaments': 'chk-dynamic-ornaments',
+        'particles': 'chk-dynamic-particles'
+    };
+    if (advMap[elementKey]) {
+        const advEl = document.getElementById(advMap[elementKey]);
+        if (advEl) advEl.checked = isChecked;
+    }
+    window.updateFullSystematicGenAiPrompt();
+};
 
 let _autoApplyDebounceTimer = null;
 window._lastAutoAppliedJson = '';

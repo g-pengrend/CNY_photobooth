@@ -90,7 +90,7 @@ body::before {
     flex-direction: column;
     align-items: center;
     position: relative;
-    z-index: 15;
+    z-index: 20;
 }
 
 /* Screen Headers */
@@ -173,7 +173,7 @@ body::before {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     pointer-events: none;
-    z-index: 5;
+    z-index: 1 !important;
     overflow: hidden;
 }
 
@@ -504,6 +504,7 @@ input:checked + .slider:before { transform: translateX(24px); }
     align-items: center;
     justify-content: center;
     position: relative;
+    cursor: zoom-in;
 }
 
 #background-grid .card-image-wrap {
@@ -519,6 +520,34 @@ input:checked + .slider:before { transform: translateX(24px); }
 
 .selection-card:hover .card-image-wrap img {
     transform: scale(1.04);
+}
+
+.expand-card-btn {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: zoom-in;
+    transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+    backdrop-filter: blur(6px);
+    z-index: 3;
+    outline: none;
+}
+
+.expand-card-btn:hover {
+    transform: scale(1.18);
+    background: var(--theme-accent);
+    color: #000;
+    border-color: var(--theme-accent);
 }
 
 .card-info {
@@ -898,16 +927,47 @@ input:checked + .slider:before { transform: translateX(24px); }
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 100;
+    z-index: 1000;
     padding: 2rem;
+    backdrop-filter: blur(8px);
 }
 
 .image-modal.open { display: flex; }
 
-.modal-content img {
-    max-width: 90vw; max-height: 85vh;
+.image-modal .modal-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-modal .modal-content img {
+    max-width: 90vw;
+    max-height: 85vh;
     border-radius: var(--radius-md);
     box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    object-fit: contain;
+}
+
+.image-modal .close-modal {
+    position: absolute;
+    top: -44px;
+    right: 0;
+    color: #ffffff;
+    font-size: 38px;
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 1;
+    transition: transform 0.2s ease, color 0.2s ease;
+    user-select: none;
+}
+
+.image-modal .close-modal:hover {
+    color: var(--theme-accent);
+    transform: scale(1.2);
 }
 
 /* Global Collaborator Watermark */

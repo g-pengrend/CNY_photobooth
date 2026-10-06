@@ -122,17 +122,21 @@ async function initAtmosphere(theme) {
         }
 
         if (!hasCustomDeco) {
-            // Built-in floating particle atmosphere
+            // Built-in floating particle atmosphere - keep strictly to peripheral margins to avoid blocking center text
             const icons = bgConfig.floatingIcons || ['✨', '✦', '⭐', '✧'];
             decoContainer.innerHTML = '';
             for (let i = 0; i < 8; i++) {
                 const p = document.createElement('div');
                 p.className = 'floating-particle';
                 p.textContent = icons[i % icons.length];
-                p.style.top = `${10 + Math.random() * 80}%`;
-                p.style.left = `${5 + Math.random() * 90}%`;
+                p.style.top = `${8 + Math.random() * 82}%`;
+                // Distribute on left margin (3%-20%) or right margin (80%-97%) so center text is 100% unobstructed
+                const isLeft = i % 2 === 0;
+                p.style.left = isLeft ? `${3 + Math.random() * 17}%` : `${80 + Math.random() * 17}%`;
                 p.style.animationDelay = `${Math.random() * 5}s`;
-                p.style.fontSize = `${1.2 + Math.random() * 1.4}rem`;
+                p.style.fontSize = `${1.1 + Math.random() * 1.2}rem`;
+                p.style.opacity = '0.35';
+                p.style.pointerEvents = 'none';
                 decoContainer.appendChild(p);
             }
         }
@@ -345,17 +349,29 @@ function bindEventHandlers() {
     document.getElementById('regenerate-btn')?.addEventListener('click', handleRegenerate);
     document.getElementById('start-over-btn')?.addEventListener('click', resetKiosk);
 
-    // Modal Expand
-    document.getElementById('result-image')?.addEventListener('click', (e) => {
+    // Modal Expand (Global helper)
+    window.expandImage = function (imageUrl) {
         const modal = document.getElementById('image-modal');
         const modalImg = document.getElementById('modal-img');
-        if (modal && modalImg) {
-            modalImg.src = e.target.src;
+        if (modal && modalImg && imageUrl) {
+            modalImg.src = imageUrl;
             modal.classList.add('open');
         }
+    };
+
+    document.getElementById('result-image')?.addEventListener('click', (e) => {
+        window.expandImage(e.target.src);
     });
+
+    document.getElementById('close-image-modal')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('image-modal')?.classList.remove('open');
+    });
+
     document.getElementById('image-modal')?.addEventListener('click', (e) => {
-        e.currentTarget.classList.remove('open');
+        if (e.target.id === 'image-modal' || e.target.classList.contains('close-modal')) {
+            e.currentTarget.classList.remove('open');
+        }
     });
 }
 
@@ -371,8 +387,9 @@ function renderSelectionGrids(data) {
         poseGrid.innerHTML = data.poses.map((p, idx) => `
             <div class="selection-card ${idx === 0 ? 'selected' : ''}" 
                  data-code="${p.code}" data-prompt="${escapeAttr(p.prompt)}">
-                <div class="card-image-wrap">
+                <div class="card-image-wrap" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(p.image)}')" title="Click to enlarge">
                     <img src="${p.image}" alt="${p.title}" loading="lazy">
+                    <button class="expand-card-btn" type="button" title="View full picture" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(p.image)}')">🔍</button>
                 </div>
                 <div class="card-info">
                     <div class="card-code">${p.code}</div>
@@ -412,8 +429,9 @@ function renderSelectionGrids(data) {
         bgGrid.innerHTML = data.backgrounds.map((b, idx) => `
             <div class="selection-card ${idx === 0 ? 'selected' : ''}" 
                  data-code="${b.code}" data-prompt="${escapeAttr(b.prompt)}">
-                <div class="card-image-wrap">
+                <div class="card-image-wrap" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(b.image)}')" title="Click to enlarge">
                     <img src="${b.image}" alt="${b.title}" loading="lazy">
+                    <button class="expand-card-btn" type="button" title="View full picture" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(b.image)}')">🔍</button>
                 </div>
                 <div class="card-info">
                     <div class="card-code">${b.code}</div>
@@ -452,8 +470,9 @@ function renderClothesGrid(clothesList) {
     grid.innerHTML = clothesList.map((c, idx) => `
         <div class="selection-card ${idx === 0 ? 'selected' : ''}" 
              data-code="${c.code}" data-category="${c.category || 'unisex'}" data-prompt="${escapeAttr(c.prompt)}">
-            <div class="card-image-wrap">
+            <div class="card-image-wrap" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(c.image)}')" title="Click to enlarge">
                 <img src="${c.image}" alt="${c.title}" loading="lazy">
+                <button class="expand-card-btn" type="button" title="View full picture" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(c.image)}')">🔍</button>
             </div>
             <div class="card-info">
                 <div class="card-code">${c.code}</div>
