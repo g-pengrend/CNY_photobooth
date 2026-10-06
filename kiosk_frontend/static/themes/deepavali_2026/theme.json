@@ -1,15 +1,15 @@
 {
-  "slug": "deepavali2026",
+  "slug": "deepavali_2026",
   "title": "Deepavali 2026",
-  "subtitle": "illuminate your presence with vibrant traditional wear and the radiant glow of oil lamps.",
-  "badge": "Festival of Lights",
+  "subtitle": "Festival of Lights Interactive Portrait Experience",
+  "badge": "Diwali Edition 2026",
   "icon": "🪔",
-  "description": "illuminate your presence with vibrant traditional wear and the radiant glow of oil lamps.",
-  "cta": "Start Experience",
+  "description": "Step into the luminous aura of Deepavali and immerse yourself in sacred golden light. Watch your festive portrait transform into an exquisite masterpiece adorned with traditional diyas, intricate rangoli, and celebratory splendor.",
+  "cta": "Ignite Your Radiance",
   "status": "live",
   "features": {
     "luckyNumber": false,
-    "filmStrip": false,
+    "filmStrip": true,
     "genderFilter": true
   },
   "background": {
@@ -20,11 +20,11 @@
       "🎉",
       "✦"
     ],
-    "filmStrip": false
+    "filmStrip": true
   },
   "style": {
     "fontFamily": "'Outfit', sans-serif",
-    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
     "colors": {
       "background": "#0a0a12",
       "accent": "#8722ec",
@@ -40,36 +40,36 @@
     }
   },
   "waitingExperience": {
-    "title": "Creating Magic...",
-    "subtitle": "Processing your photo",
+    "title": "Kindling Your Festive Glow...",
+    "subtitle": "Weaving the golden warmth and vibrant aura of Deepavali",
     "sequence": [
       {
-        "text": "Welcome to Deepavali 2026!",
+        "text": "Illuminating portrait contours with ambient candlelight...",
         "delay": 500,
-        "color": "#d4af37"
+        "color": "#ffd700"
       },
       {
-        "text": "Manifesting your illuminate your presence with vibrant traditional wear and the radiant glow of oil lamps. look...",
-        "delay": 2500,
+        "text": "Synthesizing intricate royal silk motifs and golden rangoli patterns...",
+        "delay": 3500,
+        "color": "#8722ec"
+      },
+      {
+        "text": "Kindling clay diyas and framing ceremonial radiance...",
+        "delay": 7000,
+        "color": "#ff9933"
+      },
+      {
+        "text": "Harmonizing festive twilight shadows and golden spark speculars...",
+        "delay": 10500,
         "color": "#ffffff"
       },
       {
-        "text": "Styling custom fabric & intricate embroidery...",
-        "delay": 5500,
-        "color": "#ffffff"
-      },
-      {
-        "text": "Harmonizing ambient cinematic lighting...",
-        "delay": 8500,
-        "color": "#ffffff"
-      },
-      {
-        "text": "Ready to shine at Deepavali 2026!",
-        "delay": 12000,
-        "color": "#d4af37"
+        "text": "Manifestation complete! Unveiling your Deepavali celebration portrait...",
+        "delay": 14000,
+        "color": "#ffd700"
       }
     ],
-    "completionMessage": "Calculations Complete! Ready to manifest."
+    "completionMessage": "Happy Deepavali 2026!"
   },
   "promptTemplate": {
     "framing": "Medium shot, waist up shot of",
@@ -86,5 +86,7 @@
     "atmosphere": "Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field.",
     "includeLuckyNum": false,
     "rawPrompt": "Medium shot, waist up shot of a \"gender\" \"gender_style\" with \"pose\" for a concept photo, dressed in \"clothes_style\". The setting is \"background\". The image features a modern graphic overlay with a translucent frosted-glass border forming a frame. At the top-center apex, the title \"Union of ITE Training Staff\" is rendered in an exquisite gold-leaf, fluid hand-drawn script, followed by the years \"1976 – 2026\" elegantly etched in a smaller, minimalist gold serif font directly below it. At the bottom-center, overlayed above the image, anchored within the ornate border, the title \"50th Anniversary\" is displayed in bold, luminous calligraphy. All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field."
-  }
+  },
+  "atmosphereMode": "advanced",
+  "isUnsavedDraft": false
 }
