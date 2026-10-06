@@ -3096,6 +3096,330 @@ window.syncAtmospherePreset = function (elementKey, isChecked) {
     window.updateFullSystematicGenAiPrompt();
 };
 
+function escapeHtml(str) {
+    if (!str) return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+// =========================================================================
+// STUDIO NATURAL LANGUAGE EXAMPLES & INTERACTIVE GUIDE MODAL
+// =========================================================================
+
+window.applyNaturalLanguageExample = function (customObjDesc, themeConcept) {
+    const objEl = document.getElementById('adv-custom-objects');
+    const conceptEl = document.getElementById('adv-theme-intent');
+    
+    if (objEl) {
+        objEl.value = customObjDesc;
+        objEl.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+        objEl.style.borderColor = '#ec4899';
+        objEl.style.boxShadow = '0 0 16px rgba(236, 72, 153, 0.4)';
+        setTimeout(() => {
+            objEl.style.borderColor = '';
+            objEl.style.boxShadow = '';
+        }, 1200);
+    }
+    
+    if (conceptEl && themeConcept) {
+        conceptEl.value = themeConcept;
+    }
+    
+    window.updateFullSystematicGenAiPrompt();
+    window.closeStudioGuideModal();
+    showToast(`✨ Example "${themeConcept || 'Custom'}" applied! The GenAI prompt template below is now customized.`, 'success');
+
+    // Smooth scroll down to prompt box if on mobile/small screen
+    const promptBox = document.getElementById('adv-systematic-prompt-full');
+    if (promptBox && window.innerWidth < 1100) {
+        promptBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+};
+
+window.closeStudioGuideModal = function () {
+    const modal = document.getElementById('studio-guide-modal');
+    if (modal) modal.style.display = 'none';
+};
+
+const STUDIO_INSPIRATION_DATA = {
+    cyberpunk: {
+        title: '🕹️ Cyberpunk 80s Retro Arcade',
+        badge: 'Retro Neon & Ticker',
+        intent: 'Cyberpunk 80s Retro Arcade',
+        desc: "Retro 80s arcade feel with a glowing pink neon logo reading 'Insert Coin' at top-right, a pixelated green high-score ticker along the bottom, and scanline CRT glow.",
+        tips: [
+            { icon: '🎯', label: 'Screen Anchors', text: 'Top-Right neon badge + Bottom full-width ticker bar. Leaves the middle 80% completely clear for guest poses and clothes.' },
+            { icon: '🌊', label: 'Motion & Physics', text: 'Flickering neon gas tube pulsing (@keyframes neonFlicker) + Smooth 60fps horizontal marquee scrolling (@keyframes tickerMarquee).' },
+            { icon: '🎨', label: 'Visual Atmosphere', text: 'Multi-layer pink glow drop-shadows (0 0 15px #f472b6, 0 0 30px #ec4899) with subtle CRT scanline vignette in the backdrop.' },
+            { icon: '🛡️', label: 'Guest Touch Protection', text: 'Uses pointer-events: none and z-index: 1 so guests can tap pose cards and countdown buttons with zero interference.' }
+        ],
+        codeSnippetHtml: `<!-- Persistent Custom Interface: Block 2 (decorations.html) -->
+<div class="persistent-decorations">
+  <div class="arcade-neon-coin">INSERT COIN [25¢]</div>
+  <div class="arcade-score-ticker">
+    <div class="ticker-track">★ 1P READY ★ HIGH SCORE: 999990 ★ INSERT COIN TO PLAY ★ BONUS LEVEL UNLOCKED ★</div>
+  </div>
+  <div class="crt-scanline-vignette"></div>
+</div>`,
+        codeSnippetCss: `/* High-Performance Animations: Block 3 (style.css) */
+@keyframes neonFlicker {
+  0%, 100% { opacity: 1; text-shadow: 0 0 12px #f472b6, 0 0 28px #ec4899; }
+  45% { opacity: 0.92; text-shadow: 0 0 8px #f472b6; }
+  50% { opacity: 0.75; }
+  55% { opacity: 1; }
+}
+@keyframes tickerMarquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}`
+    },
+    gatsby: {
+        title: '🍸 1920s Great Gatsby Gala',
+        badge: 'Art-Deco Gold & Chandeliers',
+        intent: '1920s Great Gatsby Gala',
+        desc: "Art-deco geometric gold frames along borders, swaying crystal chandeliers at top corners, and floating champagne sparkle particles.",
+        tips: [
+            { icon: '🎯', label: 'Screen Anchors', text: 'Suspended chandeliers from top-left and top-right corners (top: 0; left: 35px & right: 35px) + 1px gold hairline borders.' },
+            { icon: '🌊', label: 'Motion & Physics', text: 'Pendulum sway physics (transform-origin: top center; @keyframes gatsbySway 4.5s ease-in-out infinite alternate).' },
+            { icon: '🎨', label: 'Visual Atmosphere', text: 'Reflective gold metallic linear gradient borders and champagne bubble star particles drifting softly upward.' },
+            { icon: '🛡️', label: 'Guest Touch Protection', text: 'Strictly bounds floating sparkles to outer screen flanks so the middle photo area is clean.' }
+        ],
+        codeSnippetHtml: `<!-- Persistent Custom Interface: Block 2 (decorations.html) -->
+<div class="persistent-decorations">
+  <div class="gatsby-chandelier chandelier-left">✦ ❖ ✦</div>
+  <div class="gatsby-chandelier chandelier-right">✦ ❖ ✦</div>
+  <div class="gatsby-deco-border-flank"></div>
+  <div class="champagne-sparkle s-1">✨</div>
+  <div class="champagne-sparkle s-2">🍾</div>
+</div>`,
+        codeSnippetCss: `/* Pendulum Sway & Sparkling Rising Animations: Block 3 (style.css) */
+@keyframes gatsbySway {
+  0% { transform: rotate(-3.5deg); }
+  100% { transform: rotate(3.5deg); }
+}
+@keyframes champagneRise {
+  0% { transform: translateY(105vh) scale(0.8); opacity: 0; }
+  30% { opacity: 0.7; }
+  100% { transform: translateY(-5vh) scale(1.1); opacity: 0; }
+}`
+    },
+    japanese: {
+        title: '⛩️ Cozy Japanese Autumn',
+        badge: 'Woodwork, Lanterns & Leaves',
+        intent: 'Cozy Japanese Autumn',
+        desc: "Warm wooden signboard header, softly swaying red paper chochin lanterns at the sides, and gently falling maple leaves drifting down.",
+        tips: [
+            { icon: '🎯', label: 'Screen Anchors', text: 'Curved wooden signboard centered at top header + red paper lanterns flanking side margins.' },
+            { icon: '🌊', label: 'Motion & Physics', text: 'Gentle breeze lantern swaying + swirling falling autumn maple leaves drifting downward.' },
+            { icon: '🎨', label: 'Visual Atmosphere', text: 'Warm cherrywood textured arch, soft red ambient lantern glow, and golden kanji calligraphy subtitle.' },
+            { icon: '🛡️', label: 'Guest Touch Protection', text: 'Side margins are hidden automatically on narrow mobile screens (@media (max-width: 900px)).' }
+        ],
+        codeSnippetHtml: `<!-- Persistent Custom Interface: Block 2 (decorations.html) -->
+<div class="persistent-decorations">
+  <div class="japanese-wooden-header"><span>秋の記憶 • AUTUMN MEMORIES</span></div>
+  <div class="chochin-lantern lantern-left">🏮</div>
+  <div class="chochin-lantern lantern-right">🏮</div>
+  <div class="maple-leaf leaf-1">🍁</div>
+  <div class="maple-leaf leaf-2">🍂</div>
+</div>`,
+        codeSnippetCss: `/* Autumn Leaves Drift & Lantern Breeze: Block 3 (style.css) */
+@keyframes lanternBreeze {
+  0% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+  100% { transform: rotate(-4deg); }
+}
+@keyframes leafFall {
+  0% { transform: translateY(-30px) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.8; }
+  100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+}`
+    },
+    luxury: {
+        title: '💎 Minimalist Modern Luxury',
+        badge: 'Frosted Glass & Ambient Orbs',
+        intent: 'Minimalist Modern Luxury',
+        desc: "Sleek frosted glass pill banners, ultra-thin gold hairline borders, and subtle glowing pulse orbs behind the cards.",
+        tips: [
+            { icon: '🎯', label: 'Screen Anchors', text: 'Top centered frosted pill badge + ultra-thin hairline border lines flanking outer edges.' },
+            { icon: '🌊', label: 'Motion & Physics', text: 'Slow, elegant 8-second breathing pulse on ambient radial gradient glow orbs.' },
+            { icon: '🎨', label: 'Visual Atmosphere', text: 'Modern frosted glass acrylic (backdrop-filter: blur(16px)) with hairline gold metallic borders.' },
+            { icon: '🛡️', label: 'Guest Touch Protection', text: 'All orbs and banners are strictly non-interactive (pointer-events: none), leaving cards super crisp.' }
+        ],
+        codeSnippetHtml: `<!-- Persistent Custom Interface: Block 2 (decorations.html) -->
+<div class="persistent-decorations">
+  <div class="luxury-pill-badge">✦ EXECUTIVE PORTRAIT SUITE ✦</div>
+  <div class="luxury-hairline-frame"></div>
+  <div class="ambient-glow-orb orb-1"></div>
+  <div class="ambient-glow-orb orb-2"></div>
+</div>`,
+        codeSnippetCss: `/* Frosted Glass & Breathing Glow: Block 3 (style.css) */
+.luxury-pill-badge {
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 9999px;
+  padding: 8px 24px;
+}
+@keyframes orbPulse {
+  0% { opacity: 0.25; transform: scale(0.95); }
+  100% { opacity: 0.55; transform: scale(1.05); }
+}`
+    }
+};
+
+window.showExampleExplanationModal = function (exampleKey) {
+    const data = STUDIO_INSPIRATION_DATA[exampleKey];
+    if (!data) return;
+
+    const modal = document.getElementById('studio-guide-modal');
+    const titleEl = document.getElementById('studio-guide-modal-title');
+    const iconEl = document.getElementById('studio-guide-modal-icon');
+    const bodyEl = document.getElementById('studio-guide-modal-body');
+    const footerEl = document.getElementById('studio-guide-modal-footer');
+    if (!modal || !bodyEl) return;
+
+    if (titleEl) titleEl.innerText = `${data.title} — How It Works`;
+    if (iconEl) iconEl.innerText = 'ℹ️';
+
+    let tipsHtml = data.tips.map(t => `
+        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.06); border-radius: 6px; padding: 0.65rem 0.85rem;">
+            <div style="font-weight: 700; color: #a5b4fc; font-size: 0.78rem; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.2rem;">
+                <span>${t.icon}</span> ${t.label}
+            </div>
+            <div style="font-size: 0.76rem; color: #cbd5e1; line-height: 1.45;">${t.text}</div>
+        </div>
+    `).join('');
+
+    bodyEl.innerHTML = `
+        <div style="margin-bottom: 1.1rem; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 8px; padding: 0.85rem 1rem;">
+            <div style="font-size: 0.75rem; font-weight: 700; color: #818cf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.3rem;">
+                📝 The Natural Language Description Sent to GenAI:
+            </div>
+            <div style="font-size: 0.88rem; color: #fff; font-weight: 600; font-style: italic;">
+                "${data.desc}"
+            </div>
+        </div>
+
+        <div style="font-size: 0.82rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">
+            💡 Why This Design Works Perfectly for Touchscreen Kiosks:
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.6rem; margin-bottom: 1.2rem;">
+            ${tipsHtml}
+        </div>
+
+        <div style="font-size: 0.82rem; font-weight: 700; color: #fde047; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.45rem;">
+            🏗️ What the AI Builds Behind the Scenes (2 Code Blocks):
+        </div>
+
+        <div style="margin-bottom: 0.85rem;">
+            <div style="font-size: 0.76rem; font-weight: 600; color: #94a3b8; margin-bottom: 0.25rem;">
+                1. Semantic HTML Markup for <strong>Block 2 (decorations.html)</strong>:
+            </div>
+            <pre style="background: #07080f; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 0.75rem; font-family: monospace; font-size: 0.74rem; color: #a5b4fc; overflow-x: auto; margin: 0;">${escapeHtml(data.codeSnippetHtml)}</pre>
+        </div>
+
+        <div>
+            <div style="font-size: 0.76rem; font-weight: 600; color: #94a3b8; margin-bottom: 0.25rem;">
+                2. Keyframe Animations &amp; Coordinates for <strong>Block 3 (style.css)</strong>:
+            </div>
+            <pre style="background: #07080f; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 0.75rem; font-family: monospace; font-size: 0.74rem; color: #38bdf8; overflow-x: auto; margin: 0;">${escapeHtml(data.codeSnippetCss)}</pre>
+        </div>
+    `;
+
+    if (footerEl) {
+        footerEl.innerHTML = `
+            <button type="button" class="admin-btn admin-btn-secondary" onclick="closeStudioGuideModal()">Close</button>
+            <button type="button" class="admin-btn admin-btn-accent" style="display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1.2rem; font-weight: 700;" onclick="applyNaturalLanguageExample('${data.desc.replace(/'/g, "\\'")}', '${data.intent.replace(/'/g, "\\'")}')">
+                <span>⚡</span> Apply This Example to Studio
+            </button>
+        `;
+    }
+
+    modal.style.display = 'flex';
+};
+
+window.showStudioWalkthroughModal = function () {
+    const modal = document.getElementById('studio-guide-modal');
+    const titleEl = document.getElementById('studio-guide-modal-title');
+    const iconEl = document.getElementById('studio-guide-modal-icon');
+    const bodyEl = document.getElementById('studio-guide-modal-body');
+    const footerEl = document.getElementById('studio-guide-modal-footer');
+    if (!modal || !bodyEl) return;
+
+    if (titleEl) titleEl.innerText = '📖 Photobooth Theme Studio: Complete Walkthrough';
+    if (iconEl) iconEl.innerText = '🚀';
+
+    bodyEl.innerHTML = `
+        <div style="line-height: 1.6; color: #cbd5e1;">
+            <p style="margin-bottom: 1rem; font-size: 0.92rem;">
+                Theme Studio allows you to build complete, customized, animated photobooth themes in minutes using Generative AI (ChatGPT, Claude, or Gemini) without needing frontend engineering skills.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.2rem;">
+                <!-- Step 1 -->
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 8px; padding: 0.9rem 1.1rem;">
+                    <div style="font-weight: 700; color: #818cf8; font-size: 0.9rem; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>💡</span> Step 1: Describe Your Event Vision in Plain English
+                    </div>
+                    <div style="font-size: 0.82rem; color: #94a3b8; line-height: 1.5;">
+                        Enter your theme concept or click any of the 4 inspiration examples. Mention any specific visual objects you'd like (e.g. <em>"neon sign"</em>, <em>"swaying lanterns"</em>, <em>"ticker tape"</em>). Or leave it blank and the AI will creatively brainstorm a unique concept for you!
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 0.9rem 1.1rem;">
+                    <div style="font-weight: 700; color: #38bdf8; font-size: 0.9rem; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>📋</span> Step 2: One-Click Copy the GenAI Prompt Template
+                    </div>
+                    <div style="font-size: 0.82rem; color: #94a3b8; line-height: 1.5;">
+                        Click <strong>"Copy GenAI Prompt Template"</strong>. Open ChatGPT, Claude, or Gemini in your browser and paste it. The AI will output 3 structured code blocks:
+                        <ul style="margin: 0.35rem 0 0 1.2rem; color: #cbd5e1;">
+                            <li><strong>Block 1: theme_identity.json</strong> — Titles, colors, fonts, waiting screen sequence</li>
+                            <li><strong>Block 2: decorations.html</strong> — Semantic markup for banners, arches, lanterns, neon signs</li>
+                            <li><strong>Block 3: style.css</strong> — Keyframe animations, screen coordinates &amp; glowing shadows</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: 8px; padding: 0.9rem 1.1rem;">
+                    <div style="font-weight: 700; color: #facc15; font-size: 0.9rem; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>📥</span> Step 3: Paste Response (Smart Auto-Split Enabled)
+                    </div>
+                    <div style="font-size: 0.82rem; color: #94a3b8; line-height: 1.5;">
+                        Paste the AI's response into Step 2 below. You can paste the entire multi-block text into the Block 1 box, and our intelligent parser will automatically split and distribute the HTML and CSS into Tabs 2 and 3!
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 8px; padding: 0.9rem 1.1rem;">
+                    <div style="font-weight: 700; color: #4ade80; font-size: 0.9rem; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>🚀</span> Step 4: Compile &amp; Live Preview Instantly
+                    </div>
+                    <div style="font-size: 0.82rem; color: #94a3b8; line-height: 1.5;">
+                        Click <strong>"Compile &amp; Live Preview"</strong>. The kiosk engine will immediately compile the files and show an interactive live simulation. When satisfied, hit <strong>"Save Theme"</strong> to deploy it directly to the guest kiosk!
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    if (footerEl) {
+        footerEl.innerHTML = `
+            <button type="button" class="admin-btn admin-btn-secondary" onclick="closeStudioGuideModal()">Close Walkthrough</button>
+            <button type="button" class="admin-btn admin-btn-accent" onclick="closeStudioGuideModal(); copyFullSystematicGenAiPrompt();" style="display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1.2rem; font-weight: 700;">
+                <span>📋</span> Copy GenAI Prompt Template Now
+            </button>
+        `;
+    }
+
+    modal.style.display = 'flex';
+};
+
 let _autoApplyDebounceTimer = null;
 window._lastAutoAppliedJson = '';
 

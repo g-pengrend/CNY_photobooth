@@ -361,18 +361,187 @@
                                         (HTML goes to <strong>Block 2: decorations.html</strong>, CSS goes to <strong>Block 3: style.css</strong>)
                                     </div>
                                 </div>
-                                
-                                <!-- User Input for Custom Interface Objects -->
+
+                                <!-- Collapsible Interactive Style & Prompting Guide with Clickable Examples -->
+                                <details style="background: rgba(99, 102, 241, 0.07); border: 1px solid rgba(99, 102, 241, 0.28); border-radius: var(--radius-sm); margin-bottom: 0.85rem; padding: 0.75rem 1rem;" open>
+                                    <summary style="font-size: 0.84rem; font-weight: 700; color: #a5b4fc; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                                        <span style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span style="font-size: 1.1rem;">💡</span> Natural Language Guide &amp; Clickable Inspirations
+                                        </span>
+                                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                            <button type="button" class="admin-btn admin-btn-secondary" style="padding: 0.25rem 0.65rem; font-size: 0.72rem; display: flex; align-items: center; gap: 0.35rem; border-color: rgba(99, 102, 241, 0.4);" onclick="event.stopPropagation(); showStudioWalkthroughModal();" title="Click to view full step-by-step walkthrough">
+                                                <span>📖</span> Walkthrough / How to Use
+                                            </button>
+                                            <span style="font-size: 0.72rem; color: #818cf8; text-decoration: underline;">Click to toggle tips</span>
+                                        </div>
+                                    </summary>
+                                    
+                                    <div style="margin-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.75rem;">
+                                        <!-- Verbose Prompting Tips Breakdown -->
+                                        <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 0.95rem;">
+                                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                                                <strong style="color: #67e8f9; font-size: 0.82rem;">✍️ 4 Plain-English Prompting Rules (No Coding Experience Needed):</strong>
+                                                <span style="font-size: 0.72rem; color: #94a3b8;">Describe what you want to see — AI writes the HTML &amp; CSS</span>
+                                            </div>
+                                            
+                                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.6rem;">
+                                                <!-- Tip 1 -->
+                                                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.07); border-radius: 6px; padding: 0.55rem 0.75rem;">
+                                                    <div style="font-weight: 700; color: #38bdf8; font-size: 0.76rem; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.25rem;">
+                                                        <span>🎯</span> Rule 1: Anchor to Outer Screen Margins
+                                                    </div>
+                                                    <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.4;">
+                                                        Keep the center clear for photo poses &amp; clothes! Anchor to: <strong>Top Arch</strong>, <strong>Left/Right Margins</strong>, <strong>Corner Suspensions</strong>, or <strong>Bottom Ticker Bar</strong>.
+                                                    </div>
+                                                </div>
+
+                                                <!-- Tip 2 -->
+                                                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.07); border-radius: 6px; padding: 0.55rem 0.75rem;">
+                                                    <div style="font-weight: 700; color: #a78bfa; font-size: 0.76rem; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.25rem;">
+                                                        <span>🌊</span> Rule 2: Describe Motion &amp; Physics
+                                                    </div>
+                                                    <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.4;">
+                                                        Say how items move: <em>"swaying like a wind chime with pendulum physics"</em>, <em>"slow upward floating embers"</em>, <em>"neon pulsing flicker"</em>, or <em>"scrolling ticker tape"</em>.
+                                                    </div>
+                                                </div>
+
+                                                <!-- Tip 3 -->
+                                                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.07); border-radius: 6px; padding: 0.55rem 0.75rem;">
+                                                    <div style="font-weight: 700; color: #facc15; font-size: 0.76rem; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.25rem;">
+                                                        <span>🎨</span> Rule 3: Textures &amp; Styling Keywords
+                                                    </div>
+                                                    <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.4;">
+                                                        Use descriptive words: <em>"frosted glass blur"</em>, <em>"hairline gold art-deco"</em>, <em>"embossed woodwork"</em>, <em>"cyberpunk scanlines"</em>, or <em>"glowing drop-shadows"</em>.
+                                                    </div>
+                                                </div>
+
+                                                <!-- Tip 4 -->
+                                                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.07); border-radius: 6px; padding: 0.55rem 0.75rem;">
+                                                    <div style="font-weight: 700; color: #4ade80; font-size: 0.76rem; display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.25rem;">
+                                                        <span>🛡️</span> Rule 4: Built-in Guest Touch Safety
+                                                    </div>
+                                                    <div style="font-size: 0.72rem; color: #94a3b8; line-height: 1.4;">
+                                                        Every element generated automatically uses <code>pointer-events: none</code> and <code>z-index: 1</code> so guest taps on kiosk buttons and cards are 100% responsive.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Clickable Inspiration Cards -->
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; flex-wrap: wrap; gap: 0.4rem;">
+                                            <div style="font-size: 0.76rem; font-weight: 700; color: #fde047; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.35rem;">
+                                                <span>⚡</span> Clickable Inspirations (1-Click Apply or View How-To Breakdown):
+                                            </div>
+                                            <span style="font-size: 0.71rem; color: #94a3b8;">Click <strong>ℹ️ How it works</strong> on any card to see generated HTML/CSS</span>
+                                        </div>
+
+                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.6rem;">
+                                            <!-- Example 1: Cyberpunk -->
+                                            <div style="background: rgba(0,0,0,0.45); border: 1px solid rgba(236, 72, 153, 0.35); border-radius: 8px; padding: 0.65rem 0.8rem; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <div>
+                                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                                                        <strong style="font-size: 0.8rem; color: #f472b6; display: flex; align-items: center; gap: 0.3rem;">
+                                                            <span>🕹️</span> Cyberpunk Arcade
+                                                        </strong>
+                                                        <span style="font-size: 0.66rem; color: #f472b6; background: rgba(236, 72, 153, 0.12); border: 1px solid rgba(236, 72, 153, 0.3); padding: 1px 6px; border-radius: 4px;">Retro Neon</span>
+                                                    </div>
+                                                    <div style="font-size: 0.72rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 0.55rem;">
+                                                        "Retro 80s arcade feel with a glowing pink neon logo reading 'Insert Coin' at top-right, a pixelated green high-score ticker along the bottom, and scanline CRT glow."
+                                                    </div>
+                                                </div>
+                                                <div style="display: flex; gap: 0.4rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.45rem;">
+                                                    <button type="button" class="admin-btn admin-btn-secondary" style="flex: 1; padding: 0.3rem 0.5rem; font-size: 0.71rem; display: flex; align-items: center; justify-content: center; gap: 0.3rem;" onclick="showExampleExplanationModal('cyberpunk')">
+                                                        <span>ℹ️</span> How it works
+                                                    </button>
+                                                    <button type="button" class="admin-btn admin-btn-accent" style="flex: 1.2; padding: 0.3rem 0.5rem; font-size: 0.71rem; display: flex; align-items: center; justify-content: center; gap: 0.3rem; background: linear-gradient(135deg, #ec4899, #8b5cf6);" onclick="applyNaturalLanguageExample('Retro 80s arcade feel with a glowing pink neon logo reading \'Insert Coin\' at top-right, a pixelated green high-score ticker along the bottom, and scanline CRT glow.', 'Cyberpunk 80s Retro Arcade')">
+                                                        <span>⚡</span> Use Example
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Example 2: Gatsby -->
+                                            <div style="background: rgba(0,0,0,0.45); border: 1px solid rgba(250, 204, 21, 0.35); border-radius: 8px; padding: 0.65rem 0.8rem; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <div>
+                                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                                                        <strong style="font-size: 0.8rem; color: #fde047; display: flex; align-items: center; gap: 0.3rem;">
+                                                            <span>🍸</span> 1920s Great Gatsby
+                                                        </strong>
+                                                        <span style="font-size: 0.66rem; color: #fde047; background: rgba(250, 204, 21, 0.12); border: 1px solid rgba(250, 204, 21, 0.3); padding: 1px 6px; border-radius: 4px;">Art-Deco Gold</span>
+                                                    </div>
+                                                    <div style="font-size: 0.72rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 0.55rem;">
+                                                        "Art-deco geometric gold frames along borders, swaying crystal chandeliers at top corners, and floating champagne sparkle particles."
+                                                    </div>
+                                                </div>
+                                                <div style="display: flex; gap: 0.4rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.45rem;">
+                                                    <button type="button" class="admin-btn admin-btn-secondary" style="flex: 1; padding: 0.3rem 0.5rem; font-size: 0.71rem; display: flex; align-items: center; justify-content: center; gap: 0.3rem;" onclick="showExampleExplanationModal('gatsby')">
+                                                        <span>ℹ️</span> How it works
+                                                    </button>
+                                                    <button type="button" class="admin-btn admin-btn-accent" style="flex: 1.2; padding: 0.3rem 0.5rem; font-size: 0.71rem; display: flex; align-items: center; justify-content: center; gap: 0.3rem; background: linear-gradient(135deg, #d97706, #f59e0b);" onclick="applyNaturalLanguageExample('Art-deco geometric gold frames along borders, swaying crystal chandeliers at top corners, and floating champagne sparkle particles.', '1920s Great Gatsby Gala')">
+                                                        <span>⚡</span> Use Example
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Example 3: Japanese Autumn -->
+                                            <div style="background: rgba(0,0,0,0.45); border: 1px solid rgba(249, 115, 22, 0.35); border-radius: 8px; padding: 0.65rem 0.8rem; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <div>
+                                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                                                        <strong style="font-size: 0.8rem; color: #fb923c; display: flex; align-items: center; gap: 0.3rem;">
+                                                            <span>⛩️</span> Cozy Japanese Autumn
+                                                        </strong>
+                                                        <span style="font-size: 0.66rem; color: #fb923c; background: rgba(249, 115, 22, 0.12); border: 1px solid rgba(249, 115, 22, 0.3); padding: 1px 6px; border-radius: 4px;">Lanterns &amp; Leaves</span>
+                                                    </div>
+                                                    <div style="font-size: 0.72rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 0.55rem;">
+                                                        "Warm wooden signboard header, softly swaying red paper chochin lanterns at the sides, and gently falling maple leaves drifting down."
+                                                    </div>
+                                                </div>
+                                                <div style="display: flex; gap: 0.4rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.45rem;">
+                                                    <button type="button" class="admin-btn admin-btn-secondary" style="flex: 1; padding: 0.3rem 0.5rem; font-size: 0.71rem; display: flex; align-items: center; justify-content: center; gap: 0.3rem;" onclick="showExampleExplanationModal('japanese')">
+                                                        <span>ℹ️</span> How it works
+                                                    </button>
+                                                    <button type="button" class="admin-btn admin-btn-accent" style="flex: 1.2; padding: 0.3rem 0.5rem; font-size: 0.71rem; display: flex; align-items: center; justify-content: center; gap: 0.3rem; background: linear-gradient(135deg, #c2410c, #ea580c);" onclick="applyNaturalLanguageExample('Warm wooden signboard header, softly swaying red paper chochin lanterns at the sides, and gently falling maple leaves drifting down.', 'Cozy Japanese Autumn')">
+                                                        <span>⚡</span> Use Example
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Example 4: Modern Minimalist Luxury -->
+                                            <div style="background: rgba(0,0,0,0.45); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 8px; padding: 0.65rem 0.8rem; display: flex; flex-direction: column; justify-content: space-between;">
+                                                <div>
+                                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                                                        <strong style="font-size: 0.8rem; color: #38bdf8; display: flex; align-items: center; gap: 0.3rem;">
+                                                            <span>💎</span> Minimalist Modern Luxury
+                                                        </strong>
+                                                        <span style="font-size: 0.66rem; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); padding: 1px 6px; border-radius: 4px;">Frosted Glass</span>
+                                                    </div>
+                                                    <div style="font-size: 0.72rem; color: #cbd5e1; line-height: 1.4; margin-bottom: 0.55rem;">
+                                                        "Sleek frosted glass pill banners, ultra-thin gold hairline borders, and subtle glowing pulse orbs behind the cards."
+                                                    </div>
+                                                </div>
+                                                <div style="display: flex; gap: 0.4rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.45rem;">
+                                                    <button type="button" class="admin-btn admin-btn-secondary" style="flex: 1; padding: 0.3rem 0.5rem; font-size: 0.71rem; display: flex; align-items: center; justify-content: center; gap: 0.3rem;" onclick="showExampleExplanationModal('luxury')">
+                                                        <span>ℹ️</span> How it works
+                                                    </button>
+                                                    <button type="button" class="admin-btn admin-btn-accent" style="flex: 1.2; padding: 0.3rem 0.5rem; font-size: 0.71rem; display: flex; align-items: center; justify-content: center; gap: 0.3rem; background: linear-gradient(135deg, #0284c7, #38bdf8);" onclick="applyNaturalLanguageExample('Sleek frosted glass pill banners, ultra-thin gold hairline borders, and subtle glowing pulse orbs behind the cards.', 'Minimalist Modern Luxury')">
+                                                        <span>⚡</span> Use Example
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </details>
+
+                                <!-- User Natural Language Description Textarea -->
                                 <div style="margin-bottom: 0.75rem;">
-                                    <label style="font-size: 0.8rem; color: #e2e8f0; display: block; margin-bottom: 0.35rem;">
-                                        Describe Any Custom Visual Object(s) or UI Elements to Manifest:
+                                    <label style="font-size: 0.8rem; font-weight: 600; color: #e2e8f0; display: block; margin-bottom: 0.35rem;">
+                                        Describe Any Custom Visual Object(s) or UI Atmosphere (In Plain English):
                                     </label>
-                                    <input id="adv-custom-objects" type="text" placeholder="e.g. Glowing neon sign reading 'Tokyo Nights', retro gold ticker tape along top, swaying paper lanterns, holographic crest, floating lotus flowers" style="width: 100%; font-size: 0.85rem; background: #07080f; border: 1px solid var(--border-subtle); color: #f8fafc;" oninput="updateFullSystematicGenAiPrompt()">
+                                    <textarea id="adv-custom-objects" rows="3" placeholder="e.g. Glowing neon sign reading 'Tokyo Nights', retro gold ticker tape along top, swaying paper lanterns, holographic crest, floating lotus flowers" style="width: 100%; font-size: 0.85rem; background: #07080f; border: 1px solid var(--border-subtle); color: #f8fafc; padding: 0.75rem; border-radius: var(--radius-sm); font-family: inherit; line-height: 1.45; resize: vertical;" oninput="updateFullSystematicGenAiPrompt()"></textarea>
                                 </div>
 
                                 <!-- Quick Suggestion Chips to click and append -->
                                 <div style="display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.85rem;">
-                                    <span style="font-size: 0.73rem; color: var(--text-dim); margin-right: 0.2rem;">Quick Ideas:</span>
+                                    <span style="font-size: 0.73rem; color: var(--text-dim); margin-right: 0.2rem;">Quick Chips:</span>
                                     <button type="button" class="chip-sm" onclick="addCustomObjectChip('🏮 Swaying Paper Lanterns')">+ 🏮 Swaying Lanterns</button>
                                     <button type="button" class="chip-sm" onclick="addCustomObjectChip('⚡ Glowing Neon Sign')">+ ⚡ Glowing Neon Sign</button>
                                     <button type="button" class="chip-sm" onclick="addCustomObjectChip('📜 Retro Ticker Tape Bar')">+ 📜 Retro Ticker Tape</button>
@@ -1324,6 +1493,8 @@
                 </div>
             </div>
         </div>
+    </div>
+
     <!-- Atmosphere Live Preview Modal -->
     <div id="atmosphere-preview-modal" class="modal-overlay" style="display: none; align-items: center; justify-content: center; z-index: 9999;">
         <div class="asset-picker-dialog" style="max-width: 960px; width: 92vw; height: 86vh; display: flex; flex-direction: column; overflow: hidden; padding: 0;">
@@ -1342,6 +1513,25 @@
             </div>
             <div style="flex: 1; position: relative; background: #000; overflow: hidden;">
                 <iframe id="atmosphere-preview-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Studio Guide & Example Explanation Modal -->
+    <div id="studio-guide-modal" class="modal-overlay" style="display: none; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(8px);">
+        <div class="asset-picker-dialog" style="max-width: 820px; width: 92vw; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; background: #0f111c; border: 1px solid rgba(99, 102, 241, 0.4); box-shadow: 0 10px 40px rgba(0,0,0,0.8); border-radius: 12px;">
+            <div class="modal-header" style="padding: 1rem 1.4rem; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(18, 20, 36, 0.95); display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                    <span id="studio-guide-modal-icon" style="font-size: 1.3rem;">💡</span>
+                    <h3 id="studio-guide-modal-title" style="margin: 0; font-size: 1.1rem; color: #fff; font-weight: 700;">How It Works &amp; Behind the Scenes</h3>
+                </div>
+                <button class="modal-close-btn" onclick="closeStudioGuideModal()" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+            <div id="studio-guide-modal-body" style="padding: 1.4rem; overflow-y: auto; flex: 1; font-size: 0.88rem; line-height: 1.6; color: #cbd5e1;">
+                <!-- Populated dynamically via showExampleExplanationModal() or showStudioWalkthroughModal() -->
+            </div>
+            <div id="studio-guide-modal-footer" style="padding: 0.9rem 1.4rem; border-top: 1px solid rgba(255,255,255,0.08); background: rgba(18, 20, 36, 0.95); display: flex; justify-content: flex-end; gap: 0.6rem;">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeStudioGuideModal()">Close</button>
             </div>
         </div>
     </div>
