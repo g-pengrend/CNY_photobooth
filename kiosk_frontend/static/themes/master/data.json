@@ -683,6 +683,20 @@
       "lighting": "Cinematic ambient studio lighting",
       "category": "male",
       "gender": "male"
+    },
+    {
+      "id": "crimson-saffron-brocade-heritage-lehenga",
+      "code": "C59",
+      "title": "Crimson & Saffron Brocade Heritage Lehenga",
+      "name": "Crimson & Saffron Brocade Heritage Lehenga",
+      "description": "A voluminous festive Banarasi silk lehenga choli layered with resham threadwork, hand-embroidered gotta patti, and a sheer gossamer dupatta with antique zardozi trim.",
+      "image": "/static/themes/master/images/clothes/crimson-saffron-brocade-heritage-lehenga.png",
+      "prompt": "A majestic festive lehenga ensemble featuring a voluminous, flared skirt cut from midnight crimson Banarasi georgette and brocade silk, densely patterned with hand-loomed gold and copper kadwa weave medallions. The sweeping hemline is reinforced with a broad saffron-orange velvet border loaded with intricate gotta patti, sequin borders, and fine metallic zardozi floral vines, finished with handmade latkan tassels suspended on braided golden cords. The accompanying crop choli features a sweetheart neckline in structured silk brocade, accented with bullion embroidery and micro-mirror embellishments. Draped over the shoulder is a feather-light saffron organza dupatta, edged with scalloped gold threadwork and delicate scattered golden mitti sequins that shimmer in the ambient light. Complemented by grand polki and emerald jewelry, including an ornate kundan bib necklace, matching chandelier earrings, and a delicate gold hathphool.",
+      "prompt_modifier": "A majestic festive lehenga ensemble featuring a voluminous, flared skirt cut from midnight crimson Banarasi georgette and brocade silk, densely patterned with hand-loomed gold and copper kadwa weave medallions. The sweeping hemline is reinforced with a broad saffron-orange velvet border loaded with intricate gotta patti, sequin borders, and fine metallic zardozi floral vines, finished with handmade latkan tassels suspended on braided golden cords. The accompanying crop choli features a sweetheart neckline in structured silk brocade, accented with bullion embroidery and micro-mirror embellishments. Draped over the shoulder is a feather-light saffron organza dupatta, edged with scalloped gold threadwork and delicate scattered golden mitti sequins that shimmer in the ambient light. Complemented by grand polki and emerald jewelry, including an ornate kundan bib necklace, matching chandelier earrings, and a delicate gold hathphool.",
+      "mapping_desc": "A voluminous festive Banarasi silk lehenga choli layered with resham threadwork, hand-embroidered gotta patti, and a sheer gossamer dupatta with antique zardozi trim.",
+      "lighting": "Cinematic ambient studio lighting",
+      "category": "female",
+      "gender": "female"
     }
   ],
   "poses": [
@@ -996,6 +1010,78 @@
       "prompt": "Facing the camera with both arms spread wide open to either side at shoulder level, palms facing forward. Standing balanced with feet slightly apart, chest open, and a bright, radiant beaming smile.",
       "prompt_modifier": "Facing the camera with both arms spread wide open to either side at shoulder level, palms facing forward. Standing balanced with feet slightly apart, chest open, and a bright, radiant beaming smile.",
       "mapping_desc": "A welcoming pose with both arms extended straight out to the sides.",
+      "lighting": "Cinematic ambient studio lighting"
+    },
+    {
+      "id": "radiant-diya-offering-pose",
+      "code": "P36",
+      "title": "Radiant Diya Offering Pose",
+      "name": "Radiant Diya Offering Pose",
+      "description": "A charming celebratory stance holding a glowing earthen diya forward with both hands held chest-level to keep the face fully clear.",
+      "image": "/static/themes/master/images/poses/radiant-diya-offering-pose.png",
+      "prompt": "Facing the camera with both hands gently cupped together at chest height holding a small glowing diya, elbows held comfortably away from the body, standing upright with feet shoulder-width apart, and offering a bright, warm smile.",
+      "prompt_modifier": "Facing the camera with both hands gently cupped together at chest height holding a small glowing diya, elbows held comfortably away from the body, standing upright with feet shoulder-width apart, and offering a bright, warm smile.",
+      "mapping_desc": "A charming celebratory stance holding a glowing earthen diya forward with both hands held chest-level to keep the face fully clear.",
+      "lighting": "Cinematic ambient studio lighting"
+    },
+    {
+      "id": "festive-namaste-greeting",
+      "code": "P37",
+      "title": "Festive Namaste Greeting",
+      "name": "Festive Namaste Greeting",
+      "description": "A respectful and joyful traditional greeting posture with hands pressed together at mid-chest level.",
+      "image": "/static/themes/master/images/poses/festive-namaste-greeting.png",
+      "prompt": "Facing the camera with palms pressed together in a neat Namaste gesture centered at lower chest level well below the chin, shoulders relaxed back, spine straight, head aligned upright with an inviting, cheerful expression.",
+      "prompt_modifier": "Facing the camera with palms pressed together in a neat Namaste gesture centered at lower chest level well below the chin, shoulders relaxed back, spine straight, head aligned upright with an inviting, cheerful expression.",
+      "mapping_desc": "A respectful and joyful traditional greeting posture with hands pressed together at mid-chest level.",
+      "lighting": "Cinematic ambient studio lighting"
+    },
+    {
+      "id": "wakanda-forever",
+      "code": "P38",
+      "title": "Wakanda Forever",
+      "name": "Wakanda Forever",
+      "description": "An iconic, honorable stance featuring crossed forearms held tightly across the chest, carefully positioned low enough to keep the chin, mouth, and full face completely unobstructed.",
+      "image": "/static/themes/master/images/poses/wakanda-forever.png",
+      "prompt": "Facing the camera with arms crossed over the mid-chest in a firm \"X\" formation, hands clenched into fists resting against opposite clavicles well below the chin, shoulders pulled back with an upright spine, standing proud and projecting a calm, dignified expression.",
+      "prompt_modifier": "Facing the camera with arms crossed over the mid-chest in a firm \"X\" formation, hands clenched into fists resting against opposite clavicles well below the chin, shoulders pulled back with an upright spine, standing proud and projecting a calm, dignified expression.",
+      "mapping_desc": "An iconic, honorable stance featuring crossed forearms held tightly across the chest, carefully positioned low enough to keep the chin, mouth, and full face completely unobstructed.",
+      "lighting": "Cinematic ambient studio lighting"
+    },
+    {
+      "id": "champion-lightning-bolt-pose",
+      "code": "P39",
+      "title": "Champion Lightning Bolt Pose",
+      "name": "Champion Lightning Bolt Pose",
+      "description": "The iconic celebratory archer stance with one arm pointing diagonally skyward and the other drawn back near the chest.",
+      "image": "/static/themes/master/images/poses/champion-lightning-bolt-pose.png",
+      "prompt": "Facing the camera with the body angled slightly but chest open, left arm fully extended pointing high into the upper diagonal, right elbow bent drawing the hand back near the upper chest below the jawline, standing in a grounded wide stance with a triumphant, beaming grin.",
+      "prompt_modifier": "Facing the camera with the body angled slightly but chest open, left arm fully extended pointing high into the upper diagonal, right elbow bent drawing the hand back near the upper chest below the jawline, standing in a grounded wide stance with a triumphant, beaming grin.",
+      "mapping_desc": "The iconic celebratory archer stance with one arm pointing diagonally skyward and the other drawn back near the chest.",
+      "lighting": "Cinematic ambient studio lighting"
+    },
+    {
+      "id": "double-bicep-champion-flex",
+      "code": "P40",
+      "title": "Double Bicep Champion Flex",
+      "name": "Double Bicep Champion Flex",
+      "description": "A classic athletic victory flex showcasing strength while framing the head cleanly without any hand overlap.",
+      "image": "/static/themes/master/images/poses/double-bicep-champion-flex.png",
+      "prompt": "Facing the camera with both arms raised outward in a classic double bicep flex, fists clenched and elbows held parallel to the shoulders wide enough to leave the entire head and neck completely free, standing tall with a bold, energetic grin.",
+      "prompt_modifier": "Facing the camera with both arms raised outward in a classic double bicep flex, fists clenched and elbows held parallel to the shoulders wide enough to leave the entire head and neck completely free, standing tall with a bold, energetic grin.",
+      "mapping_desc": "A classic athletic victory flex showcasing strength while framing the head cleanly without any hand overlap.",
+      "lighting": "Cinematic ambient studio lighting"
+    },
+    {
+      "id": "luminous-diya-offering-pose",
+      "code": "P41",
+      "title": "Luminous Diya Offering Pose",
+      "name": "Luminous Diya Offering Pose",
+      "description": "A celebratory stance presenting a warm, glowing clay lamp with both hands cupped safely at chest level to keep the face fully clear.",
+      "image": "/static/themes/master/images/poses/luminous-diya-offering-pose.png",
+      "prompt": "Facing the camera with both hands gently cupped together holding an illuminated brass diya at lower chest level well below the chin, elbows angled comfortably outward, standing upright with feet shoulder-width apart, and offering a bright, warm smile.",
+      "prompt_modifier": "Facing the camera with both hands gently cupped together holding an illuminated brass diya at lower chest level well below the chin, elbows angled comfortably outward, standing upright with feet shoulder-width apart, and offering a bright, warm smile.",
+      "mapping_desc": "A celebratory stance presenting a warm, glowing clay lamp with both hands cupped safely at chest level to keep the face fully clear.",
       "lighting": "Cinematic ambient studio lighting"
     }
   ],
@@ -1336,6 +1422,18 @@
       "prompt": "A cinematic, wide-angle view across an empty tiled rooftop terrace at deep twilight. Colorful handcrafted paper festival lanterns (kandils) in geometric diamond and star shapes hang from overhead bamboo canopies, glowing softly from within in shades of crimson, saffron, and magenta. The terrace parapet is lined with small burning clay diyas that trace the outer perimeter. Below in the soft-focus distance, the vibrant, blurred glow of festive streetlights illuminates the silhouettes of historic shophouse roofs beneath a clear night sky.",
       "prompt_modifier": "A cinematic, wide-angle view across an empty tiled rooftop terrace at deep twilight. Colorful handcrafted paper festival lanterns (kandils) in geometric diamond and star shapes hang from overhead bamboo canopies, glowing softly from within in shades of crimson, saffron, and magenta. The terrace parapet is lined with small burning clay diyas that trace the outer perimeter. Below in the soft-focus distance, the vibrant, blurred glow of festive streetlights illuminates the silhouettes of historic shophouse roofs beneath a clear night sky.",
       "mapping_desc": "Captures a panoramic rooftop terrace glowing with handmade festival paper lanterns and clay lamps overlooking a decorated historic neighborhood.",
+      "lighting": "Cinematic ambient studio lighting"
+    },
+    {
+      "id": "little-india-festive-light-up-street-archway",
+      "code": "B38",
+      "title": "Little India Festive Light-Up & Street Archway",
+      "name": "Little India Festive Light-Up & Street Archway",
+      "description": "A vibrant, richly illuminated street celebration bathed in radiant neon lights, majestic peacock arches, and the gentle buzz of festive strollers at dusk.",
+      "image": "/static/themes/master/images/backgrounds/little-india-festive-light-up-street-archway.png",
+      "prompt": "A wide-angle, cinematic street-level perspective looking down a bustling avenue in Singapore’s Little India at dusk. Towering festive arches adorned with elaborate golden peacock motifs, neon lotus emblems, and thousands of shimmering micro-LED fairy lights stretch overhead toward the vanishing point. The asphalt below catches golden reflections from warm streetlamps and ambient overhead illumination. In the mid-ground and background, soft-focus silhouettes of families and celebrants dressed in vibrant silk saris and kurtas stroll leisurely beneath the glow, admiring the street decor. Gentle traces of fragrant sandalwood incense haze drift through the air, creating a radiant golden-violet twilight bokeh while leaving the wide foreground spacious and softly lit for an interactive portrait.",
+      "prompt_modifier": "A wide-angle, cinematic street-level perspective looking down a bustling avenue in Singapore’s Little India at dusk. Towering festive arches adorned with elaborate golden peacock motifs, neon lotus emblems, and thousands of shimmering micro-LED fairy lights stretch overhead toward the vanishing point. The asphalt below catches golden reflections from warm streetlamps and ambient overhead illumination. In the mid-ground and background, soft-focus silhouettes of families and celebrants dressed in vibrant silk saris and kurtas stroll leisurely beneath the glow, admiring the street decor. Gentle traces of fragrant sandalwood incense haze drift through the air, creating a radiant golden-violet twilight bokeh while leaving the wide foreground spacious and softly lit for an interactive portrait.",
+      "mapping_desc": "A vibrant, richly illuminated street celebration bathed in radiant neon lights, majestic peacock arches, and the gentle buzz of festive strollers at dusk.",
       "lighting": "Cinematic ambient studio lighting"
     }
   ]
