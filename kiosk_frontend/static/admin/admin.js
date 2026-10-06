@@ -3350,7 +3350,7 @@ window.showStudioWalkthroughModal = function () {
     const footerEl = document.getElementById('studio-guide-modal-footer');
     if (!modal || !bodyEl) return;
 
-    if (titleEl) titleEl.innerText = '📖 Photobooth Theme Studio: Complete Walkthrough';
+    if (titleEl) titleEl.innerText = '📖 Photobooth Theme Studio: Walkthrough & Prompting Rules';
     if (iconEl) iconEl.innerText = '🚀';
 
     bodyEl.innerHTML = `
@@ -3359,49 +3359,99 @@ window.showStudioWalkthroughModal = function () {
                 Theme Studio allows you to build complete, customized, animated photobooth themes in minutes using Generative AI (ChatGPT, Claude, or Gemini) without needing frontend engineering skills.
             </p>
 
-            <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.2rem;">
-                <!-- Step 1 -->
-                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 8px; padding: 0.9rem 1.1rem;">
-                    <div style="font-weight: 700; color: #818cf8; font-size: 0.9rem; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <span>💡</span> Step 1: Describe Your Event Vision in Plain English
+            <!-- 4 Plain-English Prompting Rules -->
+            <div style="margin-bottom: 1.4rem;">
+                <div style="font-size: 0.82rem; font-weight: 700; color: #67e8f9; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem;">
+                    ✍️ 4 Plain-English Prompting Rules (No Coding Needed):
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.65rem;">
+                    <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 6px; padding: 0.7rem 0.85rem;">
+                        <div style="font-weight: 700; color: #38bdf8; font-size: 0.78rem; margin-bottom: 0.25rem;">
+                            🎯 Rule 1: Anchor to Outer Screen Margins
+                        </div>
+                        <div style="font-size: 0.74rem; color: #94a3b8; line-height: 1.45;">
+                            Keep the center 80% clear for guest photos, pose cards & outfits! Anchor visual items to: <strong>Top Arch</strong>, <strong>Left/Right Margins</strong>, <strong>Corner Suspensions</strong>, or <strong>Bottom Ticker Bar</strong>.
+                        </div>
                     </div>
-                    <div style="font-size: 0.82rem; color: #94a3b8; line-height: 1.5;">
-                        Enter your theme concept or click any of the 4 inspiration examples. Mention any specific visual objects you'd like (e.g. <em>"neon sign"</em>, <em>"swaying lanterns"</em>, <em>"ticker tape"</em>). Or leave it blank and the AI will creatively brainstorm a unique concept for you!
+                    <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(167, 139, 250, 0.25); border-radius: 6px; padding: 0.7rem 0.85rem;">
+                        <div style="font-weight: 700; color: #a78bfa; font-size: 0.78rem; margin-bottom: 0.25rem;">
+                            🌊 Rule 2: Describe Motion & Physics
+                        </div>
+                        <div style="font-size: 0.74rem; color: #94a3b8; line-height: 1.45;">
+                            Describe how items move: <em>"swaying like a wind chime with pendulum physics"</em>, <em>"slow upward floating embers"</em>, <em>"neon pulsing flicker"</em>, or <em>"scrolling marquee ticker"</em>. AI translates this into 60fps CSS keyframes.
+                        </div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(250, 204, 21, 0.25); border-radius: 6px; padding: 0.7rem 0.85rem;">
+                        <div style="font-weight: 700; color: #facc15; font-size: 0.78rem; margin-bottom: 0.25rem;">
+                            🎨 Rule 3: Textures & Modern Aesthetics
+                        </div>
+                        <div style="font-size: 0.74rem; color: #94a3b8; line-height: 1.45;">
+                            Use sensory keywords: <em>"frosted glass blur"</em>, <em>"hairline gold art-deco"</em>, <em>"embossed woodwork"</em>, <em>"cyberpunk scanlines"</em>, or <em>"glowing drop-shadows"</em>.
+                        </div>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.35); border: 1px solid rgba(74, 222, 128, 0.25); border-radius: 6px; padding: 0.7rem 0.85rem;">
+                        <div style="font-weight: 700; color: #4ade80; font-size: 0.78rem; margin-bottom: 0.25rem;">
+                            🛡️ Rule 4: Built-in Guest Touch Safety
+                        </div>
+                        <div style="font-size: 0.74rem; color: #94a3b8; line-height: 1.45;">
+                            All generated atmosphere elements automatically use <code>pointer-events: none</code> and <code>z-index: 1</code> so guest taps on kiosk buttons and cards are always responsive.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Try Preset Elements Tip -->
+            <div style="background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 8px; padding: 0.85rem 1.1rem; margin-bottom: 1.4rem;">
+                <div style="font-weight: 700; color: #a5b4fc; font-size: 0.84rem; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <span>🎋</span> Tip: Try Preset Atmospheric Screen Elements
+                </div>
+                <div style="font-size: 0.78rem; color: #cbd5e1; line-height: 1.5;">
+                    Under the custom objects box in the main screen, you can expand <strong>"Preset Atmospheric Screen Elements"</strong> to toggle vertical side banners, a top decorative arch, swaying corner ornaments, and floating celebratory particles.
+                </div>
+            </div>
+
+            <!-- 4 Step Workflow -->
+            <div style="font-size: 0.82rem; font-weight: 700; color: #fde047; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem;">
+                🚀 Complete 4-Step Studio Workflow:
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.2rem;">
+                <!-- Step 1 -->
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 8px; padding: 0.85rem 1rem;">
+                    <div style="font-weight: 700; color: #818cf8; font-size: 0.86rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>💡</span> Step 1: Describe Your Vision or Pick an Inspiration
+                    </div>
+                    <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
+                        Enter your theme concept or click any of the 4 inspiration examples. Mention any specific visual objects you'd like (e.g. <em>"neon sign"</em>, <em>"swaying lanterns"</em>, <em>"ticker tape"</em>). Or leave it blank and the AI will brainstorm an exciting concept!
                     </div>
                 </div>
 
                 <!-- Step 2 -->
-                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 0.9rem 1.1rem;">
-                    <div style="font-weight: 700; color: #38bdf8; font-size: 0.9rem; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <span>📋</span> Step 2: One-Click Copy the GenAI Prompt Template
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 0.85rem 1rem;">
+                    <div style="font-weight: 700; color: #38bdf8; font-size: 0.86rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>📋</span> Step 2: One-Click Copy the GenAI Prompt
                     </div>
-                    <div style="font-size: 0.82rem; color: #94a3b8; line-height: 1.5;">
-                        Click <strong>"Copy GenAI Prompt Template"</strong>. Open ChatGPT, Claude, or Gemini in your browser and paste it. The AI will output 3 structured code blocks:
-                        <ul style="margin: 0.35rem 0 0 1.2rem; color: #cbd5e1;">
-                            <li><strong>Block 1: theme_identity.json</strong> — Titles, colors, fonts, waiting screen sequence</li>
-                            <li><strong>Block 2: decorations.html</strong> — Semantic markup for banners, arches, lanterns, neon signs</li>
-                            <li><strong>Block 3: style.css</strong> — Keyframe animations, screen coordinates &amp; glowing shadows</li>
-                        </ul>
+                    <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
+                        Click <strong>"Copy Full Theme Prompt"</strong> (for full themes) or <strong>"Copy Atmosphere Only Prompt"</strong> (just for decorations). Open ChatGPT, Claude, or Gemini in your browser and paste it.
                     </div>
                 </div>
 
                 <!-- Step 3 -->
-                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: 8px; padding: 0.9rem 1.1rem;">
-                    <div style="font-weight: 700; color: #facc15; font-size: 0.9rem; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: 8px; padding: 0.85rem 1rem;">
+                    <div style="font-weight: 700; color: #facc15; font-size: 0.86rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem;">
                         <span>📥</span> Step 3: Paste Response (Smart Auto-Split Enabled)
                     </div>
-                    <div style="font-size: 0.82rem; color: #94a3b8; line-height: 1.5;">
-                        Paste the AI's response into Step 2 below. You can paste the entire multi-block text into the Block 1 box, and our intelligent parser will automatically split and distribute the HTML and CSS into Tabs 2 and 3!
+                    <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
+                        Paste the AI's response into Step 2 below. You can paste the entire multi-block text into the Block 1 box, and our intelligent parser will automatically distribute the HTML and CSS into Tabs 2 and 3!
                     </div>
                 </div>
 
                 <!-- Step 4 -->
-                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 8px; padding: 0.9rem 1.1rem;">
-                    <div style="font-weight: 700; color: #4ade80; font-size: 0.9rem; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <span>🚀</span> Step 4: Compile &amp; Live Preview Instantly
+                <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(74, 222, 128, 0.3); border-radius: 8px; padding: 0.85rem 1rem;">
+                    <div style="font-weight: 700; color: #4ade80; font-size: 0.86rem; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span>👁️</span> Step 4: Temporary Live Preview &amp; Safe Saving
                     </div>
-                    <div style="font-size: 0.82rem; color: #94a3b8; line-height: 1.5;">
-                        Click <strong>"Compile &amp; Live Preview"</strong>. The kiosk engine will immediately compile the files and show an interactive live simulation. When satisfied, hit <strong>"Save Theme"</strong> to deploy it directly to the guest kiosk!
+                    <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
+                        Click <strong>"Compile &amp; Live Preview"</strong> to launch an in-memory simulation. It runs entirely in temporary memory without touching disk or saving to the sidebar. When satisfied, click <strong>"Save Theme"</strong> to persist it permanently!
                     </div>
                 </div>
             </div>
@@ -3412,7 +3462,7 @@ window.showStudioWalkthroughModal = function () {
         footerEl.innerHTML = `
             <button type="button" class="admin-btn admin-btn-secondary" onclick="closeStudioGuideModal()">Close Walkthrough</button>
             <button type="button" class="admin-btn admin-btn-accent" onclick="closeStudioGuideModal(); copyFullSystematicGenAiPrompt();" style="display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1.2rem; font-weight: 700;">
-                <span>📋</span> Copy GenAI Prompt Template Now
+                <span>📋</span> Copy Full Theme Prompt Now
             </button>
         `;
     }
@@ -3872,78 +3922,40 @@ window.openAtmospherePreviewModal = async function () {
         window.autoApplyIdentityJsonOnInput(true);
     }
 
-    // 2. Read latest inputs from the form
+    // 2. Read latest inputs from the form / in-memory draft
     const theme = readFormFields();
-    let slug = theme.slug || studio.activeTheme?.slug;
-    if (!slug) {
-        slug = 'new_theme_' + Math.floor(Date.now() % 10000);
-    }
-    slug = slug.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
+    let slug = theme.slug || studio.activeTheme?.slug || 'preview_draft';
+    slug = slug.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '') || 'preview_draft';
     theme.slug = slug;
     if (!theme.title) {
         theme.title = 'Untitled Draft ✨';
     }
 
-    // Keep inputs synced
-    setValue('inp-slug', slug);
-    setValue('inp-slug-adv', slug);
-    setValue('inp-title', theme.title);
-    setValue('inp-title-adv', theme.title);
-
-    // If active theme had a placeholder slug that changed, remove old placeholder
-    const prevSlug = studio.activeTheme?.slug;
-    if (prevSlug && prevSlug !== slug && studio.themes) {
-        studio.themes = studio.themes.filter(t => t.slug !== prevSlug);
-    }
-
-    studio.activeTheme = Object.assign(studio.activeTheme || {}, theme);
-    studio.activeTheme.slug = slug;
-    studio.activeTheme.status = 'draft';
-    studio.activeTheme.isUnsavedDraft = false;
-
-    // 3. Compile and save the full theme package to disk so backend directories, theme.json, data.json, and atmosphere files exist
+    // 3. Read custom decorations HTML & custom CSS from editor tabs
     const decorations_html = document.getElementById('adv-decorations-html')?.value || '';
     const custom_css = document.getElementById('adv-custom-css')?.value || '';
 
-    const payload = {
-        theme: studio.activeTheme,
+    // 4. Build in-memory preview payload (DO NOT SAVE TO DISK OR DATABASE)
+    const previewPayload = {
+        theme: theme,
         data: studio.activeData || { clothes: [], poses: [], backgrounds: [] },
-        bindings: studio.activeBindings || null,
-        workflow: studio.uploadedWorkflow || null,
         decorations_html: decorations_html,
         custom_css: custom_css
     };
 
     try {
-        const res = await fetch('/api/admin/theme/save', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        sessionStorage.setItem('kiosk_live_preview_payload', JSON.stringify(previewPayload));
+    } catch (e) {
+        console.warn('Could not cache preview payload into sessionStorage:', e);
+    }
 
-        if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.error || 'Failed to compile theme for preview');
-        }
-
-        // Register compiled draft in sidebar and keep it selected
-        await loadThemes(slug, false);
-        studio.activeTheme = theme;
-        studio.activeTheme.slug = slug;
-        studio.activeTheme.status = 'draft';
-        studio.activeTheme.isUnsavedDraft = false;
-        renderThemeSidebar();
-
-        // 4. Open Live Preview modal pointing to Universal Engine preview
-        const modal = document.getElementById('atmosphere-preview-modal');
-        const iframe = document.getElementById('atmosphere-preview-iframe');
-        if (modal && iframe) {
-            iframe.src = `/${slug}?engine=universal&preview=atmosphere&t=${Date.now()}`;
-            modal.style.display = 'flex';
-            showToast(`⚡ Live Preview compiled for "${theme.title || slug}"!`, 'success');
-        }
-    } catch (err) {
-        showToast('Compile preview error: ' + err.message, 'error');
+    // 5. Open Live Preview modal pointing to Universal Engine in-memory preview
+    const modal = document.getElementById('atmosphere-preview-modal');
+    const iframe = document.getElementById('atmosphere-preview-iframe');
+    if (modal && iframe) {
+        iframe.src = `/preview_draft?engine=universal&preview=draft&t=${Date.now()}`;
+        modal.style.display = 'flex';
+        showToast(`👁️ Temporary live preview loaded for "${theme.title}"! (Not saved to disk)`, 'info');
     }
 };
 
@@ -3952,5 +3964,25 @@ window.closeAtmospherePreviewModal = function () {
     const iframe = document.getElementById('atmosphere-preview-iframe');
     if (modal) modal.style.display = 'none';
     if (iframe) iframe.src = '';
+
+    // Clear temporary in-memory session payload
+    try {
+        sessionStorage.removeItem('kiosk_live_preview_payload');
+    } catch (e) {}
+
+    // Show clear reminder that this preview was not saved to disk
+    showToast('ℹ️ Preview closed. Note: This preview was NOT saved. Click "Save Theme" on the left if you are happy with it, or edit your prompt to re-create it.', 'warning', 7000);
+};
+
+window.saveDraftFromPreviewModal = async function () {
+    await saveActiveTheme();
+    const modal = document.getElementById('atmosphere-preview-modal');
+    if (modal) modal.style.display = 'none';
+    const iframe = document.getElementById('atmosphere-preview-iframe');
+    if (iframe) iframe.src = '';
+    try {
+        sessionStorage.removeItem('kiosk_live_preview_payload');
+    } catch (e) {}
+    showToast('💾 Theme successfully saved to database & disk!', 'success');
 };
 

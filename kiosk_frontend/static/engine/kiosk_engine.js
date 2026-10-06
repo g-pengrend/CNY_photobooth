@@ -29,6 +29,69 @@ const state = {
 // 1. Initialization & Theme Loading
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', async () => {
+    // 0. Check for in-memory Temporary Draft Preview (Zero Disk Write)
+    const urlParams = new URLSearchParams(window.location.search);
+    const isTempDraftPreview = urlParams.get('preview') === 'draft' || window.location.pathname.includes('preview_draft');
+
+    if (isTempDraftPreview) {
+        let previewPayload = null;
+        try {
+            const raw = sessionStorage.getItem('kiosk_live_preview_payload');
+            if (raw) previewPayload = JSON.parse(raw);
+        } catch (e) {
+            console.warn('[Kiosk Engine] Could not read live preview payload from sessionStorage:', e);
+        }
+
+        if (previewPayload && previewPayload.theme) {
+            state.theme = previewPayload.theme;
+            state.slug = state.theme.slug || 'preview_draft';
+            state.selections.theme = state.slug;
+
+            // Use provided data or fallback to default asset catalog for realistic card preview
+            let catalogData = previewPayload.data;
+            if (!catalogData || (!catalogData.clothes?.length && !catalogData.poses?.length && !catalogData.backgrounds?.length)) {
+                try {
+                    const fallbackRes = await fetch('/api/theme/cny/data');
+                    if (fallbackRes.ok) catalogData = await fallbackRes.json();
+                } catch (e) {
+                    catalogData = { clothes: [], poses: [], backgrounds: [] };
+                }
+            }
+            state.data = catalogData;
+
+            // Apply Look & Feel
+            applyThemeStyles(state.theme);
+
+            // Inject custom inline CSS from style.css editor
+            if (previewPayload.custom_css) {
+                let inlineStyle = document.getElementById('custom-theme-inline-css');
+                if (!inlineStyle) {
+                    inlineStyle = document.createElement('style');
+                    inlineStyle.id = 'custom-theme-inline-css';
+                    document.head.appendChild(inlineStyle);
+                }
+                inlineStyle.textContent = previewPayload.custom_css;
+            }
+
+            // Inject custom persistent HTML from decorations.html editor
+            const decoContainer = document.getElementById('persistent-decorations');
+            if (decoContainer && previewPayload.decorations_html) {
+                decoContainer.innerHTML = previewPayload.decorations_html;
+            } else {
+                initAtmosphere(state.theme);
+            }
+
+            // Populate Screen Content
+            initWelcomeScreen(state.theme);
+            renderSelectionGrids(state.data);
+            bindEventHandlers();
+
+            console.log('[Kiosk Engine] Running in TEMPORARY DRAFT PREVIEW mode (No files saved to disk).');
+            return;
+        }
+    }
+
+    // Standard Theme Loading
     // Resolve slug from URL path, e.g. /uits -> uits
     const match = window.location.pathname.match(/\/([^\/]+)/);
     state.slug = match ? match[1] : 'cny';

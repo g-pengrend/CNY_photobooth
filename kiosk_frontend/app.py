@@ -329,6 +329,15 @@ def serve_theme_image_fallback(theme_slug, category, filename):
     return "Image Not Found", 404
 
 
+@app.route('/preview_draft')
+def preview_draft():
+    """Serve universal engine in temporary in-memory preview mode without creating files on disk."""
+    engine_html = os.path.join(app.static_folder, 'engine', 'kiosk.html')
+    if os.path.exists(engine_html):
+        return send_from_directory(os.path.join(app.static_folder, 'engine'), 'kiosk.html')
+    return "Universal Kiosk Engine Not Found", 404
+
+
 @app.route('/<theme_slug>')
 def serve_theme(theme_slug):
     """Serve theme: custom index.html if present, otherwise Universal Engine."""
