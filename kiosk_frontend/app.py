@@ -120,9 +120,6 @@ def manage_theme_config(theme_slug):
         theme_dir = os.path.join(app.static_folder, 'themes', theme_slug)
         dgx_theme_dir = os.path.join(base_dir, '..', 'dgx_photobooth', 'templates', 'themes', theme_slug)
 
-        if not os.path.exists(theme_dir):
-            return jsonify({'error': f'Theme "{theme_slug}" not found'}), 404
-
         try:
             import shutil
             if os.path.exists(theme_dir):
@@ -161,9 +158,6 @@ def admin_delete_theme_post():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     theme_dir = os.path.join(app.static_folder, 'themes', theme_slug)
     dgx_theme_dir = os.path.join(base_dir, '..', 'dgx_photobooth', 'templates', 'themes', theme_slug)
-
-    if not os.path.exists(theme_dir):
-        return jsonify({'error': f'Theme "{theme_slug}" not found'}), 404
 
     try:
         import shutil

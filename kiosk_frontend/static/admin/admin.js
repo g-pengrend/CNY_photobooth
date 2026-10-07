@@ -59,7 +59,7 @@ async function loadThemes(targetSlug = null, autoSelectFirst = false) {
         studio.themes = allThemes.filter(t => t.slug !== 'master');
         for (const draft of unsavedDrafts) {
             if (!studio.themes.some(t => t.slug === draft.slug)) {
-                studio.themes.push(draft);
+                studio.themes.unshift(draft);
             }
         }
 
@@ -69,7 +69,9 @@ async function loadThemes(targetSlug = null, autoSelectFirst = false) {
         const matchingTheme = activeSlug ? studio.themes.find(t => t.slug === activeSlug) : null;
 
         if (matchingTheme) {
-            // Keep the active theme highlighted without wiping form inputs or switching themes
+            if (!matchingTheme.isUnsavedDraft && studio.activeTheme?.slug === activeSlug) {
+                studio.activeTheme.isUnsavedDraft = false;
+            }
             return;
         }
 
@@ -123,8 +125,8 @@ function renderThemeSidebar() {
     });
 }
 
-async function selectTheme(slug) {
-    if (studio.activeTheme?.slug === slug && studio.activeTheme?.isUnsavedDraft) {
+async function selectTheme(slug, force = false) {
+    if (!force && studio.activeTheme?.slug === slug && studio.activeTheme?.isUnsavedDraft) {
         return;
     }
     try {
@@ -135,10 +137,13 @@ async function selectTheme(slug) {
 
         if (!themeRes.ok) throw new Error('Theme not found');
         studio.activeTheme = await themeRes.json();
+        studio.activeTheme.isUnsavedDraft = false;
         studio.activeData = dataRes.ok ? await dataRes.json() : { clothes: [], poses: [], backgrounds: [] };
 
         // Remove in-memory unsaved draft placeholder if another theme is selected
         studio.themes = studio.themes.filter(t => !(t.isUnsavedDraft && t.slug !== slug));
+        const cur = studio.themes.find(t => t.slug === slug);
+        if (cur) cur.isUnsavedDraft = false;
 
         renderThemeSidebar();
         populateFormFields(studio.activeTheme);
@@ -171,10 +176,25 @@ async function loadExistingBindings(slug) {
     } catch (e) { }
 }
 
-function createNewTheme() {
-    const defaultSlug = 'new_theme_' + Math.floor(Date.now() % 10000);
+function getUniqueNewThemeSlug() {
+    const existingSlugs = new Set((studio.themes || []).map(t => (t.slug || '').toLowerCase()));
+    if (studio.activeTheme?.slug) {
+        existingSlugs.add(studio.activeTheme.slug.toLowerCase());
+    }
+    let counter = 1;
+    while (existingSlugs.has(`new_theme_${counter}`)) {
+        counter++;
+    }
+    return `new_theme_${counter}`;
+}
 
-    // Add placeholder into sidebar themes list
+function createNewTheme() {
+    // Remove any unpersisted in-memory draft placeholders first
+    studio.themes = (studio.themes || []).filter(t => !t.isUnsavedDraft);
+
+    const defaultSlug = getUniqueNewThemeSlug();
+
+    // Add placeholder into sidebar themes list at the top
     const placeholder = {
         slug: defaultSlug,
         title: 'Untitled Theme ✨',
@@ -182,9 +202,7 @@ function createNewTheme() {
         status: 'draft',
         isUnsavedDraft: true
     };
-    // Remove any existing unsaved in-memory placeholders first
-    studio.themes = studio.themes.filter(t => !t.isUnsavedDraft);
-    studio.themes.push(placeholder);
+    studio.themes.unshift(placeholder);
 
     studio.activeTheme = {
         slug: defaultSlug,
@@ -1239,10 +1257,12 @@ window.confirmImportTheme = async function () {
 async function saveAndPublishTheme() {
     const theme = readFormFields();
     theme.status = 'live';
+    theme.isUnsavedDraft = false;
     if (!theme.slug || !theme.title) {
         showToast('Please specify a Theme Slug and Title!', 'error');
         return;
     }
+    const prevSlug = studio.activeTheme?.slug;
 
     const payload = {
         theme: theme,
@@ -1271,9 +1291,22 @@ async function saveAndPublishTheme() {
         showToast(`🎉 Theme "${theme.title}" successfully published!`, 'success');
         if (btn) btn.textContent = '🚀 Save & Publish Live';
 
-        // Refresh sidebar
-        await loadThemes();
-        selectTheme(theme.slug);
+        // Mark activeTheme clean
+        if (studio.activeTheme) {
+            studio.activeTheme = { ...studio.activeTheme, ...theme, isUnsavedDraft: false };
+        }
+
+        // Update studio.themes so draft is marked live and unsaved draft flag cleared
+        studio.themes = (studio.themes || []).map(t => {
+            if (t.slug === theme.slug || (prevSlug && t.slug === prevSlug)) {
+                return { ...t, ...theme, isUnsavedDraft: false };
+            }
+            return t;
+        }).filter(t => !t.isUnsavedDraft || t.slug !== prevSlug);
+
+        // Refresh sidebar and force reload the newly saved theme
+        await loadThemes(theme.slug, false);
+        await selectTheme(theme.slug, true);
     } catch (err) {
         showToast('Save error: ' + err.message, 'error');
         const btn = document.getElementById('save-publish-btn');
@@ -1565,17 +1598,18 @@ window.openDeleteThemeModal = function (slug, title) {
     if (slugEl) slugEl.textContent = slug;
 
     const phraseEl = document.getElementById('delete-theme-target-phrase');
-    if (phraseEl) phraseEl.textContent = targetPhrase;
+    if (phraseEl) phraseEl.textContent = `${targetPhrase} (or "delete")`;
 
     const input = document.getElementById('inp-delete-theme-confirm');
     if (input) {
         input.value = '';
+        input.placeholder = `Type "delete" or "${targetPhrase}" to confirm...`;
         input.style.borderColor = 'rgba(239, 68, 68, 0.4)';
         input.style.boxShadow = 'none';
     }
 
     const hint = document.getElementById('delete-phrase-hint');
-    if (hint) hint.innerHTML = '';
+    if (hint) hint.innerHTML = '<span style="color:var(--text-muted);">Tip: Type <strong>delete</strong> or the phrase to confirm</span>';
 
     const btn = document.getElementById('btn-confirm-delete-theme');
     if (btn) {
@@ -1602,13 +1636,20 @@ window.onDeleteThemePhraseInput = function () {
     const val = input.value.trim().toLowerCase();
     const target = (studio.deleteTargetPhrase || '').trim().toLowerCase();
     const cleanTitle = (studio.deleteCleanTitle || '').trim().toLowerCase();
+    const rawTitle = (studio.pendingDeleteTitle || '').trim().toLowerCase();
     const slug = (studio.pendingDeleteSlug || '').trim().toLowerCase();
 
     const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
-    const isMatch = val && (
+    const isMatch = Boolean(val) && (
+        val === 'delete' ||
         val === target ||
-        norm(val) === norm(target)
+        norm(val) === norm(target) ||
+        val === slug ||
+        norm(val) === norm(slug) ||
+        val === cleanTitle ||
+        norm(val) === norm(cleanTitle) ||
+        norm(val) === norm(rawTitle)
     );
 
     if (isMatch) {
@@ -1618,7 +1659,7 @@ window.onDeleteThemePhraseInput = function () {
         input.style.borderColor = '#10b981';
         input.style.boxShadow = '0 0 0 2px rgba(16, 185, 129, 0.25)';
         if (hint) {
-            hint.innerHTML = '<span style="color:#10b981;font-weight:600;">✓ Phrase matched. You can now delete this theme.</span>';
+            hint.innerHTML = '<span style="color:#10b981;font-weight:600;">✓ Confirmed. You can now delete this theme.</span>';
         }
     } else {
         btn.disabled = true;
@@ -1627,7 +1668,7 @@ window.onDeleteThemePhraseInput = function () {
         input.style.borderColor = 'rgba(239, 68, 68, 0.4)';
         input.style.boxShadow = 'none';
         if (hint) {
-            hint.innerHTML = val ? '<span style="color:#f87171;">Phrase does not match.</span>' : '';
+            hint.innerHTML = val ? '<span style="color:#f87171;">Type "delete", slug, or confirmation phrase.</span>' : '<span style="color:var(--text-muted);">Tip: Type <strong>delete</strong> or the phrase to confirm</span>';
         }
     }
 };
@@ -1671,11 +1712,18 @@ window.confirmDeleteTheme = async function () {
     const val = (input?.value || '').trim().toLowerCase();
     const target = (studio.deleteTargetPhrase || '').trim().toLowerCase();
     const cleanTitle = (studio.deleteCleanTitle || '').trim().toLowerCase();
+    const rawTitle = (studio.pendingDeleteTitle || '').trim().toLowerCase();
     const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
-    const isMatch = val && (
+    const isMatch = Boolean(val) && (
+        val === 'delete' ||
         val === target ||
-        norm(val) === norm(target)
+        norm(val) === norm(target) ||
+        val === slug ||
+        norm(val) === norm(slug) ||
+        val === cleanTitle ||
+        norm(val) === norm(cleanTitle) ||
+        norm(val) === norm(rawTitle)
     );
 
     if (!isMatch) {
@@ -1689,23 +1737,26 @@ window.confirmDeleteTheme = async function () {
     if (btn) { btn.textContent = '🗑️ Deleting...'; btn.disabled = true; }
 
     try {
-        let res = await fetch(`/api/theme/${slug}`, { method: 'DELETE' });
-        if (!res.ok && res.status !== 404) {
-            // Try POST fallback endpoint
-            res = await fetch('/api/admin/theme/delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slug })
-            });
-        }
+        const isDraftOnly = (studio.themes || []).some(t => t.slug === slug && t.isUnsavedDraft);
+        if (!isDraftOnly) {
+            let res = await fetch(`/api/theme/${slug}`, { method: 'DELETE' });
+            if (!res.ok && res.status !== 404) {
+                // Try POST fallback endpoint
+                res = await fetch('/api/admin/theme/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ slug })
+                });
+            }
 
-        if (!res.ok && res.status !== 404) {
-            let errMsg = `Delete failed with status ${res.status}`;
-            try {
-                const data = await res.json();
-                errMsg = data.error || errMsg;
-            } catch (je) {}
-            throw new Error(errMsg);
+            if (!res.ok && res.status !== 404) {
+                let errMsg = `Delete failed with status ${res.status}`;
+                try {
+                    const data = await res.json();
+                    errMsg = data.error || errMsg;
+                } catch (je) {}
+                throw new Error(errMsg);
+            }
         }
 
         // 1. Immediately close the delete prompt modal
@@ -1725,14 +1776,14 @@ window.confirmDeleteTheme = async function () {
         showToast(`Theme "${slug}" permanently deleted.`, 'success');
 
         // 3. Remove from sidebar and reload
-        studio.themes = studio.themes.filter(t => t.slug !== slug);
+        studio.themes = (studio.themes || []).filter(t => t.slug !== slug);
         if (studio.activeTheme?.slug === slug) {
             studio.activeTheme = null;
         }
 
         await loadThemes();
         if (studio.themes.length > 0) {
-            selectTheme(studio.themes[0].slug);
+            await selectTheme(studio.themes[0].slug, true);
         } else {
             switchToMasterGallery();
         }
@@ -2708,12 +2759,26 @@ window.syncThemeBasicIdentity = function (field, val) {
     if (field === 'slug') {
         const el = document.getElementById('inp-slug-adv');
         if (el && el.value !== val) el.value = val;
+        if (studio.activeTheme) {
+            studio.activeTheme.slug = val;
+            if (studio.activeTheme.isUnsavedDraft) {
+                const draft = (studio.themes || []).find(t => t.isUnsavedDraft);
+                if (draft) { draft.slug = val; renderThemeSidebar(); }
+            }
+        }
     } else if (field === 'title') {
         const el = document.getElementById('inp-title-adv');
         if (el && el.value !== val) el.value = val;
         const intentEl = document.getElementById('adv-theme-intent');
         if (intentEl && !intentEl.value && val !== 'New Event Photobooth' && val !== 'Untitled Theme ✨') {
             intentEl.value = val;
+        }
+        if (studio.activeTheme) {
+            studio.activeTheme.title = val;
+            if (studio.activeTheme.isUnsavedDraft) {
+                const draft = (studio.themes || []).find(t => t.isUnsavedDraft);
+                if (draft) { draft.title = val || 'Untitled Theme ✨'; renderThemeSidebar(); }
+            }
         }
     } else if (field === 'subtitle') {
         const el = document.getElementById('inp-subtitle-adv');
@@ -2747,12 +2812,26 @@ window.syncThemeAdvancedIdentity = function (field, val) {
     if (field === 'slug') {
         const el = document.getElementById('inp-slug');
         if (el && el.value !== val) el.value = val;
+        if (studio.activeTheme) {
+            studio.activeTheme.slug = val;
+            if (studio.activeTheme.isUnsavedDraft) {
+                const draft = (studio.themes || []).find(t => t.isUnsavedDraft);
+                if (draft) { draft.slug = val; renderThemeSidebar(); }
+            }
+        }
     } else if (field === 'title') {
         const el = document.getElementById('inp-title');
         if (el && el.value !== val) el.value = val;
         const intentEl = document.getElementById('adv-theme-intent');
         if (intentEl && !intentEl.value && val !== 'New Event Photobooth' && val !== 'Untitled Theme ✨') {
             intentEl.value = val;
+        }
+        if (studio.activeTheme) {
+            studio.activeTheme.title = val;
+            if (studio.activeTheme.isUnsavedDraft) {
+                const draft = (studio.themes || []).find(t => t.isUnsavedDraft);
+                if (draft) { draft.title = val || 'Untitled Theme ✨'; renderThemeSidebar(); }
+            }
         }
     } else if (field === 'subtitle') {
         const el = document.getElementById('inp-subtitle');
@@ -3974,8 +4053,9 @@ window.closeAtmospherePreviewModal = function () {
     showToast('ℹ️ Preview closed. Note: This preview was NOT saved. Click "Save Theme" on the left if you are happy with it, or edit your prompt to re-create it.', 'warning', 7000);
 };
 
+window.saveActiveTheme = saveAndPublishTheme;
 window.saveDraftFromPreviewModal = async function () {
-    await saveActiveTheme();
+    await saveAndPublishTheme();
     const modal = document.getElementById('atmosphere-preview-modal');
     if (modal) modal.style.display = 'none';
     const iframe = document.getElementById('atmosphere-preview-iframe');
