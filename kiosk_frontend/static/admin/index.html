@@ -483,48 +483,75 @@
 
                                 <!-- Quick Suggestion Chips to click and append -->
                                 <div style="display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.75rem;">
-                                    <span style="font-size: 0.73rem; color: var(--text-dim); margin-right: 0.2rem;">Quick Chips:</span>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🏮 Swaying Paper Lanterns')">+ 🏮 Swaying Lanterns</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('⚡ Glowing Neon Sign')">+ ⚡ Glowing Neon Sign</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('📜 Retro Ticker Tape Bar')">+ 📜 Retro Ticker Tape</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🏛️ Top Grand Arch')">+ 🏛️ Top Grand Arch</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🎋 Vertical Couplet Banners')">+ 🎋 Vertical Banners</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🪷 Floating Lotus Flowers')">+ 🪷 Floating Lotus</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('💠 Holographic Crest')">+ 💠 Holographic Crest</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🎆 Fireworks Sparklers')">+ 🎆 Fireworks Sparklers</button>
+                                    <span style="font-size: 0.73rem; color: var(--text-dim); margin-right: 0.2rem;">Architectural Chips:</span>
+                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🕹️ Corner HUD Brackets & Scanning Ticker')">+ 🕹️ Cyber HUD Brackets</button>
+                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('👑 Gilded Art-Deco Pediment & Fluted Columns')">+ 👑 Gilded Pediment</button>
+                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🏮 Multi-Tier Torii Eaves & Swaying Lanterns')">+ 🏮 Heritage Eaves</button>
+                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('📼 Isometric Neon Grid & Retro Marquee')">+ 📼 Neon Grid</button>
+                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🌿 Organic Botanical Borders & Aurora Ribbons')">+ 🌿 Botanical Runes</button>
+                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('⚡ Scanline CRT Filter & Electrical Glitch')">+ ⚡ CRT Glitch</button>
+                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🥂 Champagne Crystal Cascade Sparkles')">+ 🥂 Crystal Cascades</button>
                                 </div>
 
-                                <!-- Collapsible Preset Thematic Elements Toggles -->
-                                <details style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); padding: 0.5rem 0.8rem; margin-bottom: 0.5rem;">
-                                    <summary style="font-size: 0.78rem; font-weight: 600; color: #a5b4fc; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between;">
-                                        <span style="display: flex; align-items: center; gap: 0.4rem;">
-                                            <span>🎋</span> Preset Atmospheric Screen Elements (Click to toggle checkboxes)
+                                <!-- Layer 4: Configurable Creative Levers Panel -->
+                                <div class="creative-levers-panel" style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 0.75rem;">
+                                    <div style="font-size: 0.82rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.65rem;">
+                                        <span style="display: flex; align-items: center; gap: 0.45rem;">
+                                            <span>🎛️</span> 4-Layer Dynamic Theme Builder: Creative Levers
                                         </span>
-                                        <span style="font-size: 0.7rem; color: #818cf8; text-decoration: underline;">Expand / Collapse</span>
-                                    </summary>
-                                    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; font-size: 0.82rem; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid rgba(255,255,255,0.06);">
-                                        <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer; background: rgba(255,255,255,0.04); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9;">
-                                            <input id="chk-dynamic-banners" type="checkbox" checked onchange="updateFullSystematicGenAiPrompt()">
-                                            <span>🎋 Vertical Side Banners / Couplets</span>
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer; background: rgba(255,255,255,0.04); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9;">
-                                            <input id="chk-dynamic-arch" type="checkbox" checked onchange="updateFullSystematicGenAiPrompt()">
-                                            <span>🏛️ Top Decorative Arch</span>
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer; background: rgba(255,255,255,0.04); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9;">
-                                            <input id="chk-dynamic-ornaments" type="checkbox" checked onchange="updateFullSystematicGenAiPrompt()">
-                                            <span>🏮 Corner Swaying Ornaments</span>
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer; background: rgba(255,255,255,0.04); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9;">
-                                            <input id="chk-dynamic-particles" type="checkbox" checked onchange="updateFullSystematicGenAiPrompt()">
-                                            <span>✨ Floating Particles &amp; Badges</span>
-                                        </label>
-                                        <label style="display: flex; align-items: center; gap: 0.45rem; cursor: pointer; background: rgba(255,255,255,0.04); padding: 0.35rem 0.75rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); color: #f1f5f9;">
-                                            <input id="chk-dynamic-frame" type="checkbox" checked onchange="updateFullSystematicGenAiPrompt()">
-                                            <span>🌌 Thematic Vignette &amp; Borders</span>
-                                        </label>
+                                        <span style="font-size: 0.72rem; color: var(--text-dim); font-weight: normal;">Optional · Auto-inferred if left blank</span>
                                     </div>
-                                </details>
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.7rem;">
+                                        <div>
+                                            <label for="lever-density" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
+                                                🏛️ Aesthetic Density
+                                            </label>
+                                            <select id="lever-density" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.35rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
+                                                <option value="">Auto (Infer from concept)</option>
+                                                <option value="Minimalist">Minimalist (Clean Framing, Touch First)</option>
+                                                <option value="Balanced">Balanced (Harmonious Accents)</option>
+                                                <option value="Immersive Maximalist">Immersive Maximalist (Multi-Layer Splendor)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="lever-motion" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
+                                                ⚡ Motion Energy &amp; Physics
+                                            </label>
+                                            <select id="lever-motion" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.35rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
+                                                <option value="">Auto (Infer from concept)</option>
+                                                <option value="Still Ambience">Still Ambience (Static Lighting &amp; Shimmer)</option>
+                                                <option value="Gentle Drift">Gentle Drift (Slow Organic Floating &amp; Sway)</option>
+                                                <option value="High Energy">High Energy (Dynamic Marquees &amp; Pulses)</option>
+                                                <option value="Glitch &amp; Pulse">Glitch &amp; Pulse (Scanlines &amp; Electrical Flicker)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="lever-lighting" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
+                                                💡 Lighting &amp; Texture Treatment
+                                            </label>
+                                            <select id="lever-lighting" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.35rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
+                                                <option value="">Auto (Infer from concept)</option>
+                                                <option value="Subtle Matte">Subtle Matte (Refined Editorial Elegance)</option>
+                                                <option value="Neon Glow">Neon Glow (Vibrant Multi-Stop Glow Shadows)</option>
+                                                <option value="Specular Gold">Specular Gold (Gilded Sheen &amp; Metallic Lustre)</option>
+                                                <option value="CRT Retro">CRT Retro (Scanline Shaders &amp; Phosphor Grain)</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label for="lever-archetype" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
+                                                📐 Architectural Archetype
+                                            </label>
+                                            <select id="lever-archetype" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.35rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
+                                                <option value="">Auto (Bespoke Polymorphic Architecture)</option>
+                                                <option value="Cyber / Arcade / Sci-Fi">Archetype 1: Cyber / Arcade / Sci-Fi (HUD Brackets, Tickers, Data Rails)</option>
+                                                <option value="Royal Gala / Luxury">Archetype 2: Royal Gala / Luxury (Filigree, Gilded Pediments, Columns)</option>
+                                                <option value="Cultural / Heritage">Archetype 3: Cultural / Heritage (Multi-tier Eaves, Banners, Lanterns)</option>
+                                                <option value="Retro Pop / Vaporwave">Archetype 4: Retro Pop / Vaporwave (Grid Floors, Neon Signs, Cassettes)</option>
+                                                <option value="Whimsical / Fantasy">Archetype 5: Whimsical / Fantasy (Botanical Borders, Runes, Auroras)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -594,6 +621,9 @@
                                 </button>
                             </div>
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <button type="button" class="admin-btn admin-btn-accent" style="font-size: 0.82rem; padding: 0.4rem 0.95rem; font-weight: 700; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: #059669;" onclick="openUnifiedPasteModal()" title="Paste entire multi-block AI response to populate JSON, HTML, and CSS in one click">
+                                    ⚡ Quick Paste Full Response
+                                </button>
                                 <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.4rem 0.8rem;" onclick="clearAtmosphereEditors()">
                                     🧹 Clear
                                 </button>
@@ -601,6 +631,17 @@
                                     ⚡ Compile &amp; Live Preview
                                 </button>
                             </div>
+                        </div>
+
+                        <!-- Architectural Rationale & Design Thinking Display Box -->
+                        <div id="adv-design-thinking-box" style="display: none; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1rem;">
+                            <div style="font-size: 0.85rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+                                <span style="display: flex; align-items: center; gap: 0.45rem;">
+                                    <span>🧠</span> AI Architectural Rationale &amp; Design Thinking:
+                                </span>
+                                <button type="button" onclick="document.getElementById('adv-design-thinking-box').style.display='none'" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem;">&times;</button>
+                            </div>
+                            <div id="adv-design-thinking-content" style="font-size: 0.82rem; color: #e2e8f0; line-height: 1.5; white-space: pre-wrap;"></div>
                         </div>
 
                         <!-- Tab 1: JSON Editor -->
@@ -1463,6 +1504,30 @@
 
     <!-- Script -->
     <script src="/static/admin/admin.js"></script>
+    <!-- All-in-One Multi-Block AI Response Parser Modal -->
+    <div id="unified-paste-modal" class="modal-overlay" style="display: none; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(8px);">
+        <div class="asset-picker-dialog" style="max-width: 720px; width: 92vw; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; background: #0f111c; border: 1px solid rgba(99, 102, 241, 0.4); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1.3rem;">⚡</span>
+                    <h3 style="margin: 0; font-size: 1.1rem; color: #fff; font-weight: 700;">All-in-One AI Output Parser</h3>
+                </div>
+                <button class="modal-close-btn" onclick="closeUnifiedPasteModal()">&times;</button>
+            </div>
+            <div style="padding: 1.4rem; overflow-y: auto; flex: 1;">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.8rem; line-height: 1.5;">
+                    Paste the entire response from ChatGPT, Claude, or Gemini below (including <code>&lt;design_thinking&gt;</code>, Block 1 JSON, Block 2 HTML, and Block 3 CSS). The Theme Studio will automatically extract each layer into its proper editor tab and synchronize theme details.
+                </p>
+                <textarea id="inp-unified-ai-paste" rows="12" class="admin-input" placeholder="Paste full AI markdown response here..." style="width: 100%; font-family: monospace; font-size: 0.82rem; line-height: 1.45;"></textarea>
+            </div>
+            <div style="padding: 0.9rem 1.4rem; border-top: 1px solid rgba(255,255,255,0.08); background: rgba(18, 20, 36, 0.95); display: flex; justify-content: flex-end; gap: 0.6rem;">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeUnifiedPasteModal()">Cancel</button>
+                <button type="button" class="admin-btn admin-btn-accent" onclick="applyUnifiedAiPaste()" style="font-weight: 700; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
+                    🚀 Parse &amp; Populate All Layers
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

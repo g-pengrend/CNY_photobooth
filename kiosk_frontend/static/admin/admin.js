@@ -2861,176 +2861,120 @@ window.syncThemeAdvancedIdentity = function (field, val) {
     window.updateFullSystematicGenAiPrompt();
 };
 
-// Generate the complete systematic GenAI prompt template
-window.generateFullSystematicPromptText = function () {
-    const userIntent = document.getElementById('adv-theme-intent')?.value.trim();
-    const titleVal = document.getElementById('inp-title-adv')?.value.trim() 
-                  || document.getElementById('inp-title')?.value.trim();
-    const isCustomTitle = titleVal && titleVal !== 'New Event Photobooth' && titleVal !== 'Untitled Theme ✨';
-    
-    const concept = userIntent || (isCustomTitle ? titleVal : '');
-    const filmStripChecked = (document.getElementById('chk-film-strip-adv')?.checked || document.getElementById('chk-film-strip')?.checked);
-    const filmStripInstruction = filmStripChecked 
-        ? "ENABLED (The welcome screen will feature an animated rolling camera film strip showcasing guest portraits)"
-        : "DISABLED (Clean welcome screen without rolling film strip)";
+// =========================================================================
+// 4-LAYER COMPOSITIONAL THEME BUILDER ARCHITECTURE
+// Layer 1: Structural Polymorphism (Dynamic DOM Manifest)
+// Layer 2: Parameterized Motion & Physics Engine
+// Layer 3: Atmospheric Lighting & Surface Textures
+// Layer 4: User-Guided Creative Levers (Input Pipeline)
+// =========================================================================
 
-    const bgCol = document.getElementById('inp-color-bg')?.value || '#0c0d14';
-    const accentCol = document.getElementById('inp-color-accent')?.value || '#d4af37';
-    const primaryCol = document.getElementById('inp-color-primary')?.value || '#181926';
+window.buildThemePrompt = function (userInput, creativeLevers = {}) {
+    // 1. Natural Language Concept
+    const rawConcept = typeof userInput === 'string' ? userInput.trim() : '';
+    const conceptText = rawConcept || '{{USER_THEME_DESCRIPTION_OR_PROPOSE}}';
 
-    const customObjects = document.getElementById('adv-custom-objects')?.value?.trim();
-    const chkBanners = document.getElementById('chk-dynamic-banners')?.checked ?? true;
-    const chkArch = document.getElementById('chk-dynamic-arch')?.checked ?? true;
-    const chkOrnaments = document.getElementById('chk-dynamic-ornaments')?.checked ?? true;
-    const chkParticles = document.getElementById('chk-dynamic-particles')?.checked ?? true;
-    const chkFrame = document.getElementById('chk-dynamic-frame')?.checked ?? true;
+    // 2. Creative Levers (Layer 4)
+    const densityVal = creativeLevers.density || '';
+    const densityText = densityVal ? densityVal : 'Infer from concept (Default: Balanced)';
 
-    let themeSpecification = "";
-    if (concept) {
-        themeSpecification = `• Event Theme / Concept: "${concept}"\n• Guidance: Design the entire interface, colors, festive ornaments, and manifestation sequence around this celebration concept.`;
-    } else {
-        themeSpecification = `• Event Theme / Concept: [NOT SPECIFIED - PLEASE PROPOSE AN EXCITING THEME!]\n  Note to AI: Since no specific theme was provided, please invent an evocative, creative, culturally rich or festive celebration theme (e.g. Vintage Parisian Bistro, Neon Cyberpunk Gala, Lunar New Year, Mid-Autumn Lantern Fest, Royal Masquerade, Tropical Fiesta, Autumn Harvest, etc.). In Block 1, invent an evocative display title and clean URL slug for it!`;
+    const motionVal = creativeLevers.motion || '';
+    const motionText = motionVal ? motionVal : 'Infer from concept (Default: Gentle Drift)';
+
+    const lightingVal = creativeLevers.lighting || '';
+    const lightingText = lightingVal ? lightingVal : 'Infer from concept (Default: Immersive Themed Lighting)';
+
+    // Optional archetype and custom objects guidance if provided
+    const archetypeVal = creativeLevers.archetype || '';
+    const customObjectsVal = creativeLevers.customObjects || '';
+    const bgCol = creativeLevers.background || document.getElementById('inp-color-bg')?.value || '#0a0a12';
+    const accentCol = creativeLevers.accent || document.getElementById('inp-color-accent')?.value || '#6366f1';
+    const primaryCol = creativeLevers.primary || document.getElementById('inp-color-primary')?.value || '#181926';
+
+    let optionalDirectives = '';
+    if (archetypeVal) {
+        optionalDirectives += `\n• Suggested Architectural Archetype: ${archetypeVal}`;
+    }
+    if (customObjectsVal) {
+        optionalDirectives += `\n• Key Bespoke Atmospheric Elements / Requested Objects: "${customObjectsVal}"`;
+    }
+    if (creativeLevers.filmStrip !== undefined) {
+        optionalDirectives += `\n• Welcome Screen Rolling Film Strip: ${creativeLevers.filmStrip ? 'ENABLED' : 'DISABLED'}`;
     }
 
-    const dynamicAtmosphereSpecs = [];
+    return `You are an elite, award-winning Principal UI/UX Creative Director and Experiential Technologist specializing in luxury interactive touchscreen kiosks and immersive photobooth installations.
 
-    if (customObjects) {
-        dynamicAtmosphereSpecs.push(`• CUSTOM USER INTERFACE & ATMOSPHERIC OBJECTS (CRITICAL REQUIREMENT):
-    - The user specifically requested to design and manifest these custom interface elements: "${customObjects}"
-    - In BLOCK 2 (decorations.html): Construct complete, semantic HTML markup for these custom objects inside the persistent atmosphere container (e.g. glowing neon sign, marquee ticker, floating lotus, holographic badge). Use descriptive classes.
-    - In BLOCK 3 (style.css): Provide complete styling, exact fixed/absolute coordinate placement, glassmorphism, responsive rules, and fluid keyframe animations for each custom object.`);
-    }
+Your mission is to dynamically architect an entirely bespoke, structurally original interface configuration based on the user's creative concept.
 
-    if (chkBanners) {
-        dynamicAtmosphereSpecs.push(`• Vertical Side Couplets / Banners (.thematic-side-banner.banner-left and .banner-right):
-    - Flank the left and right sides of the kiosk screen (left: 24px; right: 24px; top: 50%; transform: translateY(-50%)).
-    - Include header crest/icon, vertical celebration motto (using individual stacked .banner-char spans or vertical typography), and bottom tassel.
-    - Styled with themed background, border accent glow, and subtle breathing animation (@keyframes bannerBreathe).
-    - Media query rule: @media (max-width: 900px) { .thematic-side-banner { display: none; } } so smaller mobile devices hide them cleanly.`);
-    }
-    if (chkArch) {
-        dynamicAtmosphereSpecs.push(`• Top Decorative Arch / Marquee (.thematic-top-arch):
-    - Positioned gracefully at top center (top: 0; left: 50%; transform: translateX(-50%); width: 72%; max-width: 820px; height: 80px).
-    - Curved bottom border (border-radius: 0 0 50% 50%) or arch contour with glowing gradient and central event badge / celebration motto (.arch-crest).`);
-    }
-    if (chkOrnaments) {
-        dynamicAtmosphereSpecs.push(`• Corner Swaying Physics Ornaments (.custom-ornament.ornament-left and .ornament-right):
-    - Suspended at top corners (e.g. lanterns, ketupats, crystal chandeliers, or neon tokens).
-    - Swaying animation with pendulum physics (@keyframes ornamentSway, transform-origin: top center).`);
-    }
-    if (chkParticles) {
-        dynamicAtmosphereSpecs.push(`• Floating Celebratory Particles (.custom-particle.p-1 through p-5):
-    - Thematic emojis with styled glowing text labels floating upwards with staggered animation delays (@keyframes floatUpward). Keep strictly outside center text.`);
-    }
-    if (chkFrame) {
-        dynamicAtmosphereSpecs.push(`• Thematic Frame / Vignette:
-    - Subtle glowing edge vignette or decorative corner accents enhancing atmosphere depth.`);
-    }
-
-    const dynamicReqsText = dynamicAtmosphereSpecs.length > 0 
-        ? dynamicAtmosphereSpecs.join('\n')
-        : '• Minimal ambient styling with subtle glow tokens.';
-
-    return `You are a world-class UI/UX frontend designer and creative director for an interactive photobooth touchscreen kiosk.
-Your mission is to systematically design and generate the complete interface configuration, marketing copy, color tokens, festive ambience, and waiting manifestation sequence for a photobooth theme.
-
---- THEME SPECIFICATIONS ---
-${themeSpecification}
-• Welcome Screen Rolling Film Strip: ${filmStripInstruction}
+--- INPUT SPECIFICATIONS ---
+• Natural Language Concept: ${conceptText}
+• Aesthetic Density: ${densityText}
+• Motion Energy: ${motionText}
+• Lighting Treatment: ${lightingText}${optionalDirectives}
 • Target Screen: Interactive Touchscreen Kiosk (responsive for 9:16 portrait 1080x1920 kiosk as well as 16:9 landscape monitors).
-• Interaction Constraint: ALL ambient decorations MUST have "pointer-events: none" so they never block touch clicks on kiosk buttons.
-• Color Palette Direction: Deep Background ${bgCol}, Brand Accent ${accentCol}, Surface Tone ${primaryCol} (AI may enhance palette to fit the theme).
+• Interaction Safety: ALL ambient decorations MUST have "pointer-events: none" so they never block touch clicks on kiosk buttons. Keep the center 70% clear for user interactions.
 
---- DYNAMIC FESTIVE ATMOSPHERE ELEMENTS TO INCLUDE IN HTML & CSS ---
-${dynamicReqsText}
+--- ARCHITECTURAL FREEDOM & DIVERGENCE CONTRACT ---
+1. BAN ON MONOLITHIC SKELETONS:
+   Do NOT default to the exact same top arch tray and vertical scroll dowels. Invent an original structural layout that naturally belongs to this world (e.g., sci-fi HUD frames, gilded pediments, organic hanging flora, neon marquees, corner bracket brackets, or floor-anchored atmospheric pillars).
+2. BESPOKE HTML MARKUP (BLOCK 2):
+   Construct meaningful, custom semantic HTML tags and class names native to this theme concept (e.g., .arcade-neon-coin, .crystal-architrave, .lantern-flock, .cyber-hud-bracket).
+3. BESPOKE PHYSICS & MOTION (BLOCK 3):
+   Write custom CSS keyframes matching the object physics (flickering gas tubes, swaying textiles, floating micro-sparks, undulating auroras, or mechanical ticks).
+4. COLOR & TYPOGRAPHY SYSTEM (BLOCK 1):
+   Import a Google Font that accurately embodies the visual genre (Futuristic, Editorial Serif, Heritage Calligraphy, Geometric Display, or Grotesque).
 
---- INSTRUCTIONS FOR WHAT TO GENERATE ---
-Please produce EXACTLY THREE clean code blocks for the user to copy directly into the Photobooth Theme Studio:
+--- REQUIRED OUTPUT FORMAT ---
+Provide a short <design_thinking> architectural rationale (detailing chosen layout archetype, physics model, and lighting strategy), followed by EXACTLY THREE code blocks:
 
 ### BLOCK 1: theme_identity.json
-Generate a JSON object configuring theme identity, marketing copy, Google Font typography, CSS color tokens, and a 5-step sequential waiting screen manifestation sequence tailored to the theme:
 \`\`\`json
 {
-  "slug": "url_safe_slug_lowercase_with_underscores_e.g_gala_2026",
+  "slug": "url_safe_slug",
   "title": "Evocative Theme Display Title",
-  "subtitle": "Short captivating subtitle or venue",
-  "badge": "Short badge tag (e.g. Special Edition)",
-  "icon": "A single representative emoji",
-  "cta": "Start button label (e.g. Start Experience)",
-  "description": "2-sentence inspiring description of the AI portrait transformation experience.",
+  "subtitle": "Short captivating subtitle or mood",
+  "badge": "2-4 word theme-native badge (no generic 'Special/Limited Edition')",
+  "icon": "Single representative emoji",
+  "cta": "Start button label",
+  "description": "2-sentence inspiring experience description.",
   "style": {
-    "fontFamily": "'Outfit', sans-serif",
-    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap",
+    "fontFamily": "'Chosen Font', sans-serif",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=...",
     "colors": {
       "background": "${bgCol}",
       "text": "#ffffff",
       "primary": "${primaryCol}",
       "accent": "${accentCol}",
-      "accentGlow": "rgba(...accent with 0.35 opacity...)",
-      "surface": "rgba(255, 255, 255, 0.05)",
-      "surfaceBorder": "rgba(...accent with 0.3 opacity...)"
+      "accentGlow": "rgba(...)",
+      "surface": "rgba(...)",
+      "surfaceBorder": "rgba(...)"
     }
   },
   "waitingExperience": {
-    "title": "Creating Magic...",
-    "subtitle": "Transforming your photo into a festive masterpiece",
+    "title": "Manifesting Atmosphere...",
+    "subtitle": "Transforming your photo into a masterpiece",
     "sequence": [
-      { "text": "Step 1: Welcoming phrase or scanning photo...", "delay": 500, "color": "${accentCol}" },
-      { "text": "Step 2: AI synthesis step matching theme concept...", "delay": 3500, "color": "#ffffff" },
-      { "text": "Step 3: Rendering ornaments and thematic aura...", "delay": 7000, "color": "${accentCol}" },
-      { "text": "Step 4: Harmonizing lighting and textures...", "delay": 10500, "color": "#ffffff" },
-      { "text": "Step 5: Manifestation complete! Preparing reveal...", "delay": 14000, "color": "${accentCol}" }
+      { "text": "Step 1: ...", "delay": 500, "color": "${accentCol}" },
+      { "text": "Step 2: ...", "delay": 3500, "color": "#ffffff" },
+      { "text": "Step 3: ...", "delay": 7000, "color": "${accentCol}" },
+      { "text": "Step 4: ...", "delay": 10500, "color": "#ffffff" },
+      { "text": "Step 5: ...", "delay": 14000, "color": "${accentCol}" }
     ],
-    "completionMessage": "Ready to Celebrate!"
+    "completionMessage": "Ready!"
   }
 }
 \`\`\`
 
 ### BLOCK 2: decorations.html
-Generate persistent HTML decorations wrapped inside an ambient container, containing the requested dynamic elements:
 \`\`\`html
-<!-- Persistent Festive Decorations -->
-${chkArch ? `<!-- Top Decorative Arch -->
-<div class="thematic-top-arch">
-    <div class="arch-crest">✦ CELEBRATION MOTTO ✦</div>
-</div>\n` : ''}${chkBanners ? `<!-- Vertical Side Couplets / Banners -->
-<div class="thematic-side-banner banner-left">
-    <div class="banner-crest">✦</div>
-    <div class="banner-content">
-        <span class="banner-char">W</span>
-        <span class="banner-char">O</span>
-        <span class="banner-char">R</span>
-        <span class="banner-char">D</span>
-    </div>
-    <div class="banner-tassel">❖</div>
+<div class="persistent-decorations">
+  <!-- Dynamic atmospheric layers, framing objects, and bespoke decorative elements created specifically for this concept -->
 </div>
-<div class="thematic-side-banner banner-right">
-    <div class="banner-crest">✦</div>
-    <div class="banner-content">
-        <span class="banner-char">M</span>
-        <span class="banner-char">O</span>
-        <span class="banner-char">T</span>
-        <span class="banner-char">O</span>
-    </div>
-    <div class="banner-tassel">❖</div>
-</div>\n` : ''}${chkOrnaments ? `<!-- Corner Swaying Ornaments -->
-<div class="custom-ornament ornament-left">🏮</div>
-<div class="custom-ornament ornament-right">🏮</div>\n` : ''}${chkParticles ? `<!-- Floating Celebratory Particles -->
-<div class="custom-particle p-1"><span>✨</span><label>Joy</label></div>
-<div class="custom-particle p-2"><span>🎉</span><label>Celebrate</label></div>
-<div class="custom-particle p-3"><span>⭐</span><label>Magic</label></div>
-<div class="custom-particle p-4"><span>✦</span><label>Memories</label></div>` : ''}
 \`\`\`
 
 ### BLOCK 3: style.css
-Generate standalone, high-performance scoped CSS styling and keyframes:
-• :root CSS custom variables matching the design palette
-• .persistent-decorations container fixed to inset: 0 with pointer-events: none and z-index: 1 (keeps decorations behind screen text and buttons)
-• Keyframe animations (@keyframes bannerBreathe, @keyframes ornamentSway, @keyframes floatUpward)
-• Responsive rules (@media (max-width: 900px) { .thematic-side-banner { display: none; } })
-• High visual quality with drop-shadows and backdrop-filters
 \`\`\`css
-/* Scoped Atmosphere Animations */
+/* Scoped atmosphere variables, custom keyframe physics, and responsive rules */
 :root {
   --bg-color: ${bgCol};
   --accent-color: ${accentCol};
@@ -3043,16 +2987,141 @@ Generate standalone, high-performance scoped CSS styling and keyframes:
   z-index: 1;
   overflow: hidden;
 }
-/* ... Complete CSS for banners, arch, ornaments, and particles ... */
+/* Bespoke layout coordinates, media queries, and fluid animation curves */
 \`\`\`
 
-Output ONLY these three code blocks with their markdown headers.`;
+Output ONLY the <design_thinking> block and the three labeled markdown code blocks.`;
 };
 
-window.updateFullSystematicGenAiPrompt = function () {
-    const box = document.getElementById('adv-systematic-prompt-full');
-    if (box) {
-        box.value = window.generateFullSystematicPromptText();
+// Atmosphere Only Prompt (Blocks 2 & 3) following the same 4-layer dynamic rules
+window.buildAtmosphereOnlyPrompt = function (userInput, creativeLevers = {}) {
+    const rawConcept = typeof userInput === 'string' ? userInput.trim() : '';
+    const conceptText = rawConcept || 'Interactive Photobooth Atmosphere';
+    const densityText = creativeLevers.density || 'Infer from concept (Default: Balanced)';
+    const motionText = creativeLevers.motion || 'Infer from concept (Default: Gentle Drift)';
+    const lightingText = creativeLevers.lighting || 'Infer from concept (Default: Immersive Themed Lighting)';
+    const archetypeText = creativeLevers.archetype ? `\n• Suggested Architectural Archetype: ${creativeLevers.archetype}` : '';
+    const customObjectsText = creativeLevers.customObjects ? `\n• Key Bespoke Atmospheric Elements / Requested Objects: "${creativeLevers.customObjects}"` : '';
+    const bgCol = creativeLevers.background || document.getElementById('inp-color-bg')?.value || '#0a0a12';
+    const accentCol = creativeLevers.accent || document.getElementById('inp-color-accent')?.value || '#6366f1';
+    const primaryCol = creativeLevers.primary || document.getElementById('inp-color-primary')?.value || '#181926';
+
+    return `You are an elite, award-winning Principal UI/UX Creative Director and Experiential Technologist specializing in luxury interactive touchscreen kiosks and immersive photobooth installations.
+
+Your mission is to dynamically architect bespoke HTML atmospheric decorations (BLOCK 2) and physics-driven CSS styling & keyframes (BLOCK 3) for an interactive photobooth theme.
+
+--- INPUT SPECIFICATIONS ---
+• Natural Language Concept: ${conceptText}
+• Aesthetic Density: ${densityText}
+• Motion Energy: ${motionText}
+• Lighting Treatment: ${lightingText}${archetypeText}${customObjectsText}
+• Target Screen: Interactive Touchscreen Kiosk (responsive for 9:16 portrait 1080x1920 kiosk as well as 16:9 landscape monitors).
+• Interaction Safety: ALL ambient decorations MUST have "pointer-events: none" so they never block touch clicks on kiosk buttons. Keep the center 70% clear for user interactions.
+
+--- ARCHITECTURAL FREEDOM CONTRACT ---
+1. BAN ON MONOLITHIC SKELETONS:
+   Do NOT default to a fixed arch and side banners. Architect bespoke semantic markup native to this concept (e.g., cyber HUD brackets, neon signs, fluted pedestals, crystal cascades, floral borders, or floating runes).
+2. BESPOKE PHYSICS & MOTION:
+   Write custom CSS keyframes matching the object physics (flickers, marquee ticker, floating slow-drift, or organic pendulums).
+3. LAYERED LIGHTING & TEXTURES:
+   Apply scanlines, film grain, frosted glassmorphism, or multi-stop glow drop-shadows.
+
+--- REQUIRED OUTPUT FORMAT ---
+Provide a short <design_thinking> architectural rationale, followed by EXACTLY TWO code blocks:
+
+### BLOCK 2: decorations.html
+\`\`\`html
+<div class="persistent-decorations">
+  <!-- Dynamic atmospheric layers, framing objects, and bespoke decorative elements created specifically for this concept -->
+</div>
+\`\`\`
+
+### BLOCK 3: style.css
+\`\`\`css
+:root {
+  --bg-color: ${bgCol};
+  --accent-color: ${accentCol};
+  --primary-color: ${primaryCol};
+}
+.persistent-decorations {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+/* Bespoke layout coordinates, media queries, and fluid animation curves */
+\`\`\`
+
+Output ONLY the <design_thinking> block and the two labeled markdown code blocks.`;
+};
+
+// Generate the complete systematic GenAI prompt template using 4-Layer Dynamic Theme Builder
+window.generateFullSystematicPromptText = function () {
+    const userIntent = document.getElementById('adv-theme-intent')?.value.trim();
+    const titleVal = document.getElementById('inp-title-adv')?.value.trim() 
+                  || document.getElementById('inp-title')?.value.trim();
+    const isCustomTitle = titleVal && titleVal !== 'New Event Photobooth' && titleVal !== 'Untitled Theme ✨';
+    const concept = userIntent || (isCustomTitle ? titleVal : '');
+
+    const density = document.getElementById('lever-density')?.value || '';
+    const motion = document.getElementById('lever-motion')?.value || '';
+    const lighting = document.getElementById('lever-lighting')?.value || '';
+    const archetype = document.getElementById('lever-archetype')?.value || '';
+    const customObjects = document.getElementById('adv-custom-objects')?.value.trim() || '';
+
+    const filmStripChecked = Boolean(document.getElementById('chk-film-strip-adv')?.checked 
+                                  || document.getElementById('chk-film-strip')?.checked);
+    const bgCol = document.getElementById('inp-color-bg')?.value || '#0a0a12';
+    const accentCol = document.getElementById('inp-color-accent')?.value || '#6366f1';
+    const primaryCol = document.getElementById('inp-color-primary')?.value || '#181926';
+
+    const levers = {
+        density,
+        motion,
+        lighting,
+        archetype,
+        customObjects,
+        filmStrip: filmStripChecked,
+        background: bgCol,
+        accent: accentCol,
+        primary: primaryCol
+    };
+
+    return window.buildThemePrompt(concept, levers);
+};
+
+window.copyCustomObjectGenAiPrompt = function () {
+    const userIntent = document.getElementById('adv-theme-intent')?.value.trim();
+    const titleVal = document.getElementById('inp-title-adv')?.value.trim() 
+                  || document.getElementById('inp-title')?.value.trim();
+    const isCustomTitle = titleVal && titleVal !== 'New Event Photobooth' && titleVal !== 'Untitled Theme ✨';
+    const concept = userIntent || (isCustomTitle ? titleVal : '');
+
+    const density = document.getElementById('lever-density')?.value || '';
+    const motion = document.getElementById('lever-motion')?.value || '';
+    const lighting = document.getElementById('lever-lighting')?.value || '';
+    const archetype = document.getElementById('lever-archetype')?.value || '';
+    const customObjects = document.getElementById('adv-custom-objects')?.value.trim() || '';
+
+    const levers = {
+        density,
+        motion,
+        lighting,
+        archetype,
+        customObjects
+    };
+
+    const promptText = window.buildAtmosphereOnlyPrompt(concept, levers);
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(promptText).then(() => {
+            showToast('🎨 Atmosphere Only GenAI Prompt copied! Paste into ChatGPT / Claude / Gemini.', 'success');
+        }).catch(() => {
+            fallbackCopyPromptText(promptText);
+        });
+    } else {
+        fallbackCopyPromptText(promptText);
     }
 };
 
@@ -3097,70 +3166,6 @@ window.addCustomObjectChip = function (objectText) {
     showToast(`Added: ${objectText}`, 'info');
 };
 
-window.copyCustomObjectGenAiPrompt = function () {
-    const concept = document.getElementById('adv-theme-intent')?.value?.trim() || state.theme?.title || 'Interactive Festive Kiosk';
-    const customObjects = document.getElementById('adv-custom-objects')?.value?.trim() || 'Custom festive interface elements, banners, animated header marquee, and ambient particle objects';
-    const bgCol = document.getElementById('inp-color-bg')?.value || '#0c0d14';
-    const accentCol = document.getElementById('inp-color-accent')?.value || '#d4af37';
-    const primaryCol = document.getElementById('inp-color-primary')?.value || '#181926';
-
-    const promptText = `You are an expert creative UI/UX frontend designer and animator for an interactive photobooth touchscreen kiosk.
-
-EVENT THEME CONCEPT: "${concept}"
-COLOR TOKENS: Background ${bgCol}, Brand Accent ${accentCol}, Surface ${primaryCol}
-
-USER'S CUSTOM INTERFACE & ATMOSPHERIC OBJECTS:
-"${customObjects}"
-
-Your task is to design and generate the complete HTML structure and CSS animations for these custom objects.
-Please output EXACTLY TWO CODE BLOCKS to paste into the Photobooth Theme Studio:
-
-### BLOCK 2: decorations.html
-Generate persistent HTML markup for these custom objects wrapped inside <div class="persistent-decorations">:
-\`\`\`html
-<!-- Persistent Custom Interface & Atmospheric Objects -->
-<div class="persistent-decorations">
-    <!-- Place semantic HTML elements for each requested custom object here -->
-    <!-- (e.g. custom neon signs, marquee bars, ticker banners, swaying ornaments, corner crests, particle items) -->
-</div>
-\`\`\`
-
-### BLOCK 3: style.css
-Generate high-performance CSS styling, positioning, and fluid keyframe animations for the custom objects:
-\`\`\`css
-/* Custom Interface Objects Styling */
-:root {
-  --bg-color: ${bgCol};
-  --accent-color: ${accentCol};
-  --primary-color: ${primaryCol};
-}
-
-.persistent-decorations {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1; /* Keeps decorations in background so screen text & kiosk buttons are 100% accessible */
-  overflow: hidden;
-}
-
-/* Specific fixed or absolute positioning, glassmorphism, and keyframe animations for each custom object */
-/* Include pointer-events: none on ambient items so touch clicks on kiosk buttons are never blocked */
-/* Include responsive rules (@media (max-width: 900px)) to hide or scale large side elements cleanly */
-\`\`\`
-
-Output ONLY these two code blocks with their markdown headers.`;
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(promptText).then(() => {
-            showToast('🎨 Custom Objects GenAI Prompt copied! Paste into ChatGPT / Claude / Gemini.', 'success');
-        }).catch(() => {
-            fallbackCopyPromptText(promptText);
-        });
-    } else {
-        fallbackCopyPromptText(promptText);
-    }
-};
-
 window.syncAtmospherePreset = function (elementKey, isChecked) {
     const advMap = {
         'banners': 'chk-dynamic-banners',
@@ -3189,7 +3194,7 @@ function escapeHtml(str) {
 // STUDIO NATURAL LANGUAGE EXAMPLES & INTERACTIVE GUIDE MODAL
 // =========================================================================
 
-window.applyNaturalLanguageExample = function (customObjDesc, themeConcept) {
+window.applyNaturalLanguageExample = function (customObjDesc, themeConcept, exampleKey = null) {
     const objEl = document.getElementById('adv-custom-objects');
     const conceptEl = document.getElementById('adv-theme-intent');
     
@@ -3207,10 +3212,19 @@ window.applyNaturalLanguageExample = function (customObjDesc, themeConcept) {
     if (conceptEl && themeConcept) {
         conceptEl.value = themeConcept;
     }
+
+    // Set creative levers corresponding to the example archetype
+    const exData = exampleKey ? STUDIO_INSPIRATION_DATA[exampleKey] : null;
+    if (exData && exData.levers) {
+        if (exData.levers.density) setValue('lever-density', exData.levers.density);
+        if (exData.levers.motion) setValue('lever-motion', exData.levers.motion);
+        if (exData.levers.lighting) setValue('lever-lighting', exData.levers.lighting);
+        if (exData.levers.archetype) setValue('lever-archetype', exData.levers.archetype);
+    }
     
     window.updateFullSystematicGenAiPrompt();
     window.closeStudioGuideModal();
-    showToast(`✨ Example "${themeConcept || 'Custom'}" applied! The GenAI prompt template below is now customized.`, 'success');
+    showToast(`✨ Example "${themeConcept || 'Custom'}" applied with 4-Layer Creative Levers!`, 'success');
 
     // Smooth scroll down to prompt box if on mobile/small screen
     const promptBox = document.getElementById('adv-systematic-prompt-full');
@@ -3227,125 +3241,171 @@ window.closeStudioGuideModal = function () {
 const STUDIO_INSPIRATION_DATA = {
     cyberpunk: {
         title: '🕹️ Cyberpunk 80s Retro Arcade',
-        badge: 'Retro Neon & Ticker',
-        intent: 'Cyberpunk 80s Retro Arcade',
-        desc: "Retro 80s arcade feel with a glowing pink neon logo reading 'Insert Coin' at top-right, a pixelated green high-score ticker along the bottom, and scanline CRT glow.",
+        badge: 'Archetype 1: Cyber / Arcade',
+        intent: 'Cyberpunk Neo-Tokyo Retro Arcade',
+        desc: "High-octane neon cyber arcade with corner HUD brackets, pulsing 'Insert Coin' marquee ticker along the bottom, scanline CRT overlay, and electrical glitch transitions.",
+        levers: {
+            density: 'Balanced',
+            motion: 'Glitch & Pulse',
+            lighting: 'Neon Glow',
+            archetype: 'Cyber / Arcade / Sci-Fi'
+        },
         tips: [
-            { icon: '🎯', label: 'Screen Anchors', text: 'Top-Right neon badge + Bottom full-width ticker bar. Leaves the middle 80% completely clear for guest poses and clothes.' },
-            { icon: '🌊', label: 'Motion & Physics', text: 'Flickering neon gas tube pulsing (@keyframes neonFlicker) + Smooth 60fps horizontal marquee scrolling (@keyframes tickerMarquee).' },
-            { icon: '🎨', label: 'Visual Atmosphere', text: 'Multi-layer pink glow drop-shadows (0 0 15px #f472b6, 0 0 30px #ec4899) with subtle CRT scanline vignette in the backdrop.' },
-            { icon: '🛡️', label: 'Guest Touch Protection', text: 'Uses pointer-events: none and z-index: 1 so guests can tap pose cards and countdown buttons with zero interference.' }
+            { icon: '🎯', label: 'Layer 1: Structural Polymorphism', text: 'Corner HUD brackets + bottom scanning ticker rail. Leaves the center 70% completely clear for interactive pose and wardrobe cards.' },
+            { icon: '🌊', label: 'Layer 2: Parameterized Motion', text: 'Electrical glitch pulsing (@keyframes neonGlitch) + smooth 60fps horizontal data ticker marquee (@keyframes hudTicker).' },
+            { icon: '🎨', label: 'Layer 3: Atmospheric Lighting', text: 'Multi-layer cyan & hot-pink glow drop-shadows with subtle scanline CRT texture filter.' },
+            { icon: '🛡️', label: 'Touch Interaction Safety', text: 'All ambient layers have pointer-events: none so touchscreen kiosk buttons are never blocked.' }
         ],
         codeSnippetHtml: `<!-- Persistent Custom Interface: Block 2 (decorations.html) -->
 <div class="persistent-decorations">
-  <div class="arcade-neon-coin">INSERT COIN [25¢]</div>
-  <div class="arcade-score-ticker">
-    <div class="ticker-track">★ 1P READY ★ HIGH SCORE: 999990 ★ INSERT COIN TO PLAY ★ BONUS LEVEL UNLOCKED ★</div>
+  <div class="cyber-hud-bracket hud-top-left"></div>
+  <div class="cyber-hud-bracket hud-top-right"></div>
+  <div class="cyber-data-rail">
+    <span class="ticker-text">★ SYSTEM READY ★ 60FPS SYNTHESIS ★ CHOOSE YOUR LOOK ★</span>
   </div>
-  <div class="crt-scanline-vignette"></div>
+  <div class="crt-scanline-overlay"></div>
 </div>`,
-        codeSnippetCss: `/* High-Performance Animations: Block 3 (style.css) */
-@keyframes neonFlicker {
-  0%, 100% { opacity: 1; text-shadow: 0 0 12px #f472b6, 0 0 28px #ec4899; }
-  45% { opacity: 0.92; text-shadow: 0 0 8px #f472b6; }
-  50% { opacity: 0.75; }
-  55% { opacity: 1; }
+        codeSnippetCss: `/* Scoped Keyframes & Atmospheric Styling: Block 3 (style.css) */
+@keyframes neonGlitch {
+  0%, 100% { opacity: 1; text-shadow: 0 0 12px #06b6d4, 0 0 25px #ec4899; }
+  50% { opacity: 0.85; text-shadow: 0 0 6px #06b6d4; }
 }
-@keyframes tickerMarquee {
+@keyframes hudTicker {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
 }`
     },
     gatsby: {
-        title: '🍸 1920s Great Gatsby Gala',
-        badge: 'Art-Deco Gold & Chandeliers',
-        intent: '1920s Great Gatsby Gala',
-        desc: "Art-deco geometric gold frames along borders, swaying crystal chandeliers at top corners, and floating champagne sparkle particles.",
+        title: '🍸 1920s Great Gatsby Roaring Gala',
+        badge: 'Archetype 2: Royal Gala / Luxury',
+        intent: '1920s Great Gatsby Roaring Gala',
+        desc: "Art-deco gilded pediments, slender filigree geometric borders, swaying crystal prism chandeliers at top corners, and champagne bubble sparkle particles.",
+        levers: {
+            density: 'Balanced',
+            motion: 'Gentle Drift',
+            lighting: 'Specular Gold',
+            archetype: 'Royal Gala / Luxury'
+        },
         tips: [
-            { icon: '🎯', label: 'Screen Anchors', text: 'Suspended chandeliers from top-left and top-right corners (top: 0; left: 35px & right: 35px) + 1px gold hairline borders.' },
-            { icon: '🌊', label: 'Motion & Physics', text: 'Pendulum sway physics (transform-origin: top center; @keyframes gatsbySway 4.5s ease-in-out infinite alternate).' },
-            { icon: '🎨', label: 'Visual Atmosphere', text: 'Reflective gold metallic linear gradient borders and champagne bubble star particles drifting softly upward.' },
-            { icon: '🛡️', label: 'Guest Touch Protection', text: 'Strictly bounds floating sparkles to outer screen flanks so the middle photo area is clean.' }
+            { icon: '🎯', label: 'Layer 1: Structural Polymorphism', text: 'Slender gold filigree perimeter borders and gilded architrave pediments framing the screen.' },
+            { icon: '🌊', label: 'Layer 2: Parameterized Motion', text: 'Slow pendulum sway physics on crystal chandeliers (transform-origin: top center; @keyframes chandelierSway).' },
+            { icon: '🎨', label: 'Layer 3: Atmospheric Lighting', text: 'Specular metallic gold linear gradients and champagne bubble sparkle particles drifting upward.' },
+            { icon: '🛡️', label: 'Touch Interaction Safety', text: 'Floating champagne sparkles are strictly bounded to outer flanks to preserve touchscreen clarity.' }
         ],
         codeSnippetHtml: `<!-- Persistent Custom Interface: Block 2 (decorations.html) -->
 <div class="persistent-decorations">
+  <div class="gatsby-pediment-crest">✧ GALA EXTRAORDINAIRE ✧</div>
   <div class="gatsby-chandelier chandelier-left">✦ ❖ ✦</div>
   <div class="gatsby-chandelier chandelier-right">✦ ❖ ✦</div>
-  <div class="gatsby-deco-border-flank"></div>
+  <div class="gatsby-filigree-frame"></div>
   <div class="champagne-sparkle s-1">✨</div>
-  <div class="champagne-sparkle s-2">🍾</div>
 </div>`,
-        codeSnippetCss: `/* Pendulum Sway & Sparkling Rising Animations: Block 3 (style.css) */
-@keyframes gatsbySway {
+        codeSnippetCss: `/* Pendulum Sway & Rising Sparkles: Block 3 (style.css) */
+@keyframes chandelierSway {
   0% { transform: rotate(-3.5deg); }
   100% { transform: rotate(3.5deg); }
 }
 @keyframes champagneRise {
   0% { transform: translateY(105vh) scale(0.8); opacity: 0; }
-  30% { opacity: 0.7; }
+  50% { opacity: 0.8; }
   100% { transform: translateY(-5vh) scale(1.1); opacity: 0; }
 }`
     },
-    japanese: {
-        title: '⛩️ Cozy Japanese Autumn',
-        badge: 'Woodwork, Lanterns & Leaves',
-        intent: 'Cozy Japanese Autumn',
-        desc: "Warm wooden signboard header, softly swaying red paper chochin lanterns at the sides, and gently falling maple leaves drifting down.",
+    cultural: {
+        title: '⛩️ Cultural & Heritage Festival',
+        badge: 'Archetype 3: Cultural / Heritage',
+        intent: 'Cultural & Heritage Celebration',
+        desc: "Multi-tier architectural torii eaves, vertical calligraphy banners flanking outer screen bounds, and softly swaying paper lanterns under warm atmospheric lighting.",
+        levers: {
+            density: 'Balanced',
+            motion: 'Gentle Drift',
+            lighting: 'Subtle Matte',
+            archetype: 'Cultural / Heritage'
+        },
         tips: [
-            { icon: '🎯', label: 'Screen Anchors', text: 'Curved wooden signboard centered at top header + red paper lanterns flanking side margins.' },
-            { icon: '🌊', label: 'Motion & Physics', text: 'Gentle breeze lantern swaying + swirling falling autumn maple leaves drifting downward.' },
-            { icon: '🎨', label: 'Visual Atmosphere', text: 'Warm cherrywood textured arch, soft red ambient lantern glow, and golden kanji calligraphy subtitle.' },
-            { icon: '🛡️', label: 'Guest Touch Protection', text: 'Side margins are hidden automatically on narrow mobile screens (@media (max-width: 900px)).' }
+            { icon: '🎯', label: 'Layer 1: Structural Polymorphism', text: 'Multi-tier architectural eaves centered at top + swaying paper lanterns hung on side margins.' },
+            { icon: '🌊', label: 'Layer 2: Parameterized Motion', text: 'Breeze physics simulation with cubic-bezier ease for swaying red paper chochin lanterns.' },
+            { icon: '🎨', label: 'Layer 3: Atmospheric Lighting', text: 'Warm ambient glow, tactile cherrywood textures, and golden calligraphy subtitles.' },
+            { icon: '🛡️', label: 'Touch Interaction Safety', text: 'Side margins automatically hide or collapse on narrow screens via responsive media queries.' }
         ],
         codeSnippetHtml: `<!-- Persistent Custom Interface: Block 2 (decorations.html) -->
 <div class="persistent-decorations">
-  <div class="japanese-wooden-header"><span>秋の記憶 • AUTUMN MEMORIES</span></div>
-  <div class="chochin-lantern lantern-left">🏮</div>
-  <div class="chochin-lantern lantern-right">🏮</div>
-  <div class="maple-leaf leaf-1">🍁</div>
-  <div class="maple-leaf leaf-2">🍂</div>
+  <div class="heritage-torii-eaves"><span>✦ TRADITION & CELEBRATION ✦</span></div>
+  <div class="swaying-lantern lantern-left">🏮</div>
+  <div class="swaying-lantern lantern-right">🏮</div>
+  <div class="falling-petal petal-1">🌸</div>
 </div>`,
-        codeSnippetCss: `/* Autumn Leaves Drift & Lantern Breeze: Block 3 (style.css) */
+        codeSnippetCss: `/* Breeze Physics & Falling Petals: Block 3 (style.css) */
 @keyframes lanternBreeze {
-  0% { transform: rotate(-4deg); }
+  0%, 100% { transform: rotate(-4deg); }
   50% { transform: rotate(4deg); }
-  100% { transform: rotate(-4deg); }
 }
-@keyframes leafFall {
+@keyframes petalDrift {
   0% { transform: translateY(-30px) rotate(0deg); opacity: 0; }
-  20% { opacity: 0.8; }
+  25% { opacity: 0.8; }
   100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
 }`
     },
-    luxury: {
-        title: '💎 Minimalist Modern Luxury',
-        badge: 'Frosted Glass & Ambient Orbs',
-        intent: 'Minimalist Modern Luxury',
-        desc: "Sleek frosted glass pill banners, ultra-thin gold hairline borders, and subtle glowing pulse orbs behind the cards.",
+    vaporwave: {
+        title: '📼 80s Retro Pop / Vaporwave',
+        badge: 'Archetype 4: Retro Pop',
+        intent: '80s Retro Pop Vaporwave Paradise',
+        desc: "Isometric perspective grid floor, glowing neon palm silhouette at bottom-right, holographic cassette badge, and radiant sunset gradient aura.",
+        levers: {
+            density: 'Immersive Maximalist',
+            motion: 'High Energy',
+            lighting: 'Neon Glow',
+            archetype: 'Retro Pop / Vaporwave'
+        },
         tips: [
-            { icon: '🎯', label: 'Screen Anchors', text: 'Top centered frosted pill badge + ultra-thin hairline border lines flanking outer edges.' },
-            { icon: '🌊', label: 'Motion & Physics', text: 'Slow, elegant 8-second breathing pulse on ambient radial gradient glow orbs.' },
-            { icon: '🎨', label: 'Visual Atmosphere', text: 'Modern frosted glass acrylic (backdrop-filter: blur(16px)) with hairline gold metallic borders.' },
-            { icon: '🛡️', label: 'Guest Touch Protection', text: 'All orbs and banners are strictly non-interactive (pointer-events: none), leaving cards super crisp.' }
+            { icon: '🎯', label: 'Layer 1: Structural Polymorphism', text: '3D perspective grid floor along bottom 15vh + floating neon palm and cassette badges.' },
+            { icon: '🌊', label: 'Layer 2: Parameterized Motion', text: 'Endless horizon grid scroll (@keyframes gridHorizon) with pulsating neon palm glow.' },
+            { icon: '🎨', label: 'Layer 3: Atmospheric Lighting', text: 'Sunset gradient backdrop (magenta to electric violet) with chromatic aberration shadows.' },
+            { icon: '🛡️', label: 'Touch Interaction Safety', text: 'Floor horizon is anchored strictly below the interactive card zone.' }
         ],
         codeSnippetHtml: `<!-- Persistent Custom Interface: Block 2 (decorations.html) -->
 <div class="persistent-decorations">
-  <div class="luxury-pill-badge">✦ EXECUTIVE PORTRAIT SUITE ✦</div>
-  <div class="luxury-hairline-frame"></div>
-  <div class="ambient-glow-orb orb-1"></div>
-  <div class="ambient-glow-orb orb-2"></div>
+  <div class="vaporwave-grid-floor"></div>
+  <div class="neon-palm-crest">🌴</div>
+  <div class="floating-cassette">📼</div>
+  <div class="synthwave-sun"></div>
 </div>`,
-        codeSnippetCss: `/* Frosted Glass & Breathing Glow: Block 3 (style.css) */
-.luxury-pill-badge {
-  backdrop-filter: blur(16px);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.35);
-  border-radius: 9999px;
-  padding: 8px 24px;
-}
-@keyframes orbPulse {
-  0% { opacity: 0.25; transform: scale(0.95); }
-  100% { opacity: 0.55; transform: scale(1.05); }
+        codeSnippetCss: `/* Grid Horizon Scroll: Block 3 (style.css) */
+@keyframes gridHorizon {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 40px; }
+}`
+    },
+    fantasy: {
+        title: '🌿 Enchanted Fairy Forest',
+        badge: 'Archetype 5: Whimsical / Fantasy',
+        intent: 'Enchanted Fairy Forest',
+        desc: "Organic botanical vine borders, undulating celestial aurora ribbons across the top header, and gently drifting glowing fairy spore runes.",
+        levers: {
+            density: 'Immersive Maximalist',
+            motion: 'Gentle Drift',
+            lighting: 'Neon Glow',
+            archetype: 'Whimsical / Fantasy'
+        },
+        tips: [
+            { icon: '🎯', label: 'Layer 1: Structural Polymorphism', text: 'Organic flora borders hugging screen edges + celestial aurora ribbons flowing across the header.' },
+            { icon: '🌊', label: 'Layer 2: Parameterized Motion', text: 'Undulating sinusoidal wave keyframes (@keyframes auroraWave) and buoyant micro-sparks.' },
+            { icon: '🎨', label: 'Layer 3: Atmospheric Lighting', text: 'Bioluminescent emerald and ethereal violet radiance with frosted glass textures.' },
+            { icon: '🛡️', label: 'Touch Interaction Safety', text: 'Vines and auroras are strictly perimeter-anchored, leaving center 70% clear.' }
+        ],
+        codeSnippetHtml: `<!-- Persistent Custom Interface: Block 2 (decorations.html) -->
+<div class="persistent-decorations">
+  <div class="aurora-ribbon-canopy"></div>
+  <div class="botanical-vine-border border-left"></div>
+  <div class="botanical-vine-border border-right"></div>
+  <div class="fairy-spore spore-1">✨</div>
+  <div class="fairy-spore spore-2">✦</div>
+</div>`,
+        codeSnippetCss: `/* Undulating Aurora Wave & Spore Float: Block 3 (style.css) */
+@keyframes auroraWave {
+  0% { transform: scaleX(1) translateY(0); filter: hue-rotate(0deg); }
+  50% { transform: scaleX(1.08) translateY(6px); filter: hue-rotate(45deg); }
+  100% { transform: scaleX(1) translateY(0); filter: hue-rotate(0deg); }
 }`
     }
 };
@@ -3376,7 +3436,7 @@ window.showExampleExplanationModal = function (exampleKey) {
     bodyEl.innerHTML = `
         <div style="margin-bottom: 1.1rem; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 8px; padding: 0.85rem 1rem;">
             <div style="font-size: 0.75rem; font-weight: 700; color: #818cf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.3rem;">
-                📝 The Natural Language Description Sent to GenAI:
+                📋 The Natural Language Description Sent to GenAI:
             </div>
             <div style="font-size: 0.88rem; color: #fff; font-weight: 600; font-style: italic;">
                 "${data.desc}"
@@ -3412,7 +3472,7 @@ window.showExampleExplanationModal = function (exampleKey) {
     if (footerEl) {
         footerEl.innerHTML = `
             <button type="button" class="admin-btn admin-btn-secondary" onclick="closeStudioGuideModal()">Close</button>
-            <button type="button" class="admin-btn admin-btn-accent" style="display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1.2rem; font-weight: 700;" onclick="applyNaturalLanguageExample('${data.desc.replace(/'/g, "\\'")}', '${data.intent.replace(/'/g, "\\'")}')">
+            <button type="button" class="admin-btn admin-btn-accent" style="display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 1.2rem; font-weight: 700;" onclick="applyNaturalLanguageExample('${data.desc.replace(/'/g, "\'")}', '${data.intent.replace(/'/g, "\'")}', '${exampleKey}')">
                 <span>⚡</span> Apply This Example to Studio
             </button>
         `;
@@ -3552,49 +3612,87 @@ window.showStudioWalkthroughModal = function () {
 let _autoApplyDebounceTimer = null;
 window._lastAutoAppliedJson = '';
 
-// Extract clean JSON from user pasted text (resilient to markdown fences, trailing commas, surrounding comments, and multi-block paste)
-function extractJsonFromText(rawText) {
+// =========================================================================
+// MULTI-BLOCK PARSER & UNIFIED ALL-IN-ONE RESPONSE PARSER
+// Extracts <design_thinking>, Block 1 JSON, Block 2 HTML, and Block 3 CSS
+// =========================================================================
+
+window.parseMultiBlockGenAiResponse = function (rawText) {
     if (!rawText || typeof rawText !== 'string') return null;
-    let text = rawText.trim();
+    const text = rawText.trim();
     if (!text) return null;
 
-    // Detect if user pasted the entire multi-block GenAI response into Block 1 box:
-    // If so, automatically extract HTML and CSS and populate them into tabs 2 & 3!
-    const htmlFenceMatch = text.match(/```(?:html|xml)?\s*([\s\S]*?)```/i);
-    const cssFenceMatch = text.match(/```(?:css)?\s*([\s\S]*?)```/i);
-    const jsonFenceMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+    const result = {
+        designThinking: '',
+        json: '',
+        config: null,
+        html: '',
+        css: ''
+    };
 
-    if (htmlFenceMatch && htmlFenceMatch[1]) {
-        const htmlEl = document.getElementById('adv-decorations-html');
-        if (htmlEl && (!htmlEl.value || !htmlEl.value.trim())) {
-            htmlEl.value = htmlFenceMatch[1].trim();
-        }
-    }
-    if (cssFenceMatch && cssFenceMatch[1]) {
-        const cssEl = document.getElementById('adv-custom-css');
-        if (cssEl && (!cssEl.value || !cssEl.value.trim())) {
-            cssEl.value = cssFenceMatch[1].trim();
-        }
+    // 1. Extract <design_thinking>...</design_thinking>
+    const dtMatch = text.match(/<design_thinking>([\s\S]*?)<\/design_thinking>/i);
+    if (dtMatch && dtMatch[1]) {
+        result.designThinking = dtMatch[1].trim();
     }
 
-    let candidate = '';
-    if (jsonFenceMatch && jsonFenceMatch[1]) {
-        candidate = jsonFenceMatch[1].trim();
+    // 2. Extract Block 1: theme_identity.json
+    const b1Match = text.match(/(?:###\s*BLOCK\s*1[^\n]*\n)?```(?:json)?\s*([\s\S]*?)```/i);
+    if (b1Match && b1Match[1]) {
+        result.json = b1Match[1].trim();
     } else {
-        const firstBrace = text.indexOf('{');
-        const lastBrace = text.lastIndexOf('}');
-        if (firstBrace !== -1 && lastBrace > firstBrace) {
-            candidate = text.substring(firstBrace, lastBrace + 1).trim();
+        const jsonFences = [...text.matchAll(/```(?:json)?\s*([\s\S]*?)```/gi)];
+        if (jsonFences.length > 0) {
+            result.json = jsonFences[0][1].trim();
         } else {
-            candidate = text;
+            const firstBrace = text.indexOf('{');
+            const lastBrace = text.lastIndexOf('}');
+            if (firstBrace !== -1 && lastBrace > firstBrace) {
+                result.json = text.substring(firstBrace, lastBrace + 1).trim();
+            }
         }
     }
 
+    if (result.json) {
+        result.config = parseJsonCandidate(result.json);
+    }
+
+    // 3. Extract Block 2: decorations.html
+    const b2Match = text.match(/(?:###\s*BLOCK\s*2[^\n]*\n)?```(?:html|xml)\s*([\s\S]*?)```/i);
+    if (b2Match && b2Match[1]) {
+        result.html = b2Match[1].trim();
+    } else {
+        const htmlFences = [...text.matchAll(/```(?:html|xml)\s*([\s\S]*?)```/gi)];
+        if (htmlFences.length > 0) {
+            result.html = htmlFences[0][1].trim();
+        } else {
+            const decoMatch = text.match(/<div class=["']persistent-decorations["']>[\s\S]*?<\/div>/i);
+            if (decoMatch) {
+                result.html = decoMatch[0].trim();
+            }
+        }
+    }
+
+    // 4. Extract Block 3: style.css
+    const b3Match = text.match(/(?:###\s*BLOCK\s*3[^\n]*\n)?```(?:css)\s*([\s\S]*?)```/i);
+    if (b3Match && b3Match[1]) {
+        result.css = b3Match[1].trim();
+    } else {
+        const cssFences = [...text.matchAll(/```(?:css)\s*([\s\S]*?)```/gi)];
+        if (cssFences.length > 0) {
+            result.css = cssFences[0][1].trim();
+        }
+    }
+
+    return result;
+};
+
+function parseJsonCandidate(candidate) {
+    if (!candidate) return null;
     let parsed = null;
     try {
         parsed = JSON.parse(candidate);
     } catch (e) {
-        // Try stripping trailing commas which GenAI models sometimes leave
         try {
             const cleaned = candidate.replace(/,\s*([\]}])/g, '$1');
             parsed = JSON.parse(cleaned);
@@ -3614,8 +3712,123 @@ function extractJsonFromText(rawText) {
             parsed = parsed.block1;
         }
     }
-
     return parsed;
+}
+
+window.applyUnifiedAiText = function (rawText) {
+    const parsed = window.parseMultiBlockGenAiResponse(rawText);
+    if (!parsed) return false;
+
+    let appliedCount = 0;
+
+    // Design Thinking
+    if (parsed.designThinking) {
+        const dtBox = document.getElementById('adv-design-thinking-box');
+        const dtContent = document.getElementById('adv-design-thinking-content');
+        if (dtBox && dtContent) {
+            dtContent.textContent = parsed.designThinking;
+            dtBox.style.display = 'block';
+            appliedCount++;
+        }
+    }
+
+    // Block 1 JSON & Theme Config
+    if (parsed.json && parsed.config) {
+        const jsonEl = document.getElementById('adv-identity-json');
+        if (jsonEl) jsonEl.value = parsed.json;
+        window.applyConfigToThemeFields(parsed.config, false);
+        appliedCount++;
+    }
+
+    // Block 2 HTML
+    if (parsed.html) {
+        const htmlEl = document.getElementById('adv-decorations-html');
+        if (htmlEl) htmlEl.value = parsed.html;
+        appliedCount++;
+    }
+
+    // Block 3 CSS
+    if (parsed.css) {
+        const cssEl = document.getElementById('adv-custom-css');
+        if (cssEl) cssEl.value = parsed.css;
+        appliedCount++;
+    }
+
+    return appliedCount > 0;
+};
+
+window.openUnifiedPasteModal = function () {
+    const modal = document.getElementById('unified-paste-modal');
+    const input = document.getElementById('inp-unified-ai-paste');
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('open');
+        if (input) {
+            input.value = '';
+            setTimeout(() => input.focus(), 120);
+        }
+    }
+};
+
+window.closeUnifiedPasteModal = function () {
+    const modal = document.getElementById('unified-paste-modal');
+    if (modal) {
+        modal.classList.remove('open');
+        modal.style.display = 'none';
+    }
+};
+
+window.applyUnifiedAiPaste = function () {
+    const input = document.getElementById('inp-unified-ai-paste');
+    const text = input ? input.value.trim() : '';
+    if (!text) {
+        showToast('Please paste AI response text first!', 'warning');
+        return;
+    }
+    const success = window.applyUnifiedAiText(text);
+    if (success) {
+        window.closeUnifiedPasteModal();
+        showToast('✨ 4-Layer Dynamic Theme successfully parsed & populated into all tabs!', 'success');
+    } else {
+        showToast('Could not find recognizable code blocks. Please check formatting.', 'error');
+    }
+};
+
+// Extract clean JSON from user pasted text (also auto-extracts HTML/CSS if full response pasted into Block 1 box)
+function extractJsonFromText(rawText) {
+    if (!rawText || typeof rawText !== 'string') return null;
+    let text = rawText.trim();
+    if (!text) return null;
+
+    // Check if full multi-block response was pasted into Block 1 box
+    if (text.includes('BLOCK 2') || text.includes('decorations.html') || text.includes('<design_thinking>') || text.includes('```html') || text.includes('```css')) {
+        const parsed = window.parseMultiBlockGenAiResponse(text);
+        if (parsed) {
+            if (parsed.designThinking) {
+                const dtBox = document.getElementById('adv-design-thinking-box');
+                const dtContent = document.getElementById('adv-design-thinking-content');
+                if (dtBox && dtContent) {
+                    dtContent.textContent = parsed.designThinking;
+                    dtBox.style.display = 'block';
+                }
+            }
+            if (parsed.html) {
+                const htmlEl = document.getElementById('adv-decorations-html');
+                if (htmlEl) htmlEl.value = parsed.html;
+            }
+            if (parsed.css) {
+                const cssEl = document.getElementById('adv-custom-css');
+                if (cssEl) cssEl.value = parsed.css;
+            }
+            if (parsed.json) {
+                const jsonEl = document.getElementById('adv-identity-json');
+                if (jsonEl && jsonEl.value !== parsed.json) jsonEl.value = parsed.json;
+            }
+            if (parsed.config) return parsed.config;
+        }
+    }
+
+    return parseJsonCandidate(text);
 }
 
 window.applyConfigToThemeFields = function (config, silent = true) {
