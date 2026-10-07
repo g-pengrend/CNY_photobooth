@@ -596,9 +596,7 @@
                                 <button type="button" class="admin-btn admin-btn-accent" style="padding: 0.55rem 1.3rem; font-size: 0.88rem; font-weight: 700; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: #059669; box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);" onclick="openUnifiedPasteModal()" title="Paste entire multi-block AI response to populate JSON, HTML, and CSS in one click">
                                     ⚡ Quick Paste Full Response
                                 </button>
-                                <button type="button" class="admin-btn admin-btn-accent" style="font-size: 0.84rem; padding: 0.55rem 1.1rem; font-weight: 700;" onclick="openAtmospherePreviewModal()">
-                                    👁️ Live Kiosk Preview
-                                </button>
+                                
                             </div>
                         </div>
 
@@ -685,6 +683,23 @@
                                 </span>
                             </div>
                             <textarea id="adv-custom-css" rows="11" placeholder="/* Paste GenAI Block 3 (style.css) here */" style="width: 100%; padding: 0.9rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #93c5fd; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.84rem; line-height: 1.45; resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- Live Kiosk Preview Action Bar (Placed directly after manual/quick pasting of the 3 code blocks) -->
+                        <div style="margin-top: 1.25rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: var(--radius-sm); padding: 1.1rem 1.3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <div>
+                                <div style="font-size: 0.92rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>👁️</span> Ready to Test? Live Kiosk Preview
+                                </div>
+                                <div style="font-size: 0.78rem; color: #cbd5e1; margin-top: 0.25rem; line-height: 1.4;">
+                                    Compiles your newly pasted JSON, HTML, and CSS into the touchscreen kiosk simulator with interactive touch checks.
+                                </div>
+                            </div>
+                            <div>
+                                <button type="button" class="admin-btn admin-btn-accent" style="padding: 0.65rem 1.45rem; font-size: 0.92rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 18px rgba(99, 102, 241, 0.45); cursor: pointer;" onclick="openAtmospherePreviewModal()">
+                                    <span>👁️</span> Live Kiosk Preview
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Theme Details (Populated from GenAI JSON or editable below) -->
