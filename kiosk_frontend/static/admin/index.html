@@ -312,72 +312,76 @@
                 <!-- ========================================================= -->
                 <div id="container-mode-advanced" style="display: none;">
 
-                    <!-- STEP 1: Teach & Copy Prompt Template -->
+                    <!-- STEP 1: DEFINE CONCEPT & COMPILE BESPOKE PROMPT -->
                     <div class="form-section" style="border: 1px solid rgba(99, 102, 241, 0.4); background: rgba(18, 20, 36, 0.85); border-radius: var(--radius-md); padding: 1.5rem; position: relative;">
                         <div style="position: absolute; top: 0; right: 0; background: linear-gradient(135deg, var(--primary), #ec4899); color: #fff; font-size: 0.68rem; font-weight: 800; padding: 0.25rem 0.8rem; border-bottom-left-radius: var(--radius-sm); letter-spacing: 0.5px;">
-                            🤖 GENAI PROMPT TEMPLATE
+                            🤖 4-LAYER THEME BUILDER
                         </div>
 
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem;">
-                            <div style="max-width: 720px;">
-                                <div style="display: flex; align-items: center; gap: 0.6rem;">
-                                    <span style="font-size: 1.4rem;">📖</span>
-                                    <h3 class="section-title" style="margin: 0; font-size: 1.25rem;">Step 1: Copy GenAI Prompt Template</h3>
-                                </div>
-                                <p class="section-desc" style="margin-top: 0.4rem; line-height: 1.5;">
-                                    Use this template to instruct ChatGPT, Claude, or Gemini to systematically build your photobooth interface (theme identity, color tokens, festive decorations, and waiting sequence). 
-                                    <strong>If you don't specify a theme concept below, the AI will propose an exciting creative theme for you!</strong>
-                                </p>
+                        <!-- Step 1 Title & Description -->
+                        <div style="max-width: 780px; margin-bottom: 1.25rem;">
+                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                <span style="font-size: 1.4rem;">✨</span>
+                                <h3 class="section-title" style="margin: 0; font-size: 1.25rem;">Step 1: Define Your Concept &amp; Creative Levers</h3>
                             </div>
-                            <button type="button" class="admin-btn admin-btn-accent" onclick="copyFullSystematicGenAiPrompt()" style="padding: 0.55rem 1.3rem; font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);" title="Generates full theme: JSON identity, colors, waiting sequence, HTML & CSS">
-                                <span>📋</span> Copy Full Theme Prompt (Blocks 1, 2, 3)
-                            </button>
+                            <p class="section-desc" style="margin-top: 0.4rem; line-height: 1.5;">
+                                Describe your event theme and adjust creative levers below. The 4-Layer Dynamic Engine will compile a bespoke prompt for ChatGPT, Claude, or Gemini without locking you into rigid templates.
+                            </p>
                         </div>
 
-                        <!-- Template Controls Bar -->
-                        <div style="background: rgba(0,0,0,0.35); padding: 1.1rem 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 1.2rem;">
-                            <div style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; margin-bottom: 1rem;">
-                                <div style="flex: 1; min-width: 260px;">
-                                    <label style="font-size: 0.82rem; font-weight: 600; color: #a5b4fc; display: block; margin-bottom: 0.35rem;">
-                                        💡 Theme Intent / Event Concept (Optional — or leave blank to let AI propose):
-                                    </label>
-                                    <input id="adv-theme-intent" type="text" placeholder="e.g. Vintage Parisian Bistro, Cyberpunk Gala, Mid-Autumn Lanterns (or leave blank)" style="width: 100%; font-size: 0.85rem;" oninput="updateFullSystematicGenAiPrompt()">
-                                </div>
-                                <div>
-                                    <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer; font-weight: 600; color: #fff; font-size: 0.88rem; background: rgba(99, 102, 241, 0.15); padding: 0.6rem 1rem; border-radius: var(--radius-sm); border: 1px solid rgba(99, 102, 241, 0.4);">
-                                        <input id="chk-film-strip-adv" type="checkbox" onchange="syncThemeAdvancedIdentity('filmStrip', this.checked)">
-                                        <span>🎞️ Enable Rolling Film Screen</span>
-                                    </label>
-                                </div>
+                        <!-- 1. Concept & Visual Elements Input Panel -->
+                        <div style="background: rgba(0,0,0,0.35); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); margin-bottom: 1.2rem;">
+                            <!-- Concept Intent Input -->
+                            <div style="margin-bottom: 1rem;">
+                                <label for="adv-theme-intent" style="font-size: 0.82rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.35rem;">
+                                    <span>💡</span> Theme Concept / Event Intent:
+                                </label>
+                                <input id="adv-theme-intent" type="text" placeholder="e.g. Cyberpunk Neo-Tokyo, 1920s Great Gatsby Gala, Enchanted Fairy Forest, 80s Retro Arcade (or leave blank for AI to propose)" style="width: 100%; font-size: 0.88rem; background: #07080f; border: 1px solid var(--border-subtle); color: #fff; padding: 0.7rem; border-radius: var(--radius-sm);" oninput="updateFullSystematicGenAiPrompt()">
                             </div>
 
-                            <!-- Custom Interface & Atmospheric Objects (Build Any Element) -->
-                            <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.95rem;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
-                                    <div style="font-size: 0.82rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 0.4rem;">
-                                        <span>🛠️</span> Custom Interface &amp; Atmospheric Objects:
-                                    </div>
-                                    <div style="font-size: 0.74rem; color: #94a3b8;">
-                                        (HTML goes to <strong>Block 2: decorations.html</strong>, CSS goes to <strong>Block 3: style.css</strong>)
-                                    </div>
-                                </div>
+                            <!-- Visual Objects & Atmosphere Details Textarea -->
+                            <div style="margin-bottom: 0.85rem;">
+                                <label for="adv-custom-objects" style="font-size: 0.82rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.35rem;">
+                                    <span>🎨</span> Visual Details &amp; Atmospheric Elements (In Plain English):
+                                </label>
+                                <textarea id="adv-custom-objects" rows="2" placeholder="e.g. Glowing neon sign reading 'Tokyo Nights', digital scanning ticker along top, holographic crests, swaying lanterns, floating lotus petals..." style="width: 100%; font-size: 0.85rem; background: #07080f; border: 1px solid var(--border-subtle); color: #f8fafc; padding: 0.75rem; border-radius: var(--radius-sm); font-family: inherit; line-height: 1.45; resize: vertical;" oninput="updateFullSystematicGenAiPrompt()"></textarea>
+                            </div>
 
-                                <!-- Collapsible Interactive Style & Prompting Guide with Clickable Examples -->
-                                <details style="background: rgba(99, 102, 241, 0.07); border: 1px solid rgba(99, 102, 241, 0.28); border-radius: var(--radius-sm); margin-bottom: 0.85rem; padding: 0.75rem 1rem;" open>
-                                    <summary style="font-size: 0.84rem; font-weight: 700; color: #a5b4fc; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
-                                        <span style="display: flex; align-items: center; gap: 0.5rem;">
-                                            <span style="font-size: 1.1rem;">💡</span> Atmosphere Inspirations (Click to Apply or View Breakdown)
-                                        </span>
-                                        <div style="display: flex; align-items: center; gap: 0.6rem;">
-                                            <button type="button" class="admin-btn admin-btn-secondary" style="padding: 0.25rem 0.65rem; font-size: 0.72rem; display: flex; align-items: center; gap: 0.35rem; border-color: rgba(99, 102, 241, 0.4);" onclick="event.stopPropagation(); showStudioWalkthroughModal();" title="Click to view full step-by-step walkthrough & prompting tips">
-                                                <span>📖</span> Tutorial &amp; Prompting Tips
-                                            </button>
-                                            <span style="font-size: 0.72rem; color: #818cf8; text-decoration: underline;">Click to toggle</span>
-                                        </div>
-                                    </summary>
-                                    
-                                    <div style="margin-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.75rem;">
-                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.6rem;">
+                            <!-- Quick Suggestion Chips -->
+                            <div style="display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.85rem;">
+                                <span style="font-size: 0.73rem; color: var(--text-dim); margin-right: 0.2rem;">Quick Chips:</span>
+                                <button type="button" class="chip-sm" onclick="addCustomObjectChip('🕹️ Corner HUD Brackets & Scanning Ticker')">+ 🕹️ Cyber HUD Brackets</button>
+                                <button type="button" class="chip-sm" onclick="addCustomObjectChip('👑 Gilded Art-Deco Pediment & Fluted Columns')">+ 👑 Gilded Pediment</button>
+                                <button type="button" class="chip-sm" onclick="addCustomObjectChip('🏮 Multi-Tier Torii Eaves & Swaying Lanterns')">+ 🏮 Heritage Eaves</button>
+                                <button type="button" class="chip-sm" onclick="addCustomObjectChip('📼 Isometric Neon Grid & Retro Marquee')">+ 📼 Neon Grid</button>
+                                <button type="button" class="chip-sm" onclick="addCustomObjectChip('🌿 Organic Botanical Borders & Aurora Ribbons')">+ 🌿 Botanical Runes</button>
+                                <button type="button" class="chip-sm" onclick="addCustomObjectChip('⚡ Scanline CRT Filter & Electrical Glitch')">+ ⚡ CRT Glitch</button>
+                                <button type="button" class="chip-sm" onclick="addCustomObjectChip('🥂 Champagne Crystal Cascade Sparkles')">+ 🥂 Crystal Cascades</button>
+                            </div>
+
+                            <!-- Film Screen Feature Checkbox -->
+                            <div style="margin-bottom: 0.85rem;">
+                                <label style="display: inline-flex; align-items: center; gap: 0.6rem; cursor: pointer; font-weight: 600; color: #fff; font-size: 0.84rem; background: rgba(99, 102, 241, 0.12); padding: 0.5rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid rgba(99, 102, 241, 0.35);">
+                                    <input id="chk-film-strip-adv" type="checkbox" onchange="syncThemeAdvancedIdentity('filmStrip', this.checked)">
+                                    <span>🎞️ Enable Rolling Film Screen on Welcome Screen</span>
+                                </label>
+                            </div>
+
+                            <!-- Collapsible Inspirations Drawer (CLOSED by default for clean flow) -->
+                            <details style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.22); border-radius: var(--radius-sm); padding: 0.7rem 0.95rem;">
+                                <summary style="font-size: 0.82rem; font-weight: 700; color: #a5b4fc; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                                    <span style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <span>💡</span> Need Ideas? Browse Curated Presets &amp; Examples
+                                    </span>
+                                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                        <button type="button" class="admin-btn admin-btn-secondary" style="padding: 0.2rem 0.6rem; font-size: 0.72rem; display: flex; align-items: center; gap: 0.3rem; border-color: rgba(99, 102, 241, 0.4);" onclick="event.stopPropagation(); showStudioWalkthroughModal();">
+                                            <span>📖</span> Prompting Tutorial
+                                        </button>
+                                        <span style="font-size: 0.72rem; color: #818cf8; text-decoration: underline;">Click to toggle</span>
+                                    </div>
+                                </summary>
+                                <div style="margin-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.75rem;">
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.6rem;">
                                             <!-- Example 1: Cyberpunk -->
                                             <div style="background: rgba(0,0,0,0.45); border: 1px solid rgba(236, 72, 153, 0.35); border-radius: 8px; padding: 0.65rem 0.8rem; display: flex; flex-direction: column; justify-content: space-between;">
                                                 <div>
@@ -471,141 +475,153 @@
                                             </div>
                                         </div>
                                     </div>
-                                </details>
+                                </div>
+                            </details>
+                        </div>
 
-                                <!-- User Natural Language Description Textarea -->
-                                <div style="margin-bottom: 0.75rem;">
-                                    <label style="font-size: 0.8rem; font-weight: 600; color: #e2e8f0; display: block; margin-bottom: 0.35rem;">
-                                        Describe Any Custom Visual Object(s) or UI Atmosphere (In Plain English):
+                        <!-- 2. Layer 4 Creative Levers Panel -->
+                        <div class="creative-levers-panel" style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.2rem;">
+                            <div style="font-size: 0.84rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.4rem;">
+                                <span style="display: flex; align-items: center; gap: 0.45rem;">
+                                    <span>🎛️</span> Layer 4: Creative Levers (Aesthetic &amp; Physics Knobs)
+                                </span>
+                                <span style="font-size: 0.72rem; color: var(--text-dim); font-weight: normal;">Optional · The AI infers any unselected knobs automatically</span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
+                                <div>
+                                    <label for="lever-density" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
+                                        🏛️ Aesthetic Density
                                     </label>
-                                    <textarea id="adv-custom-objects" rows="3" placeholder="e.g. Glowing neon sign reading 'Tokyo Nights', retro gold ticker tape along top, swaying paper lanterns, holographic crest, floating lotus flowers" style="width: 100%; font-size: 0.85rem; background: #07080f; border: 1px solid var(--border-subtle); color: #f8fafc; padding: 0.75rem; border-radius: var(--radius-sm); font-family: inherit; line-height: 1.45; resize: vertical;" oninput="updateFullSystematicGenAiPrompt()"></textarea>
+                                    <select id="lever-density" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.4rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
+                                        <option value="">Auto (Infer from concept)</option>
+                                        <option value="Minimalist">Minimalist (Clean Framing, Touch First)</option>
+                                        <option value="Balanced">Balanced (Harmonious Accents)</option>
+                                        <option value="Immersive Maximalist">Immersive Maximalist (Multi-Layer Splendor)</option>
+                                    </select>
                                 </div>
-
-                                <!-- Quick Suggestion Chips to click and append -->
-                                <div style="display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.75rem;">
-                                    <span style="font-size: 0.73rem; color: var(--text-dim); margin-right: 0.2rem;">Architectural Chips:</span>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🕹️ Corner HUD Brackets & Scanning Ticker')">+ 🕹️ Cyber HUD Brackets</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('👑 Gilded Art-Deco Pediment & Fluted Columns')">+ 👑 Gilded Pediment</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🏮 Multi-Tier Torii Eaves & Swaying Lanterns')">+ 🏮 Heritage Eaves</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('📼 Isometric Neon Grid & Retro Marquee')">+ 📼 Neon Grid</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🌿 Organic Botanical Borders & Aurora Ribbons')">+ 🌿 Botanical Runes</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('⚡ Scanline CRT Filter & Electrical Glitch')">+ ⚡ CRT Glitch</button>
-                                    <button type="button" class="chip-sm" onclick="addCustomObjectChip('🥂 Champagne Crystal Cascade Sparkles')">+ 🥂 Crystal Cascades</button>
+                                <div>
+                                    <label for="lever-motion" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
+                                        ⚡ Motion Energy &amp; Physics
+                                    </label>
+                                    <select id="lever-motion" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.4rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
+                                        <option value="">Auto (Infer from concept)</option>
+                                        <option value="Still Ambience">Still Ambience (Static Lighting &amp; Shimmer)</option>
+                                        <option value="Gentle Drift">Gentle Drift (Slow Organic Floating &amp; Sway)</option>
+                                        <option value="High Energy">High Energy (Dynamic Marquees &amp; Pulses)</option>
+                                        <option value="Glitch &amp; Pulse">Glitch &amp; Pulse (Scanlines &amp; Electrical Flicker)</option>
+                                    </select>
                                 </div>
-
-                                <!-- Layer 4: Configurable Creative Levers Panel -->
-                                <div class="creative-levers-panel" style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 0.75rem;">
-                                    <div style="font-size: 0.82rem; font-weight: 700; color: #a5b4fc; display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.65rem;">
-                                        <span style="display: flex; align-items: center; gap: 0.45rem;">
-                                            <span>🎛️</span> 4-Layer Dynamic Theme Builder: Creative Levers
-                                        </span>
-                                        <span style="font-size: 0.72rem; color: var(--text-dim); font-weight: normal;">Optional · Auto-inferred if left blank</span>
-                                    </div>
-                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.7rem;">
-                                        <div>
-                                            <label for="lever-density" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
-                                                🏛️ Aesthetic Density
-                                            </label>
-                                            <select id="lever-density" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.35rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
-                                                <option value="">Auto (Infer from concept)</option>
-                                                <option value="Minimalist">Minimalist (Clean Framing, Touch First)</option>
-                                                <option value="Balanced">Balanced (Harmonious Accents)</option>
-                                                <option value="Immersive Maximalist">Immersive Maximalist (Multi-Layer Splendor)</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="lever-motion" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
-                                                ⚡ Motion Energy &amp; Physics
-                                            </label>
-                                            <select id="lever-motion" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.35rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
-                                                <option value="">Auto (Infer from concept)</option>
-                                                <option value="Still Ambience">Still Ambience (Static Lighting &amp; Shimmer)</option>
-                                                <option value="Gentle Drift">Gentle Drift (Slow Organic Floating &amp; Sway)</option>
-                                                <option value="High Energy">High Energy (Dynamic Marquees &amp; Pulses)</option>
-                                                <option value="Glitch &amp; Pulse">Glitch &amp; Pulse (Scanlines &amp; Electrical Flicker)</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="lever-lighting" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
-                                                💡 Lighting &amp; Texture Treatment
-                                            </label>
-                                            <select id="lever-lighting" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.35rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
-                                                <option value="">Auto (Infer from concept)</option>
-                                                <option value="Subtle Matte">Subtle Matte (Refined Editorial Elegance)</option>
-                                                <option value="Neon Glow">Neon Glow (Vibrant Multi-Stop Glow Shadows)</option>
-                                                <option value="Specular Gold">Specular Gold (Gilded Sheen &amp; Metallic Lustre)</option>
-                                                <option value="CRT Retro">CRT Retro (Scanline Shaders &amp; Phosphor Grain)</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="lever-archetype" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
-                                                📐 Architectural Archetype
-                                            </label>
-                                            <select id="lever-archetype" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.35rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
-                                                <option value="">Auto (Bespoke Polymorphic Architecture)</option>
-                                                <option value="Cyber / Arcade / Sci-Fi">Archetype 1: Cyber / Arcade / Sci-Fi (HUD Brackets, Tickers, Data Rails)</option>
-                                                <option value="Royal Gala / Luxury">Archetype 2: Royal Gala / Luxury (Filigree, Gilded Pediments, Columns)</option>
-                                                <option value="Cultural / Heritage">Archetype 3: Cultural / Heritage (Multi-tier Eaves, Banners, Lanterns)</option>
-                                                <option value="Retro Pop / Vaporwave">Archetype 4: Retro Pop / Vaporwave (Grid Floors, Neon Signs, Cassettes)</option>
-                                                <option value="Whimsical / Fantasy">Archetype 5: Whimsical / Fantasy (Botanical Borders, Runes, Auroras)</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                <div>
+                                    <label for="lever-lighting" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
+                                        💡 Lighting &amp; Texture Treatment
+                                    </label>
+                                    <select id="lever-lighting" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.4rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
+                                        <option value="">Auto (Infer from concept)</option>
+                                        <option value="Subtle Matte">Subtle Matte (Refined Editorial Elegance)</option>
+                                        <option value="Neon Glow">Neon Glow (Vibrant Multi-Stop Glow Shadows)</option>
+                                        <option value="Specular Gold">Specular Gold (Gilded Sheen &amp; Metallic Lustre)</option>
+                                        <option value="CRT Retro">CRT Retro (Scanline Shaders &amp; Phosphor Grain)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="lever-archetype" style="display: block; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.25rem;">
+                                        📐 Architectural Archetype
+                                    </label>
+                                    <select id="lever-archetype" class="admin-input" style="width: 100%; font-size: 0.78rem; padding: 0.4rem 0.55rem; background: #07080f; border-color: rgba(99, 102, 241, 0.3);" onchange="updateFullSystematicGenAiPrompt()">
+                                        <option value="">Auto (Bespoke Polymorphic Architecture)</option>
+                                        <option value="Cyber / Arcade / Sci-Fi">Archetype 1: Cyber / Arcade / Sci-Fi (HUD Brackets, Tickers, Data Rails)</option>
+                                        <option value="Royal Gala / Luxury">Archetype 2: Royal Gala / Luxury (Filigree, Gilded Pediments, Columns)</option>
+                                        <option value="Cultural / Heritage">Archetype 3: Cultural / Heritage (Multi-tier Eaves, Banners, Lanterns)</option>
+                                        <option value="Retro Pop / Vaporwave">Archetype 4: Retro Pop / Vaporwave (Grid Floors, Neon Signs, Cassettes)</option>
+                                        <option value="Whimsical / Fantasy">Archetype 5: Whimsical / Fantasy (Botanical Borders, Runes, Auroras)</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Full Prompt Template Display -->
-                        <div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                    <label style="font-size: 0.85rem; font-weight: 700; color: #a5b4fc; margin: 0; display: flex; align-items: center; gap: 0.4rem;">
-                                        📄 Systematic GenAI Prompt Template:
-                                    </label>
-                                    <span style="font-size: 0.74rem; color: var(--text-dim);">(Ready to copy directly into AI)</span>
+                        <!-- 3. Compile & Copy Prompt Call-to-Action Bar -->
+                        <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.16) 0%, rgba(236, 72, 153, 0.12) 100%); border: 1px solid rgba(99, 102, 241, 0.4); border-radius: var(--radius-sm); padding: 1.15rem 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                            <div style="max-width: 580px;">
+                                <div style="font-size: 0.95rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>📋</span> Ready to Generate Theme Prompt
                                 </div>
-                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                    <button type="button" class="admin-btn admin-btn-secondary" onclick="copyCustomObjectGenAiPrompt()" style="padding: 0.45rem 1rem; font-size: 0.82rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;" title="Generates ONLY custom HTML decorations & CSS animations without touching theme identity">
-                                        <span>🎨</span> Copy Atmosphere Only Prompt (Blocks 2 &amp; 3)
-                                    </button>
-                                    <button type="button" class="admin-btn admin-btn-accent" onclick="copyFullSystematicGenAiPrompt()" style="padding: 0.45rem 1.15rem; font-size: 0.85rem; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; box-shadow: 0 0 14px rgba(99, 102, 241, 0.45);" title="Generates complete theme from scratch: identity, colors, waiting sequence, HTML & CSS">
-                                        <span>📋</span> Copy Full Theme Prompt (Blocks 1, 2, 3)
-                                    </button>
+                                <div style="font-size: 0.78rem; color: #cbd5e1; margin-top: 0.25rem; line-height: 1.45;">
+                                    Click below to copy your bespoke 4-layer prompt, then paste it into <strong>ChatGPT, Claude, or Gemini</strong> to receive your bespoke theme code.
                                 </div>
                             </div>
-                            <div style="position: relative;">
-                                <textarea id="adv-systematic-prompt-full" rows="13" readonly style="width: 100%; padding: 1rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #cbd5e1; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.82rem; line-height: 1.5; resize: vertical;" title="Copyable prompt template"></textarea>
+                            <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center;">
+                                <button type="button" class="admin-btn admin-btn-accent" onclick="copyFullSystematicGenAiPrompt()" style="padding: 0.65rem 1.35rem; font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 16px rgba(99, 102, 241, 0.45); cursor: pointer;" title="Generates complete theme from scratch: identity, colors, waiting sequence, HTML & CSS">
+                                    <span>📋</span> Copy Full Theme Prompt (Blocks 1, 2, 3)
+                                </button>
+                                <button type="button" class="admin-btn admin-btn-secondary" onclick="copyCustomObjectGenAiPrompt()" style="padding: 0.65rem 0.95rem; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; cursor: pointer;" title="Generates ONLY custom HTML decorations & CSS animations without touching theme identity">
+                                    <span>🎨</span> Atmosphere Only (Blocks 2 &amp; 3)
+                                </button>
                             </div>
                         </div>
+
+                        <!-- Collapsible Raw Prompt Template Inspector -->
+                        <details style="margin-top: 0.85rem;">
+                            <summary style="font-size: 0.76rem; color: #818cf8; cursor: pointer; user-select: none;">
+                                👁️ View Compiled Prompt Text (Click to inspect or manually select)
+                            </summary>
+                            <div style="margin-top: 0.5rem;">
+                                <textarea id="adv-systematic-prompt-full" rows="6" readonly style="width: 100%; padding: 0.85rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #cbd5e1; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.8rem; line-height: 1.45; resize: vertical;" title="Copyable prompt template"></textarea>
+                            </div>
+                        </details>
                     </div>
 
-                    <!-- STEP 2: Paste Output, Instructions & Review Details Below -->
+                    <!-- STEP 2: IMPORT AI RESPONSE & ACTIVATE -->
                     <div class="form-section" style="margin-top: 1.5rem; border: 1px solid var(--border-subtle); background: rgba(18, 20, 36, 0.7); border-radius: var(--radius-md); padding: 1.5rem;">
                         <div style="margin-bottom: 1.2rem;">
                             <div style="display: flex; align-items: center; gap: 0.6rem;">
                                 <span style="font-size: 1.4rem;">📥</span>
-                                <h3 class="section-title" style="margin: 0; font-size: 1.25rem;">Step 2: Paste GenAI Output &amp; Populate Theme</h3>
+                                <h3 class="section-title" style="margin: 0; font-size: 1.25rem;">Step 2: Import GenAI Output &amp; Populate Theme</h3>
                             </div>
                             <p class="section-desc" style="margin-top: 0.4rem;">
-                                After the AI outputs the 3 blocks, paste each block into its corresponding tab below. Theme details populate automatically in real-time.
+                                When your AI finishes generating, import the response below. Everything populates automatically in real-time.
                             </p>
                         </div>
 
-                        <!-- Instruction Cards on What to Copy -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.8rem; margin-bottom: 1.3rem;">
-                            <div style="background: rgba(250, 204, 21, 0.08); border: 1px solid rgba(250, 204, 21, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
-                                <div style="font-weight: 700; color: #fde047; font-size: 0.85rem; margin-bottom: 0.2rem;">1️⃣ Copy Block 1 (JSON)</div>
-                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>theme_identity.json</strong> tab below. Details below auto-fill instantly upon paste!</div>
+                        <!-- Fast Track 1-Click Hero Banner -->
+                        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); padding: 1rem 1.25rem; margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <div>
+                                <div style="font-weight: 700; color: #6ee7b7; font-size: 0.92rem; display: flex; align-items: center; gap: 0.45rem;">
+                                    <span>⚡</span> Recommended: 1-Click Multi-Block Importer
+                                </div>
+                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; margin-top: 0.25rem;">
+                                    Copy the entire message from your AI and click below. It automatically parses Block 1 (JSON), Block 2 (HTML), Block 3 (CSS), and Design Thinking!
+                                </div>
                             </div>
-                            <div style="background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
-                                <div style="font-weight: 700; color: #6ee7b7; font-size: 0.85rem; margin-bottom: 0.2rem;">2️⃣ Copy Block 2 (HTML)</div>
-                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>decorations.html</strong> tab below. Contains swaying ornaments, side banners, and floating particles.</div>
-                            </div>
-                            <div style="background: rgba(96, 165, 250, 0.08); border: 1px solid rgba(96, 165, 250, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
-                                <div style="font-weight: 700; color: #93c5fd; font-size: 0.85rem; margin-bottom: 0.2rem;">3️⃣ Copy Block 3 (CSS)</div>
-                                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">Paste into <strong>style.css</strong> tab below. Contains keyframe animations and color tokens.</div>
+                            <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                                <button type="button" class="admin-btn admin-btn-accent" style="padding: 0.55rem 1.3rem; font-size: 0.88rem; font-weight: 700; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: #059669; box-shadow: 0 0 16px rgba(16, 185, 129, 0.35);" onclick="openUnifiedPasteModal()" title="Paste entire multi-block AI response to populate JSON, HTML, and CSS in one click">
+                                    ⚡ Quick Paste Full Response
+                                </button>
+                                <button type="button" class="admin-btn admin-btn-accent" style="font-size: 0.84rem; padding: 0.55rem 1.1rem; font-weight: 700;" onclick="openAtmospherePreviewModal()">
+                                    👁️ Live Kiosk Preview
+                                </button>
                             </div>
                         </div>
+
+                        <!-- Manual Tab Paste Guidance Details (Optional / Advanced) -->
+                        <details style="margin-bottom: 1rem;">
+                            <summary style="font-size: 0.78rem; color: #94a3b8; cursor: pointer; user-select: none; margin-bottom: 0.5rem;">
+                                ℹ️ Manual Tab Paste Instructions (Optional / Advanced)
+                            </summary>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.6rem; margin-top: 0.5rem;">
+                                <div style="background: rgba(250, 204, 21, 0.08); border: 1px solid rgba(250, 204, 21, 0.25); border-radius: var(--radius-sm); padding: 0.75rem;">
+                                    <div style="font-weight: 700; color: #fde047; font-size: 0.8rem;">1️⃣ Block 1 (JSON)</div>
+                                    <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.35; margin-top: 0.2rem;">Paste into <strong>theme_identity.json</strong> tab. Details auto-fill instantly.</div>
+                                </div>
+                                <div style="background: rgba(52, 211, 153, 0.08); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: var(--radius-sm); padding: 0.75rem;">
+                                    <div style="font-weight: 700; color: #6ee7b7; font-size: 0.8rem;">2️⃣ Block 2 (HTML)</div>
+                                    <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.35; margin-top: 0.2rem;">Paste into <strong>decorations.html</strong> tab for bespoke layout markup.</div>
+                                </div>
+                                <div style="background: rgba(96, 165, 250, 0.08); border: 1px solid rgba(96, 165, 250, 0.25); border-radius: var(--radius-sm); padding: 0.75rem;">
+                                    <div style="font-weight: 700; color: #93c5fd; font-size: 0.8rem;">3️⃣ Block 3 (CSS)</div>
+                                    <div style="font-size: 0.74rem; color: var(--text-muted); line-height: 1.35; margin-top: 0.2rem;">Paste into <strong>style.css</strong> tab for keyframe physics and styling.</div>
+                                </div>
+                            </div>
+                        </details>
 
                         <!-- Editor Tabs Navigation & Action Buttons -->
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.6rem;">
@@ -621,14 +637,8 @@
                                 </button>
                             </div>
                             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                <button type="button" class="admin-btn admin-btn-accent" style="font-size: 0.82rem; padding: 0.4rem 0.95rem; font-weight: 700; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-color: #059669;" onclick="openUnifiedPasteModal()" title="Paste entire multi-block AI response to populate JSON, HTML, and CSS in one click">
-                                    ⚡ Quick Paste Full Response
-                                </button>
                                 <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.82rem; padding: 0.4rem 0.8rem;" onclick="clearAtmosphereEditors()">
-                                    🧹 Clear
-                                </button>
-                                <button type="button" class="admin-btn admin-btn-accent" style="font-size: 0.84rem; padding: 0.4rem 1.1rem; font-weight: 700;" onclick="openAtmospherePreviewModal()">
-                                    ⚡ Compile &amp; Live Preview
+                                    🧹 Clear Code
                                 </button>
                             </div>
                         </div>

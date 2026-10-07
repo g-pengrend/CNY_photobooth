@@ -3091,6 +3091,14 @@ window.generateFullSystematicPromptText = function () {
     return window.buildThemePrompt(concept, levers);
 };
 
+// Update live prompt preview box
+window.updateFullSystematicGenAiPrompt = function () {
+    const box = document.getElementById('adv-systematic-prompt-full');
+    if (box) {
+        box.value = window.generateFullSystematicPromptText();
+    }
+};
+
 window.copyCustomObjectGenAiPrompt = function () {
     const userIntent = document.getElementById('adv-theme-intent')?.value.trim();
     const titleVal = document.getElementById('inp-title-adv')?.value.trim() 
