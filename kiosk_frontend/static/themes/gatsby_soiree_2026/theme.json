@@ -1,0 +1,92 @@
+{
+  "slug": "gatsby_soiree_2026",
+  "title": "The Great Gatsby Soirée",
+  "subtitle": "West Egg Champagne Gala & Speakeasy Soirée",
+  "badge": "1920s Haute Vintage",
+  "icon": "🍸",
+  "description": "Step into Jay Gatsby's glittering ballroom draped in gilded decadence, jazz rhythms, and sparkling crystal chandeliers. Transform your portrait into a radiant 1920s high-society masterpiece illuminated with champagne shimmer and flapper glamour.",
+  "cta": "Enter the Roaring Twenties",
+  "status": "live",
+  "isUnsavedDraft": true,
+  "features": {
+    "luckyNumber": false,
+    "filmStrip": true,
+    "genderFilter": true
+  },
+  "background": {
+    "type": "particles",
+    "floatingIcons": [
+      "✨",
+      "⭐",
+      "🎉",
+      "✦"
+    ],
+    "filmStrip": true
+  },
+  "style": {
+    "fontFamily": "'Cinzel Decorative', 'Outfit', sans-serif",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Outfit:wght@300;400;600;700;800&display=swap",
+    "colors": {
+      "background": "#0d0a0d",
+      "accent": "#ff2a85",
+      "text": "#fdf8ea",
+      "primary": "#1c1216",
+      "accentGlow": "rgba(255, 42, 133, 0.25)",
+      "surface": "rgba(255, 255, 255, 0.05)",
+      "surfaceBorder": "rgba(255, 42, 133, 0.3)"
+    },
+    "gradients": {
+      "radialBackground": "radial-gradient(circle at 50% 50%, rgba(255, 42, 133, 0.25) 0%, transparent 70%)",
+      "primaryButton": "linear-gradient(135deg, #1c1216 0%, #ff2a85 100%)"
+    }
+  },
+  "waitingExperience": {
+    "title": "Conjuring Gatsby's Grandeur...",
+    "subtitle": "Imbuing your portrait with 1920s champagne luminescence & haute couture",
+    "sequence": [
+      {
+        "text": "Checking the speakeasy guest list & welcoming you to West Egg...",
+        "delay": 500,
+        "color": "#d4af37"
+      },
+      {
+        "text": "Tailoring velvet tuxedos, silk headbands, and pearl necklaces...",
+        "delay": 3500,
+        "color": "#ff2a85"
+      },
+      {
+        "text": "Igniting golden sparklers and swirling vintage crystal chandeliers...",
+        "delay": 7000,
+        "color": "#fbf2b7"
+      },
+      {
+        "text": "Pouring vintage Dom Pérignon champagne and balancing warm sepia tones...",
+        "delay": 10500,
+        "color": "#ffffff"
+      },
+      {
+        "text": "Finishing touches complete! Unveiling your Roaring Twenties portrait...",
+        "delay": 14000,
+        "color": "#ff2a85"
+      }
+    ],
+    "completionMessage": "A Toast to You, Old Sport!"
+  },
+  "promptTemplate": {
+    "framing": "Medium shot, waist up shot of",
+    "maleStyle": "executive leading man",
+    "femaleStyle": "charismatic k-pop idol",
+    "borderStyle": "The image features a modern graphic overlay with a translucent frosted-glass border forming a frame.",
+    "topTitle": "Union of ITE Training Staff",
+    "topTitleStyle": "rendered in an exquisite gold-leaf, fluid hand-drawn script",
+    "subtitle": "1976 – 2026",
+    "subtitleStyle": "elegantly etched in a smaller, minimalist gold serif font directly below it",
+    "bottomTitle": "50th Anniversary",
+    "bottomTitleStyle": "displayed in bold, luminous calligraphy",
+    "typoStyle": "All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders.",
+    "atmosphere": "Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field.",
+    "includeLuckyNum": false,
+    "rawPrompt": "Medium shot, waist up shot of a \"gender\" \"gender_style\" with \"pose\" for a concept photo, dressed in \"clothes_style\". The setting is \"background\". The image features a modern graphic overlay with a translucent frosted-glass border forming a frame. At the top-center apex, the title \"Union of ITE Training Staff\" is rendered in an exquisite gold-leaf, fluid hand-drawn script, followed by the years \"1976 – 2026\" elegantly etched in a smaller, minimalist gold serif font directly below it. At the bottom-center, overlayed above the image, anchored within the ornate border, the title \"50th Anniversary\" is displayed in bold, luminous calligraphy. All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field."
+  },
+  "atmosphereMode": "advanced"
+}
