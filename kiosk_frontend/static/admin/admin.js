@@ -20,6 +20,7 @@ const studio = {
     pendingDeleteSlug: null,
     currentView: 'theme-editor' // 'theme-editor' | 'master-library' | 'ai-creator'
 };
+window.studio = studio;
 
 document.addEventListener('DOMContentLoaded', async () => {
     initTabs();
@@ -757,6 +758,11 @@ function populatePromptDesigner(theme) {
     const assembled = tpl.rawPrompt || assembleModularPrompt(tpl);
     setValue('raw-prompt-textarea', assembled);
     renderPromptLivePreview(assembled);
+
+    // Synchronize ComfyUI GenAI Frame Studio titles with current theme
+    if (typeof window.syncComfyTitlesFromActiveTheme === 'function') {
+        window.syncComfyTitlesFromActiveTheme(false);
+    }
 }
 
 function readPromptDesigner() {
@@ -874,15 +880,23 @@ window.copyAssembledPrompt = function () {
 
 window.buildComfyFramePrompt = function (concept, options = {}) {
     const rawConcept = typeof concept === 'string' ? concept.trim() : '';
-    const themeConcept = rawConcept || '{{YOUR_EVENT_THEME_TITLE_OR_CONCEPT}}';
-    const frameStyle = options.frameStyle || 'Auto (Infer from Concept)';
-    const typoStyle = options.typoStyle || 'Auto (Infer from Concept)';
-    const atmosphere = options.atmosphere || 'Auto (Infer from Concept)';
+    const themeConcept = rawConcept || getValue('comfy-genai-concept') || '{{YOUR_EVENT_THEME_TITLE_OR_CONCEPT}}';
+
+    const topTitle = (options.topTitle !== undefined ? options.topTitle : (getValue('comfy-genai-top-title') || getValue('prompt-inp-top-title') || (studio.activeTheme?.title || 'Union of ITE Training Staff'))).trim();
+    const subtitle = (options.subtitle !== undefined ? options.subtitle : (getValue('comfy-genai-subtitle') || getValue('prompt-inp-subtitle') || (studio.activeTheme?.subtitle || '1976 – 2026'))).trim();
+    const bottomTitle = (options.bottomTitle !== undefined ? options.bottomTitle : (getValue('comfy-genai-bottom-title') || getValue('prompt-inp-bottom-title') || (studio.activeTheme?.badge || '50th Anniversary'))).trim();
+
+    const frameStyle = options.frameStyle || getValue('comfy-lever-frame-style') || 'Auto (Infer from Concept)';
+    const typoStyle = options.typoStyle || getValue('comfy-lever-typo-style') || 'Auto (Infer from Concept)';
+    const atmosphere = options.atmosphere || getValue('comfy-lever-atmosphere') || 'Auto (Infer from Concept)';
 
     return `You are an expert AI Art Director and Prompt Engineer specializing in photobooth composition and diffusion image generation (Stable Diffusion SDXL, ComfyUI CLIP Node 45, Flux).
 
-We are designing the prompt components for CLIP Node 45 for an interactive photobooth kiosk theme:
-• THEME CONCEPT: "${themeConcept}"
+We are designing bespoke prompt components for CLIP Node 45 for an interactive photobooth kiosk theme:
+• THEME CONCEPT / VIBE: "${themeConcept}"
+• TOP APEX TITLE: "${topTitle}"
+• TOP SUBTITLE / YEARS: "${subtitle}"
+• BOTTOM BADGE TITLE: "${bottomTitle}"
 • FRAME & BORDER ARCHETYPE: "${frameStyle}"
 • TYPOGRAPHY & SCRIPT VIBE: "${typoStyle}"
 • ATMOSPHERE & FINISHERS: "${atmosphere}"
@@ -898,11 +912,11 @@ In our photobooth pipeline, the final generation prompt is assembled modularly a
 [6. ATMOSPHERE, LIGHTING & AESTHETIC FINISHERS]
 
 ### YOUR TASK
-Invent bespoke, cohesive prompt specifications for the Graphic Border Frame, Theme Titles & Typography, Lighting Integration, and Atmosphere tailored specifically for "${themeConcept}".
+Invent bespoke, cohesive prompt specifications for the Graphic Border Frame, Theme Titles & Typography styling, Lighting Integration, and Atmosphere tailored specifically for "${themeConcept}".
 
 Ensure:
 1. The border frame frames the subject naturally (e.g. translucent frosted-glass, ornate gilded filigree, neon cyber brackets, festive banners) without blocking the central guest face or torso.
-2. The typography titles feel physical, premium, and integrated into the scene architecture (e.g. gold-leaf script, backlit cyber glyphs, luminous calligraphy).
+2. The typography titles feel physical, premium, and integrated into the scene architecture (e.g. gold-leaf script, backlit cyber glyphs, luminous calligraphy). Incorporate the exact Top Apex Title "${topTitle}", Subtitle "${subtitle}", and Bottom Badge "${bottomTitle}".
 3. The lighting, depth of field, and atmosphere create a stunning, high-fashion finish.
 
 Provide your output in TWO parts:
@@ -912,11 +926,11 @@ Provide your output in TWO parts:
 \`\`\`json
 {
   "border": "Detailed graphic design & border overlay prompt. Describe the frame borders, architectural contours, transparency/glassmorphism, materials (e.g. liquid gold, neon cyber brackets, festive banners, floral filigree, translucent acrylic), and corner accents.",
-  "topTitle": "Top Apex Title text (e.g. Event Name, Organization, Festival, or Company Name).",
+  "topTitle": "${topTitle}",
   "topTitleStyle": "Style description for the top title (e.g. 'rendered in an exquisite gold-leaf, fluid hand-drawn script' or 'displayed in razor-sharp holographic neon typography').",
-  "subtitle": "Subtitle text or milestone years (e.g. '1976 - 2026' or 'Celebration of Excellence' or 'Spring Edition').",
+  "subtitle": "${subtitle}",
   "subtitleStyle": "Style description for the subtitle (e.g. 'elegantly etched in a smaller, minimalist gold serif font directly below it').",
-  "bottomTitle": "Bottom badge title text (e.g. '50th Anniversary' or 'Prosperity & Joy' or 'Gala Night').",
+  "bottomTitle": "${bottomTitle}",
   "bottomTitleStyle": "Style description for the bottom badge (e.g. 'displayed in bold, luminous calligraphy anchored within the lower crest').",
   "typoIntegration": "Lighting and border integration for all typography (e.g. 'All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders.').",
   "atmosphere": "Volumetric lighting, lens characteristics, color palette, glassmorphism, depth of field, 8k resolution, photorealistic finish.",
@@ -930,11 +944,17 @@ Strict Requirement: Output clean, valid JSON inside the code block so the photob
 
 window.updateComfyFrameGenAiPrompt = function () {
     const concept = getValue('comfy-genai-concept');
+    const topTitle = getValue('comfy-genai-top-title');
+    const subtitle = getValue('comfy-genai-subtitle');
+    const bottomTitle = getValue('comfy-genai-bottom-title');
     const frameStyle = getValue('comfy-lever-frame-style');
     const typoStyle = getValue('comfy-lever-typo-style');
     const atmosphere = getValue('comfy-lever-atmosphere');
 
     const promptText = window.buildComfyFramePrompt(concept, {
+        topTitle: topTitle,
+        subtitle: subtitle,
+        bottomTitle: bottomTitle,
         frameStyle: frameStyle,
         typoStyle: typoStyle,
         atmosphere: atmosphere
@@ -943,6 +963,57 @@ window.updateComfyFrameGenAiPrompt = function () {
     const box = document.getElementById('comfy-genai-prompt-full');
     if (box) {
         box.value = promptText;
+    }
+};
+
+window.onComfyTitleFieldInput = function (field) {
+    if (field === 'topTitle') {
+        const val = getValue('comfy-genai-top-title');
+        setValue('prompt-inp-top-title', val);
+    } else if (field === 'subtitle') {
+        const val = getValue('comfy-genai-subtitle');
+        setValue('prompt-inp-subtitle', val);
+    } else if (field === 'bottomTitle') {
+        const val = getValue('comfy-genai-bottom-title');
+        setValue('prompt-inp-bottom-title', val);
+    }
+
+    window.updateComfyFrameGenAiPrompt();
+    if (typeof updatePromptLivePreview === 'function') {
+        updatePromptLivePreview();
+    }
+};
+
+window.syncComfyTitlesFromActiveTheme = function (isUserClick = false) {
+    const theme = (window.studio && window.studio.activeTheme) || studio.activeTheme || {};
+    const tpl = theme.promptTemplate || {};
+
+    const title = (isUserClick ? (tpl.topTitle || theme.title) : (tpl.topTitle || theme.title || getValue('prompt-inp-top-title'))) || 'Union of ITE Training Staff';
+    const subtitle = (isUserClick ? (tpl.subtitle || theme.subtitle) : (tpl.subtitle || theme.subtitle || getValue('prompt-inp-subtitle'))) || '1976 – 2026';
+    const bottomTitle = (isUserClick ? (tpl.bottomTitle || theme.badge) : (tpl.bottomTitle || theme.badge || getValue('prompt-inp-bottom-title'))) || '50th Anniversary';
+
+    setValue('comfy-genai-top-title', title);
+    setValue('comfy-genai-subtitle', subtitle);
+    setValue('comfy-genai-bottom-title', bottomTitle);
+
+    // Keep modular designer inputs in sync
+    if (!getValue('prompt-inp-top-title')) setValue('prompt-inp-top-title', title);
+    if (!getValue('prompt-inp-subtitle')) setValue('prompt-inp-subtitle', subtitle);
+    if (!getValue('prompt-inp-bottom-title')) setValue('prompt-inp-bottom-title', bottomTitle);
+
+    const conceptInp = document.getElementById('comfy-genai-concept');
+    if (conceptInp && (isUserClick || !conceptInp.value.trim())) {
+        const desc = theme.description || getValue('inp-desc') || '';
+        conceptInp.value = desc ? `${theme.title || title} - ${desc}` : (theme.title || title);
+    }
+
+    window.updateComfyFrameGenAiPrompt();
+    if (typeof updatePromptLivePreview === 'function') {
+        updatePromptLivePreview();
+    }
+
+    if (isUserClick) {
+        showToast(`Matched titles & vibe from active theme: "${theme.title || title}"`, 'info');
     }
 };
 
@@ -989,19 +1060,7 @@ window.setComfyConceptPreset = function (concept, frameArchetype, typoVibe, atmo
 };
 
 window.syncConceptFromActiveTheme = function () {
-    const title = studio.activeTheme?.title || getValue('inp-title') || getValue('inp-title-adv') || '';
-    const desc = studio.activeTheme?.description || getValue('inp-desc') || getValue('inp-desc-adv') || '';
-    const conceptInp = document.getElementById('comfy-genai-concept');
-    if (conceptInp) {
-        if (title) {
-            conceptInp.value = desc ? `${title} - ${desc}` : title;
-            showToast(`Synced concept from active theme: "${title}"`, 'info');
-        } else {
-            conceptInp.value = 'UITS 50th Anniversary Golden Jubilee Gala';
-            showToast('Loaded benchmark gala concept', 'info');
-        }
-        window.updateComfyFrameGenAiPrompt();
-    }
+    window.syncComfyTitlesFromActiveTheme(true);
 };
 
 window.openComfyFramePasteModal = function () {
@@ -1163,6 +1222,12 @@ window.applyComfyFrameAiPaste = function (rawInputText) {
     applyField('prompt-inp-male-style', parsed.maleStyle);
     applyField('prompt-inp-female-style', parsed.femaleStyle);
 
+    if (parsed.topTitle) setValue('comfy-genai-top-title', parsed.topTitle);
+    if (parsed.subtitle) setValue('comfy-genai-subtitle', parsed.subtitle);
+    if (parsed.bottomTitle) setValue('comfy-genai-bottom-title', parsed.bottomTitle);
+
+    window.updateComfyFrameGenAiPrompt();
+
     if (appliedCount === 0) {
         showToast('No recognizable fields found. Please ensure the AI output includes JSON or field names.', 'warning');
         return false;
@@ -1197,7 +1262,23 @@ function initPromptDesignerListeners() {
         'prompt-inp-bottom-title-style', 'prompt-inp-typo-style', 'prompt-inp-atmosphere'
     ];
     inputIds.forEach(id => {
-        document.getElementById(id)?.addEventListener('input', updatePromptLivePreview);
+        document.getElementById(id)?.addEventListener('input', () => {
+            if (id === 'prompt-inp-top-title') setValue('comfy-genai-top-title', getValue('prompt-inp-top-title'));
+            if (id === 'prompt-inp-subtitle') setValue('comfy-genai-subtitle', getValue('prompt-inp-subtitle'));
+            if (id === 'prompt-inp-bottom-title') setValue('comfy-genai-bottom-title', getValue('prompt-inp-bottom-title'));
+            if (typeof window.updateComfyFrameGenAiPrompt === 'function') {
+                window.updateComfyFrameGenAiPrompt();
+            }
+            updatePromptLivePreview();
+        });
+    });
+
+    ['comfy-genai-top-title', 'comfy-genai-subtitle', 'comfy-genai-bottom-title', 'comfy-genai-concept'].forEach(id => {
+        document.getElementById(id)?.addEventListener('input', () => {
+            if (typeof window.updateComfyFrameGenAiPrompt === 'function') {
+                window.updateComfyFrameGenAiPrompt();
+            }
+        });
     });
 
     document.getElementById('raw-prompt-textarea')?.addEventListener('input', updatePromptLivePreview);

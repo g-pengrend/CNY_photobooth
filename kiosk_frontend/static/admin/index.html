@@ -841,6 +841,43 @@
                                     <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Hari Raya Aidilfitri Festive Open House &amp; Ketupat Radiance', 'Emerald &amp; Gold Islamic Arabesque Geometry', 'Bold Luminous Festive Calligraphy', 'High-Key Vibrant Festive Fireworks')">🌙 Hari Raya</button>
                                     <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Neo-Tokyo Cyberpunk 2077 Neon Underground Nightclub', 'Futuristic Holographic HUD Neon Bracket Matrix', 'Holographic Glowing Glitch Cyber Monospace', 'Cyberpunk Neon Fog &amp; Light Streaks')">⚡ Cyberpunk 2077</button>
                                     <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Whimsical Enchanted Botanical Forest Garden Gala', 'Organic Floral Vine Arch &amp; Luminous Dewdrops', 'Gold-Leaf Fluid Hand-Drawn Calligraphy', 'Ethereal Dreamy Bokeh &amp; Sunbeams')">🌸 Enchanted Flora</button>
+                                    <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Vogue High-End Luxury Editorial Fashion Studio', 'Minimalist Studio Border with Clean Margins', 'Modern High-Fashion Editorial Serif', 'Studio Portrait High-End Fashion')">🍸 High-End Fashion</button>
+                                    <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Imperial Roman Neo-Classical Architecture Gala', 'Neo-Classical Liquid Gold Filigree', 'Gold-Leaf Fluid Hand-Drawn Calligraphy', 'Volumetric Liquid Gold Gala Lighting')">🏛️ Neo-Classical</button>
+                                    <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Sleek Minimalist Obsidian &amp; Liquid Gold Luxury', 'Translucent Frosted Glass &amp; Cyan Glow', 'Minimalist Etched Metallic Sans-Serif', 'Volumetric Liquid Gold Gala Lighting')">🖤 Minimalist Gold</button>
+                                </div>
+                            </div>
+
+                            <!-- 1.1 Theme Titles & Apex Texts (Matching Active Theme, Editable Anytime) -->
+                            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(99, 102, 241, 0.28); border-radius: var(--radius-sm); padding: 0.85rem 1rem; margin-bottom: 0.95rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.55rem; flex-wrap: wrap; gap: 0.5rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.45rem;">
+                                        <span style="font-size: 1rem;">🏷️</span>
+                                        <span style="font-size: 0.82rem; font-weight: 700; color: #e2e8f0;">Theme Titles &amp; Apex Texts</span>
+                                        <span style="font-size: 0.72rem; color: #94a3b8;">(Auto-matched with active theme · Edit anytime)</span>
+                                    </div>
+                                    <button type="button" class="admin-btn admin-btn-secondary" style="font-size: 0.75rem; padding: 0.32rem 0.75rem;" onclick="syncComfyTitlesFromActiveTheme(true)" title="Reset titles to match the current active theme">
+                                        🔄 Match Current Active Theme
+                                    </button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.7rem;">
+                                    <div>
+                                        <label for="comfy-genai-top-title" style="display: block; font-size: 0.73rem; font-weight: 600; color: #a5b4fc; margin-bottom: 0.25rem;">
+                                            Top Apex Title
+                                        </label>
+                                        <input type="text" id="comfy-genai-top-title" class="admin-input" placeholder="e.g. Union of ITE Training Staff" style="width: 100%; font-size: 0.8rem; background: #070814; border-color: rgba(99, 102, 241, 0.3);" oninput="onComfyTitleFieldInput('topTitle')">
+                                    </div>
+                                    <div>
+                                        <label for="comfy-genai-subtitle" style="display: block; font-size: 0.73rem; font-weight: 600; color: #a5b4fc; margin-bottom: 0.25rem;">
+                                            Top Subtitle / Years
+                                        </label>
+                                        <input type="text" id="comfy-genai-subtitle" class="admin-input" placeholder="e.g. 1976 – 2026" style="width: 100%; font-size: 0.8rem; background: #070814; border-color: rgba(99, 102, 241, 0.3);" oninput="onComfyTitleFieldInput('subtitle')">
+                                    </div>
+                                    <div>
+                                        <label for="comfy-genai-bottom-title" style="display: block; font-size: 0.73rem; font-weight: 600; color: #a5b4fc; margin-bottom: 0.25rem;">
+                                            Bottom Badge Title
+                                        </label>
+                                        <input type="text" id="comfy-genai-bottom-title" class="admin-input" placeholder="e.g. 50th Anniversary" style="width: 100%; font-size: 0.8rem; background: #070814; border-color: rgba(99, 102, 241, 0.3);" oninput="onComfyTitleFieldInput('bottomTitle')">
+                                    </div>
                                 </div>
                             </div>
 

@@ -237,7 +237,52 @@ Atmosphere: High-key festive cinematic lighting, vibrant colors, 8k
     console.log('✅ PASSED: applyComfyFrameAiPaste auto-populates all DOM fields & refreshes live preview');
 }
 
+// Test 6: syncComfyTitlesFromActiveTheme matches current theme and embeds into prompt
+{
+    windowMock.studio = {
+        activeTheme: {
+            title: "Cyber City Nights 2077",
+            subtitle: "Neo-Tokyo Underground",
+            badge: "VIP Pass",
+            description: "High-octane cyberpunk neon adventure"
+        }
+    };
+
+    windowMock.syncComfyTitlesFromActiveTheme(true);
+
+    assert.strictEqual(documentMock.getElementById('comfy-genai-top-title').value, 'Cyber City Nights 2077');
+    assert.strictEqual(documentMock.getElementById('comfy-genai-subtitle').value, 'Neo-Tokyo Underground');
+    assert.strictEqual(documentMock.getElementById('comfy-genai-bottom-title').value, 'VIP Pass');
+    assert(documentMock.getElementById('comfy-genai-concept').value.includes('Cyber City Nights 2077'));
+
+    const compiledPrompt = documentMock.getElementById('comfy-genai-prompt-full').value;
+    assert(compiledPrompt.includes('Cyber City Nights 2077'), 'Prompt should include active theme title');
+    assert(compiledPrompt.includes('Neo-Tokyo Underground'), 'Prompt should include active theme subtitle');
+    assert(compiledPrompt.includes('VIP Pass'), 'Prompt should include active theme bottom badge');
+
+    console.log('✅ PASSED: syncComfyTitlesFromActiveTheme matches active theme & auto-updates prompt');
+}
+
+// Test 7: Two-way editing anytime updates prompt dynamically and keeps fields in sync
+{
+    // User edits top title and subtitle anytime
+    documentMock.getElementById('comfy-genai-top-title').value = 'Singapore Night Festival 2026';
+    windowMock.onComfyTitleFieldInput('topTitle');
+
+    documentMock.getElementById('comfy-genai-subtitle').value = 'Heritage & Lights Edition';
+    windowMock.onComfyTitleFieldInput('subtitle');
+
+    assert.strictEqual(documentMock.getElementById('prompt-inp-top-title').value, 'Singapore Night Festival 2026');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-subtitle').value, 'Heritage & Lights Edition');
+
+    const updatedPrompt = documentMock.getElementById('comfy-genai-prompt-full').value;
+    assert(updatedPrompt.includes('Singapore Night Festival 2026'), 'Prompt should reflect edited title');
+    assert(updatedPrompt.includes('Heritage & Lights Edition'), 'Prompt should reflect edited subtitle');
+
+    console.log('✅ PASSED: Two-way editing anytime updates modular fields and prompt in real-time');
+}
+
 console.log('\\n================================================================');
-console.log('ALL 5 COMFYUI FRAME & TYPOGRAPHY TESTS PASSED CLEANLY!');
+console.log('ALL 7 COMFYUI FRAME & TYPOGRAPHY TESTS PASSED CLEANLY!');
 console.log('================================================================');
 process.exit(0);
