@@ -282,7 +282,56 @@ Atmosphere: High-key festive cinematic lighting, vibrant colors, 8k
     console.log('✅ PASSED: Two-way editing anytime updates modular fields and prompt in real-time');
 }
 
+
+// Test 8: Block-based markdown response extraction (### [FRAME_STYLE], etc.)
+{
+    const blockResponse = `
+Here is your photobooth design:
+
+### [FRAME_STYLE]
+Ornate neo-classical gilded filigree border with floating amber particles.
+
+### [TOP_TITLE]
+Singapore Bicentennial Gala
+
+### [TOP_TITLE_STYLE]
+rendered in razor-sharp gold-leaf letterpress
+
+### [SUBTITLE]
+1819 – 2019
+
+### [SUBTITLE_STYLE]
+elegantly etched in a smaller minimalist gold serif
+
+### [BOTTOM_TITLE]
+Honoring the Pioneers
+
+### [BOTTOM_TITLE_STYLE]
+displayed in bold luminous typography
+
+### [ATMOSPHERE]
+Volumetric liquid gold lighting, soft bokeh, sharp focus, 8k resolution.
+`;
+
+    const success = windowMock.applyComfyFrameAiPaste(blockResponse);
+    assert.strictEqual(success, true, 'Block-based paste should succeed');
+
+    assert.strictEqual(documentMock.getElementById('prompt-inp-border').value, 'Ornate neo-classical gilded filigree border with floating amber particles.');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-top-title').value, 'Singapore Bicentennial Gala');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-top-title-style').value, 'rendered in razor-sharp gold-leaf letterpress');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-subtitle').value, '1819 – 2019');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-subtitle-style').value, 'elegantly etched in a smaller minimalist gold serif');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-bottom-title').value, 'Honoring the Pioneers');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-bottom-title-style').value, 'displayed in bold luminous typography');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-atmosphere').value, 'Volumetric liquid gold lighting, soft bokeh, sharp focus, 8k resolution.');
+
+    // Verify live preview in Step 3 was updated
+    const livePreview = documentMock.getElementById('prompt-live-preview');
+    assert(livePreview.innerHTML.includes('Singapore Bicentennial Gala'), 'Live preview should contain extracted title');
+
+    console.log('✅ PASSED: Block-based markdown extraction auto-populates relevant blocks & Step 3 preview');
+}
 console.log('\\n================================================================');
-console.log('ALL 7 COMFYUI FRAME & TYPOGRAPHY TESTS PASSED CLEANLY!');
+console.log('ALL 8 COMFYUI FRAME & TYPOGRAPHY TESTS PASSED CLEANLY!');
 console.log('================================================================');
 process.exit(0);

@@ -880,11 +880,11 @@ window.copyAssembledPrompt = function () {
 
 window.buildComfyFramePrompt = function (concept, options = {}) {
     const rawConcept = typeof concept === 'string' ? concept.trim() : '';
-    const themeConcept = rawConcept || getValue('comfy-genai-concept') || '{{YOUR_EVENT_THEME_TITLE_OR_CONCEPT}}';
+    const themeConcept = rawConcept || getValue('comfy-genai-concept') || 'Ornate liquid gold filigree frame with sweeping architectural curves and floating amber champagne sparkles';
 
-    const topTitle = (options.topTitle !== undefined ? options.topTitle : (getValue('comfy-genai-top-title') || getValue('prompt-inp-top-title') || (studio.activeTheme?.title || 'Union of ITE Training Staff'))).trim();
-    const subtitle = (options.subtitle !== undefined ? options.subtitle : (getValue('comfy-genai-subtitle') || getValue('prompt-inp-subtitle') || (studio.activeTheme?.subtitle || '1976 – 2026'))).trim();
-    const bottomTitle = (options.bottomTitle !== undefined ? options.bottomTitle : (getValue('comfy-genai-bottom-title') || getValue('prompt-inp-bottom-title') || (studio.activeTheme?.badge || '50th Anniversary'))).trim();
+    const topTitle = (options.topTitle !== undefined ? options.topTitle : (getValue('prompt-inp-top-title') || getValue('comfy-genai-top-title') || (studio.activeTheme?.title || 'Union of ITE Training Staff'))).trim();
+    const subtitle = (options.subtitle !== undefined ? options.subtitle : (getValue('prompt-inp-subtitle') || getValue('comfy-genai-subtitle') || (studio.activeTheme?.subtitle || '1976 – 2026'))).trim();
+    const bottomTitle = (options.bottomTitle !== undefined ? options.bottomTitle : (getValue('prompt-inp-bottom-title') || getValue('comfy-genai-bottom-title') || (studio.activeTheme?.badge || '50th Anniversary'))).trim();
 
     const frameStyle = options.frameStyle || getValue('comfy-lever-frame-style') || 'Auto (Infer from Concept)';
     const typoStyle = options.typoStyle || getValue('comfy-lever-typo-style') || 'Auto (Infer from Concept)';
@@ -892,24 +892,14 @@ window.buildComfyFramePrompt = function (concept, options = {}) {
 
     return `You are an expert AI Art Director and Prompt Engineer specializing in photobooth composition and diffusion image generation (Stable Diffusion SDXL, ComfyUI CLIP Node 45, Flux).
 
-We are designing bespoke prompt components for CLIP Node 45 for an interactive photobooth kiosk theme:
-• THEME CONCEPT / VIBE: "${themeConcept}"
+The user is designing a photobooth frame and custom words with the following specifications:
+• FRAME STYLE & VISUAL EFFECT: "${themeConcept}"
 • TOP APEX TITLE: "${topTitle}"
 • TOP SUBTITLE / YEARS: "${subtitle}"
 • BOTTOM BADGE TITLE: "${bottomTitle}"
-• FRAME & BORDER ARCHETYPE: "${frameStyle}"
-• TYPOGRAPHY & SCRIPT VIBE: "${typoStyle}"
+• FRAME ARCHETYPE: "${frameStyle}"
+• TYPOGRAPHY VIBE: "${typoStyle}"
 • ATMOSPHERE & FINISHERS: "${atmosphere}"
-
-### PHOTOBOOTH PROMPT COMPOSITION ARCHITECTURE
-In our photobooth pipeline, the final generation prompt is assembled modularly as:
-[Camera Framing] + [Gender Persona] + [Pose & Clothes] + [Setting] +
-[1. GRAPHIC BORDER OVERLAY] +
-[2. TOP APEX TITLE & STYLE] +
-[3. SUBTITLE / YEARS & STYLE] +
-[4. BOTTOM BADGE TITLE & STYLE] +
-[5. TYPOGRAPHY LIGHTING & ARCHITECTURAL INTEGRATION] +
-[6. ATMOSPHERE, LIGHTING & AESTHETIC FINISHERS]
 
 ### YOUR TASK
 Invent bespoke, cohesive prompt specifications for the Graphic Border Frame, Theme Titles & Typography styling, Lighting Integration, and Atmosphere tailored specifically for "${themeConcept}".
@@ -919,23 +909,51 @@ Ensure:
 2. The typography titles feel physical, premium, and integrated into the scene architecture (e.g. gold-leaf script, backlit cyber glyphs, luminous calligraphy). Incorporate the exact Top Apex Title "${topTitle}", Subtitle "${subtitle}", and Bottom Badge "${bottomTitle}".
 3. The lighting, depth of field, and atmosphere create a stunning, high-fashion finish.
 
-Provide your output in TWO parts:
-1. <design_thinking>: A 2-3 sentence explanation of the design choices, border contouring, and typography synergy.
-2. A single JSON code block containing the exact field values:
+Format your response clearly into the EXACT BLOCKS below so the user can easily copy and paste each part into the system blocks, followed by the JSON block for 1-click auto-import:
+
+### [FRAME_STYLE]
+(Detailed graphic design & border overlay prompt. Describe the frame borders, architectural contours, transparency/glassmorphism, materials, and corner accents framing the subject naturally.)
+
+### [TOP_TITLE]
+${topTitle}
+
+### [TOP_TITLE_STYLE]
+(Style description for the top title, e.g. "rendered in an exquisite gold-leaf, fluid hand-drawn script" or "displayed in razor-sharp neon cyan typography".)
+
+### [SUBTITLE]
+${subtitle}
+
+### [SUBTITLE_STYLE]
+(Style description for the subtitle/years, e.g. "elegantly etched in a smaller, minimalist gold serif font directly below it".)
+
+### [BOTTOM_TITLE]
+${bottomTitle}
+
+### [BOTTOM_TITLE_STYLE]
+(Style description for the bottom badge, e.g. "displayed in bold, luminous calligraphy anchored within the lower crest".)
+
+### [ATMOSPHERE]
+(Volumetric lighting, lens characteristics, color palette, glassmorphism, depth of field, 8k resolution, photorealistic finish.)
 
 \`\`\`json
 {
-  "border": "Detailed graphic design & border overlay prompt. Describe the frame borders, architectural contours, transparency/glassmorphism, materials (e.g. liquid gold, neon cyber brackets, festive banners, floral filigree, translucent acrylic), and corner accents.",
+  "frame_style": "Detailed graphic design & border overlay prompt. Describe frame borders and contours.",
+  "border": "Detailed graphic design & border overlay prompt. Describe frame borders and contours.",
+  "top_title": "${topTitle}",
   "topTitle": "${topTitle}",
-  "topTitleStyle": "Style description for the top title (e.g. 'rendered in an exquisite gold-leaf, fluid hand-drawn script' or 'displayed in razor-sharp holographic neon typography').",
+  "top_title_style": "rendered in an exquisite gold-leaf, fluid hand-drawn script",
+  "topTitleStyle": "rendered in an exquisite gold-leaf, fluid hand-drawn script",
   "subtitle": "${subtitle}",
-  "subtitleStyle": "Style description for the subtitle (e.g. 'elegantly etched in a smaller, minimalist gold serif font directly below it').",
+  "subtitle_style": "elegantly etched in a smaller, minimalist gold serif font directly below it",
+  "subtitleStyle": "elegantly etched in a smaller, minimalist gold serif font directly below it",
+  "bottom_title": "${bottomTitle}",
   "bottomTitle": "${bottomTitle}",
-  "bottomTitleStyle": "Style description for the bottom badge (e.g. 'displayed in bold, luminous calligraphy anchored within the lower crest').",
-  "typoIntegration": "Lighting and border integration for all typography (e.g. 'All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders.').",
+  "bottom_title_style": "displayed in bold, luminous calligraphy anchored within the lower crest",
+  "bottomTitleStyle": "displayed in bold, luminous calligraphy anchored within the lower crest",
+  "typoIntegration": "All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders.",
   "atmosphere": "Volumetric lighting, lens characteristics, color palette, glassmorphism, depth of field, 8k resolution, photorealistic finish.",
-  "maleStyle": "Male guest persona aesthetic (e.g. 'executive leading man in tailored dinner suit')",
-  "femaleStyle": "Female guest persona aesthetic (e.g. 'charismatic elegant leading lady in evening gown')"
+  "maleStyle": "executive leading man in tailored dinner suit",
+  "femaleStyle": "charismatic elegant leading lady in evening gown"
 }
 \`\`\`
 
@@ -1143,19 +1161,26 @@ window.parseComfyFrameAiResponse = function (rawText) {
     };
 
     if (parsedJson && typeof parsedJson === 'object') {
-        result.border = parsedJson.border || parsedJson.borderStyle || parsedJson.graphicBorder || parsedJson.frame || parsedJson.frameStyle || '';
-        result.topTitle = parsedJson.topTitle || parsedJson.topApexTitle || parsedJson.apexTitle || parsedJson.mainTitle || '';
-        result.topTitleStyle = parsedJson.topTitleStyle || parsedJson.topApexTitleStyle || parsedJson.apexTitleStyle || parsedJson.topStyle || '';
-        result.subtitle = parsedJson.subtitle || parsedJson.subTitle || parsedJson.years || '';
-        result.subtitleStyle = parsedJson.subtitleStyle || parsedJson.subTitleStyle || parsedJson.yearsStyle || '';
-        result.bottomTitle = parsedJson.bottomTitle || parsedJson.bottomBadgeTitle || parsedJson.badgeTitle || parsedJson.bottomBadge || '';
-        result.bottomTitleStyle = parsedJson.bottomTitleStyle || parsedJson.bottomBadgeStyle || parsedJson.badgeStyle || '';
+        result.border = parsedJson.frame_style || parsedJson.border || parsedJson.borderStyle || parsedJson.graphicBorder || parsedJson.frame || parsedJson.frameStyle || '';
+        result.topTitle = parsedJson.top_title || parsedJson.topTitle || parsedJson.topApexTitle || parsedJson.apexTitle || parsedJson.mainTitle || '';
+        result.topTitleStyle = parsedJson.top_title_style || parsedJson.topTitleStyle || parsedJson.topApexTitleStyle || parsedJson.apexTitleStyle || parsedJson.topStyle || '';
+        result.subtitle = parsedJson.subtitle || parsedJson.sub_title || parsedJson.subTitle || parsedJson.years || '';
+        result.subtitleStyle = parsedJson.subtitle_style || parsedJson.subtitleStyle || parsedJson.subTitleStyle || parsedJson.yearsStyle || '';
+        result.bottomTitle = parsedJson.bottom_title || parsedJson.bottomTitle || parsedJson.bottomBadgeTitle || parsedJson.badgeTitle || parsedJson.bottomBadge || '';
+        result.bottomTitleStyle = parsedJson.bottom_title_style || parsedJson.bottomTitleStyle || parsedJson.bottomBadgeStyle || parsedJson.badgeStyle || '';
         result.typoStyle = parsedJson.typoStyle || parsedJson.typoIntegration || parsedJson.typographyStyle || parsedJson.typographyIntegration || '';
         result.atmosphere = parsedJson.atmosphere || parsedJson.atmosphereLighting || parsedJson.finishers || '';
         result.maleStyle = parsedJson.maleStyle || parsedJson.malePersona || '';
         result.femaleStyle = parsedJson.femaleStyle || parsedJson.femalePersona || '';
         result.framing = parsedJson.framing || parsedJson.cameraFraming || '';
     } else {
+        // Block-based extraction fallback (### [FRAME_STYLE] or [FRAME_STYLE])
+        const extractBlock = (name) => {
+            const re = new RegExp('(?:###\\s*\\[|\\b\\[)' + name + '\\]\\s*\\n*([\\s\\S]*?)(?=(?:###\\s*\\[|\\b\\[[A-Z_]+\\]|```|$))', 'i');
+            const m = text.match(re);
+            return m ? m[1].trim() : '';
+        };
+
         // Line-based key-value extraction fallback
         const extractField = (patterns) => {
             for (const p of patterns) {
@@ -1166,18 +1191,18 @@ window.parseComfyFrameAiResponse = function (rawText) {
             return '';
         };
 
-        result.border = extractField(['border', 'border style', 'graphic border', 'frame style', 'frame']);
-        result.topTitle = extractField(['top title', 'top apex title', 'apex title', 'main title']);
-        result.topTitleStyle = extractField(['top title style', 'top apex title style', 'apex title style', 'top style']);
-        result.subtitle = extractField(['subtitle', 'sub title', 'years']);
-        result.subtitleStyle = extractField(['subtitle style', 'sub title style', 'years style']);
-        result.bottomTitle = extractField(['bottom title', 'bottom badge title', 'bottom badge', 'badge title']);
-        result.bottomTitleStyle = extractField(['bottom title style', 'bottom badge style', 'badge style']);
-        result.typoStyle = extractField(['typo style', 'typography style', 'typography integration', 'typo integration', 'backlight']);
-        result.atmosphere = extractField(['atmosphere', 'atmosphere lighting', 'aesthetic finishers', 'finishers', 'lighting']);
-        result.maleStyle = extractField(['male style', 'male persona', 'male']);
-        result.femaleStyle = extractField(['female style', 'female persona', 'female']);
-        result.framing = extractField(['framing', 'camera framing', 'shot']);
+        result.border = extractBlock('FRAME_STYLE') || extractBlock('BORDER') || extractBlock('FRAME') || extractField(['border', 'border style', 'graphic border', 'frame style', 'frame']);
+        result.topTitle = extractBlock('TOP_TITLE') || extractField(['top title', 'top apex title', 'apex title', 'main title']);
+        result.topTitleStyle = extractBlock('TOP_TITLE_STYLE') || extractField(['top title style', 'top apex title style', 'apex title style', 'top style']);
+        result.subtitle = extractBlock('SUBTITLE') || extractField(['subtitle', 'sub title', 'years']);
+        result.subtitleStyle = extractBlock('SUBTITLE_STYLE') || extractField(['subtitle style', 'sub title style', 'years style']);
+        result.bottomTitle = extractBlock('BOTTOM_TITLE') || extractField(['bottom title', 'bottom badge title', 'bottom badge', 'badge title']);
+        result.bottomTitleStyle = extractBlock('BOTTOM_TITLE_STYLE') || extractField(['bottom title style', 'bottom badge style', 'badge style']);
+        result.typoStyle = extractBlock('TYPO_STYLE') || extractBlock('TYPOGRAPHY') || extractField(['typo style', 'typography style', 'typography integration', 'typo integration', 'backlight']);
+        result.atmosphere = extractBlock('ATMOSPHERE') || extractField(['atmosphere', 'atmosphere lighting', 'aesthetic finishers', 'finishers', 'lighting']);
+        result.maleStyle = extractBlock('MALE_STYLE') || extractField(['male style', 'male persona', 'male']);
+        result.femaleStyle = extractBlock('FEMALE_STYLE') || extractField(['female style', 'female persona', 'female']);
+        result.framing = extractBlock('FRAMING') || extractField(['framing', 'camera framing', 'shot']);
     }
 
     return result;
