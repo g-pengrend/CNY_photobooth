@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadThemes(null, true);
     await loadMasterAssets();
     await loadAssetGenConfigs();
+    if (typeof window.updateFullSystematicGenAiPrompt === 'function') { window.updateFullSystematicGenAiPrompt(); }
 });
 
 async function loadMasterAssets() {
@@ -1352,7 +1353,8 @@ window.switchAssetSubtab = function (subtab) {
 // ==========================================================================
 // Workspace View Switcher
 // ==========================================================================
-function switchToThemeEditor() {
+window.switchToThemeEditor = function () {
+
     studio.currentView = 'theme-editor';
     document.getElementById('view-theme-editor').style.display = '';
     document.getElementById('view-master-library').style.display = 'none';
@@ -3099,7 +3101,81 @@ window.updateFullSystematicGenAiPrompt = function () {
     }
 };
 
-window.copyCustomObjectGenAiPrompt = function () {
+// Bulletproof clipboard copy helper with multi-tier fallback (works on HTTP, localhost, and all browsers)
+window.copyTextToClipboard = async function (text, successMsg = '📋 Copied to clipboard!') {
+    if (!text) return false;
+    let copied = false;
+
+    // Tier 1: Modern Async Clipboard API (works on HTTPS & localhost)
+    if (navigator.clipboard && window.isSecureContext) {
+        try {
+            await navigator.clipboard.writeText(text);
+            copied = true;
+        } catch (err) {
+            console.warn('navigator.clipboard.writeText failed, falling back:', err);
+        }
+    }
+
+    // Tier 2: Dedicated DOM textarea fallback (works everywhere, including non-HTTPS HTTP IPs)
+    if (!copied) {
+        try {
+            const tempEl = document.createElement('textarea');
+            tempEl.value = text;
+            tempEl.setAttribute('readonly', '');
+            tempEl.style.position = 'fixed';
+            tempEl.style.top = '0';
+            tempEl.style.left = '0';
+            tempEl.style.width = '2em';
+            tempEl.style.height = '2em';
+            tempEl.style.padding = '0';
+            tempEl.style.border = 'none';
+            tempEl.style.outline = 'none';
+            tempEl.style.boxShadow = 'none';
+            tempEl.style.background = 'transparent';
+            tempEl.style.opacity = '0.01';
+            tempEl.style.zIndex = '-1';
+            document.body.appendChild(tempEl);
+            tempEl.focus();
+            tempEl.select();
+            tempEl.setSelectionRange(0, tempEl.value.length);
+            copied = document.execCommand('copy');
+            document.body.removeChild(tempEl);
+        } catch (err) {
+            console.error('Fallback execCommand copy error:', err);
+        }
+    }
+
+    // Tier 3: Sync & select visible prompt box so user can also press Ctrl+C if needed
+    const promptBox = document.getElementById('adv-systematic-prompt-full');
+    if (promptBox) {
+        promptBox.value = text;
+        try {
+            promptBox.focus();
+            promptBox.select();
+            promptBox.setSelectionRange(0, promptBox.value.length);
+        } catch (e) {}
+    }
+
+    if (copied) {
+        showToast(successMsg, 'success');
+        return true;
+    } else {
+        showToast('📋 Entire prompt selected! Press Ctrl+C / Cmd+C to copy.', 'info');
+        return false;
+    }
+};
+
+window.selectAllPromptText = function () {
+    const box = document.getElementById('adv-systematic-prompt-full');
+    if (box) {
+        box.focus();
+        box.select();
+        box.setSelectionRange(0, box.value.length);
+        window.copyTextToClipboard(box.value, '📋 Entire prompt selected & copied to clipboard!');
+    }
+};
+
+window.copyCustomObjectGenAiPrompt = async function () {
     const userIntent = document.getElementById('adv-theme-intent')?.value.trim();
     const titleVal = document.getElementById('inp-title-adv')?.value.trim() 
                   || document.getElementById('inp-title')?.value.trim();
@@ -3121,40 +3197,55 @@ window.copyCustomObjectGenAiPrompt = function () {
     };
 
     const promptText = window.buildAtmosphereOnlyPrompt(concept, levers);
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(promptText).then(() => {
-            showToast('🎨 Atmosphere Only GenAI Prompt copied! Paste into ChatGPT / Claude / Gemini.', 'success');
-        }).catch(() => {
-            fallbackCopyPromptText(promptText);
-        });
-    } else {
-        fallbackCopyPromptText(promptText);
+    
+    // Display in prompt viewer immediately
+    const box = document.getElementById('adv-systematic-prompt-full');
+    if (box) {
+        box.value = promptText;
     }
+
+    await window.copyTextToClipboard(promptText, '🎨 Atmosphere Only GenAI Prompt copied! Paste into ChatGPT / Claude / Gemini.');
 };
 
-window.copyFullSystematicGenAiPrompt = function () {
-    const text = window.generateFullSystematicPromptText();
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-            showToast('📋 GenAI Prompt Template copied! Paste into ChatGPT / Claude / Gemini.', 'success');
-        }).catch(() => {
-            fallbackCopyPromptText(text);
-        });
-    } else {
-        fallbackCopyPromptText(text);
+window.copyFullSystematicGenAiPrompt = async function () {
+    let text = '';
+    try {
+        text = window.generateFullSystematicPromptText();
+    } catch (e) {
+        console.error('Error in generateFullSystematicPromptText:', e);
+    }
+    if (!text) {
+        showToast('Please enter a theme concept first.', 'warning');
+        return;
+    }
+
+    // Immediately reflect in the visible prompt box
+    const box = document.getElementById('adv-systematic-prompt-full');
+    if (box) {
+        box.value = text;
+    }
+
+    const btn = document.getElementById('btn-copy-full-prompt');
+    const originalHtml = btn ? btn.innerHTML : '';
+
+    const copied = await window.copyTextToClipboard(text, '📋 GenAI Prompt Template copied! Paste into ChatGPT / Claude / Gemini.');
+
+    if (btn && copied) {
+        btn.innerHTML = '<span>✅</span> Copied to Clipboard!';
+        btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        btn.style.borderColor = '#059669';
+        setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            btn.style.background = '';
+            btn.style.borderColor = '';
+        }, 2200);
     }
 };
 
 function fallbackCopyPromptText(text) {
-    const box = document.getElementById('adv-systematic-prompt-full');
-    if (box) {
-        box.value = text;
-        box.select();
-        document.execCommand('copy');
-        showToast('📋 GenAI Prompt Template copied to clipboard!', 'success');
-    }
+    window.copyTextToClipboard(text);
 }
+
 
 // Backward-compatible alias
 window.copyGenAiAtmospherePrompt = window.copyFullSystematicGenAiPrompt;

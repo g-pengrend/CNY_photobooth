@@ -23,6 +23,18 @@
                 <span class="studio-tag">V2 Modular</span>
             </div>
         </div>
+        <!-- Quick top-level navigation -->
+        <div class="header-nav" style="display: flex; gap: 0.5rem; align-items: center; margin-left: 1rem;">
+            <button type="button" class="admin-btn admin-btn-secondary" onclick="switchToThemeEditor()" style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; padding: 0.4rem 0.85rem;" title="Theme Editor">
+                <span>🎨</span> Themes
+            </button>
+            <button type="button" class="admin-btn admin-btn-secondary" onclick="switchToMasterGallery()" style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; padding: 0.4rem 0.85rem;" title="Asset Viewer">
+                <span>📦</span> Asset Viewer
+            </button>
+            <button type="button" class="admin-btn admin-btn-secondary" onclick="switchToAICreator()" style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; padding: 0.4rem 0.85rem;" title="Asset Creation">
+                <span>🤖</span> Asset Creation
+            </button>
+        </div>
         <div class="header-actions">
             <button id="view-live-btn" class="admin-btn admin-btn-secondary" title="Open Theme in Kiosk">
                 👁️ View Live
@@ -40,6 +52,27 @@
     <div class="studio-container">
         <!-- Sidebar: Themes Browser -->
         <aside class="studio-sidebar">
+            <!-- Asset Library Nav (Asset Viewer & Asset Creation ON TOP) -->
+            <div class="sidebar-header">
+                <span class="sidebar-heading">Asset Studio</span>
+            </div>
+            <div class="sidebar-nav-list" style="margin-bottom: 1.25rem;">
+                <div id="nav-master-gallery" class="sidebar-nav-item" onclick="switchToMasterGallery()">
+                    <span class="sidebar-nav-icon">📦</span>
+                    <div class="sidebar-nav-info">
+                        <span class="sidebar-nav-title">Asset Viewer</span>
+                        <span class="sidebar-nav-sub">Browse all library assets</span>
+                    </div>
+                </div>
+                <div id="nav-ai-creator" class="sidebar-nav-item" onclick="switchToAICreator()">
+                    <span class="sidebar-nav-icon">🤖</span>
+                    <div class="sidebar-nav-info">
+                        <span class="sidebar-nav-title">Asset Creation</span>
+                        <span class="sidebar-nav-sub">Generate new AI assets</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="sidebar-header">
                 <span class="sidebar-heading">Themes Catalog</span>
                 <button id="new-theme-btn" class="sidebar-new-btn" title="New Theme">+ New</button>
@@ -48,27 +81,7 @@
                 <!-- Theme list populated dynamically -->
             </div>
 
-            <!-- Asset Library Nav -->
-            <div class="sidebar-header" style="margin-top:1.5rem;">
-                <span class="sidebar-heading">Asset Library</span>
-            </div>
-            <div class="sidebar-nav-list">
-                <div id="nav-master-gallery" class="sidebar-nav-item" onclick="switchToMasterGallery()">
-                    <span class="sidebar-nav-icon">📦</span>
-                    <div class="sidebar-nav-info">
-                        <span class="sidebar-nav-title">Asset Gallery</span>
-                        <span class="sidebar-nav-sub">Browse all library assets</span>
-                    </div>
-                </div>
-                <div id="nav-ai-creator" class="sidebar-nav-item" onclick="switchToAICreator()">
-                    <span class="sidebar-nav-icon">🤖</span>
-                    <div class="sidebar-nav-info">
-                        <span class="sidebar-nav-title">AI Asset Creator</span>
-                        <span class="sidebar-nav-sub">Generate new AI assets</span>
-                    </div>
-                </div>
-            </div>
-        </aside>
+            </aside>
 
         <!-- Main Workspace -->
         <main class="studio-main">
@@ -539,35 +552,37 @@
                             </div>
                         </div>
 
-                        <!-- 3. Compile & Copy Prompt Call-to-Action Bar -->
-                        <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.16) 0%, rgba(236, 72, 153, 0.12) 100%); border: 1px solid rgba(99, 102, 241, 0.4); border-radius: var(--radius-sm); padding: 1.15rem 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
-                            <div style="max-width: 580px;">
-                                <div style="font-size: 0.95rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
-                                    <span>📋</span> Ready to Generate Theme Prompt
+                        <!-- 3. Live AI Prompt Viewer & Copy Action Card (Always Visible) -->
+                        <div class="full-prompt-card" style="background: rgba(10, 12, 24, 0.92); border: 1px solid rgba(99, 102, 241, 0.4); border-radius: var(--radius-sm); padding: 1.25rem; margin-top: 1.2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.45);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.75rem;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 0.55rem;">
+                                        <span style="font-size: 1.2rem;">📋</span>
+                                        <h4 style="margin: 0; font-size: 0.98rem; font-weight: 700; color: #fff;">Compiled GenAI Theme Prompt</h4>
+                                        <span style="font-size: 0.72rem; color: #34d399; background: rgba(52, 211, 153, 0.12); border: 1px solid rgba(52, 211, 153, 0.35); padding: 2px 8px; border-radius: 999px; font-weight: 600;">● Live Updated</span>
+                                    </div>
+                                    <p style="font-size: 0.78rem; color: #94a3b8; margin: 0.25rem 0 0 0; line-height: 1.4;">
+                                        The 4-layer dynamic prompt is compiled live below. Copy and paste it directly into <strong>ChatGPT, Claude, or Gemini</strong>.
+                                    </p>
                                 </div>
-                                <div style="font-size: 0.78rem; color: #cbd5e1; margin-top: 0.25rem; line-height: 1.45;">
-                                    Click below to copy your bespoke 4-layer prompt, then paste it into <strong>ChatGPT, Claude, or Gemini</strong> to receive your bespoke theme code.
+                                <div style="display: flex; gap: 0.55rem; flex-wrap: wrap; align-items: center;">
+                                    <button type="button" id="btn-copy-full-prompt" class="admin-btn admin-btn-accent" onclick="copyFullSystematicGenAiPrompt()" style="padding: 0.65rem 1.4rem; font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 18px rgba(99, 102, 241, 0.45); cursor: pointer;" title="Generates complete theme from scratch: identity, colors, waiting sequence, HTML & CSS">
+                                        <span>📋</span> Copy Full Theme Prompt (Blocks 1, 2, 3)
+                                    </button>
+                                    <button type="button" class="admin-btn admin-btn-secondary" onclick="copyCustomObjectGenAiPrompt()" style="padding: 0.65rem 0.95rem; font-size: 0.82rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; cursor: pointer;" title="Generates ONLY custom HTML decorations & CSS animations without touching theme identity">
+                                        <span>🎨</span> Atmosphere Only (Blocks 2 &amp; 3)
+                                    </button>
+                                    <button type="button" class="admin-btn admin-btn-secondary" onclick="selectAllPromptText()" style="padding: 0.65rem 0.85rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;" title="Select all text in prompt box for manual copying">
+                                        <span>🔍</span> Select All
+                                    </button>
                                 </div>
                             </div>
-                            <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center;">
-                                <button type="button" class="admin-btn admin-btn-accent" onclick="copyFullSystematicGenAiPrompt()" style="padding: 0.65rem 1.35rem; font-size: 0.9rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 0 16px rgba(99, 102, 241, 0.45); cursor: pointer;" title="Generates complete theme from scratch: identity, colors, waiting sequence, HTML & CSS">
-                                    <span>📋</span> Copy Full Theme Prompt (Blocks 1, 2, 3)
-                                </button>
-                                <button type="button" class="admin-btn admin-btn-secondary" onclick="copyCustomObjectGenAiPrompt()" style="padding: 0.65rem 0.95rem; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem; cursor: pointer;" title="Generates ONLY custom HTML decorations & CSS animations without touching theme identity">
-                                    <span>🎨</span> Atmosphere Only (Blocks 2 &amp; 3)
-                                </button>
+
+                            <!-- Visible Monospace Prompt Textarea -->
+                            <div style="position: relative; margin-top: 0.5rem;">
+                                <textarea id="adv-systematic-prompt-full" rows="13" readonly style="width: 100%; padding: 0.95rem; border-radius: var(--radius-sm); background: #05060b; border: 1px solid rgba(99, 102, 241, 0.3); color: #cbd5e1; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.82rem; line-height: 1.5; resize: vertical; box-sizing: border-box; cursor: text;" onclick="this.select()" title="Click to select all text"></textarea>
                             </div>
                         </div>
-
-                        <!-- Collapsible Raw Prompt Template Inspector -->
-                        <details style="margin-top: 0.85rem;">
-                            <summary style="font-size: 0.76rem; color: #818cf8; cursor: pointer; user-select: none;">
-                                👁️ View Compiled Prompt Text (Click to inspect or manually select)
-                            </summary>
-                            <div style="margin-top: 0.5rem;">
-                                <textarea id="adv-systematic-prompt-full" rows="6" readonly style="width: 100%; padding: 0.85rem; border-radius: var(--radius-sm); background: #07080f; border: 1px solid var(--border-subtle); color: #cbd5e1; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.8rem; line-height: 1.45; resize: vertical;" title="Copyable prompt template"></textarea>
-                            </div>
-                        </details>
                     </div>
 
                     <!-- STEP 2: IMPORT AI RESPONSE & ACTIVATE -->
