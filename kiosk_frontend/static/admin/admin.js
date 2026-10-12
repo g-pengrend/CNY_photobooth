@@ -867,6 +867,328 @@ window.copyAssembledPrompt = function () {
     }
 };
 
+
+// ==========================================================================
+// ComfyUI GenAI Frame & Typography Studio Engine (CLIP Node 45 Architect)
+// ==========================================================================
+
+window.buildComfyFramePrompt = function (concept, options = {}) {
+    const rawConcept = typeof concept === 'string' ? concept.trim() : '';
+    const themeConcept = rawConcept || '{{YOUR_EVENT_THEME_TITLE_OR_CONCEPT}}';
+    const frameStyle = options.frameStyle || 'Auto (Infer from Concept)';
+    const typoStyle = options.typoStyle || 'Auto (Infer from Concept)';
+    const atmosphere = options.atmosphere || 'Auto (Infer from Concept)';
+
+    return `You are an expert AI Art Director and Prompt Engineer specializing in photobooth composition and diffusion image generation (Stable Diffusion SDXL, ComfyUI CLIP Node 45, Flux).
+
+We are designing the prompt components for CLIP Node 45 for an interactive photobooth kiosk theme:
+• THEME CONCEPT: "${themeConcept}"
+• FRAME & BORDER ARCHETYPE: "${frameStyle}"
+• TYPOGRAPHY & SCRIPT VIBE: "${typoStyle}"
+• ATMOSPHERE & FINISHERS: "${atmosphere}"
+
+### PHOTOBOOTH PROMPT COMPOSITION ARCHITECTURE
+In our photobooth pipeline, the final generation prompt is assembled modularly as:
+[Camera Framing] + [Gender Persona] + [Pose & Clothes] + [Setting] +
+[1. GRAPHIC BORDER OVERLAY] +
+[2. TOP APEX TITLE & STYLE] +
+[3. SUBTITLE / YEARS & STYLE] +
+[4. BOTTOM BADGE TITLE & STYLE] +
+[5. TYPOGRAPHY LIGHTING & ARCHITECTURAL INTEGRATION] +
+[6. ATMOSPHERE, LIGHTING & AESTHETIC FINISHERS]
+
+### YOUR TASK
+Invent bespoke, cohesive prompt specifications for the Graphic Border Frame, Theme Titles & Typography, Lighting Integration, and Atmosphere tailored specifically for "${themeConcept}".
+
+Ensure:
+1. The border frame frames the subject naturally (e.g. translucent frosted-glass, ornate gilded filigree, neon cyber brackets, festive banners) without blocking the central guest face or torso.
+2. The typography titles feel physical, premium, and integrated into the scene architecture (e.g. gold-leaf script, backlit cyber glyphs, luminous calligraphy).
+3. The lighting, depth of field, and atmosphere create a stunning, high-fashion finish.
+
+Provide your output in TWO parts:
+1. <design_thinking>: A 2-3 sentence explanation of the design choices, border contouring, and typography synergy.
+2. A single JSON code block containing the exact field values:
+
+\`\`\`json
+{
+  "border": "Detailed graphic design & border overlay prompt. Describe the frame borders, architectural contours, transparency/glassmorphism, materials (e.g. liquid gold, neon cyber brackets, festive banners, floral filigree, translucent acrylic), and corner accents.",
+  "topTitle": "Top Apex Title text (e.g. Event Name, Organization, Festival, or Company Name).",
+  "topTitleStyle": "Style description for the top title (e.g. 'rendered in an exquisite gold-leaf, fluid hand-drawn script' or 'displayed in razor-sharp holographic neon typography').",
+  "subtitle": "Subtitle text or milestone years (e.g. '1976 - 2026' or 'Celebration of Excellence' or 'Spring Edition').",
+  "subtitleStyle": "Style description for the subtitle (e.g. 'elegantly etched in a smaller, minimalist gold serif font directly below it').",
+  "bottomTitle": "Bottom badge title text (e.g. '50th Anniversary' or 'Prosperity & Joy' or 'Gala Night').",
+  "bottomTitleStyle": "Style description for the bottom badge (e.g. 'displayed in bold, luminous calligraphy anchored within the lower crest').",
+  "typoIntegration": "Lighting and border integration for all typography (e.g. 'All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders.').",
+  "atmosphere": "Volumetric lighting, lens characteristics, color palette, glassmorphism, depth of field, 8k resolution, photorealistic finish.",
+  "maleStyle": "Male guest persona aesthetic (e.g. 'executive leading man in tailored dinner suit')",
+  "femaleStyle": "Female guest persona aesthetic (e.g. 'charismatic elegant leading lady in evening gown')"
+}
+\`\`\`
+
+Strict Requirement: Output clean, valid JSON inside the code block so the photobooth system can auto-import all fields in 1-click.`;
+};
+
+window.updateComfyFrameGenAiPrompt = function () {
+    const concept = getValue('comfy-genai-concept');
+    const frameStyle = getValue('comfy-lever-frame-style');
+    const typoStyle = getValue('comfy-lever-typo-style');
+    const atmosphere = getValue('comfy-lever-atmosphere');
+
+    const promptText = window.buildComfyFramePrompt(concept, {
+        frameStyle: frameStyle,
+        typoStyle: typoStyle,
+        atmosphere: atmosphere
+    });
+
+    const box = document.getElementById('comfy-genai-prompt-full');
+    if (box) {
+        box.value = promptText;
+    }
+};
+
+window.copyComfyFrameGenAiPrompt = async function () {
+    const box = document.getElementById('comfy-genai-prompt-full');
+    let text = box ? box.value : '';
+    if (!text) {
+        window.updateComfyFrameGenAiPrompt();
+        text = box ? box.value : '';
+    }
+
+    const btn = document.getElementById('btn-copy-comfy-frame-prompt');
+    const originalHtml = btn ? btn.innerHTML : '';
+
+    const copied = await window.copyTextToClipboard(text, '📋 GenAI Frame & Typography Prompt copied! Paste into ChatGPT / Claude / Gemini.');
+    if (btn && copied) {
+        btn.innerHTML = '<span>✅</span> Copied to Clipboard!';
+        btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            btn.style.background = '';
+        }, 2200);
+    }
+};
+
+window.selectAllComfyFramePromptText = function () {
+    const box = document.getElementById('comfy-genai-prompt-full');
+    if (box) {
+        box.focus();
+        box.select();
+        box.setSelectionRange(0, box.value.length);
+        window.copyTextToClipboard(box.value, '📋 Entire prompt selected & copied to clipboard!');
+    }
+};
+
+window.setComfyConceptPreset = function (concept, frameArchetype, typoVibe, atmosphere) {
+    setValue('comfy-genai-concept', concept || '');
+    if (frameArchetype !== undefined) setValue('comfy-lever-frame-style', frameArchetype);
+    if (typoVibe !== undefined) setValue('comfy-lever-typo-style', typoVibe);
+    if (atmosphere !== undefined) setValue('comfy-lever-atmosphere', atmosphere);
+
+    window.updateComfyFrameGenAiPrompt();
+    showToast(`Loaded preset concept: ${concept}`, 'info');
+};
+
+window.syncConceptFromActiveTheme = function () {
+    const title = studio.activeTheme?.title || getValue('inp-title') || getValue('inp-title-adv') || '';
+    const desc = studio.activeTheme?.description || getValue('inp-desc') || getValue('inp-desc-adv') || '';
+    const conceptInp = document.getElementById('comfy-genai-concept');
+    if (conceptInp) {
+        if (title) {
+            conceptInp.value = desc ? `${title} - ${desc}` : title;
+            showToast(`Synced concept from active theme: "${title}"`, 'info');
+        } else {
+            conceptInp.value = 'UITS 50th Anniversary Golden Jubilee Gala';
+            showToast('Loaded benchmark gala concept', 'info');
+        }
+        window.updateComfyFrameGenAiPrompt();
+    }
+};
+
+window.openComfyFramePasteModal = function () {
+    const modal = document.getElementById('comfy-frame-paste-modal');
+    const input = document.getElementById('inp-comfy-ai-paste');
+    if (modal) {
+        modal.style.display = 'flex';
+        if (input) {
+            input.value = '';
+            setTimeout(() => input.focus(), 80);
+        }
+    }
+};
+
+window.closeComfyFramePasteModal = function () {
+    const modal = document.getElementById('comfy-frame-paste-modal');
+    if (modal) modal.style.display = 'none';
+};
+
+window.parseComfyFrameAiResponse = function (rawText) {
+    if (!rawText || typeof rawText !== 'string') return null;
+    const text = rawText.trim();
+    if (!text) return null;
+
+    let designThinking = '';
+    const dtMatch = text.match(/<design_thinking>([\s\S]*?)<\/design_thinking>/i);
+    if (dtMatch) {
+        designThinking = dtMatch[1].trim();
+    }
+
+    let parsedJson = null;
+
+    // 1. Try markdown code block extraction
+    const jsonBlockRegex = /```(?:json)?\s*([\s\S]*?)\s*```/i;
+    const blockMatch = text.match(jsonBlockRegex);
+    if (blockMatch) {
+        try {
+            parsedJson = JSON.parse(blockMatch[1].trim());
+        } catch (e) {
+            try {
+                const cleaned = blockMatch[1].trim()
+                    .replace(/,\s*}/g, '}')
+                    .replace(/,\s*]/g, ']');
+                parsedJson = JSON.parse(cleaned);
+            } catch (e2) {}
+        }
+    }
+
+    // 2. Try raw JSON extraction if code block failed
+    if (!parsedJson) {
+        const rawJsonMatch = text.match(/\{[\s\S]*\}/);
+        if (rawJsonMatch) {
+            try {
+                parsedJson = JSON.parse(rawJsonMatch[0]);
+            } catch (e) {
+                try {
+                    const cleaned = rawJsonMatch[0]
+                        .replace(/,\s*}/g, '}')
+                        .replace(/,\s*]/g, ']');
+                    parsedJson = JSON.parse(cleaned);
+                } catch (e2) {}
+            }
+        }
+    }
+
+    const result = {
+        designThinking: designThinking,
+        border: '',
+        topTitle: '',
+        topTitleStyle: '',
+        subtitle: '',
+        subtitleStyle: '',
+        bottomTitle: '',
+        bottomTitleStyle: '',
+        typoStyle: '',
+        atmosphere: '',
+        maleStyle: '',
+        femaleStyle: '',
+        framing: ''
+    };
+
+    if (parsedJson && typeof parsedJson === 'object') {
+        result.border = parsedJson.border || parsedJson.borderStyle || parsedJson.graphicBorder || parsedJson.frame || parsedJson.frameStyle || '';
+        result.topTitle = parsedJson.topTitle || parsedJson.topApexTitle || parsedJson.apexTitle || parsedJson.mainTitle || '';
+        result.topTitleStyle = parsedJson.topTitleStyle || parsedJson.topApexTitleStyle || parsedJson.apexTitleStyle || parsedJson.topStyle || '';
+        result.subtitle = parsedJson.subtitle || parsedJson.subTitle || parsedJson.years || '';
+        result.subtitleStyle = parsedJson.subtitleStyle || parsedJson.subTitleStyle || parsedJson.yearsStyle || '';
+        result.bottomTitle = parsedJson.bottomTitle || parsedJson.bottomBadgeTitle || parsedJson.badgeTitle || parsedJson.bottomBadge || '';
+        result.bottomTitleStyle = parsedJson.bottomTitleStyle || parsedJson.bottomBadgeStyle || parsedJson.badgeStyle || '';
+        result.typoStyle = parsedJson.typoStyle || parsedJson.typoIntegration || parsedJson.typographyStyle || parsedJson.typographyIntegration || '';
+        result.atmosphere = parsedJson.atmosphere || parsedJson.atmosphereLighting || parsedJson.finishers || '';
+        result.maleStyle = parsedJson.maleStyle || parsedJson.malePersona || '';
+        result.femaleStyle = parsedJson.femaleStyle || parsedJson.femalePersona || '';
+        result.framing = parsedJson.framing || parsedJson.cameraFraming || '';
+    } else {
+        // Line-based key-value extraction fallback
+        const extractField = (patterns) => {
+            for (const p of patterns) {
+                const re = new RegExp(`(?:^|\\n)\\s*(?:\\*\\*|[-*]\\s*)?${p}[:\\-=]\\s*([^\\n\\r]+)`, 'i');
+                const m = text.match(re);
+                if (m && m[1]) return m[1].replace(/^[\"']|[\"']$/g, '').trim();
+            }
+            return '';
+        };
+
+        result.border = extractField(['border', 'border style', 'graphic border', 'frame style', 'frame']);
+        result.topTitle = extractField(['top title', 'top apex title', 'apex title', 'main title']);
+        result.topTitleStyle = extractField(['top title style', 'top apex title style', 'apex title style', 'top style']);
+        result.subtitle = extractField(['subtitle', 'sub title', 'years']);
+        result.subtitleStyle = extractField(['subtitle style', 'sub title style', 'years style']);
+        result.bottomTitle = extractField(['bottom title', 'bottom badge title', 'bottom badge', 'badge title']);
+        result.bottomTitleStyle = extractField(['bottom title style', 'bottom badge style', 'badge style']);
+        result.typoStyle = extractField(['typo style', 'typography style', 'typography integration', 'typo integration', 'backlight']);
+        result.atmosphere = extractField(['atmosphere', 'atmosphere lighting', 'aesthetic finishers', 'finishers', 'lighting']);
+        result.maleStyle = extractField(['male style', 'male persona', 'male']);
+        result.femaleStyle = extractField(['female style', 'female persona', 'female']);
+        result.framing = extractField(['framing', 'camera framing', 'shot']);
+    }
+
+    return result;
+};
+
+window.applyComfyFrameAiPaste = function (rawInputText) {
+    const inputEl = document.getElementById('inp-comfy-ai-paste');
+    const text = rawInputText !== undefined ? rawInputText : (inputEl ? inputEl.value : '');
+    if (!text || !text.trim()) {
+        showToast('Please paste the AI output first!', 'warning');
+        return false;
+    }
+
+    const parsed = window.parseComfyFrameAiResponse(text);
+    if (!parsed) {
+        showToast('Could not extract frame or typography fields from the provided text.', 'error');
+        return false;
+    }
+
+    let appliedCount = 0;
+    const highlightElements = [];
+
+    const applyField = (id, val) => {
+        if (val !== undefined && val !== null && String(val).trim() !== '') {
+            setValue(id, String(val).trim());
+            appliedCount++;
+            const el = document.getElementById(id);
+            if (el) highlightElements.push(el);
+        }
+    };
+
+    applyField('prompt-inp-border', parsed.border);
+    applyField('prompt-inp-top-title', parsed.topTitle);
+    applyField('prompt-inp-top-title-style', parsed.topTitleStyle);
+    applyField('prompt-inp-subtitle', parsed.subtitle);
+    applyField('prompt-inp-subtitle-style', parsed.subtitleStyle);
+    applyField('prompt-inp-bottom-title', parsed.bottomTitle);
+    applyField('prompt-inp-bottom-title-style', parsed.bottomTitleStyle);
+    applyField('prompt-inp-typo-style', parsed.typoStyle);
+    applyField('prompt-inp-atmosphere', parsed.atmosphere);
+    applyField('prompt-inp-framing', parsed.framing);
+    applyField('prompt-inp-male-style', parsed.maleStyle);
+    applyField('prompt-inp-female-style', parsed.femaleStyle);
+
+    if (appliedCount === 0) {
+        showToast('No recognizable fields found. Please ensure the AI output includes JSON or field names.', 'warning');
+        return false;
+    }
+
+    // Refresh live prompt tokens and assembled formula
+    updatePromptLivePreview();
+
+    // Pulse highlight all updated inputs
+    highlightElements.forEach(el => {
+        el.style.transition = 'box-shadow 0.4s ease, border-color 0.4s ease';
+        el.style.borderColor = '#10b981';
+        el.style.boxShadow = '0 0 12px rgba(16, 185, 129, 0.45)';
+        setTimeout(() => {
+            el.style.borderColor = '';
+            el.style.boxShadow = '';
+        }, 2200);
+    });
+
+    // Close modal
+    window.closeComfyFramePasteModal();
+
+    showToast(`✨ Populated ${appliedCount} Frame & Typography fields from GenAI!`, 'success');
+    return true;
+};
+
 function initPromptDesignerListeners() {
     const inputIds = [
         'prompt-inp-framing', 'prompt-inp-male-style', 'prompt-inp-female-style',
@@ -880,6 +1202,24 @@ function initPromptDesignerListeners() {
 
     document.getElementById('raw-prompt-textarea')?.addEventListener('input', updatePromptLivePreview);
     document.getElementById('chk-lucky-number')?.addEventListener('change', updatePromptLivePreview);
+    const borderInp = document.getElementById('prompt-inp-border');
+    if (borderInp) {
+        borderInp.addEventListener('paste', (e) => {
+            const pasted = (e.clipboardData || window.clipboardData)?.getData('text');
+            if (pasted && (pasted.includes('topTitle') || pasted.includes('topApexTitle') || pasted.includes('"border":') || (pasted.includes('Border:') && pasted.includes('Title:')))) {
+                setTimeout(() => {
+                    if (confirm('It looks like you pasted a multi-field GenAI response! Would you like to automatically populate all Frame and Typography fields?')) {
+                        window.applyComfyFrameAiPaste(pasted);
+                    }
+                }, 60);
+            }
+        });
+    }
+    // Initialize ComfyUI GenAI Prompt Template Preview
+    if (typeof window.updateComfyFrameGenAiPrompt === 'function') {
+        window.updateComfyFrameGenAiPrompt();
+    }
+
 }
 
 // ==========================================================================
