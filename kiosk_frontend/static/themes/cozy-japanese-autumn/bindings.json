@@ -1,9 +1,0 @@
-{
-  "confidence": "low",
-  "detected_tokens": [],
-  "face_swap_node": null,
-  "input_image_node": null,
-  "output_node": null,
-  "prompt_node": null,
-  "sampler_node": null
-}
