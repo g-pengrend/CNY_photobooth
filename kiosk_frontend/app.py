@@ -147,6 +147,17 @@ def manage_theme_config(theme_slug):
     }), 200
 
 
+@app.route('/api/theme/<theme_slug>/bindings', methods=['GET'])
+def get_theme_bindings_api(theme_slug):
+    """Retrieve ComfyUI node bindings for a theme, inspecting workflow or using fallback defaults."""
+    theme_dir = os.path.join(app.static_folder, 'themes', theme_slug)
+    if not os.path.exists(theme_dir):
+        return jsonify({'error': f'Theme "{theme_slug}" not found'}), 404
+    from workflow_inspector import load_theme_bindings
+    bindings = load_theme_bindings(theme_dir)
+    return jsonify(bindings), 200
+
+
 @app.route('/api/admin/theme/delete', methods=['POST'])
 def admin_delete_theme_post():
     """Delete a theme via POST."""
@@ -884,11 +895,28 @@ def admin_save_theme():
         with open(data_json_path, 'w', encoding='utf-8') as f:
             json.dump(asset_data, f, indent=2, ensure_ascii=False)
 
-        # 3. Save bindings.json if present
-        if bindings:
-            bindings_path = os.path.join(theme_dir, 'bindings.json')
-            with open(bindings_path, 'w', encoding='utf-8') as f:
-                json.dump(bindings, f, indent=2)
+        # 3. Save bindings.json (always ensure nodes are bound)
+        if not bindings or not isinstance(bindings, dict):
+            from workflow_inspector import load_theme_bindings
+            bindings = load_theme_bindings(theme_dir)
+        
+        # Populate defaults for any unbound photobooth nodes
+        defaults = {
+            "input_image_node": "65",
+            "prompt_node": "45",
+            "sampler_node": "44",
+            "face_swap_node": "57",
+            "output_node": "60"
+        }
+        for k, def_val in defaults.items():
+            if not bindings.get(k):
+                bindings[k] = def_val
+        if not bindings.get("confidence"):
+            bindings["confidence"] = "high"
+
+        bindings_path = os.path.join(theme_dir, 'bindings.json')
+        with open(bindings_path, 'w', encoding='utf-8') as f:
+            json.dump(bindings, f, indent=2)
 
         # 4. Save workflow_kiosk.json if uploaded
         if workflow:

@@ -332,6 +332,100 @@ Volumetric liquid gold lighting, soft bokeh, sharp focus, 8k resolution.
     console.log('✅ PASSED: Block-based markdown extraction auto-populates relevant blocks & Step 3 preview');
 }
 console.log('\\n================================================================');
-console.log('ALL 8 COMFYUI FRAME & TYPOGRAPHY TESTS PASSED CLEANLY!');
+// Test 9: buildComfyFramePrompt does NOT force UITS strings on custom concepts
+{
+    // Clear any theme or input titles
+    documentMock.getElementById('prompt-inp-top-title').value = '';
+    documentMock.getElementById('prompt-inp-subtitle').value = '';
+    documentMock.getElementById('prompt-inp-bottom-title').value = '';
+    documentMock.getElementById('comfy-genai-top-title').value = '';
+    documentMock.getElementById('comfy-genai-subtitle').value = '';
+    documentMock.getElementById('comfy-genai-bottom-title').value = '';
+    windowMock.studio = { activeTheme: { slug: 'custom_retro', title: '', subtitle: '', badge: '' } };
+
+    const customPrompt = windowMock.buildComfyFramePrompt('80s Retro Synthwave Neon Grid', {
+        topTitle: '',
+        subtitle: '',
+        bottomTitle: ''
+    });
+
+    assert(!customPrompt.includes('Union of ITE Training Staff'), 'Prompt must NOT contain hardcoded UITS title');
+    assert(!customPrompt.includes('1976 – 2026'), 'Prompt must NOT contain hardcoded UITS subtitle');
+    assert(!customPrompt.includes('50th Anniversary'), 'Prompt must NOT contain hardcoded UITS badge');
+    assert(customPrompt.includes('80s Retro Synthwave Neon Grid'), 'Prompt must contain custom concept');
+    assert(customPrompt.includes('Invent creative apex title') || customPrompt.includes('Creative Top Title'), 'Prompt must instruct AI to dynamically invent title');
+
+    console.log('✅ PASSED: buildComfyFramePrompt does NOT force UITS titles on custom concepts');
+}
+
+// Test 10: parseComfyFrameAiResponse parses dirty JSON with trailing commas and comments
+{
+    const dirtyJsonText = `
+Here is your photobooth design:
+
+\`\`\`json
+{
+  // Frame border
+  "border": "Bespoke obsidian art deco border with stepped chevrons.",
+  /* Top title */
+  "topTitle": "Metropolis Soiree",
+  "topTitleStyle": "gold-leaf typography",
+  "subtitle": "2026 Edition",
+  "subtitleStyle": "minimalist serif",
+  "bottomTitle": "Gala Night",
+  "bottomTitleStyle": "bold calligraphy",
+  "typoIntegration": "Backlit with ambient gold glow.",
+  "atmosphere": "Moody volumetric lighting, 8k resolution.",
+}
+\`\`\`
+`;
+
+    const parsed = windowMock.parseComfyFrameAiResponse(dirtyJsonText);
+    assert(parsed !== null, 'Should parse dirty JSON');
+    assert.strictEqual(parsed.topTitle, 'Metropolis Soiree');
+    assert.strictEqual(parsed.subtitle, '2026 Edition');
+    assert.strictEqual(parsed.bottomTitle, 'Gala Night');
+    assert(parsed.border.includes('obsidian art deco'), 'Should extract border from dirty JSON');
+
+    console.log('✅ PASSED: parseComfyFrameAiResponse parses dirty JSON with comments & trailing commas');
+}
+
+// Test 11: parseComfyFrameAiResponse and applyComfyFrameAiPaste handle raw unformatted text
+{
+    const rawParagraph = `
+Sure! Here is the prompt:
+A luxurious art deco border with geometric stepped chevron arches and frosted champagne glass framing the photo naturally.
+`;
+
+    const parsed = windowMock.parseComfyFrameAiResponse(rawParagraph);
+    assert(parsed !== null, 'Should parse raw paragraph');
+    assert(parsed.border.includes('stepped chevron arches'), 'Should assign raw paragraph to border');
+
+    const success = windowMock.applyComfyFrameAiPaste(rawParagraph);
+    assert.strictEqual(success, true, 'Paste of raw paragraph should succeed');
+    assert(documentMock.getElementById('prompt-inp-border').value.includes('stepped chevron arches'), 'Should set border input');
+
+    console.log('✅ PASSED: parseComfyFrameAiResponse & applyComfyFrameAiPaste gracefully handle unformatted text');
+}
+
+// Test 12: ComfyUI node auto-binding and activeBindings initialization
+{
+    windowMock.studio.activeBindings = { input_image_node: 'None', prompt_node: '', sampler_node: '44' };
+    windowMock.autoBindStandardComfyNodes();
+
+    assert.strictEqual(windowMock.studio.activeBindings.input_image_node, '65', 'Should bind input image node 65');
+    assert.strictEqual(windowMock.studio.activeBindings.prompt_node, '45', 'Should bind prompt node 45');
+    assert.strictEqual(windowMock.studio.activeBindings.sampler_node, '44', 'Should bind sampler node 44');
+    assert.strictEqual(windowMock.studio.activeBindings.face_swap_node, '57', 'Should bind face swap node 57');
+    assert.strictEqual(windowMock.studio.activeBindings.output_node, '60', 'Should bind output node 60');
+
+    windowMock.updateBindingNode('prompt_node', '123');
+    assert.strictEqual(windowMock.studio.activeBindings.prompt_node, '123', 'Should update prompt node');
+
+    console.log('✅ PASSED: ComfyUI node bindings interactively update and auto-bind benchmark nodes');
+}
+
+console.log('\n================================================================');
+console.log('ALL 12 COMFYUI FRAME, TYPOGRAPHY & NODE BINDING TESTS PASSED CLEANLY!');
 console.log('================================================================');
 process.exit(0);

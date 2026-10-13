@@ -828,15 +828,15 @@
 
                         <!-- Pre-filled styles buttons for user to click -->
                         <div class="prompt-chips" style="margin-bottom: 0.95rem;">
-                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('UITS 50th Anniversary Golden Jubilee Gala with liquid gold filigree frame and floating amber sparkles')">✨ UITS 50th Gala</button>
-                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Chinese New Year 2026 Year of the Horse Prosperity Celebration with festive red and gold eaves, lanterns, and gold foil accents')">🧧 CNY Prosperity</button>
-                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Singapore National Day Parade 2026 with bold crimson red and white festive banners, star fireworks, and glassmorphic overlay')">🇸🇬 NDP 2026</button>
-                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Hari Raya Aidilfitri with emerald and gold Islamic arabesque geometry and warm lantern glow')">🌙 Hari Raya</button>
-                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Futuristic Cyberpunk 2077 Nightclub with holographic neon cyan HUD bracket matrix and light streaks')">⚡ Cyberpunk 2077</button>
-                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Whimsical Enchanted Botanical Forest with organic floral vine arch, luminous dewdrops, and ethereal bokeh')">🌸 Enchanted Flora</button>
-                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Vogue High-End Luxury Editorial Fashion Studio with minimalist clean margins and studio softbox rim lighting')">🍸 High-End Fashion</button>
-                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Neo-Classical Roman Heritage Gala with gilded liquid gold columns, sweeping arches, and marble pediments')">🏛️ Neo-Classical</button>
-                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Sleek Minimalist Obsidian & Liquid Gold Luxury with translucent frosted glass and clean geometric etched borders')">🖤 Minimalist Gold</button>
+                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('UITS 50th Anniversary Golden Jubilee Gala with liquid gold filigree frame and floating amber sparkles', 'Union of ITE Training Staff', '1976 – 2026', '50th Anniversary')">✨ UITS 50th Gala</button>
+                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Chinese New Year 2026 Year of the Horse Prosperity Celebration with festive red and gold eaves, lanterns, and gold foil accents', 'Lunar New Year 2026', 'Spring Festival', 'Gong Xi Fa Cai')">🧧 CNY Prosperity</button>
+                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Singapore National Day Parade 2026 with bold crimson red and white festive banners, star fireworks, and glassmorphic overlay', 'National Day Parade 2026', 'Together As One', 'Majulah Singapura')">🇸🇬 NDP 2026</button>
+                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Hari Raya Aidilfitri with emerald and gold Islamic arabesque geometry and warm lantern glow', 'Hari Raya Aidilfitri', 'Syawal 1447H', 'Maaf Zahir & Batin')">🌙 Hari Raya</button>
+                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Futuristic Cyberpunk 2077 Nightclub with holographic neon cyan HUD bracket matrix and light streaks', 'Cyber City Nights', 'Neo-Tokyo 2077', 'VIP Pass')">⚡ Cyberpunk 2077</button>
+                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Whimsical Enchanted Botanical Forest with organic floral vine arch, luminous dewdrops, and ethereal bokeh', 'Secret Garden Gala', 'Enchanted Forest', 'Fairy Whispers')">🌸 Enchanted Flora</button>
+                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Vogue High-End Luxury Editorial Fashion Studio with minimalist clean margins and studio softbox rim lighting', 'VOGUE Runway Edition', 'Autumn / Winter 2026', 'Haute Couture')">🍸 High-End Fashion</button>
+                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Neo-Classical Roman Heritage Gala with gilded liquid gold columns, sweeping arches, and marble pediments', 'Roman Heritage Gala', 'Bicentennial Celebration', 'Carpe Diem')">🏛️ Neo-Classical</button>
+                            <button type="button" class="chip-sm" onclick="setComfyConceptPreset('Sleek Minimalist Obsidian & Liquid Gold Luxury with translucent frosted glass and clean geometric etched borders', 'Obsidian Luxury Gala', 'Private Collector Edition', 'Black & Gold')">🖤 Minimalist Gold</button>
                         </div>
 
                         <!-- Prompt box to copy to commercial GenAI -->
@@ -893,8 +893,8 @@
                                     🏷️ Block 2: Top Apex Title &amp; Style
                                 </label>
                                 <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 0.6rem;">
-                                    <input type="text" id="prompt-inp-top-title" class="admin-input" placeholder="Title text (e.g. Union of ITE Training Staff)" value="Union of ITE Training Staff" style="font-size: 0.82rem;">
-                                    <input type="text" id="prompt-inp-top-title-style" class="admin-input" placeholder="Style description (e.g. rendered in an exquisite gold-leaf, fluid hand-drawn script)" value="rendered in an exquisite gold-leaf, fluid hand-drawn script" style="font-size: 0.82rem;">
+                                    <input type="text" id="prompt-inp-top-title" class="admin-input" placeholder="Title text (e.g. Lunar New Year 2026)" style="font-size: 0.82rem;">
+                                    <input type="text" id="prompt-inp-top-title-style" class="admin-input" placeholder="Style description (e.g. rendered in gold-leaf fluid calligraphy)" style="font-size: 0.82rem;">
                                 </div>
                             </div>
 
@@ -904,8 +904,8 @@
                                     🗓️ Block 3: Subtitle / Years &amp; Style
                                 </label>
                                 <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 0.6rem;">
-                                    <input type="text" id="prompt-inp-subtitle" class="admin-input" placeholder="Subtitle (e.g. 1976 – 2026)" value="1976 – 2026" style="font-size: 0.82rem;">
-                                    <input type="text" id="prompt-inp-subtitle-style" class="admin-input" placeholder="Style description (e.g. elegantly etched in a smaller, minimalist gold serif font directly below it)" value="elegantly etched in a smaller, minimalist gold serif font directly below it" style="font-size: 0.82rem;">
+                                    <input type="text" id="prompt-inp-subtitle" class="admin-input" placeholder="Subtitle (e.g. Year of the Horse)" style="font-size: 0.82rem;">
+                                    <input type="text" id="prompt-inp-subtitle-style" class="admin-input" placeholder="Style description (e.g. elegantly etched in minimalist modern serif)" style="font-size: 0.82rem;">
                                 </div>
                             </div>
 
@@ -915,8 +915,8 @@
                                     🎖️ Block 4: Bottom Badge Title &amp; Style
                                 </label>
                                 <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 0.6rem;">
-                                    <input type="text" id="prompt-inp-bottom-title" class="admin-input" placeholder="Bottom text (e.g. 50th Anniversary)" value="50th Anniversary" style="font-size: 0.82rem;">
-                                    <input type="text" id="prompt-inp-bottom-title-style" class="admin-input" placeholder="Style description (e.g. displayed in bold, luminous calligraphy anchored within the lower crest)" value="displayed in bold, luminous calligraphy" style="font-size: 0.82rem;">
+                                    <input type="text" id="prompt-inp-bottom-title" class="admin-input" placeholder="Bottom text (e.g. Gong Xi Fa Cai)" style="font-size: 0.82rem;">
+                                    <input type="text" id="prompt-inp-bottom-title-style" class="admin-input" placeholder="Style description (e.g. displayed in bold luminous typography)" style="font-size: 0.82rem;">
                                 </div>
                             </div>
 
@@ -925,7 +925,7 @@
                                 <label for="prompt-inp-atmosphere" style="display: block; font-size: 0.82rem; font-weight: 700; color: #e2e8f0; margin-bottom: 0.35rem;">
                                     💡 Block 5: Atmosphere, Lighting &amp; Finishers
                                 </label>
-                                <textarea id="prompt-inp-atmosphere" class="admin-input" rows="2" placeholder="e.g. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field." style="width: 100%; font-size: 0.82rem; line-height: 1.45;">Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field.</textarea>
+                                <textarea id="prompt-inp-atmosphere" class="admin-input" rows="2" placeholder="e.g. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field." style="width: 100%; font-size: 0.82rem; line-height: 1.45;"></textarea>
                             </div>
 
                             <!-- Typography Backlight (Hidden / Advanced integration) -->
