@@ -1,0 +1,496 @@
+/* =========================================================
+   MOMIJI NO YŪBE — Cozy Japanese Autumn Kiosk Atmosphere
+   All layers are pointer-events:none and sit beneath UI.
+   ========================================================= */
+
+:root {
+  --bg-color: #14100e;
+  --text-color: #f6ead9;
+  --primary-color: #1f1714;
+  --accent-color: #c8452b;
+  --accent-warm: #e8a44a;
+  --accent-glow: rgba(232, 164, 74, 0.45);
+  --surface-color: rgba(246, 234, 217, 0.06);
+  --surface-border: rgba(232, 164, 74, 0.22);
+
+  --torii-vermilion: #b83a25;
+  --torii-vermilion-dark: #7d2216;
+  --torii-vermilion-light: #d9542f;
+
+  --beam-top: clamp(42px, 9vh, 124px);
+  --beam-h: clamp(11px, 1.5vh, 20px);
+  --pillar-w: clamp(30px, 3.6vw, 66px);
+}
+
+/* ---------- Root atmosphere shell ---------- */
+.persistent-decorations {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 70% at 50% 108%, rgba(200, 69, 43, 0.20) 0%, transparent 62%),
+    radial-gradient(90% 55% at 50% -8%, rgba(232, 164, 74, 0.16) 0%, transparent 60%),
+    var(--bg-color);
+}
+
+/* Hard safety: nothing ambient may ever intercept a kiosk tap */
+.persistent-decorations *,
+.persistent-decorations *::before,
+.persistent-decorations *::after {
+  pointer-events: none;
+}
+
+/* =========================================================
+   1. TORII THRESHOLD — floor-anchored gate
+   ========================================================= */
+.torii-threshold {
+  position: absolute;
+  inset: 0;
+}
+
+.torii-pillar {
+  position: absolute;
+  bottom: 0;
+  width: var(--pillar-w);
+  height: 78vh;
+  background:
+    linear-gradient(90deg,
+      var(--torii-vermilion-dark) 0%,
+      var(--torii-vermilion) 24%,
+      var(--torii-vermilion-light) 46%,
+      var(--torii-vermilion) 72%,
+      var(--torii-vermilion-dark) 100%);
+  border-radius: 3px 3px 0 0;
+  box-shadow:
+    inset -6px 0 14px rgba(0, 0, 0, 0.42),
+    inset 5px 0 10px rgba(255, 190, 140, 0.14),
+    0 0 42px rgba(200, 69, 43, 0.18);
+}
+
+.torii-pillar--left  { left: 1.6vw; }
+.torii-pillar--right { right: 1.6vw; }
+
+/* Stone footing at each pillar base */
+.torii-pillar::after {
+  content: "";
+  position: absolute;
+  left: -14%;
+  bottom: 0;
+  width: 128%;
+  height: 3.2vh;
+  background: linear-gradient(180deg, #3a3230 0%, #241d1b 100%);
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.55);
+}
+
+/* Curved kasagi (top lintel) */
+.torii-kasagi {
+  position: absolute;
+  top: var(--beam-top);
+  left: 0.4vw;
+  right: 0.4vw;
+  height: var(--beam-h);
+  background: linear-gradient(180deg,
+    var(--torii-vermilion-light) 0%,
+    var(--torii-vermilion) 42%,
+    var(--torii-vermilion-dark) 100%);
+  border-radius: 999px;
+  box-shadow:
+    0 6px 26px rgba(200, 69, 43, 0.28),
+    inset 0 2px 3px rgba(255, 210, 170, 0.28),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Upward-swept lintel tips */
+.kasagi-tip {
+  position: absolute;
+  top: -0.7vh;
+  width: 8%;
+  height: 190%;
+  background: linear-gradient(180deg, var(--torii-vermilion-light), var(--torii-vermilion-dark));
+  border-radius: 999px;
+}
+.kasagi-tip--left  { left: -1.2%; transform: rotate(-4deg); }
+.kasagi-tip--right { right: -1.2%; transform: rotate(4deg); }
+
+/* Secondary nuki beam */
+.torii-nuki {
+  position: absolute;
+  top: calc(var(--beam-top) + var(--beam-h) + 4.2vh);
+  left: 5vw;
+  right: 5vw;
+  height: calc(var(--beam-h) * 0.72);
+  background: linear-gradient(180deg, var(--torii-vermilion) 0%, var(--torii-vermilion-dark) 100%);
+  border-radius: 3px;
+  box-shadow: 0 4px 18px rgba(200, 69, 43, 0.22), inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Central 秋 plaque with slow ember breathing */
+.torii-plaque {
+  position: absolute;
+  top: calc(var(--beam-top) + var(--beam-h) + 1.2vh);
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  width: clamp(34px, 4.4vh, 60px);
+  height: clamp(34px, 4.4vh, 60px);
+  font-family: 'Shippori Mincho', serif;
+  font-size: clamp(17px, 2.3vh, 30px);
+  font-weight: 600;
+  color: #f7d9a3;
+  background: linear-gradient(180deg, #2b1a14 0%, #150d0a 100%);
+  border: 1px solid rgba(232, 164, 74, 0.42);
+  border-radius: 4px;
+  text-shadow: 0 0 12px rgba(255, 176, 82, 0.8);
+  animation: plaque-ember 5.5s ease-in-out infinite;
+}
+
+@keyframes plaque-ember {
+  0%, 100% { box-shadow: 0 0 14px rgba(232, 164, 74, 0.25); }
+  50%      { box-shadow: 0 0 26px rgba(255, 168, 76, 0.55); }
+}
+
+/* =========================================================
+   2. SHIMENAWA SWAG — arcing rope + rustling shide
+   ========================================================= */
+.shimenawa-swag {
+  position: absolute;
+  top: calc(var(--beam-top) + var(--beam-h) + 5.6vh);
+  left: 10%;
+  right: 10%;
+  height: 8vh;
+}
+
+.shimenawa-rope {
+  position: absolute;
+  inset: 0;
+  border-bottom: clamp(5px, 0.9vh, 10px) solid rgba(206, 188, 152, 0.5);
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+}
+
+.shide {
+  position: absolute;
+  top: 62%;
+  width: clamp(9px, 1.1vh, 16px);
+  height: clamp(22px, 3.4vh, 46px);
+  background: linear-gradient(180deg, #fdf7ec 0%, #e6d9c2 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 18%, 50% 32%, 100% 46%, 100% 64%, 50% 78%, 100% 92%, 100% 100%, 0 100%, 0 92%, 50% 78%, 0 64%, 0 46%, 50% 32%, 0 18%);
+  opacity: 0.85;
+  transform-origin: top center;
+  animation: shide-rustle 4.6s ease-in-out infinite;
+}
+.shide--1 { left: 6%;  animation-delay: -0.2s; }
+.shide--2 { left: 27%; animation-delay: -1.4s; }
+.shide--3 { left: 48%; animation-delay: -2.6s; }
+.shide--4 { left: 69%; animation-delay: -0.9s; }
+.shide--5 { left: 90%; animation-delay: -3.3s; }
+
+@keyframes shide-rustle {
+  0%, 100% { transform: rotate(-3.5deg); }
+  50%      { transform: rotate(3.5deg); }
+}
+
+/* =========================================================
+   3. LANTERN FLOCK — pendular chōchin
+   ========================================================= */
+.lantern-flock {
+  position: absolute;
+  inset: 0;
+}
+
+.lantern-tether {
+  position: absolute;
+  top: 0;
+  width: 0;
+  transform-origin: top center;
+  animation: lantern-sway 7.5s cubic-bezier(0.42, 0, 0.28, 1) infinite;
+}
+
+.lantern-cord {
+  position: absolute;
+  top: 0;
+  left: -0.5px;
+  width: 1px;
+  height: var(--cord, 16vh);
+  background: linear-gradient(180deg, rgba(90, 70, 55, 0.15) 0%, rgba(180, 150, 110, 0.55) 100%);
+}
+
+.chochin {
+  position: absolute;
+  top: var(--cord, 16vh);
+  left: 50%;
+  width: clamp(28px, 4.2vw, 56px);
+  aspect-ratio: 1 / 1.22;
+  transform: translateX(-50%);
+  border-radius: 50% / 42%;
+  display: grid;
+  place-items: center;
+  background:
+    repeating-linear-gradient(90deg,
+      rgba(70, 22, 10, 0.20) 0 1.5px,
+      transparent 1.5px 9px),
+    radial-gradient(circle at 34% 30%, #ffe0ae 0%, #f2ac52 36%, #d4703a 70%, #a8412a 100%);
+  box-shadow:
+    0 0 20px rgba(255, 172, 84, 0.55),
+    0 0 52px rgba(255, 138, 58, 0.26),
+    inset -6px -4px 16px rgba(110, 28, 10, 0.45);
+  animation: flame-flicker 3.7s steps(1, end) infinite;
+}
+
+/* Wooden caps */
+.chochin::before,
+.chochin::after {
+  content: "";
+  position: absolute;
+  left: 27%;
+  width: 46%;
+  height: 12%;
+  background: linear-gradient(180deg, #6d2415 0%, #43140c 100%);
+  border-radius: 3px;
+}
+.chochin::before { top: -5%; }
+.chochin::after  { bottom: -5%; }
+
+/* Combustion bloom */
+.chochin-glow {
+  position: absolute;
+  inset: -70%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 186, 96, 0.42) 0%, rgba(255, 140, 60, 0.12) 45%, transparent 72%);
+  filter: blur(10px);
+  animation: glow-breathe 4.3s ease-in-out infinite;
+}
+
+.chochin-kanji {
+  position: relative;
+  font-family: 'Shippori Mincho', serif;
+  font-size: clamp(12px, 1.5vw, 21px);
+  font-weight: 600;
+  color: #4a1508;
+  opacity: 0.72;
+  text-shadow: 0 1px 0 rgba(255, 226, 180, 0.5);
+}
+
+.chochin--amber { filter: hue-rotate(0deg); }
+.chochin--ember { filter: hue-rotate(-9deg) saturate(1.15); animation-delay: -1.3s; }
+.chochin--gold  { filter: hue-rotate(9deg) saturate(0.95) brightness(1.06); animation-delay: -2.4s; }
+
+/* Tether placements */
+.lantern-tether--a { left: 6%;  --cord: 16vh; animation-delay:  0s;   animation-duration: 7.2s; }
+.lantern-tether--b { left: 15%; --cord: 25vh; animation-delay: -2.6s; animation-duration: 8.8s; }
+.lantern-tether--c { left: 25%; --cord: 12vh; animation-delay: -4.1s; animation-duration: 6.5s; }
+.lantern-tether--d { left: 94%; --cord: 19vh; animation-delay: -1.4s; animation-duration: 8.1s; }
+.lantern-tether--e { left: 85%; --cord: 27vh; animation-delay: -3.3s; animation-duration: 9.4s; }
+.lantern-tether--f { left: 75%; --cord: 13vh; animation-delay: -5.2s; animation-duration: 6.9s; }
+
+@keyframes lantern-sway {
+  0%, 100% { transform: rotate(-3.4deg) translateY(0); }
+  35%      { transform: rotate(1.2deg)  translateY(0.6vh); }
+  70%      { transform: rotate(3.6deg)  translateY(0.2vh); }
+}
+
+@keyframes flame-flicker {
+  0%   { opacity: 1;    filter: brightness(1); }
+  18%  { opacity: 0.86; filter: brightness(0.94); }
+  36%  { opacity: 1;    filter: brightness(1.08); }
+  54%  { opacity: 0.92; filter: brightness(0.97); }
+  72%  { opacity: 1;    filter: brightness(1.04); }
+  88%  { opacity: 0.9;  filter: brightness(0.95); }
+  100% { opacity: 1;    filter: brightness(1); }
+}
+
+@keyframes glow-breathe {
+  0%, 100% { opacity: 0.75; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.12); }
+}
+
+/* =========================================================
+   4. MOMIJI DRIFT — falling maple particles
+   ========================================================= */
+.momiji-drift {
+  position: absolute;
+  inset: 0;
+}
+
+.momiji {
+  position: absolute;
+  top: 0;
+  width: clamp(9px, 1.5vh, 17px);
+  height: clamp(9px, 1.5vh, 17px);
+  background: linear-gradient(140deg, #f0a13f 0%, #d4552c 55%, #8f2a17 100%);
+  clip-path: polygon(50% 0%, 62% 33%, 98% 34%, 69% 56%, 80% 92%, 50% 71%, 20% 92%, 31% 56%, 2% 34%, 38% 33%);
+  opacity: 0;
+  filter: drop-shadow(0 0 6px rgba(255, 150, 60, 0.28));
+  animation: momiji-drift-path 17s linear infinite;
+}
+
+.momiji--1  { left: 7%;  animation-duration: 16s;   animation-delay: -1s; }
+.momiji--2  { left: 18%; animation-duration: 21s;   animation-delay: -6.5s; }
+.momiji--3  { left: 29%; animation-duration: 18.5s; animation-delay: -12s; }
+.momiji--4  { left: 41%; animation-duration: 23s;   animation-delay: -3.5s; }
+.momiji--5  { left: 53%; animation-duration: 19s;   animation-delay: -15s; }
+.momiji--6  { left: 64%; animation-duration: 22s;   animation-delay: -9s; }
+.momiji--7  { left: 72%; animation-duration: 17.5s; animation-delay: -4.5s; }
+.momiji--8  { left: 81%; animation-duration: 20s;   animation-delay: -17s; }
+.momiji--9  { left: 89%; animation-duration: 18s;   animation-delay: -11s; }
+.momiji--10 { left: 96%; animation-duration: 24s;   animation-delay: -7.5s; }
+
+@keyframes momiji-drift-path {
+  0%   { transform: translate3d(0, -12vh, 0) rotate(0deg) scale(0.9); opacity: 0; }
+  8%   { opacity: 0.9; }
+  30%  { transform: translate3d(4vw, 26vh, 0) rotate(160deg) scale(1); }
+  55%  { transform: translate3d(-3vw, 54vh, 0) rotate(300deg) scale(1.05); opacity: 0.85; }
+  80%  { transform: translate3d(5vw, 82vh, 0) rotate(440deg) scale(0.95); opacity: 0.6; }
+  100% { transform: translate3d(-2vw, 112vh, 0) rotate(560deg) scale(0.85); opacity: 0; }
+}
+
+/* =========================================================
+   5. LIGHT & ATMOSPHERE LAYERS
+   ========================================================= */
+
+/* Distant festival glow along the top band */
+.festival-haze {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 34vh;
+  background: radial-gradient(120% 100% at 50% 0%,
+    rgba(255, 168, 84, 0.20) 0%,
+    rgba(200, 69, 43, 0.10) 42%,
+    transparent 78%);
+  filter: blur(6px);
+}
+
+/* Warm pools bleeding up from the floor corners */
+.warm-light-pool {
+  position: absolute;
+  bottom: -12vh;
+  width: 46vw;
+  height: 44vh;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(255, 168, 84, 0.24) 0%,
+    rgba(200, 69, 43, 0.12) 45%,
+    transparent 72%);
+  filter: blur(26px);
+  animation: pool-pulse 9s ease-in-out infinite;
+}
+.warm-light-pool--left  { left: -10vw; animation-delay: 0s; }
+.warm-light-pool--right { right: -10vw; animation-delay: -4.5s; }
+
+@keyframes pool-pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.09); }
+}
+
+/* Low undulating ground mist */
+.ground-mist {
+  position: absolute;
+  left: -12%;
+  right: -12%;
+  bottom: -4vh;
+  height: 26vh;
+  background:
+    radial-gradient(60% 100% at 20% 100%, rgba(214, 186, 148, 0.13) 0%, transparent 70%),
+    radial-gradient(70% 100% at 62% 100%, rgba(232, 164, 74, 0.10) 0%, transparent 72%),
+    radial-gradient(50% 100% at 88% 100%, rgba(200, 69, 43, 0.10) 0%, transparent 70%);
+  filter: blur(18px);
+  animation: mist-undulate 30s ease-in-out infinite;
+}
+
+@keyframes mist-undulate {
+  0%, 100% { transform: translateX(-3%) scaleY(1); opacity: 0.7; }
+  50%      { transform: translateX(3%)  scaleY(1.14); opacity: 1; }
+}
+
+/* Perimeter vignette pushes focus to the center CTA */
+.kiosk-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(78% 68% at 50% 50%,
+    transparent 42%,
+    rgba(10, 7, 6, 0.42) 78%,
+    rgba(10, 7, 6, 0.78) 100%);
+}
+
+/* =========================================================
+   6. RESPONSIVE RULES — 9:16 kiosk & 16:9 landscape
+   ========================================================= */
+
+/* Portrait kiosk: 1080 x 1920 */
+@media (orientation: portrait) {
+  :root {
+    --pillar-w: clamp(34px, 6.4vw, 74px);
+    --beam-top: clamp(52px, 7vh, 110px);
+    --beam-h: clamp(13px, 1.1vh, 20px);
+  }
+
+  .torii-pillar { height: 72vh; }
+  .torii-pillar--left  { left: 1.8vw; }
+  .torii-pillar--right { right: 1.8vw; }
+
+  .torii-nuki { left: 7vw; right: 7vw; }
+  .shimenawa-swag { left: 13%; right: 13%; }
+
+  .lantern-tether--a { left: 8%;  --cord: 13vh; }
+  .lantern-tether--b { left: 21%; --cord: 21vh; }
+  .lantern-tether--c { left: 31%; --cord: 10vh; }
+  .lantern-tether--d { left: 92%; --cord: 15vh; }
+  .lantern-tether--e { left: 79%; --cord: 23vh; }
+  .lantern-tether--f { left: 69%; --cord: 11vh; }
+
+  .chochin { width: clamp(30px, 7vw, 62px); }
+  .momiji  { width: clamp(11px, 1.7vh, 19px); height: clamp(11px, 1.7vh, 19px); }
+
+  .warm-light-pool { width: 72vw; height: 36vh; }
+  .ground-mist { height: 20vh; }
+  .festival-haze { height: 26vh; }
+}
+
+/* Landscape monitor: 16:9 */
+@media (orientation: landscape) {
+  :root {
+    --pillar-w: clamp(26px, 3vw, 58px);
+    --beam-top: clamp(34px, 8vh, 96px);
+  }
+
+  .torii-pillar { height: 82vh; }
+  .torii-pillar--left  { left: 1.2vw; }
+  .torii-pillar--right { right: 1.2vw; }
+
+  .torii-nuki { left: 4vw; right: 4vw; }
+  .shimenawa-swag { left: 9%; right: 9%; height: 9vh; }
+
+  .warm-light-pool { width: 40vw; height: 50vh; }
+  .ground-mist { height: 30vh; }
+}
+
+/* Short viewports (embedded kiosk browsers) */
+@media (max-height: 720px) {
+  .shimenawa-swag { display: none; }
+  .torii-nuki { top: calc(var(--beam-top) + var(--beam-h) + 2.6vh); }
+  .torii-plaque { top: calc(var(--beam-top) + var(--beam-h) + 0.6vh); }
+  .lantern-tether--b,
+  .lantern-tether--e { --cord: 18vh; }
+}
+
+/* Accessibility: honour reduced-motion without losing the mood */
+@media (prefers-reduced-motion: reduce) {
+  .lantern-tether,
+  .chochin,
+  .chochin-glow,
+  .shide,
+  .momiji,
+  .warm-light-pool,
+  .ground-mist,
+  .torii-plaque {
+    animation: none !important;
+  }
+  .momiji { opacity: 0.5; }
+  .chochin-glow { opacity: 0.9; }
+}

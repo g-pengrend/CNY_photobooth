@@ -1,0 +1,41 @@
+{
+  "backgrounds": [
+    {
+      "id": "the-ink-wash-realm",
+      "code": "B07",
+      "title": "The Ink-Wash Realm",
+      "description": "3D Shanshui painting style",
+      "image": "/static/themes/master/images/backgrounds/the-ink-wash-realm.png",
+      "prompt": "A background that looks like a 3D version of an ancient Shanshui painting—flowing waterfalls and jagged cliffs rendered in charcoal black and vivid rainbow hues.",
+      "prompt_modifier": "A background that looks like a 3D version of an ancient Shanshui painting—flowing waterfalls and jagged cliffs rendered in charcoal black and vivid rainbow hues.",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    }
+  ],
+  "clothes": [
+    {
+      "id": "moonlit-peony-ruqun",
+      "code": "C06",
+      "title": "Moonlit Peony Ruqun (襦裙)",
+      "description": "Ethereal silk layers in soft peach and silver with misty floral embroidery",
+      "image": "/static/themes/master/images/clothes/moonlit-peony-ruqun.png",
+      "prompt": "Xianxia style female immortal, a multi-layered Ruqun (襦裙) in moonlight silver and soft peach silk. The inner robe is pale vermilion with delicate white peony embroidery, covered by a translucent floor-length outer robe that creates a misty, ethereal glow. Wide 'water sleeves' drape gracefully, finished with iridescent silver piping. A high-waisted silk sash with long, flowing ribbons catches the wind, surrounded by faint floating cherry blossom petals.",
+      "prompt_modifier": "Xianxia style female immortal, a multi-layered Ruqun (襦裙) in moonlight silver and soft peach silk. The inner robe is pale vermilion with delicate white peony embroidery, covered by a translucent floor-length outer robe that creates a misty, ethereal glow. Wide 'water sleeves' drape gracefully, finished with iridescent silver piping. A high-waisted silk sash with long, flowing ribbons catches the wind, surrounded by faint floating cherry blossom petals.",
+      "category": "female",
+      "lighting": "Silver and Peach"
+    }
+  ],
+  "poses": [
+    {
+      "id": "the-gentle-gaze",
+      "code": "P06",
+      "title": "The Gentle Gaze",
+      "description": "Soft expression, hands behind back",
+      "image": "/static/themes/master/images/poses/the-gentle-gaze.png",
+      "prompt": "Hands clasped behind the back, facing forward and leaning slightly into the frame with a soft, inviting expression,",
+      "prompt_modifier": "Hands clasped behind the back, facing forward and leaning slightly into the frame with a soft, inviting expression,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    }
+  ]
+}
