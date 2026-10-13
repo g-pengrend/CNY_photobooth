@@ -353,7 +353,7 @@ console.log('\\n================================================================
     assert(!customPrompt.includes('1976 – 2026'), 'Prompt must NOT contain hardcoded UITS subtitle');
     assert(!customPrompt.includes('50th Anniversary'), 'Prompt must NOT contain hardcoded UITS badge');
     assert(customPrompt.includes('80s Retro Synthwave Neon Grid'), 'Prompt must contain custom concept');
-    assert(customPrompt.includes('Invent creative apex title') || customPrompt.includes('Creative Top Title'), 'Prompt must instruct AI to dynamically invent title');
+    assert(customPrompt.includes('Suggest') && customPrompt.includes('Top Apex Title'), 'Prompt must instruct AI to suggest titles matching the concept');
 
     console.log('✅ PASSED: buildComfyFramePrompt does NOT force UITS titles on custom concepts');
 }

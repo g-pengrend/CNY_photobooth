@@ -1016,36 +1016,38 @@ window.buildComfyFramePrompt = function (concept, options = {}) {
     const typoStyle = options.typoStyle || getValue('comfy-lever-typo-style') || 'Auto (Infer from Concept)';
     const atmosphere = options.atmosphere || getValue('comfy-lever-atmosphere') || 'Auto (Infer from Concept)';
 
-    const topTitleLine = topTitle ? `"${topTitle}"` : `(Invent creative apex title matching the visual concept)`;
-    const subtitleLine = subtitle ? `"${subtitle}"` : `(Invent fitting subtitle or year matching the visual concept)`;
-    const bottomTitleLine = bottomTitle ? `"${bottomTitle}"` : `(Invent fitting bottom crest / badge title matching the visual concept)`;
-
-    const topTitleHeader = topTitle || '[Invent creative top apex title matching concept]';
-    const subtitleHeader = subtitle || '[Invent fitting subtitle / year matching concept]';
-    const bottomTitleHeader = bottomTitle || '[Invent fitting bottom crest / badge title]';
-
-    const topTitleReq = topTitle ? `Incorporate the exact Top Apex Title "${topTitle}".` : `Invent a bespoke Top Apex Title that matches "${themeConcept}".`;
-    const subtitleReq = subtitle ? `Incorporate the exact Subtitle "${subtitle}".` : `Invent a bespoke Subtitle / year that matches "${themeConcept}".`;
-    const bottomTitleReq = bottomTitle ? `Incorporate the exact Bottom Badge "${bottomTitle}".` : `Invent a bespoke Bottom Badge / crest title that matches "${themeConcept}".`;
+    const topTitleGuidance = topTitle 
+        ? `Suggest an evocative Top Apex Title fitting "${themeConcept}" (user seed: "${topTitle}")` 
+        : `Suggest a compelling, bespoke Top Apex Title that perfectly fits "${themeConcept}"`;
+    const subtitleGuidance = subtitle 
+        ? `Suggest a complementary Subtitle or Event Year fitting "${themeConcept}" (user seed: "${subtitle}")` 
+        : `Suggest a complementary Subtitle or Event Year matching "${themeConcept}"`;
+    const bottomTitleGuidance = bottomTitle 
+        ? `Suggest an impactful Bottom Badge or Crest Title fitting "${themeConcept}" (user seed: "${bottomTitle}")` 
+        : `Suggest an impactful Bottom Badge or Crest Title that anchors the lower frame for "${themeConcept}"`;
 
     return `You are an expert AI Art Director and Prompt Engineer specializing in photobooth composition and diffusion image generation (Stable Diffusion SDXL, ComfyUI CLIP Node 45, Flux).
 
 The user is designing a photobooth frame and custom words with the following specifications:
 • FRAME STYLE & VISUAL EFFECT: "${themeConcept}"
-• TOP APEX TITLE: ${topTitleLine}
-• TOP SUBTITLE / YEARS: ${subtitleLine}
-• BOTTOM BADGE TITLE: ${bottomTitleLine}
+• TOP APEX TITLE: ${topTitleGuidance}
+• TOP SUBTITLE / YEARS: ${subtitleGuidance}
+• BOTTOM BADGE TITLE: ${bottomTitleGuidance}
 • FRAME ARCHETYPE: "${frameStyle}"
 • TYPOGRAPHY VIBE: "${typoStyle}"
 • ATMOSPHERE & FINISHERS: "${atmosphere}"
 
 ### YOUR TASK
-Invent bespoke, cohesive prompt specifications for the Graphic Border Frame, Theme Titles & Typography styling, Lighting Integration, and Atmosphere tailored specifically for "${themeConcept}".
+Based on the visual concept "${themeConcept}", invent bespoke, cohesive prompt specifications for the Graphic Border Frame, suggested Theme Titles & Typography styling, Lighting Integration, and Atmosphere.
 
-Ensure:
-1. The border frame frames the subject naturally (e.g. translucent frosted-glass, ornate gilded filigree, neon cyber brackets, festive banners) without blocking the central guest face or torso.
-2. The typography titles feel physical, premium, and integrated into the scene architecture (e.g. gold-leaf script, backlit cyber glyphs, luminous calligraphy). ${topTitleReq} ${subtitleReq} ${bottomTitleReq}
-3. The lighting, depth of field, and atmosphere create a stunning, high-fashion finish.
+Specific Requirements:
+1. **Graphic Border Frame**: Describe an ornate, natural border overlay (materials, contours, transparency/glassmorphism, corner accents) that frames the photobooth guest without obscuring the central face or body.
+2. **Suggest Bespoke Titles & Subtitles**:
+   - **Top Apex Title**: Suggest a grand, evocative apex title tailored to "${themeConcept}" (e.g. for a gala: prestigious golden jubilee/gala title; for cyberpunk: high-tech night title; for festive holidays: festive greetings).
+   - **Subtitle / Years**: Suggest a fitting subtitle, edition, or year that complements the apex title.
+   - **Bottom Badge Title**: Suggest an impactful bottom crest, badge, or celebration motto that anchors the lower border.
+3. **Typography Styling**: Describe how each suggested title is physically rendered and illuminated in the 3D scene (materials, typeface archetype, liquid gold leaf, neon backlight, luminous calligraphy, etc.).
+4. **Atmosphere & Finishers**: Specify volumetric lighting, color palette, glassmorphism, depth of field, and 8k photorealistic finish.
 
 Format your response clearly into the EXACT BLOCKS below so the user can easily copy and paste each part into the system blocks, followed by the JSON block for 1-click auto-import:
 
@@ -1053,22 +1055,22 @@ Format your response clearly into the EXACT BLOCKS below so the user can easily 
 (Detailed graphic design & border overlay prompt. Describe the frame borders, architectural contours, transparency/glassmorphism, materials, and corner accents framing the subject naturally.)
 
 ### [TOP_TITLE]
-${topTitleHeader}
+(Suggest and output a compelling Top Apex Title tailored to "${themeConcept}"${topTitle ? `, e.g. "${topTitle}" or an elevated variant` : ''})
 
 ### [TOP_TITLE_STYLE]
-(Style description for the top title, e.g. "rendered in an exquisite gold-leaf, fluid hand-drawn script" or "displayed in razor-sharp neon cyan typography".)
+(Style description for your suggested top title, e.g. "rendered in an exquisite gold-leaf, fluid hand-drawn script" or "displayed in razor-sharp neon cyan typography".)
 
 ### [SUBTITLE]
-${subtitleHeader}
+(Suggest and output a complementary Subtitle / Year that pairs with the apex title${subtitle ? `, e.g. "${subtitle}"` : ''})
 
 ### [SUBTITLE_STYLE]
-(Style description for the subtitle/years, e.g. "elegantly etched in a smaller, minimalist gold serif font directly below it".)
+(Style description for your suggested subtitle/years, e.g. "elegantly etched in a smaller, minimalist gold serif font directly below it".)
 
 ### [BOTTOM_TITLE]
-${bottomTitleHeader}
+(Suggest and output an impactful Bottom Badge / Crest title that anchors the frame${bottomTitle ? `, e.g. "${bottomTitle}"` : ''})
 
 ### [BOTTOM_TITLE_STYLE]
-(Style description for the bottom badge, e.g. "displayed in bold, luminous calligraphy anchored within the lower crest".)
+(Style description for your suggested bottom badge, e.g. "displayed in bold, luminous calligraphy anchored within the lower crest".)
 
 ### [ATMOSPHERE]
 (Volumetric lighting, lens characteristics, color palette, glassmorphism, depth of field, 8k resolution, photorealistic finish.)
@@ -1077,15 +1079,15 @@ ${bottomTitleHeader}
 {
   "frame_style": "Detailed graphic design & border overlay prompt. Describe frame borders and contours.",
   "border": "Detailed graphic design & border overlay prompt. Describe frame borders and contours.",
-  "top_title": "${topTitle || '(Creative Top Title)'}",
-  "topTitle": "${topTitle || '(Creative Top Title)'}",
+  "top_title": "${topTitle || 'Your suggested Top Apex Title'}",
+  "topTitle": "${topTitle || 'Your suggested Top Apex Title'}",
   "top_title_style": "rendered in bespoke typography matching concept",
   "topTitleStyle": "rendered in bespoke typography matching concept",
-  "subtitle": "${subtitle || '(Creative Subtitle)'}",
+  "subtitle": "${subtitle || 'Your suggested Subtitle / Year'}",
   "subtitle_style": "elegantly etched in complementary typography",
   "subtitleStyle": "elegantly etched in complementary typography",
-  "bottom_title": "${bottomTitle || '(Creative Bottom Badge)'}",
-  "bottomTitle": "${bottomTitle || '(Creative Bottom Badge)'}",
+  "bottom_title": "${bottomTitle || 'Your suggested Bottom Badge'}",
+  "bottomTitle": "${bottomTitle || 'Your suggested Bottom Badge'}",
   "bottom_title_style": "displayed in luminous calligraphy anchored within the lower crest",
   "bottomTitleStyle": "displayed in luminous calligraphy anchored within the lower crest",
   "typoIntegration": "All typography is softly backlit with warm glow and seamlessly integrated into the frame borders.",
@@ -1095,7 +1097,7 @@ ${bottomTitleHeader}
 }
 \`\`\`
 
-Strict Requirement: Output clean, valid JSON inside the code block so the photobooth system can auto-import all fields in 1-click.`;
+Strict Requirement: Output clean, valid JSON inside the code block with your suggested titles so the photobooth system can auto-import all fields in 1-click.`;
 };
 
 window.updateComfyFrameGenAiPrompt = function () {
