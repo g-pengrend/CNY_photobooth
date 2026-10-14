@@ -91,7 +91,27 @@ function renderThemeSidebar() {
 
     const isThemeView = studio.currentView === 'theme-editor';
 
-    const createCardHtml = `
+    const themeCount = (studio.themes || []).filter(t => t.slug !== 'master').length;
+    const countEl = document.querySelector('.sidebar-heading');
+    // Update Themes Catalog header count if element exists
+    const themesCatHeader = Array.from(document.querySelectorAll('.sidebar-heading')).find(el => el.textContent.includes('Themes Catalog'));
+    if (themesCatHeader) {
+        themesCatHeader.textContent = `Themes Catalog (${themeCount})`;
+    }
+
+    const searchQuery = (document.getElementById('inp-theme-sidebar-search')?.value || '').toLowerCase().trim();
+    const filteredThemes = studio.themes.filter(t => {
+        if (!searchQuery) return true;
+        return (t.title || '').toLowerCase().includes(searchQuery) || (t.slug || '').toLowerCase().includes(searchQuery);
+    });
+
+    const searchBarHtml = `
+        <div style="margin-bottom: 0.6rem;">
+            <input type="text" id="inp-theme-sidebar-search" value="${searchQuery}" oninput="renderThemeSidebar()" placeholder="🔍 Filter themes..." style="width: 100%; padding: 0.45rem 0.75rem; border-radius: 8px; font-size: 0.8rem; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); color: #fff; box-sizing: border-box;">
+        </div>
+    `;
+
+    const createCardHtml = searchBarHtml + `
         <div class="sidebar-create-card" onclick="createNewTheme()" title="Create a new theme">
             <div class="create-card-icon-wrap">➕</div>
             <div>
@@ -101,7 +121,7 @@ function renderThemeSidebar() {
         </div>
     `;
 
-    const themeItemsHtml = studio.themes.map(t => {
+    const themeItemsHtml = filteredThemes.map(t => {
         const isActive = isThemeView && studio.activeTheme?.slug === t.slug;
         const isDraft = t.status === 'draft';
         const isReserved = t.slug?.toLowerCase() === 'master';
@@ -5149,3 +5169,92 @@ if (typeof window !== 'undefined' && typeof window.addEventListener === 'functio
         }
     });
 }
+
+// ==========================================================================
+// Themes Catalog View (Visual Parity with Front Menu)
+// ==========================================================================
+window.switchToThemesCatalog = function () {
+    studio.currentView = 'themes-catalog';
+
+    const vEditor = document.getElementById('view-theme-editor');
+    const vMaster = document.getElementById('view-master-library');
+    const vAI = document.getElementById('view-ai-creator');
+    const vCatalog = document.getElementById('view-themes-catalog');
+
+    if (vEditor) vEditor.style.display = 'none';
+    if (vMaster) vMaster.style.display = 'none';
+    if (vAI) vAI.style.display = 'none';
+    if (vCatalog) {
+        vCatalog.style.display = 'flex';
+        renderThemeCardsCatalog();
+    }
+
+    renderThemeSidebar();
+};
+
+window.renderThemeCardsCatalog = function () {
+    const grid = document.getElementById('theme-cards-catalog-grid');
+    if (!grid) return;
+
+    const countEl = document.getElementById('catalog-theme-count');
+    const activeThemes = (studio.themes || []).filter(t => t.slug !== 'master');
+    if (countEl) countEl.textContent = `${activeThemes.length} Active Themes`;
+
+    if (activeThemes.length === 0) {
+        grid.innerHTML = '<div style="color:var(--text-muted);padding:2rem;">No themes available. Click "+ Create New Theme" to build one!</div>';
+        return;
+    }
+
+    grid.innerHTML = activeThemes.map(t => {
+        const slug = t.slug;
+        const title = t.title || slug;
+        const desc = t.description || 'Virtual try-on photo experience';
+        const badge = t.badge || 'Experience';
+        const icon = t.icon || '✨';
+        const isDraft = t.status === 'draft';
+        const accent = t.style?.colors?.accent || '#fbbf24';
+        const cardBg = t.cardBackground || `/static/landing/${slug}_card_bg.png`;
+        const altBg = `/static/landing/${slug}_bg.png`;
+        const isReserved = slug === 'master';
+
+        return `
+            <div class="catalog-card-item" style="border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; background: rgba(18, 20, 36, 0.85); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+                <div style="position: relative; height: 160px; overflow: hidden; background: radial-gradient(circle at center, ${accent}25 0%, #0a0a0f 80%);">
+                    <img src="${cardBg}" alt="${title}" style="width: 100%; height: 100%; object-fit: cover;" onerror="if(this.src.indexOf('${altBg}')===-1){this.src='${altBg}';}else{this.style.display='none';}">
+                    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(10,10,15,0.85) 100%);"></div>
+                    <div style="position: absolute; top: 12px; left: 12px; display: flex; gap: 0.5rem; align-items: center;">
+                        <span style="font-size: 0.72rem; padding: 0.2rem 0.55rem; border-radius: 6px; font-weight: 700; background: ${accent}30; color: ${accent}; border: 1px solid ${accent}60;">${badge}</span>
+                        <span class="${isDraft ? 'badge-draft' : 'badge-live'}">${isDraft ? 'Draft' : 'Live on Menu'}</span>
+                    </div>
+                    <div style="position: absolute; top: 10px; right: 12px; font-size: 1.4rem;">
+                        ${icon}
+                    </div>
+                    <div style="position: absolute; bottom: 12px; left: 14px; right: 14px;">
+                        <h3 style="margin: 0; font-size: 1.15rem; font-weight: 700; color: #fff;">${title}</h3>
+                        <span style="font-size: 0.76rem; color: var(--text-dim); font-family: monospace;">/${slug}</span>
+                    </div>
+                </div>
+
+                <div style="padding: 1rem 1.25rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem;">
+                    <p style="margin: 0; font-size: 0.82rem; color: #94a3b8; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                        ${desc}
+                    </p>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.85rem; gap: 0.5rem;">
+                        <button type="button" class="admin-btn admin-btn-primary" onclick="selectTheme('${slug}'); switchToThemeEditor();" style="flex: 1; padding: 0.4rem 0.75rem; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                            <span>✏️</span> Edit Theme
+                        </button>
+                        <a href="/${slug}" target="_blank" class="admin-btn admin-btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.82rem; text-decoration: none; display: flex; align-items: center; justify-content: center;" title="Preview Theme in Kiosk">
+                            👁️
+                        </a>
+                        ${!isReserved ? `
+                            <button type="button" class="btn-delete-theme" onclick="openDeleteThemeModal('${slug}', '${(title||'').replace(/'/g, "\\'")}');" style="padding: 0.4rem 0.75rem; font-size: 0.82rem;" title="Delete Theme Permanently">
+                                🗑️
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+};
