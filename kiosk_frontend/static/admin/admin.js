@@ -5019,3 +5019,124 @@ window.saveDraftFromPreviewModal = async function () {
     showToast('💾 Theme successfully saved to database & disk!', 'success');
 };
 
+
+// ==========================================================================
+// Interactive Tutorial Guides & Video Center
+// ==========================================================================
+studio.currentTutorial = 'theme-builder';
+
+window.openTutorialCenter = function (guideKey = 'theme-builder') {
+    const modal = document.getElementById('tutorial-guide-modal');
+    if (!modal) return;
+
+    window.switchTutorialTab(guideKey);
+    modal.style.display = 'flex';
+    modal.classList.add('open');
+};
+
+window.closeTutorialModal = function () {
+    const modal = document.getElementById('tutorial-guide-modal');
+    if (!modal) return;
+    modal.style.display = 'none';
+    modal.classList.remove('open');
+
+    // Pause any playing video inside iframe if comfyui was open
+    const frame = document.getElementById('tutorial-guide-frame');
+    if (frame && frame.contentWindow) {
+        try {
+            const video = frame.contentWindow.document.querySelector('video');
+            if (video && !video.paused) {
+                video.pause();
+            }
+        } catch (e) {}
+    }
+};
+
+window.switchTutorialTab = function (guideKey) {
+    studio.currentTutorial = guideKey;
+
+    const urls = {
+        'theme-builder': '/static/guides/theme-builder/index.html',
+        'comfyui': '/static/guides/comfyui/index.html',
+        'asset-creator': '/static/guides/asset-creator/index.html'
+    };
+
+    const targetUrl = urls[guideKey] || urls['theme-builder'];
+    const frame = document.getElementById('tutorial-guide-frame');
+    if (frame && frame.getAttribute('data-loaded-src') !== targetUrl) {
+        frame.src = targetUrl;
+        frame.setAttribute('data-loaded-src', targetUrl);
+    }
+
+    // Update active pill tabs
+    const pillMap = {
+        'theme-builder': 'tut-tab-theme',
+        'comfyui': 'tut-tab-comfy',
+        'asset-creator': 'tut-tab-asset'
+    };
+
+    Object.entries(pillMap).forEach(([k, id]) => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.classList.toggle('active', k === guideKey);
+        }
+    });
+};
+
+window.openCurrentTutorialInNewTab = function () {
+    const urls = {
+        'theme-builder': '/static/guides/theme-builder/index.html',
+        'comfyui': '/static/guides/comfyui/index.html',
+        'asset-creator': '/static/guides/asset-creator/index.html'
+    };
+    const url = urls[studio.currentTutorial] || urls['theme-builder'];
+    window.open(url, '_blank');
+};
+
+let isTutorialFullscreen = false;
+window.toggleTutorialFullscreen = function () {
+    const dialog = document.getElementById('tutorial-guide-dialog');
+    if (!dialog) return;
+
+    isTutorialFullscreen = !isTutorialFullscreen;
+    if (isTutorialFullscreen) {
+        dialog.style.width = '100vw';
+        dialog.style.maxWidth = '100vw';
+        dialog.style.height = '100vh';
+        dialog.style.maxHeight = '100vh';
+        dialog.style.borderRadius = '0';
+        dialog.style.border = 'none';
+    } else {
+        dialog.style.width = '95vw';
+        dialog.style.maxWidth = '1320px';
+        dialog.style.height = '92vh';
+        dialog.style.maxHeight = '940px';
+        dialog.style.borderRadius = '16px';
+        dialog.style.border = '1px solid rgba(139, 92, 246, 0.4)';
+    }
+};
+
+// Close on backdrop click & Escape key
+if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('tutorial-guide-modal');
+        if (modal && typeof modal.addEventListener === 'function') {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    window.closeTutorialModal();
+                }
+            });
+        }
+    });
+}
+
+if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('tutorial-guide-modal');
+            if (modal && modal.style.display !== 'none' && modal.classList.contains('open')) {
+                window.closeTutorialModal();
+            }
+        }
+    });
+}

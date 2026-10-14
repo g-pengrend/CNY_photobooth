@@ -85,7 +85,7 @@ def landing():
     return send_from_directory(app.static_folder, 'landing.html')
 
 
-RESERVED_SLUGS = {'api', 'static', 'admin', 'uploads', 'outputs', 'master'}
+RESERVED_SLUGS = {'api', 'static', 'admin', 'uploads', 'outputs', 'master', 'guides'}
 
 
 @app.route('/api/themes')
@@ -365,6 +365,41 @@ def preview_draft():
     if os.path.exists(engine_html):
         return send_from_directory(os.path.join(app.static_folder, 'engine'), 'kiosk.html')
     return "Universal Kiosk Engine Not Found", 404
+
+
+@app.route('/guides')
+@app.route('/guides/')
+@app.route('/guides/<guide_name>')
+@app.route('/guides/<guide_name>/')
+@app.route('/guides/<guide_name>/<path:filename>')
+def serve_guide_page(guide_name='theme-builder', filename='index.html'):
+    """Serve embedded tutorial and walkthrough HTML guides, images, and video walkthroughs."""
+    alias_map = {
+        'theme-builder': 'theme-builder',
+        'theme_builder': 'theme-builder',
+        'theme-maker': 'theme-builder',
+        'theme_maker': 'theme-builder',
+        'theme': 'theme-builder',
+        'themes': 'theme-builder',
+        'comfy': 'comfyui',
+        'comfyui': 'comfyui',
+        'prompt': 'comfyui',
+        'prompt-studio': 'comfyui',
+        'asset-creator': 'asset-creator',
+        'asset_creator': 'asset-creator',
+        'asset-builder': 'asset-creator',
+        'asset_builder': 'asset-creator',
+        'assets': 'asset-creator'
+    }
+    canonical = alias_map.get(guide_name.lower(), guide_name)
+    guide_dir = os.path.join(app.static_folder, 'guides', canonical)
+    if not os.path.exists(guide_dir):
+        # Fallback to root Guides directory if available
+        root_guide_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'Guides', guide_name)
+        if os.path.exists(root_guide_dir):
+            return send_from_directory(root_guide_dir, filename)
+        return jsonify({'error': f'Guide "{guide_name}" not found'}), 404
+    return send_from_directory(guide_dir, filename)
 
 
 @app.route('/<theme_slug>')

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEIT Vision Studio - Theme Builder Complete Step-by-Step Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#0B0F19',
+              card: '#131927',
+              border: '#1F293D',
+              accent: '#F59E0B',
+              accentHover: '#D97706',
+              purple: '#8B5CF6',
+              pink: '#EC4899',
+              emerald: '#10B981',
+              blue: '#3B82F6'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B0F19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1F293D;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+
+    /* Glow Effects */
+    .glow-gold {
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
+    }
+    .glow-purple {
+      box-shadow: 0 0 25px rgba(139, 92, 246, 0.2);
+    }
+    .glow-blue {
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-[#0B0F19] text-gray-100 font-sans antialiased min-h-screen selection:bg-amber-500 selection:text-black">
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-emerald-600 text-white font-medium px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 border border-emerald-400/40">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+    <span id="toast-msg">Copied to clipboard!</span>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div id="lightbox" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+    <button onclick="closeLightbox()" class="absolute top-5 right-5 text-gray-400 hover:text-white bg-gray-800/80 p-2 rounded-full transition">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    <img id="lightbox-img" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain border border-gray-700" src="" alt="Enlarged view">
+    <p id="lightbox-caption" class="mt-3 text-sm text-gray-300 font-medium"></p>
+  </div>
+
+  <!-- Header Banner -->
+  <header class="border-b border-[#1F293D] bg-[#0E1424]/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center font-bold text-white text-xl shadow-lg shadow-amber-500/20">
+          🎨
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-bold tracking-tight text-white">SEIT Vision Studio</h1>
+            <span class="text-[11px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/30">Theme Studio Guide</span>
+          </div>
+          <p class="text-xs text-gray-400">Step-by-Step Beginner Tutorial: Build, Style & Publish a New Event Theme</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          Basic & Advanced GenAI Workflows
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+    <!-- Roadmap & Introduction -->
+    <div class="bg-gradient-to-r from-[#161D2F] via-[#141A2B] to-[#121826] border border-[#1F293D] rounded-2xl p-6 relative overflow-hidden shadow-2xl">
+      <div class="absolute -right-10 -bottom-10 w-52 h-52 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative z-10 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-purple-400 text-xs font-bold uppercase tracking-wider">
+            <span>🎭 Comprehensive Theme Studio Workflow</span>
+          </div>
+          <span class="text-xs text-gray-400 font-mono">No prior coding needed</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white">How to Build a New Theme from Scratch</h2>
+        <p class="text-sm text-gray-300 leading-relaxed max-w-3xl">
+          Learn how to launch a brand new photobooth theme inside SEIT Vision Studio. We start right from the main landing page, enter Theme Studio, click <span class="text-pink-400 font-semibold">"Create New Theme"</span>, explore both <span class="text-blue-400 font-semibold">Basic Mode (Form Builder)</span> and <span class="text-purple-400 font-semibold">Advanced Mode (GenAI 3-Block Studio)</span>, compile your changes, test with <span class="text-amber-400 font-semibold">"View Live"</span>, and deploy with <span class="text-emerald-400 font-semibold">"Save & Publish Live"</span>!
+        </p>
+
+        <!-- Mode Comparison Pill Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3">
+          <div class="p-4 rounded-xl bg-blue-950/20 border border-blue-500/30 flex items-start gap-3">
+            <span class="text-2xl">🛠️</span>
+            <div>
+              <h3 class="text-sm font-bold text-blue-300">Basic Mode (Form Builder)</h3>
+              <p class="text-xs text-gray-400 mt-1">Manual control over every setting: configure identity titles, color pickers, Google Fonts, floating particle effects, and waiting screen phrases row by row.</p>
+            </div>
+          </div>
+          <div class="p-4 rounded-xl bg-purple-950/20 border border-purple-500/30 flex items-start gap-3">
+            <span class="text-2xl">🤖</span>
+            <div>
+              <h3 class="text-sm font-bold text-purple-300">Advanced Mode (GenAI Studio)</h3>
+              <p class="text-xs text-gray-400 mt-1">One-prompt AI generation: copy the provided prompt template into ChatGPT/Claude/Gemini, then paste the 3 returned code blocks (JSON, HTML, CSS) to build a rich theme automatically.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Navigate to Theme Studio -->
+    <section id="step1" class="bg-[#131927] border border-[#1F293D] rounded-2xl p-6 space-y-5 shadow-xl">
+      <div class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-400 font-bold flex items-center justify-center border border-pink-500/30">1</span>
+        <div>
+          <h3 class="text-lg font-bold text-white">Enter Theme Studio from the Landing Page</h3>
+          <p class="text-xs text-gray-400">Launch into the theme management workspace</p>
+        </div>
+      </div>
+
+      <p class="text-sm text-gray-300 leading-relaxed">
+        When you first open SEIT Vision Studio, you will see the primary navigation header across the top. Click on <span class="text-amber-400 font-semibold">Theme Studio</span> in the top-right navigation bar to view your existing themes and access the theme creator.
+      </p>
+
+      <!-- Step 1 Image Card -->
+      <div class="bg-[#0B0F19] border border-gray-800 rounded-xl p-3 space-y-2">
+        <div class="overflow-hidden rounded-lg border border-gray-800/80 group cursor-pointer" onclick="openLightbox('images/t1_landing_page.png', 'Step 1: Click Theme Studio on the Landing Page')">
+          <img src="images/t1_landing_page.png" alt="Step 1: Landing Page" class="w-full h-auto object-cover rounded-lg group-hover:scale-[1.01] transition-transform duration-200">
+        </div>
+        <p class="text-xs text-gray-400 text-center italic">Figure 1.1: Click the "Theme Studio" button in the upper navigation bar.</p>
+      </div>
+
+      <div class="p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg text-xs text-amber-300 flex items-center gap-2">
+        <span>💡</span>
+        <span><b>Quick Tip:</b> Theme Studio houses both your live published themes and your drafts. This is where you configure photobooth aesthetics, fonts, animations, and kiosk waiting sequences.</span>
+      </div>
+    </section>
+
+    <!-- Step 2: Click Create New Theme & Choose Mode -->
+    <section id="step2" class="bg-[#131927] border border-[#1F293D] rounded-2xl p-6 space-y-5 shadow-xl">
+      <div class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-pink-500/20 text-pink-400 font-bold flex items-center justify-center border border-pink-500/30">2</span>
+        <div>
+          <h3 class="text-lg font-bold text-white">Click "Create New Theme" & Choose Your Mode</h3>
+          <p class="text-xs text-gray-400">Start an untitled draft and pick between Basic Form Builder and Advanced GenAI Studio</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm text-gray-300 leading-relaxed">
+        <p>
+          Inside Theme Studio, look at the left sidebar under <b>THEMES CATALOG</b>:
+        </p>
+        <ol class="list-decimal list-inside space-y-2 pl-2">
+          <li>Click the large <span class="text-pink-400 font-semibold">+ Create New Theme</span> card (or the <span class="font-mono text-gray-300">+ New</span> button) at the top of the sidebar.</li>
+          <li>A fresh draft theme named <span class="font-mono text-amber-300">"Untitled Theme"</span> will appear in your catalog.</li>
+          <li>In the main workspace, locate the <b>Choose Theme Creation Mode</b> card selector:
+            <ul class="list-disc list-inside pl-5 mt-1 space-y-1 text-gray-400">
+              <li><span class="text-blue-400 font-medium">Basic Mode:</span> Step-by-step form controls for identity fields, color pickers, floating particles, and waiting sequence rows.</li>
+              <li><span class="text-purple-400 font-medium">Advanced Mode (GenAI Studio):</span> Systematic GenAI workflow that builds the full theme via 3 code blocks (JSON, HTML, CSS).</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Step 2 Image Card -->
+      <div class="bg-[#0B0F19] border border-gray-800 rounded-xl p-3 space-y-2">
+        <div class="overflow-hidden rounded-lg border border-gray-800/80 group cursor-pointer" onclick="openLightbox('images/t2_basic_mode.png', 'Step 2: Create New Theme & Choose Mode')">
+          <img src="images/t2_basic_mode.png" alt="Step 2: Mode Selection" class="w-full h-auto object-cover rounded-lg group-hover:scale-[1.01] transition-transform duration-200">
+        </div>
+        <p class="text-xs text-gray-400 text-center italic">Figure 2.1: Click "Create New Theme" in the left catalog, then choose Basic Mode or Advanced Mode.</p>
+      </div>
+    </section>
+
+    <!-- Step 3: Understanding Basic Mode -->
+    <section id="step3" class="bg-[#131927] border border-[#1F293D] rounded-2xl p-6 space-y-5 shadow-xl">
+      <div class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center border border-blue-500/30">3</span>
+        <div>
+          <h3 class="text-lg font-bold text-white">Basic Mode: Form Builder Walkthrough</h3>
+          <p class="text-xs text-gray-400">Configure Identity, Color Tokens, Ambient Effects, and Waiting Phrases manually</p>
+        </div>
+      </div>
+
+      <p class="text-sm text-gray-300 leading-relaxed">
+        If you select <span class="text-blue-400 font-semibold">Basic Mode</span>, you have full manual control through structured form sections:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="p-4 rounded-xl bg-[#0B0F19] border border-gray-800 space-y-2">
+          <div class="text-amber-400 font-bold flex items-center gap-2">
+            <span>🏷️</span>
+            <span>1. Basic Identity</span>
+          </div>
+          <p class="text-gray-400 leading-relaxed">
+            Set the <b>Theme Slug</b> (unique URL identifier, e.g. <span class="font-mono text-gray-300">new_theme_4661</span>), <b>Display Title</b>, <b>Subtitle / Venue</b>, <b>Badge Label</b> (e.g. "Special Edition"), <b>Emoji/Icon</b>, <b>Start Button Text</b>, and the <b>Description / Sub-header</b> marketing copy.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-[#0B0F19] border border-gray-800 space-y-2">
+          <div class="text-blue-400 font-bold flex items-center gap-2">
+            <span>🎨</span>
+            <span>2. Color Palette & Typography</span>
+          </div>
+          <p class="text-gray-400 leading-relaxed">
+            Customize CSS color tokens for <b>Deep Background</b>, <b>Brand Accent</b>, <b>Main Text</b>, and <b>Primary Button Tone</b>. Specify the <b>Font Family</b> (e.g. <span class="font-mono text-gray-300">'Outfit', sans-serif</span>) and an optional Google Font URL stylesheet.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-[#0B0F19] border border-gray-800 space-y-2">
+          <div class="text-purple-400 font-bold flex items-center gap-2">
+            <span>✨</span>
+            <span>3. Atmosphere & Ambient Effects</span>
+          </div>
+          <p class="text-gray-400 leading-relaxed">
+            Choose background presets like <b>Floating Particle Icons</b> and specify comma-separated floating emojis (e.g. <span class="font-mono text-gray-300">✨, ⭐, 🎉, ✦</span>). Toggle the <b>Rolling Film Strip</b>, <b>Lucky Number Screen</b>, and <b>Gender Filter Tabs</b>.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-[#0B0F19] border border-gray-800 space-y-2">
+          <div class="text-emerald-400 font-bold flex items-center gap-2">
+            <span>⏳</span>
+            <span>4. Waiting Screen Manifestation</span>
+          </div>
+          <p class="text-gray-400 leading-relaxed">
+            Configure the sequential phrases that fade in while ComfyUI synthesizes portrait images. Adjust millisecond timings (e.g. 500ms, 3500ms, 7000ms), or click <span class="text-amber-400 font-bold">✨ AI Auto-Generate 5 Phrases</span> to automatically craft festive copy!
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 3 Image Card -->
+      <div class="bg-[#0B0F19] border border-gray-800 rounded-xl p-3 space-y-2">
+        <div class="overflow-hidden rounded-lg border border-gray-800/80 group cursor-pointer" onclick="openLightbox('images/t3_basic_colors_atmosphere.png', 'Step 3: Basic Mode Colors, Atmosphere & Waiting Sequence')">
+          <img src="images/t3_basic_colors_atmosphere.png" alt="Step 3: Basic Mode Fields" class="w-full h-auto object-cover rounded-lg group-hover:scale-[1.01] transition-transform duration-200">
+        </div>
+        <p class="text-xs text-gray-400 text-center italic">Figure 3.1: Color pickers, particle effect icons, feature toggles, and waiting screen phrases in Basic Mode.</p>
+      </div>
+    </section>
+
+    <!-- Step 4: Advanced Mode - GenAI Prompt Options -->
+    <section id="step4" class="bg-[#131927] border border-[#1F293D] rounded-2xl p-6 space-y-5 shadow-xl">
+      <div class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center border border-purple-500/30">4</span>
+        <div>
+          <h3 class="text-lg font-bold text-white">Advanced Mode: Configure Theme Concept & Elements</h3>
+          <p class="text-xs text-gray-400">Set your celebration theme concept and select dynamic decorations</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm text-gray-300 leading-relaxed">
+        <p>
+          Switch to <span class="text-purple-400 font-semibold">Advanced Mode (GenAI Studio)</span> by clicking its card. The platform provides a dynamic prompt engine:
+        </p>
+        <ol class="list-decimal list-inside space-y-2 pl-2">
+          <li><b>Switch to Advanced Mode:</b> Click the Advanced Mode (GenAI Studio) card.</li>
+          <li><b>Theme Intent / Event Concept:</b> Type your theme idea into the box (e.g. <i>"Deepavali Festival of Lights"</i>, <i>"Vintage Parisian Bistro"</i>, or <i>"Cyberpunk Neon Gala"</i>).</li>
+          <li><b>Dynamic Thematic Elements:</b> Check or uncheck the festive decorations you want included in your prompt (Vertical Side Banners, Top Decorative Arch, Corner Ornaments, Floating Particles, Vignette/Borders).</li>
+        </ol>
+      </div>
+
+      <!-- Step 4 Image Card -->
+      <div class="bg-[#0B0F19] border border-gray-800 rounded-xl p-3 space-y-2">
+        <div class="overflow-hidden rounded-lg border border-gray-800/80 group cursor-pointer" onclick="openLightbox('images/t4_advanced_prompt.png', 'Step 4: Advanced Mode GenAI Options & Configuration')">
+          <img src="images/t4_advanced_prompt.png" alt="Step 4: GenAI Configuration" class="w-full h-auto object-cover rounded-lg group-hover:scale-[1.01] transition-transform duration-200">
+        </div>
+        <p class="text-xs text-gray-400 text-center italic">Figure 4.1: Switch to Advanced Mode, enter your theme concept, and select desired thematic decorative elements.</p>
+      </div>
+    </section>
+
+    <!-- Step 5: Pasting the 3 Blocks & Compiling -->
+    <section id="step5" class="bg-[#131927] border border-[#1F293D] rounded-2xl p-6 space-y-5 shadow-xl">
+      <div class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center border border-emerald-500/30">5</span>
+        <div>
+          <h3 class="text-lg font-bold text-white">Paste the 3 Blocks into GenAI Studio & Compile</h3>
+          <p class="text-xs text-gray-400">Copy each response block from ChatGPT into its corresponding tab, then click Compile</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-sm text-gray-300 leading-relaxed">
+        <p>
+          In Step 5, you copy the full prompt template, send it to your GenAI model of choice (ChatGPT, Claude, or Gemini), and paste the <b>3 structured code blocks</b> back into the platform:
+        </p>
+
+        <!-- Steps list -->
+        <ol class="list-decimal list-inside space-y-1.5 pl-2">
+          <li><b>Copy Prompt Template:</b> Click the yellow <span class="text-amber-400 font-bold">"Copy Prompt Template"</span> button above the prompt viewer.</li>
+          <li><b>Run in ChatGPT / LLM:</b> Paste the template into ChatGPT or Gemini and submit.</li>
+          <li><b>Switch between Block Tabs:</b> In SEIT Vision Studio under <i>Step 2: Paste GenAI Output & Populate Theme</i>, click each block tab and paste the corresponding code:</li>
+        </ol>
+
+        <!-- 3 Blocks Breakdown Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+          <div class="p-3.5 rounded-xl bg-[#0B0F19] border border-blue-500/40 space-y-1.5">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold flex items-center justify-center">1</span>
+              <h4 class="text-xs font-bold text-blue-300">Block 1: theme_identity.json</h4>
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">
+              Click the <span class="font-mono text-blue-300">theme_identity.json (Block 1)</span> tab. Paste the JSON response here. All marketing fields and color tokens auto-fill instantly!
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#0B0F19] border border-purple-500/40 space-y-1.5">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-purple-500/20 text-purple-400 text-xs font-bold flex items-center justify-center">2</span>
+              <h4 class="text-xs font-bold text-purple-300">Block 2: decorations.html</h4>
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">
+              Click the <span class="font-mono text-purple-300">decorations.html (Block 2)</span> tab. Paste the HTML decoration elements (corner arches, couplets, floating badges).
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-[#0B0F19] border border-amber-500/40 space-y-1.5">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold flex items-center justify-center">3</span>
+              <h4 class="text-xs font-bold text-amber-300">Block 3: style.css</h4>
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">
+              Click the <span class="font-mono text-amber-300">style.css (Block 3)</span> tab. Paste the scoped CSS styling and keyframe animations.
+            </p>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <p class="font-semibold text-white">Applying Changes:</p>
+          <p class="mt-1">
+            Once all 3 blocks are pasted, click the bright yellow/gold <span class="text-amber-400 font-bold">✨ Compile & Live Preview</span> button directly above the code editor. The engine immediately compiles the styling, applies festive decorations, and auto-populates all theme details!
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 5 Image Card -->
+      <div class="bg-[#0B0F19] border border-gray-800 rounded-xl p-3 space-y-2">
+        <div class="overflow-hidden rounded-lg border border-gray-800/80 group cursor-pointer" onclick="openLightbox('images/t5_advanced_paste_blocks.png', 'Step 5: Copy Prompt Template, Paste GenAI Blocks & Click Compile')">
+          <img src="images/t5_advanced_paste_blocks.png" alt="Step 5: Paste Blocks and Compile" class="w-full h-auto object-cover rounded-lg group-hover:scale-[1.01] transition-transform duration-200">
+        </div>
+        <p class="text-xs text-gray-400 text-center italic">Figure 5.1: Copy prompt template, paste each GenAI block into its tab, and click "Compile & Live Preview".</p>
+      </div>
+    </section>
+
+    <!-- Step 6: Verify Auto-Filled Details & Test Live -->
+    <section id="step6" class="bg-[#131927] border border-[#1F293D] rounded-2xl p-6 space-y-5 shadow-xl">
+      <div class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center border border-amber-500/30">6</span>
+        <div>
+          <h3 class="text-lg font-bold text-white">Review Details, Test "View Live" & Publish</h3>
+          <p class="text-xs text-gray-400">Inspect the auto-populated marketing copy, test the live preview, and deploy to your photobooth</p>
+        </div>
+      </div>
+
+      <div class="space-y-4 text-sm text-gray-300 leading-relaxed">
+        <div class="space-y-2">
+          <h4 class="font-bold text-white flex items-center gap-2">
+            <span>✨</span>
+            <span>1. Auto-Populated Theme Details & Marketing Copy</span>
+          </h4>
+          <p>
+            Scroll down to the <b>Theme Details & Marketing Copy</b> panel. Notice how your <b>Display Title</b>, <b>Subtitle / Venue</b>, <b>Badge Label</b>, <b>Emoji/Icon</b>, <b>Start Button Text</b>, and <b>Description</b> have been filled in automatically from your Block 1 JSON. You can fine-tune any field directly if you wish!
+          </p>
+        </div>
+
+        <!-- Step 6 Image Card -->
+        <div class="bg-[#0B0F19] border border-gray-800 rounded-xl p-3 space-y-2">
+          <div class="overflow-hidden rounded-lg border border-gray-800/80 group cursor-pointer" onclick="openLightbox('images/t6_details_autofill.png', 'Step 6: Auto-Filled Details & Marketing Copy')">
+            <img src="images/t6_details_autofill.png" alt="Step 6: Details Autofill" class="w-full h-auto object-cover rounded-lg group-hover:scale-[1.01] transition-transform duration-200">
+          </div>
+          <p class="text-xs text-gray-400 text-center italic">Figure 6.1: Theme Details & Marketing Copy populated automatically from your GenAI JSON block.</p>
+        </div>
+
+        <div class="pt-2 space-y-3">
+          <h4 class="font-bold text-white flex items-center gap-2">
+            <span>🚀</span>
+            <span>2. Top Navigation Actions: View Live & Publish</span>
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div class="p-4 rounded-xl bg-purple-950/20 border border-purple-500/30 space-y-2">
+              <div class="font-bold text-purple-300 flex items-center gap-2">
+                <span>👁️</span>
+                <span>Click "View Live" (Top Right)</span>
+              </div>
+              <p class="text-gray-400 leading-relaxed">
+                Click <span class="font-semibold text-white">View Live</span> in the top header bar. A new preview session will open showing your brand-new theme interface, animations, buttons, and custom layout. Check that all styling, fonts, and banners render cleanly.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30 space-y-2">
+              <div class="font-bold text-emerald-300 flex items-center gap-2">
+                <span>🚀</span>
+                <span>Click "Save & Publish Live"</span>
+              </div>
+              <p class="text-gray-400 leading-relaxed">
+                If everything checks out and looks spectacular, click the pink/purple <span class="font-semibold text-white">Save & Publish Live</span> button in the top navigation header. Your theme is now officially active and ready on your live booth!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Beginner Troubleshooting & Checklist -->
+    <section class="bg-gradient-to-b from-[#131927] to-[#0E1424] border border-[#1F293D] rounded-2xl p-6 space-y-4 shadow-xl">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <span>✅</span>
+        <span>Beginner Pre-Publish Checklist</span>
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-gray-300">
+        <label class="flex items-center gap-2.5 p-3 rounded-lg bg-[#0B0F19] border border-gray-800">
+          <input type="checkbox" checked class="w-4 h-4 rounded text-amber-500 focus:ring-0 bg-gray-900 border-gray-700">
+          <span>Theme slug is unique (no spaces, e.g. <code class="text-amber-400">deepavali_2026</code>)</span>
+        </label>
+        <label class="flex items-center gap-2.5 p-3 rounded-lg bg-[#0B0F19] border border-gray-800">
+          <input type="checkbox" checked class="w-4 h-4 rounded text-amber-500 focus:ring-0 bg-gray-900 border-gray-700">
+          <span>Pasted all 3 blocks (JSON, HTML, and CSS)</span>
+        </label>
+        <label class="flex items-center gap-2.5 p-3 rounded-lg bg-[#0B0F19] border border-gray-800">
+          <input type="checkbox" checked class="w-4 h-4 rounded text-amber-500 focus:ring-0 bg-gray-900 border-gray-700">
+          <span>Clicked "Compile & Live Preview" without errors</span>
+        </label>
+        <label class="flex items-center gap-2.5 p-3 rounded-lg bg-[#0B0F19] border border-gray-800">
+          <input type="checkbox" checked class="w-4 h-4 rounded text-amber-500 focus:ring-0 bg-gray-900 border-gray-700">
+          <span>Tested on "View Live" before publishing</span>
+        </label>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-[#1F293D] py-6 text-center text-xs text-gray-500">
+    <p>© SEIT Vision Studio • Modular Theme Builder & AI Photobooth Suite</p>
+  </footer>
+
+  <!-- Scripts for Clipboard & Lightbox -->
+  <script>
+    function copyPrompt(id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Prompt copied to clipboard!");
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    function openLightbox(src, caption) {
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      img.src = src;
+      cap.innerText = caption;
+      lb.classList.remove('hidden');
+      lb.classList.add('flex');
+    }
+
+    function closeLightbox() {
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('flex');
+      lb.classList.add('hidden');
+    }
+
+    document.getElementById('lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeLightbox();
+    });
+  </script>
+</body>
+</html>

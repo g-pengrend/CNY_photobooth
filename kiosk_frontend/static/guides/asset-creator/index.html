@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEIT Vision Studio - Complete End-to-End Asset Creation & Publishing Guide</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#0B0F19',
+              card: '#131927',
+              border: '#1F293D',
+              accent: '#F59E0B',
+              accentHover: '#D97706',
+              purple: '#8B5CF6',
+              pink: '#EC4899',
+              emerald: '#10B981',
+              blue: '#3B82F6'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0B0F19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1F293D;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+
+    /* Glow Effects */
+    .glow-gold {
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.2);
+    }
+    .glow-purple {
+      box-shadow: 0 0 25px rgba(139, 92, 246, 0.2);
+    }
+    .glow-blue {
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-[#0B0F19] text-gray-100 font-sans antialiased min-h-screen selection:bg-amber-500 selection:text-black">
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-emerald-600 text-white font-medium px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 border border-emerald-400/40">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+    <span id="toast-msg">Copied to clipboard!</span>
+  </div>
+
+  <!-- Image Lightbox Modal -->
+  <div id="lightbox" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm hidden flex-col items-center justify-center p-4">
+    <button onclick="closeLightbox()" class="absolute top-5 right-5 text-gray-400 hover:text-white bg-gray-800/80 p-2 rounded-full transition">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    <img id="lightbox-img" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain border border-gray-700" src="" alt="Enlarged view">
+    <p id="lightbox-caption" class="mt-3 text-sm text-gray-300 font-medium"></p>
+  </div>
+
+  <!-- Header Banner -->
+  <header class="border-b border-[#1F293D] bg-[#0E1424]/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center font-bold text-white text-xl shadow-lg shadow-amber-500/20">
+          ✨
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-bold tracking-tight text-white">SEIT Vision Studio</h1>
+            <span class="text-[11px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">Official Tutorial</span>
+          </div>
+          <p class="text-xs text-gray-400">Complete End-to-End Guide: Generate Assets, Assign to Themes & Publish Live</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          Complete Workflow (Parts 1 & 2)
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
+
+    <!-- Interactive Quick Roadmap -->
+    <div class="bg-gradient-to-r from-[#161D2F] via-[#141A2B] to-[#121826] border border-[#1F293D] rounded-2xl p-6 relative overflow-hidden shadow-2xl">
+      <div class="absolute -right-10 -bottom-10 w-52 h-52 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="relative z-10 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
+            <span>🚀 Complete 8-Step Pipeline</span>
+          </div>
+          <span class="text-xs text-gray-400 font-mono">No coding required</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-white">From ChatGPT Prompt to Live Virtual Try-On</h2>
+        <p class="text-sm text-gray-300 leading-relaxed max-w-3xl">
+          Follow this beginner-friendly roadmap. You will generate custom backdrops, festive garments, and 3D chibi poses, save them to the Master Asset Library, link them to your celebration theme (e.g. Deepavali), and publish the live photo booth!
+        </p>
+
+        <!-- Pipeline Steps Grid -->
+        <div class="pt-2 grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-medium">
+          <a href="#step-1" class="bg-[#1C2538] hover:bg-[#25324c] transition border border-[#2B374E] rounded-lg p-2.5 text-gray-300 block">
+            <span class="text-amber-400 font-bold block mb-0.5">01. Theme Studio</span>
+            Enter creator mode
+          </a>
+          <a href="#step-2" class="bg-[#1C2538] hover:bg-[#25324c] transition border border-[#2B374E] rounded-lg p-2.5 text-gray-300 block">
+            <span class="text-amber-400 font-bold block mb-0.5">02. Asset Creator</span>
+            Open ComfyUI generator
+          </a>
+          <a href="#step-3" class="bg-[#1C2538] hover:bg-[#25324c] transition border border-[#2B374E] rounded-lg p-2.5 text-gray-300 block">
+            <span class="text-amber-400 font-bold block mb-0.5">03. Pick Category</span>
+            Backdrop, Outfit, Pose
+          </a>
+          <a href="#step-4" class="bg-[#1C2538] hover:bg-[#25324c] transition border border-[#2B374E] rounded-lg p-2.5 text-gray-300 block">
+            <span class="text-purple-400 font-bold block mb-0.5">04. Prompt Gen AI</span>
+            Get description & title
+          </a>
+          <a href="#step-5" class="bg-[#1C2538] hover:bg-[#25324c] transition border border-[#2B374E] rounded-lg p-2.5 text-gray-300 block">
+            <span class="text-amber-400 font-bold block mb-0.5">05. ComfyUI Render</span>
+            Generate, review & accept
+          </a>
+          <a href="#step-6" class="bg-[#1C2538] hover:bg-[#25324c] transition border border-[#2B374E] rounded-lg p-2.5 text-gray-300 block">
+            <span class="text-blue-400 font-bold block mb-0.5">06. Asset Gallery</span>
+            Inspect master library
+          </a>
+          <a href="#step-7" class="bg-[#1C2538] hover:bg-[#25324c] transition border border-[#2B374E] rounded-lg p-2.5 text-gray-300 block">
+            <span class="text-emerald-400 font-bold block mb-0.5">07. Add to Theme</span>
+            Assign to Deepavali theme
+          </a>
+          <a href="#step-8" class="bg-[#1C2538] hover:bg-[#25324c] transition border border-[#2B374E] rounded-lg p-2.5 text-gray-300 block">
+            <span class="text-rose-400 font-bold block mb-0.5">08. Save & View Live</span>
+            Publish to photo booth
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- STEP 1: LANDING PAGE TO THEME STUDIO -->
+    <!-- ========================================== -->
+    <section id="step-1" class="bg-[#131927] border border-[#1F293D] rounded-2xl overflow-hidden shadow-xl">
+      <div class="p-6 border-b border-[#1F293D] flex items-start justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-md bg-amber-500 text-black font-extrabold text-xs">STEP 1</span>
+            <h3 class="text-xl font-bold text-white">Enter the Theme Studio</h3>
+          </div>
+          <p class="text-sm text-gray-400">Launch the studio dashboard from the main SEIT Vision Studio landing page.</p>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <div class="grid md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-6 space-y-4 text-sm text-gray-300">
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">1</span>
+              <div>
+                <p class="font-semibold text-white">Locate the top navigation bar</p>
+                <p class="text-xs text-gray-400 mt-0.5">When you first land on the home page, look at the top navigation bar next to the green <span class="text-emerald-400 font-mono">STUDIO ONLINE</span> badge.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">2</span>
+              <div>
+                <p class="font-semibold text-white">Click on "Theme Studio"</p>
+                <p class="text-xs text-gray-400 mt-0.5">Click the pill button with the palette icon labeled <strong class="text-amber-300">Theme Studio</strong>. This switches the application into administrative & creator mode.</p>
+              </div>
+            </div>
+
+            <div class="p-3 bg-blue-950/30 border border-blue-800/40 rounded-xl text-blue-200 text-xs flex gap-2.5">
+              <svg class="w-5 h-5 flex-shrink-0 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span><strong>What this shows:</strong> In Theme Studio, you can view all existing festive themes (Chinese New Year, Hari Raya, Deepavali, NDP 2026, etc.).</span>
+            </div>
+          </div>
+
+          <div class="md:col-span-6">
+            <div class="group relative rounded-xl overflow-hidden border border-[#2B374E] cursor-pointer shadow-lg bg-black" onclick="openLightbox('images/step1_landing_page.png', 'Step 1: Landing Page - Click Theme Studio at the top navigation bar')">
+              <img src="images/step1_landing_page.png" alt="SEIT Vision Studio Landing Page" class="w-full h-auto object-cover group-hover:scale-[1.02] transition duration-300">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition"></div>
+              <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-gray-200">
+                <span class="bg-black/70 px-2.5 py-1 rounded-md backdrop-blur border border-white/10 font-mono">🔍 Click image to enlarge</span>
+                <span class="bg-amber-500 text-black font-bold px-2 py-0.5 rounded">Theme Studio Button ↗</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 2: OPEN AI ASSET CREATOR -->
+    <!-- ========================================== -->
+    <section id="step-2" class="bg-[#131927] border border-[#1F293D] rounded-2xl overflow-hidden shadow-xl">
+      <div class="p-6 border-b border-[#1F293D] flex items-start justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-md bg-amber-500 text-black font-extrabold text-xs">STEP 2</span>
+            <h3 class="text-xl font-bold text-white">Navigate to AI Asset Creator</h3>
+          </div>
+          <p class="text-sm text-gray-400">Head to the dedicated asset generation studio in the left sidebar.</p>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <div class="grid md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-6 space-y-4 text-sm text-gray-300">
+            <p>
+              Once inside <strong class="text-white">Theme Studio</strong>, the screen displays theme configurations, but where you actually want to go to make new items is the <strong class="text-amber-300">AI Asset Creator</strong>.
+            </p>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">1</span>
+              <div>
+                <p class="font-semibold text-white">Scroll down the left sidebar</p>
+                <p class="text-xs text-gray-400 mt-0.5">Under the <em>THEMES CATALOG</em> list, find the section titled <strong class="text-purple-300">ASSET LIBRARY</strong>.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">2</span>
+              <div>
+                <p class="font-semibold text-white">Click "AI Asset Creator"</p>
+                <p class="text-xs text-gray-400 mt-0.5">Click on <strong class="text-amber-300">AI Asset Creator</strong> (robot icon 🤖). Here, you will find built-in example prompts for every asset category to input into your Gen AI tool!</p>
+              </div>
+            </div>
+
+            <div class="p-3 bg-purple-950/30 border border-purple-800/40 rounded-xl text-purple-200 text-xs flex gap-2.5">
+              <svg class="w-5 h-5 flex-shrink-0 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              <span><strong>Why this exists:</strong> AI Asset Creator connects directly to local ComfyUI pipelines with fixed prefixes & suffixes so you don't have to touch ComfyUI nodes manually!</span>
+            </div>
+          </div>
+
+          <div class="md:col-span-6">
+            <div class="group relative rounded-xl overflow-hidden border border-[#2B374E] cursor-pointer shadow-lg bg-black" onclick="openLightbox('images/step2_theme_studio_nav.png', 'Step 2: Theme Studio Dashboard - Click AI Asset Creator under Asset Library on the left')">
+              <img src="images/step2_theme_studio_nav.png" alt="Theme Studio Sidebar Navigation" class="w-full h-auto object-cover group-hover:scale-[1.02] transition duration-300">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition"></div>
+              <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-gray-200">
+                <span class="bg-black/70 px-2.5 py-1 rounded-md backdrop-blur border border-white/10 font-mono">🔍 Click image to enlarge</span>
+                <span class="bg-purple-600 text-white font-bold px-2 py-0.5 rounded">Asset Library ↘</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 3: UNDERSTAND THE 3 ASSET TYPES & ARCHITECTURE -->
+    <!-- ========================================== -->
+    <section id="step-3" class="bg-[#131927] border border-[#1F293D] rounded-2xl overflow-hidden shadow-xl">
+      <div class="p-6 border-b border-[#1F293D] flex items-start justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-md bg-amber-500 text-black font-extrabold text-xs">STEP 3</span>
+            <h3 class="text-xl font-bold text-white">Choose Asset Category & Understand Prompt Architecture</h3>
+          </div>
+          <p class="text-sm text-gray-400">Discover how ComfyUI structures prompts and how each asset category behaves.</p>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-8">
+        
+        <!-- Explanation of the Sandwich Architecture -->
+        <div class="bg-[#0E1424] border border-[#1F293D] rounded-xl p-5 space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="text-amber-400 font-bold text-sm">💡 The "Sandwich Prompt" Architecture Explained</span>
+          </div>
+          <p class="text-xs text-gray-300 leading-relaxed">
+            The studio uses a 3-part prompt formula to guarantee that assets match production standards without you having to configure ComfyUI node workflows:
+          </p>
+          <div class="grid md:grid-cols-3 gap-3 text-xs pt-1">
+            <div class="bg-[#161D2F] border border-gray-700/60 p-3 rounded-lg">
+              <div class="flex items-center gap-1.5 text-gray-400 font-mono font-bold mb-1">
+                <span>🔒 STATIC PREFIX</span>
+              </div>
+              <p class="text-gray-300">Locked studio standards that define asset framing, lighting setup, and isolation requirements.</p>
+            </div>
+            <div class="bg-amber-950/20 border border-amber-500/50 p-3 rounded-lg">
+              <div class="flex items-center gap-1.5 text-amber-400 font-mono font-bold mb-1">
+                <span>✏️ VARIABLE DESCRIPTION</span>
+              </div>
+              <p class="text-amber-200"><strong>The ONLY part you edit!</strong> This is where you paste the description generated from ChatGPT.</p>
+            </div>
+            <div class="bg-[#161D2F] border border-gray-700/60 p-3 rounded-lg">
+              <div class="flex items-center gap-1.5 text-gray-400 font-mono font-bold mb-1">
+                <span>🔒 STATIC SUFFIX</span>
+              </div>
+              <p class="text-gray-300">Locked technical keywords ensuring solid backdrops for transparent masking and cinematic textures.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- The Three Tabs Breakdown -->
+        <div class="space-y-6">
+          <h4 class="text-base font-bold text-white flex items-center gap-2">
+            <span>The 3 Asset Categories</span>
+          </h4>
+
+          <!-- Category 1: Backdrop -->
+          <div class="bg-[#0E1424] border border-gray-800 rounded-xl p-4 grid md:grid-cols-12 gap-4 items-center">
+            <div class="md:col-span-7 space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-blue-500/20 text-blue-400 text-xs font-bold flex items-center gap-1.5 border border-blue-500/30">
+                  <span>🖼️</span> Backdrop / Background
+                </span>
+              </div>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Generates high-resolution background environments (e.g. Marina Bay Sands at night, Deepavali lamp-lit pavilion, Chinese New Year flower market).
+              </p>
+              <div class="text-xs text-gray-400 bg-[#161D2F] p-2.5 rounded-lg border border-gray-800">
+                <span class="text-amber-400 font-semibold">Workflow:</span> Click <span class="text-white font-mono bg-black/40 px-1 py-0.5 rounded">Load Example</span> to see the format, or paste your ChatGPT prompt into the middle textarea.
+              </div>
+            </div>
+            <div class="md:col-span-5">
+              <img src="images/step3_ai_asset_creator_backdrop.png" alt="Backdrop Creator Screen" class="rounded-lg border border-gray-700 cursor-pointer hover:border-amber-400 transition" onclick="openLightbox('images/step3_ai_asset_creator_backdrop.png', 'Backdrop / Background Creator Screen')">
+            </div>
+          </div>
+
+          <!-- Category 2: Outfit / Clothes with Gender Dropdown -->
+          <div class="bg-[#0E1424] border border-amber-500/30 rounded-xl p-4 grid md:grid-cols-12 gap-4 items-center ring-1 ring-amber-500/20">
+            <div class="md:col-span-7 space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-purple-500/20 text-purple-400 text-xs font-bold flex items-center gap-1.5 border border-purple-500/30">
+                  <span>👘</span> Outfit / Clothes
+                </span>
+                <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-bold border border-amber-500/40">IMPORTANT CONTROL</span>
+              </div>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Generates standalone festive garments isolated on black background for clean virtual try-on masking.
+              </p>
+              <div class="text-xs bg-amber-950/30 border border-amber-500/40 p-3 rounded-lg text-amber-200 space-y-1">
+                <p class="font-bold flex items-center gap-1.5 text-amber-300">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  Select Gender via Dropdown Bar:
+                </p>
+                <p class="text-[11px] text-gray-300">
+                  You <strong>must</strong> select the dropdown bar labeled <span class="font-mono text-white bg-black/50 px-1.5 py-0.5 rounded border border-gray-700">Target Outfit Type / Gender</span> to choose between <strong>Male Outfit</strong> and <strong>Female Outfit</strong>. This switches the prefix to match male or female clothing cut!
+                </p>
+              </div>
+            </div>
+            <div class="md:col-span-5">
+              <img src="images/step4_outfit_gender_selector.png" alt="Outfit Gender Selector Screen" class="rounded-lg border border-gray-700 cursor-pointer hover:border-amber-400 transition" onclick="openLightbox('images/step4_outfit_gender_selector.png', 'Outfit / Clothes - Note the Target Outfit Type / Gender dropdown bar')">
+            </div>
+          </div>
+
+          <!-- Category 3: 3D Chibi Pose with CRITICAL RULE -->
+          <div class="bg-[#0E1424] border border-rose-500/30 rounded-xl p-4 grid md:grid-cols-12 gap-4 items-center ring-1 ring-rose-500/20">
+            <div class="md:col-span-7 space-y-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-lg bg-pink-500/20 text-pink-400 text-xs font-bold flex items-center gap-1.5 border border-pink-500/30">
+                  <span>🏃</span> 3D Chibi Pose
+                </span>
+                <span class="px-2 py-0.5 rounded bg-rose-500 text-white text-[10px] font-bold">CRITICAL RULE</span>
+              </div>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Generates 3D chibi-style avatar poses on solid white background for character generation.
+              </p>
+              <div class="text-xs bg-rose-950/40 border border-rose-500/50 p-3 rounded-lg text-rose-200 space-y-1">
+                <p class="font-bold flex items-center gap-1.5 text-rose-300">
+                  🚨 Do NOT cut off "Face the camera with"!
+                </p>
+                <p class="text-[11px] text-gray-300 leading-relaxed">
+                  When asking ChatGPT or any Gen AI to create a pose, you <strong>must explicitly instruct it NOT to remove or cut off</strong> the phrase <span class="font-mono text-white bg-black/60 px-1 py-0.5 rounded">"Facing the camera with"</span> (or <span class="font-mono text-white bg-black/60 px-1 py-0.5 rounded">"Face the camera with"</span>). The AI needs this exact phrasing to generate the character facing forward toward the kiosk camera!
+                </p>
+              </div>
+            </div>
+            <div class="md:col-span-5">
+              <img src="images/step5_chibi_pose_instruction.png" alt="3D Chibi Pose Screen" class="rounded-lg border border-gray-700 cursor-pointer hover:border-amber-400 transition" onclick="openLightbox('images/step5_chibi_pose_instruction.png', '3D Chibi Pose - Must preserve Facing the camera with...')">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 4: CHATGPT TEMPLATE RECIPE & ONE-CLICK COPIES -->
+    <!-- ========================================== -->
+    <section id="step-4" class="bg-[#131927] border border-[#1F293D] rounded-2xl overflow-hidden shadow-xl">
+      <div class="p-6 border-b border-[#1F293D] flex items-start justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-md bg-amber-500 text-black font-extrabold text-xs">STEP 4</span>
+            <h3 class="text-xl font-bold text-white">How to Use ChatGPT to Generate Your Prompts</h3>
+          </div>
+          <p class="text-sm text-gray-400">Copy our exact ChatGPT prompt recipe to get perfect descriptions, titles, and summaries in seconds.</p>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <p class="text-sm text-gray-300 leading-relaxed">
+          Open <a href="https://chatgpt.com" target="_blank" class="text-amber-400 underline hover:text-amber-300 font-semibold">ChatGPT</a> (or Claude / Gemini). 
+          To get the best results, you need to provide an <strong>example prompt</strong> to teach the AI the writing style, and ask it for <strong>three specific things</strong>:
+        </p>
+
+        <!-- The 3 required items from ChatGPT -->
+        <div class="grid sm:grid-cols-3 gap-3 text-xs">
+          <div class="bg-[#0E1424] p-3 rounded-xl border border-gray-800 flex items-start gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center flex-shrink-0 text-xs">A</span>
+            <div>
+              <p class="font-bold text-white">1. Prompt Description</p>
+              <p class="text-gray-400 text-[11px] mt-0.5">The vivid visual description to paste into the platform's variable box.</p>
+            </div>
+          </div>
+          <div class="bg-[#0E1424] p-3 rounded-xl border border-gray-800 flex items-start gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center flex-shrink-0 text-xs">B</span>
+            <div>
+              <p class="font-bold text-white">2. Asset Title</p>
+              <p class="text-gray-400 text-[11px] mt-0.5">Catchy 2-4 word title (e.g. <em>"Marina Bay Night Waters"</em>).</p>
+            </div>
+          </div>
+          <div class="bg-[#0E1424] p-3 rounded-xl border border-gray-800 flex items-start gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center flex-shrink-0 text-xs">C</span>
+            <div>
+              <p class="font-bold text-white">3. Short Description</p>
+              <p class="text-gray-400 text-[11px] mt-0.5">1-sentence summary displayed in the theme selector kiosk.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Template Switcher -->
+        <div class="space-y-3 pt-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-400">Choose a Ready-to-Use Prompt Template:</span>
+            <span class="text-[11px] text-amber-400 font-mono">1-Click Copy</span>
+          </div>
+
+          <!-- Tabs -->
+          <div class="flex flex-wrap gap-2">
+            <button onclick="switchPromptTab('backdrop')" id="tab-btn-backdrop" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-amber-500 text-black shadow-lg">
+              🖼️ Backdrop: Deepavali / Festival
+            </button>
+            <button onclick="switchPromptTab('outfit')" id="tab-btn-outfit" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-[#1C2538] text-gray-300 hover:text-white">
+              👘 Outfit: Traditional Attire
+            </button>
+            <button onclick="switchPromptTab('pose')" id="tab-btn-pose" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-[#1C2538] text-gray-300 hover:text-white">
+              🏃 3D Chibi Pose (Camera-Facing)
+            </button>
+          </div>
+
+          <!-- Prompt Box 1: Backdrop -->
+          <div id="prompt-box-backdrop" class="relative bg-[#0B0F19] border border-[#2B374E] rounded-xl p-4 space-y-2">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+              <span class="text-xs font-mono text-gray-400">Prompt for ChatGPT (Creative Prompt Designer - Deepavali Locations):</span>
+              <button onclick="copyText('prompt-text-backdrop')" class="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-md flex items-center gap-1 transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                Copy Prompt
+              </button>
+            </div>
+            <pre id="prompt-text-backdrop" class="text-xs text-gray-200 whitespace-pre-wrap font-sans leading-relaxed select-all">Act as a creative prompt designer. Generate 3 descriptive prompts for Deepavali (Diwali) festival locations, inspired by the following sample format and add a bit of people:
+
+Sample Reference:
+"A cinematic, mid-distance view at night focusing on the iconic Merlion statue, brilliantly illuminated as a stream of water spouts into the dark bay. In the background, the glowing Marina Bay city skyline creates a grand, luminous backdrop, with vibrant night lights and architecture reflecting shimmering colors across the water's surface."
+
+Requirements:
+1. Subject & Theme: Focus strictly on iconic festive locations, streetscapes, architecture, light installations, or sacred outdoor/indoor spaces decorated for Deepavali.
+2. People & Atmosphere: Include a bit of people in the background (such as soft-focus festival celebrants, distant silhouettes enjoying the lights, or families admiring rangoli) to add lively cultural warmth, scale, and ambiance, while keeping the main central foreground open for the photo booth subject. (Note: If you prefer empty streetscapes, specify 'No People').
+3. Format per item:
+   - A bolded, evocative Title.
+   - Prompt: A detailed, sensory-rich paragraph specifying camera angle/framing (e.g., wide shot, low-angle, vanishing perspective), lighting conditions (dusk, night, warm amber uplighting, micro-LED glow), key cultural decor (diyas, rangoli, arches, marigolds), and environmental atmosphere (festive streets, damp pavements, incense haze, soft distant crowd).
+   - Description: A concise 1-sentence summary highlighting the core mood, setting, and visual appeal.
+4. Output: Text prompts only (do not generate actual images).</pre>
+          </div>
+
+          <!-- Prompt Box 2: Outfit -->
+          <div id="prompt-box-outfit" class="hidden relative bg-[#0B0F19] border border-[#2B374E] rounded-xl p-4 space-y-2">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+              <span class="text-xs font-mono text-gray-400">Prompt for ChatGPT (Festive Outfit Example):</span>
+              <button onclick="copyText('prompt-text-outfit')" class="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-md flex items-center gap-1 transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                Copy Prompt
+              </button>
+            </div>
+            <pre id="prompt-text-outfit" class="text-xs text-gray-200 whitespace-pre-wrap font-sans leading-relaxed select-all">help me generate a detailed festive outfit prompt for Deepavali traditional wear (female or male). 
+
+Requirements:
+- Describe the garment details (embroidery, fabric textures, colors, drape, traditional festive ornaments).
+- Keep it focused only on the standalone outfit garment.
+
+Please provide:
+1. Asset Title (e.g. "Royal Maroon Silk Sherwani" or "Golden Zari Silk Saree")
+2. Short Description (1 concise sentence)
+3. Variable Description (the detailed description of the outfit to be generated)</pre>
+          </div>
+
+          <!-- Prompt Box 3: 3D Chibi Pose -->
+          <div id="prompt-box-pose" class="hidden relative bg-[#0B0F19] border border-[#2B374E] rounded-xl p-4 space-y-2">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-2">
+              <span class="text-xs font-mono text-gray-400">Prompt for ChatGPT (3D Chibi Pose with Strict Rule):</span>
+              <button onclick="copyText('prompt-text-pose')" class="px-3 py-1 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-md flex items-center gap-1 transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                Copy Prompt
+              </button>
+            </div>
+            <pre id="prompt-text-pose" class="text-xs text-gray-200 whitespace-pre-wrap font-sans leading-relaxed select-all">help me generate a 3D chibi avatar pose for our photo booth studio.
+
+IMPORTANT CONSTRAINT: You MUST explicitly start the pose description with:
+"Facing the camera with [pose details]"
+Do NOT cut off or remove "Facing the camera with", because the kiosk try-on system strictly requires front-facing alignment.
+
+Here is the example reference:
+"Facing the camera with one hand resting firmly on the waist, the other hand resting naturally at the side. Chin slightly up, projecting confidence."
+
+Please provide:
+1. Asset Title (e.g. "Confident Waist Pose" or "Festive Namaste Greeting")
+2. Short Description (1 sentence describing the posture)
+3. Variable Description (starting strictly with "Facing the camera with...")</pre>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 5: GENERATE WITH COMFYUI & ACCEPT -->
+    <!-- ========================================== -->
+    <section id="step-5" class="bg-[#131927] border border-[#1F293D] rounded-2xl overflow-hidden shadow-xl">
+      <div class="p-6 border-b border-[#1F293D] flex items-start justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-md bg-amber-500 text-black font-extrabold text-xs">STEP 5</span>
+            <h3 class="text-xl font-bold text-white">Generate with ComfyUI, Review, & Save to Asset Library</h3>
+          </div>
+          <p class="text-sm text-gray-400">Put your prompt to work in the studio and save the final asset to the library.</p>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <div class="grid md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-6 space-y-4 text-sm text-gray-300">
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">1</span>
+              <div>
+                <p class="font-semibold text-white">Paste your Variable Description</p>
+                <p class="text-xs text-gray-400 mt-0.5">Click into the <span class="text-amber-300 font-semibold">VARIABLE DESCRIPTION</span> box and paste your ChatGPT prompt. If doing outfits, verify the gender dropdown.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">2</span>
+              <div>
+                <p class="font-semibold text-white">Click "✨ Generate Asset with ComfyUI"</p>
+                <p class="text-xs text-gray-400 mt-0.5">Wait a few seconds while ComfyUI processes the neural network nodes and outputs the high-res render.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">3</span>
+              <div>
+                <p class="font-semibold text-white">Fill in Asset Title & Short Description</p>
+                <p class="text-xs text-gray-400 mt-0.5">
+                  Type your custom <strong>Asset Title / Name</strong> (e.g. <em>"Cinematic Backdrop 455"</em> or <em>"Marina Bay Waters"</em>) and the <strong>Short Description</strong> (or click the <strong class="text-amber-400">✨ Auto-Extract</strong> button).
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/5">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">4</span>
+              <div>
+                <p class="font-semibold text-emerald-400">Accept or Re-Generate</p>
+                <p class="text-xs text-gray-300 mt-0.5">
+                  Click the purple button <strong class="text-purple-300">✅ Accept & Save to Asset Library</strong>. If you want a fresh variation, click <strong class="text-gray-300">🔄 Re-Generate (New Seed)</strong>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-6">
+            <div class="group relative rounded-xl overflow-hidden border border-[#2B374E] cursor-pointer shadow-lg bg-black" onclick="openLightbox('images/step6_asset_generated_review.png', 'Step 5: Asset Generated Review Screen - Title, Short Description, Re-Generate, and Accept & Save to Asset Library')">
+              <img src="images/step6_asset_generated_review.png" alt="Asset Generated Review Screen" class="w-full h-auto object-cover group-hover:scale-[1.02] transition duration-300">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition"></div>
+              <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-gray-200">
+                <span class="bg-black/70 px-2.5 py-1 rounded-md backdrop-blur border border-white/10 font-mono">🔍 Click image to enlarge</span>
+                <span class="bg-purple-600 text-white font-bold px-2 py-0.5 rounded">Asset Generated Screen ↗</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 6: VIEW IN ASSET GALLERY -->
+    <!-- ========================================== -->
+    <section id="step-6" class="bg-[#131927] border border-[#1F293D] rounded-2xl overflow-hidden shadow-xl">
+      <div class="p-6 border-b border-[#1F293D] flex items-start justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-md bg-blue-500 text-white font-extrabold text-xs">STEP 6</span>
+            <h3 class="text-xl font-bold text-white">Inspect Your Assets in the Asset Gallery</h3>
+          </div>
+          <p class="text-sm text-gray-400">View all your saved backgrounds, traditional garments, and poses in the Master Library.</p>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <div class="grid md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-6 space-y-4 text-sm text-gray-300">
+            <p>
+              Once you click <em>Accept & Save to Asset Library</em>, your item is stored into the centralized **Master Library**.
+            </p>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs">1</span>
+              <div>
+                <p class="font-semibold text-white">Click "Asset Gallery" in left sidebar</p>
+                <p class="text-xs text-gray-400 mt-0.5">Under the <span class="text-purple-300 font-semibold">ASSET LIBRARY</span> menu on the left, click <strong class="text-white">Asset Gallery</strong>.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs">2</span>
+              <div>
+                <p class="font-semibold text-white">Filter by category tabs</p>
+                <p class="text-xs text-gray-400 mt-0.5">Toggle between <strong class="text-amber-300">Outfits</strong>, <strong class="text-purple-300">Poses</strong>, and <strong class="text-blue-300">Backgrounds</strong> to inspect your newly added items.</p>
+              </div>
+            </div>
+
+            <div class="p-3 bg-blue-950/30 border border-blue-800/40 rounded-xl text-blue-200 text-xs flex gap-2.5">
+              <svg class="w-5 h-5 flex-shrink-0 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span><strong>Shared Across All Themes:</strong> Assets saved here are available to all celebration booths (CNY, Hari Raya, Deepavali, NDP) without needing re-generation!</span>
+            </div>
+          </div>
+
+          <div class="md:col-span-6">
+            <div class="group relative rounded-xl overflow-hidden border border-[#2B374E] cursor-pointer shadow-lg bg-black" onclick="openLightbox('images/step7_asset_gallery_view.png', 'Step 6: Master Asset Gallery - View Outfits, Poses, and Backgrounds')">
+              <img src="images/step7_asset_gallery_view.png" alt="Master Asset Gallery View" class="w-full h-auto object-cover group-hover:scale-[1.02] transition duration-300">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition"></div>
+              <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-gray-200">
+                <span class="bg-black/70 px-2.5 py-1 rounded-md backdrop-blur border border-white/10 font-mono">🔍 Click image to enlarge</span>
+                <span class="bg-blue-600 text-white font-bold px-2 py-0.5 rounded">Asset Gallery View ↗</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 7: ADD ASSETS TO TARGET THEME -->
+    <!-- ========================================== -->
+    <section id="step-7" class="bg-[#131927] border border-[#1F293D] rounded-2xl overflow-hidden shadow-xl">
+      <div class="p-6 border-b border-[#1F293D] flex items-start justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-md bg-emerald-500 text-black font-extrabold text-xs">STEP 7</span>
+            <h3 class="text-xl font-bold text-white">Add Your Assets to the Theme (e.g. Deepavali)</h3>
+          </div>
+          <p class="text-sm text-gray-400">Navigate to your desired theme, open Asset Manager, and pick items from the gallery.</p>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <div class="grid md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-6 space-y-4 text-sm text-gray-300">
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">1</span>
+              <div>
+                <p class="font-semibold text-white">Select your target theme in the left sidebar</p>
+                <p class="text-xs text-gray-400 mt-0.5">Under <strong class="text-white">THEMES CATALOG</strong> on the left, click on the theme you want to update (for example: <strong class="text-amber-400">Deepavali 2026</strong>).</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">2</span>
+              <div>
+                <p class="font-semibold text-white">Click on the "Asset Manager" tab</p>
+                <p class="text-xs text-gray-400 mt-0.5">In the top horizontal tabs of the theme editor, click <strong class="text-purple-300">Asset Manager</strong>.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-gray-800">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">3</span>
+              <div>
+                <p class="font-semibold text-white">Click "Pick from Asset Gallery"</p>
+                <p class="text-xs text-gray-400 mt-0.5">This opens the modal dialog titled <strong class="text-white">"Pick Asset from Asset Library"</strong>.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3 bg-[#0E1424] p-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/5">
+              <span class="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">4</span>
+              <div>
+                <p class="font-semibold text-emerald-400">Navigate the 3 tabs & click "+ Add to Theme"</p>
+                <p class="text-xs text-gray-300 mt-0.5">
+                  Navigate across <strong class="text-amber-300">Outfits</strong>, <strong class="text-purple-300">Poses</strong>, and <strong class="text-blue-300">Backgrounds</strong>. Click the purple <strong class="text-purple-300">+ Add to Theme</strong> button on every asset you want included in this celebration! Once done, click <strong class="text-white">Done</strong> at the bottom right.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-6">
+            <div class="group relative rounded-xl overflow-hidden border border-[#2B374E] cursor-pointer shadow-lg bg-black" onclick="openLightbox('images/step8_pick_asset_modal.png', 'Step 7: Pick Asset from Asset Library Modal - Add to Theme')">
+              <img src="images/step8_pick_asset_modal.png" alt="Pick Asset from Asset Library Modal" class="w-full h-auto object-cover group-hover:scale-[1.02] transition duration-300">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80 group-hover:opacity-60 transition"></div>
+              <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-gray-200">
+                <span class="bg-black/70 px-2.5 py-1 rounded-md backdrop-blur border border-white/10 font-mono">🔍 Click image to enlarge</span>
+                <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded">+ Add to Theme Modal ↗</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 8: SAVE, PUBLISH & VIEW LIVE -->
+    <!-- ========================================== -->
+    <section id="step-8" class="bg-[#131927] border border-[#1F293D] rounded-2xl overflow-hidden shadow-xl">
+      <div class="p-6 border-b border-[#1F293D] flex items-start justify-between gap-4">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-md bg-rose-500 text-white font-extrabold text-xs">STEP 8</span>
+            <h3 class="text-xl font-bold text-white">Save, Publish & View Live</h3>
+          </div>
+          <p class="text-sm text-gray-400">Lock in your changes and launch the live interactive photo booth kiosk.</p>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-6">
+        <div class="grid sm:grid-cols-2 gap-4">
+          
+          <div class="bg-[#0E1424] border border-purple-500/40 p-5 rounded-xl space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm">A</span>
+              <h4 class="font-bold text-white text-base">Press "🚀 Save & Publish Live"</h4>
+            </div>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              In the top right corner of the Theme Studio header bar, click the glowing purple button labeled <strong class="text-purple-300">Save & Publish Live</strong>. This writes your theme configurations and links the new assets to the live kiosk production database!
+            </p>
+          </div>
+
+          <div class="bg-[#0E1424] border border-emerald-500/40 p-5 rounded-xl space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">B</span>
+              <h4 class="font-bold text-white text-base">Click "👁️ View Live"</h4>
+            </div>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Right next to the publish button, click <strong class="text-emerald-400">View Live</strong> (or navigate back to the home page). Click on your celebration pavilion (e.g. Deepavali) to test out your new backdrops, virtual try-on clothes, and poses in real-time!
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- COMPLETE BEGINNER'S CHECKLIST -->
+    <!-- ========================================== -->
+    <section class="bg-gradient-to-br from-[#121826] to-[#0D121F] border border-[#1F293D] rounded-2xl p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <span>📋</span> The Complete End-to-End Checklist
+        </h3>
+        <span class="text-xs text-amber-400 font-mono">Everything You Need</span>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-3 text-xs">
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">1. Clicked <strong>Theme Studio</strong> on Landing Page</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">2. Opened <strong>AI Asset Creator</strong> in left sidebar</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">3. Picked Tab: Backdrop, Outfit, or 3D Chibi Pose</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">4. If Outfit: Selected <strong>Male</strong> or <strong>Female</strong> dropdown</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">5. If Pose: Kept <strong>"Facing the camera with..."</strong> intact</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">6. Prompted ChatGPT for: Description, Title & Short Summary</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">7. Pasted into <strong>Variable Description</strong> & clicked Generate</span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">8. Filled Title & Short Description, then clicked <strong>Accept & Save</strong></span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">9. Selected Theme (e.g. Deepavali) ➔ <strong>Asset Manager</strong></span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">10. Clicked <strong>Pick from Asset Gallery</strong> & <strong>+ Add to Theme</strong></span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">11. Closed modal, clicked <strong>Save & Publish Live</strong></span>
+        </label>
+        <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0E1424] border border-gray-800 cursor-pointer hover:border-gray-700">
+          <input type="checkbox" class="w-4 h-4 rounded text-amber-500 bg-gray-900 border-gray-700 focus:ring-0">
+          <span class="text-gray-300">12. Clicked <strong>View Live</strong> to test live photo booth!</span>
+        </label>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-[#1F293D] py-8 text-center text-xs text-gray-500">
+    SEIT Vision Studio • AI Asset Creator & Theme Manager Master Tutorial
+  </footer>
+
+  <script>
+    // Copy Text to Clipboard with Toast
+    function copyText(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Prompt copied to clipboard!");
+      }).catch(err => {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showToast("Prompt copied to clipboard!");
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 2500);
+    }
+
+    // Switch Prompt Tabs
+    function switchPromptTab(type) {
+      const types = ['backdrop', 'outfit', 'pose'];
+      types.forEach(t => {
+        const box = document.getElementById(`prompt-box-${t}`);
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if (t === type) {
+          box.classList.remove('hidden');
+          btn.classList.remove('bg-[#1C2538]', 'text-gray-300');
+          btn.classList.add('bg-amber-500', 'text-black', 'shadow-lg');
+        } else {
+          box.classList.add('hidden');
+          btn.classList.remove('bg-amber-500', 'text-black', 'shadow-lg');
+          btn.classList.add('bg-[#1C2538]', 'text-gray-300');
+        }
+      });
+    }
+
+    // Lightbox Modal Controls
+    function openLightbox(src, caption) {
+      const modal = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      img.src = src;
+      cap.innerText = caption;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('lightbox');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Close lightbox on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
