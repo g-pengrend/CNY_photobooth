@@ -251,22 +251,34 @@
                 }
             });
 
-            // Append newly published themes from Theme Studio without touching or lagging original cards
+            // Sync all themes from backend: removes deleted themes, updates edits to titles/badges, and appends newly published themes
             async function loadDynamicThemes() {
                 try {
                     const res = await fetch('/api/themes');
                     if (!res.ok) return;
                     const data = await res.json();
                     const themes = Array.isArray(data) ? data : (data.themes || []);
-                    if (!themes || !Array.isArray(themes) || themes.length === 0) return;
+                    if (!themes || !Array.isArray(themes)) return;
 
                     const grid = document.getElementById('theme-grid');
                     if (!grid) return;
 
-                    const builtInSlugs = ['cny', 'hariraya', 'uits', 'ndp2026', 'master'];
-                    const customThemes = themes.filter(t => t.slug && t.status !== 'draft' && !builtInSlugs.includes(t.slug.toLowerCase()) && !document.getElementById(`${t.slug}-card`));
+                    // Exclude drafts and reserved master template
+                    const liveThemes = themes.filter(t => t.slug && t.status !== 'draft' && t.slug.toLowerCase() !== 'master');
+                    const liveSlugs = new Set(liveThemes.map(t => t.slug.toLowerCase()));
 
-                    customThemes.forEach(t => {
+                    // 1. If any theme card in DOM has been deleted in backend, remove it from the landing page
+                    const existingCards = grid.querySelectorAll('.theme-card');
+                    existingCards.forEach(card => {
+                        const cardId = card.id || '';
+                        const slug = cardId.replace(/-card$/, '').toLowerCase();
+                        if (slug && !liveSlugs.has(slug)) {
+                            card.remove();
+                        }
+                    });
+
+                    // 2. For remaining or new live themes, update existing or create new cards
+                    liveThemes.forEach(t => {
                         const slug = t.slug;
                         const title = t.title || slug.toUpperCase();
                         const badge = t.badge || 'New Experience';
@@ -275,6 +287,24 @@
                         const cta = t.cta || 'Start Experience';
                         const accent = t.style?.colors?.accent || '#fbbf24';
 
+                        const existingCard = document.getElementById(`${slug}-card`);
+                        if (existingCard) {
+                            // If an original or existing card was updated in Theme Studio, reflect changes
+                            const titleEl = existingCard.querySelector('.card-title');
+                            if (titleEl && t.title) titleEl.textContent = t.title;
+
+                            const descEl = existingCard.querySelector('.card-description');
+                            if (descEl && t.description) descEl.textContent = t.description;
+
+                            const badgeEl = existingCard.querySelector('.card-badge');
+                            if (badgeEl && t.badge) badgeEl.textContent = t.badge;
+
+                            const iconEl = existingCard.querySelector('.card-icon');
+                            if (iconEl && t.icon) iconEl.textContent = t.icon;
+                            return;
+                        }
+
+                        // Otherwise create a new card for this theme
                         const tags = [];
                         if (t.features?.luckyNumber) tags.push('Lucky Numbers');
                         if (t.features?.genderFilter) tags.push('Multi-Gender');
@@ -319,7 +349,7 @@
                         grid.appendChild(cardEl);
                     });
                 } catch (err) {
-                    console.warn('Could not check for additional themes:', err);
+                    console.warn('Could not sync themes:', err);
                 }
             }
 

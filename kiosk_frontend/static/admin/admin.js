@@ -104,7 +104,7 @@ function renderThemeSidebar() {
     const themeItemsHtml = studio.themes.map(t => {
         const isActive = isThemeView && studio.activeTheme?.slug === t.slug;
         const isDraft = t.status === 'draft';
-        const isReserved = ['cny', 'hariraya', 'uits', 'ndp2026', 'master'].includes(t.slug?.toLowerCase());
+        const isReserved = t.slug?.toLowerCase() === 'master';
         return `<div class="theme-item ${isActive ? 'active' : ''} ${isDraft ? 'theme-item-draft' : ''}" data-slug="${t.slug}">
             <div class="theme-item-info">
                 <span class="theme-item-icon">${t.icon || '✨'}</span>
@@ -156,6 +156,11 @@ async function selectTheme(slug, force = false) {
         document.getElementById('current-theme-heading').textContent = studio.activeTheme.title;
         const sub = document.getElementById('current-theme-subheading');
         if (sub) sub.textContent = `/${studio.activeTheme.slug} · Editing identity, workflow, and wardrobe`;
+
+        const deleteBtn = document.querySelector('.btn-delete-theme');
+        if (deleteBtn) {
+            deleteBtn.style.display = studio.activeTheme?.slug === 'master' ? 'none' : '';
+        }
 
         switchToThemeEditor();
         switchAssetSubtab('clothes');
@@ -2312,7 +2317,7 @@ window.onDeleteThemePhraseInput = function () {
 };
 
 window.openDeleteActiveThemeModal = function () {
-    if (!studio.activeTheme?.slug) return;
+    if (!studio.activeTheme?.slug || studio.activeTheme.slug === 'master') return;
     window.openDeleteThemeModal(studio.activeTheme.slug, studio.activeTheme.title);
 };
 

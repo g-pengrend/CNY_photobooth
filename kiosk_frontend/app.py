@@ -97,7 +97,10 @@ def list_themes():
         for slug in os.listdir(themes_dir):
             if slug.startswith('.') or slug in RESERVED_SLUGS:
                 continue
-            theme_json_path = os.path.join(themes_dir, slug, 'theme.json')
+            theme_folder = os.path.join(themes_dir, slug)
+            if not os.path.isdir(theme_folder):
+                continue
+            theme_json_path = os.path.join(theme_folder, 'theme.json')
             if os.path.exists(theme_json_path):
                 try:
                     with open(theme_json_path, 'r', encoding='utf-8') as f:
@@ -106,6 +109,27 @@ def list_themes():
                         theme_list.append(data)
                 except Exception as e:
                     print(f"Error reading {theme_json_path}: {e}")
+            else:
+                # Auto-synthesize default theme.json so any theme directory on disk is visible, editable, and deletable in Studio
+                try:
+                    clean_title = slug.replace('_', ' ').replace('-', ' ').title()
+                    fallback_data = {
+                        "slug": slug,
+                        "title": clean_title,
+                        "icon": "✨",
+                        "status": "live",
+                        "badge": "Experience",
+                        "description": f"Celebrate with the {clean_title} experience.",
+                        "cta": "Start Experience",
+                        "features": { "luckyNumber": False, "filmStrip": False, "genderFilter": True },
+                        "style": { "colors": { "background": "#0a0a12", "text": "#ffffff", "accent": "#6366f1" } }
+                    }
+                    with open(theme_json_path, 'w', encoding='utf-8') as f:
+                        json.dump(fallback_data, f, indent=2)
+                    theme_list.append(fallback_data)
+                    print(f"✨ [Studio] Auto-created missing theme.json for: {slug}")
+                except Exception as e:
+                    print(f"Error creating fallback {theme_json_path}: {e}")
     return jsonify(theme_list)
 
 
