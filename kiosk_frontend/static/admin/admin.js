@@ -5061,6 +5061,15 @@ window.switchTutorialTab = function (guideKey) {
         'asset-creator': '/static/guides/asset-creator/index.html'
     };
 
+    // Pause any currently playing video before switching
+    const currentFrame = document.getElementById('tutorial-guide-frame');
+    if (currentFrame && currentFrame.contentWindow) {
+        try {
+            const currentVideo = currentFrame.contentWindow.document.querySelector('video');
+            if (currentVideo && !currentVideo.paused) currentVideo.pause();
+        } catch (e) {}
+    }
+
     const targetUrl = urls[guideKey] || urls['theme-builder'];
     const frame = document.getElementById('tutorial-guide-frame');
     if (frame && frame.getAttribute('data-loaded-src') !== targetUrl) {

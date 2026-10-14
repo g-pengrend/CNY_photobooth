@@ -101,6 +101,29 @@
   <!-- Main Container -->
   <main class="max-w-5xl mx-auto px-4 py-8 space-y-10">
 
+    <!-- VIDEO WALKTHROUGH SECTION -->
+    <section id="video-walkthrough" class="bg-gradient-to-r from-[#161D2F] via-[#141A2B] to-[#121826] border border-emerald-500/40 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-4 flex-wrap gap-2">
+        <div class="flex items-center gap-3">
+          <span class="px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
+            <span>🎥</span> Video Walkthrough
+          </span>
+          <h3 class="text-xl font-bold text-white tracking-tight">Asset Creator Step-by-Step Video Guide</h3>
+        </div>
+        <span class="text-xs text-emerald-400 font-semibold px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">▶ Playable In-Browser</span>
+      </div>
+
+      <div class="rounded-xl overflow-hidden border border-slate-700/80 shadow-2xl bg-black relative max-w-4xl mx-auto">
+        <video controls playsinline preload="metadata" class="w-full max-h-[500px] object-contain mx-auto" poster="images/step1_landing_page.png">
+          <source src="asset creator guide.mp4" type="video/mp4">
+          <source src="asset_creator_guide.mp4" type="video/mp4">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+      <p class="text-xs text-gray-400 text-center">Watch the complete video demonstration above to see AI backdrop, outfit, and pose generation saved directly to the Master Library.</p>
+    </section>
+
+
     <!-- Interactive Quick Roadmap -->
     <div class="bg-gradient-to-r from-[#161D2F] via-[#141A2B] to-[#121826] border border-[#1F293D] rounded-2xl p-6 relative overflow-hidden shadow-2xl">
       <div class="absolute -right-10 -bottom-10 w-52 h-52 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
