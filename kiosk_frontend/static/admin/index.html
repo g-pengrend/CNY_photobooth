@@ -25,11 +25,8 @@
         </div>
         <!-- Quick top-level navigation -->
         <div class="header-nav" style="display: flex; gap: 0.5rem; align-items: center; margin-left: 1rem;">
-            <button type="button" class="admin-btn admin-btn-secondary" onclick="switchToThemesCatalog()" style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; padding: 0.4rem 0.85rem; border-color: rgba(59, 130, 246, 0.4); background: rgba(59, 130, 246, 0.1); color: #60a5fa;" title="View all theme cards displayed on the front menu">
-                <span>🗂️</span> All Theme Cards
-            </button>
             <button type="button" class="admin-btn admin-btn-secondary" onclick="switchToThemeEditor()" style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; padding: 0.4rem 0.85rem;" title="Theme Editor">
-                <span>🎨</span> Editor
+                <span>🎨</span> Themes
             </button>
             <button type="button" class="admin-btn admin-btn-secondary" onclick="switchToMasterGallery()" style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.84rem; padding: 0.4rem 0.85rem;" title="Asset Viewer">
                 <span>📦</span> Asset Viewer
@@ -98,35 +95,6 @@
 
         <!-- Main Workspace -->
         <main class="studio-main">
-
-            <!-- ======================================================= -->
-            <!-- VIEW: Themes Catalog Grid (Visual Parity with Front Menu) -->
-            <!-- ======================================================= -->
-            <div id="view-themes-catalog" class="workspace-view" style="display:none; flex-direction:column; height: 100%; overflow: hidden;">
-                <div class="master-library-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding: 1.25rem 2rem; border-bottom: 1px solid var(--border-subtle); background: rgba(18, 20, 36, 0.6);">
-                    <div>
-                        <div style="display: flex; align-items: center; gap: 0.6rem;">
-                            <span style="font-size: 1.5rem;">🗂️</span>
-                            <h2 style="font-size:1.6rem;font-weight:700;letter-spacing:-0.01em; margin: 0;">Main Menu Theme Cards</h2>
-                            <span id="catalog-theme-count" style="font-size: 0.78rem; padding: 0.2rem 0.6rem; border-radius: 999px; background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.35); font-weight: 600;">8 Themes</span>
-                        </div>
-                        <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Every card displayed on the front menu is listed below. Edit, customize, or permanently delete any theme.</p>
-                    </div>
-                    <div style="display: flex; gap: 0.6rem; align-items: center;">
-                        <button type="button" class="admin-btn admin-btn-primary" onclick="createNewTheme()" style="display: flex; align-items: center; gap: 0.4rem;">
-                            ➕ Create New Theme
-                        </button>
-                        <a href="/" target="_blank" class="admin-btn admin-btn-secondary" style="text-decoration:none; display: flex; align-items: center; gap: 0.4rem;" title="Open Kiosk Main Menu">
-                            👁️ View Front Menu
-                        </a>
-                    </div>
-                </div>
-                <div style="padding: 1.5rem 2rem; overflow-y: auto; flex: 1;">
-                    <div id="theme-cards-catalog-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.4rem;">
-                        <!-- Dynamically populated by renderThemeCardsCatalog() -->
-                    </div>
-                </div>
-            </div>
 
             <!-- ======================================================= -->
             <!-- VIEW: Theme Editor                                        -->
