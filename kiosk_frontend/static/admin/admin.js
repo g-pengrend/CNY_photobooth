@@ -2218,21 +2218,69 @@ window.confirmDeleteAsset = async function () {
 };
 
 // ==========================================================================
-// Delete Theme Modal (with Phrase Confirmation & Success Popup)
+// Delete Theme Modal (with In-Depth Partial/Slug Confirmation & Safety Checks)
 // ==========================================================================
+window.isDeletePhraseValid = function (inputVal, slug, title) {
+    const rawVal = (inputVal || '').trim().toLowerCase();
+    if (!rawVal) return { valid: false, reason: 'empty' };
+
+    // Strip "delete" prefix if present
+    const isPrefixedWithDelete = rawVal.startsWith('delete');
+    const valWithoutDelete = rawVal.replace(/^delete\s*/, '').trim();
+
+    // Disallow typing just "delete", "del", or "delete " without theme identifier
+    if (rawVal === 'delete' || rawVal === 'del' || (isPrefixedWithDelete && !valWithoutDelete)) {
+        return { valid: false, reason: 'just_delete' };
+    }
+
+    const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const normVal = norm(rawVal);
+    const normValWithoutDelete = norm(valWithoutDelete);
+
+    const sLower = (slug || '').toLowerCase();
+    const sNorm = norm(slug);
+    const tLower = (title || '').toLowerCase();
+    const tNorm = norm(title);
+
+    // Clean title without emojis
+    const cleanTitle = (title || slug || '').replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+                                            .replace(/[^\w\s-]/g, '')
+                                            .trim().toLowerCase();
+    const cleanTitleNorm = norm(cleanTitle);
+
+    // 1. Exact full matches (with or without 'delete' prefix)
+    if (rawVal === sLower || normVal === sNorm ||
+        rawVal === tLower || normVal === tNorm ||
+        rawVal === cleanTitle || normVal === cleanTitleNorm ||
+        rawVal === `delete ${sLower}` || normVal === norm(`delete ${sLower}`) ||
+        rawVal === `delete ${tLower}` || normVal === norm(`delete ${tLower}`) ||
+        rawVal === `delete ${cleanTitle}` || normVal === norm(`delete ${cleanTitle}`)) {
+        return { valid: true, reason: 'exact_match' };
+    }
+
+    // 2. Meaningful partial matches (at least 3 non-generic characters)
+    const genericWords = new Set(['the', 'and', 'for', 'theme', '2024', '2025', '2026', '2027']);
+    const checkPart = normValWithoutDelete || normVal;
+
+    if (checkPart.length >= 3 && !genericWords.has(checkPart)) {
+        // Check if slug or title contains this partial token
+        if (sNorm.includes(checkPart) || tNorm.includes(checkPart) || cleanTitleNorm.includes(checkPart) ||
+            sLower.includes(valWithoutDelete) || tLower.includes(valWithoutDelete) || cleanTitle.includes(valWithoutDelete)) {
+            return { valid: true, reason: 'partial_match' };
+        }
+    }
+
+    return { valid: false, reason: 'no_match' };
+};
+
 window.openDeleteThemeModal = function (slug, title) {
     if (!slug) return;
     studio.pendingDeleteSlug = slug;
     studio.pendingDeleteTitle = title || slug;
 
-    // Build clean title and phrase similar to the title
     const rawTitle = title || slug;
-    const cleanTitle = rawTitle.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
-                               .replace(/[^\w\s-]/g, '')
-                               .trim() || slug;
-    const targetPhrase = `delete ${cleanTitle.toLowerCase()}`;
+    const targetPhrase = `delete ${slug}`;
 
-    studio.deleteCleanTitle = cleanTitle;
     studio.deleteTargetPhrase = targetPhrase;
 
     const nameEl = document.getElementById('delete-theme-name');
@@ -2242,18 +2290,20 @@ window.openDeleteThemeModal = function (slug, title) {
     if (slugEl) slugEl.textContent = slug;
 
     const phraseEl = document.getElementById('delete-theme-target-phrase');
-    if (phraseEl) phraseEl.textContent = `${targetPhrase} (or "delete")`;
+    if (phraseEl) phraseEl.textContent = targetPhrase;
 
     const input = document.getElementById('inp-delete-theme-confirm');
     if (input) {
         input.value = '';
-        input.placeholder = `Type "delete" or "${targetPhrase}" to confirm...`;
+        input.placeholder = `Type "${targetPhrase}" or "${slug}" to confirm...`;
         input.style.borderColor = 'rgba(239, 68, 68, 0.4)';
         input.style.boxShadow = 'none';
     }
 
     const hint = document.getElementById('delete-phrase-hint');
-    if (hint) hint.innerHTML = '<span style="color:var(--text-muted);">Tip: Type <strong>delete</strong> or the phrase to confirm</span>';
+    if (hint) {
+        hint.innerHTML = `<span style="color:var(--text-muted);">Tip: Type <strong>${targetPhrase}</strong>, theme slug, or theme name to confirm</span>`;
+    }
 
     const btn = document.getElementById('btn-confirm-delete-theme');
     if (btn) {
@@ -2277,33 +2327,20 @@ window.onDeleteThemePhraseInput = function () {
     const hint = document.getElementById('delete-phrase-hint');
     if (!input || !btn) return;
 
-    const val = input.value.trim().toLowerCase();
-    const target = (studio.deleteTargetPhrase || '').trim().toLowerCase();
-    const cleanTitle = (studio.deleteCleanTitle || '').trim().toLowerCase();
-    const rawTitle = (studio.pendingDeleteTitle || '').trim().toLowerCase();
-    const slug = (studio.pendingDeleteSlug || '').trim().toLowerCase();
+    const slug = studio.pendingDeleteSlug || '';
+    const title = studio.pendingDeleteTitle || slug;
+    const val = input.value;
 
-    const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const check = window.isDeletePhraseValid(val, slug, title);
 
-    const isMatch = Boolean(val) && (
-        val === 'delete' ||
-        val === target ||
-        norm(val) === norm(target) ||
-        val === slug ||
-        norm(val) === norm(slug) ||
-        val === cleanTitle ||
-        norm(val) === norm(cleanTitle) ||
-        norm(val) === norm(rawTitle)
-    );
-
-    if (isMatch) {
+    if (check.valid) {
         btn.disabled = false;
         btn.style.opacity = '1';
         btn.style.cursor = 'pointer';
         input.style.borderColor = '#10b981';
         input.style.boxShadow = '0 0 0 2px rgba(16, 185, 129, 0.25)';
         if (hint) {
-            hint.innerHTML = '<span style="color:#10b981;font-weight:600;">✓ Confirmed. You can now delete this theme.</span>';
+            hint.innerHTML = '<span style="color:#10b981;font-weight:600;">✓ Confirmed. Theme identified. You can now permanently delete.</span>';
         }
     } else {
         btn.disabled = true;
@@ -2312,7 +2349,13 @@ window.onDeleteThemePhraseInput = function () {
         input.style.borderColor = 'rgba(239, 68, 68, 0.4)';
         input.style.boxShadow = 'none';
         if (hint) {
-            hint.innerHTML = val ? '<span style="color:#f87171;">Type "delete", slug, or confirmation phrase.</span>' : '<span style="color:var(--text-muted);">Tip: Type <strong>delete</strong> or the phrase to confirm</span>';
+            if (check.reason === 'just_delete') {
+                hint.innerHTML = `<span style="color:#f59e0b;">⚠️ Please include the theme slug or name (e.g. <strong>delete ${slug}</strong>).</span>`;
+            } else if (val.trim()) {
+                hint.innerHTML = `<span style="color:#f87171;">Type <strong>delete ${slug}</strong>, the slug, or partial theme title to confirm.</span>`;
+            } else {
+                hint.innerHTML = `<span style="color:var(--text-muted);">Tip: Type <strong>delete ${slug}</strong>, theme slug, or theme name to confirm</span>`;
+            }
         }
     }
 };
@@ -2325,7 +2368,6 @@ window.openDeleteActiveThemeModal = function () {
 window.closeDeleteThemeModal = function () {
     studio.pendingDeleteSlug = null;
     studio.pendingDeleteTitle = null;
-    studio.deleteCleanTitle = null;
     studio.deleteTargetPhrase = null;
     const input = document.getElementById('inp-delete-theme-confirm');
     if (input) input.value = '';
@@ -2353,24 +2395,11 @@ window.confirmDeleteTheme = async function () {
     if (btn && btn.disabled) return;
 
     const input = document.getElementById('inp-delete-theme-confirm');
-    const val = (input?.value || '').trim().toLowerCase();
-    const target = (studio.deleteTargetPhrase || '').trim().toLowerCase();
-    const cleanTitle = (studio.deleteCleanTitle || '').trim().toLowerCase();
-    const rawTitle = (studio.pendingDeleteTitle || '').trim().toLowerCase();
-    const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const val = input?.value || '';
 
-    const isMatch = Boolean(val) && (
-        val === 'delete' ||
-        val === target ||
-        norm(val) === norm(target) ||
-        val === slug ||
-        norm(val) === norm(slug) ||
-        val === cleanTitle ||
-        norm(val) === norm(cleanTitle) ||
-        norm(val) === norm(rawTitle)
-    );
+    const check = window.isDeletePhraseValid(val, slug, deletedTitle);
 
-    if (!isMatch) {
+    if (!check.valid) {
         if (input) {
             input.focus();
             input.style.borderColor = '#ef4444';
@@ -2378,9 +2407,12 @@ window.confirmDeleteTheme = async function () {
         return;
     }
 
-    if (btn) { btn.textContent = '🗑️ Deleting...'; btn.disabled = true; }
-
     try {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.style.cursor = 'wait';
+        btn.textContent = '⏳ Deleting...';
+
         const isDraftOnly = (studio.themes || []).some(t => t.slug === slug && t.isUnsavedDraft);
         if (!isDraftOnly) {
             let res = await fetch(`/api/theme/${slug}`, { method: 'DELETE' });
@@ -2397,15 +2429,14 @@ window.confirmDeleteTheme = async function () {
                 let errMsg = `Delete failed with status ${res.status}`;
                 try {
                     const data = await res.json();
-                    errMsg = data.error || errMsg;
+                    errMsg = data.error || data.detail || errMsg;
                 } catch (je) {}
                 throw new Error(errMsg);
             }
         }
 
-        // 1. Immediately close the delete prompt modal
+        // Close the confirmation modal
         window.closeDeleteThemeModal();
-
         // 2. Open explicit success popup confirmation dialog
         const successDesc = document.getElementById('delete-success-desc');
         if (successDesc) {
