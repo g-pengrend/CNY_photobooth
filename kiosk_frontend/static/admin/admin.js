@@ -105,15 +105,16 @@ function renderThemeSidebar() {
         const isActive = isThemeView && studio.activeTheme?.slug === t.slug;
         const isDraft = t.status === 'draft';
         const isReserved = t.slug?.toLowerCase() === 'master';
-        return `<div class="theme-item ${isActive ? 'active' : ''} ${isDraft ? 'theme-item-draft' : ''}" data-slug="${t.slug}">
+        const safeTitle = (t.title || 'Untitled Theme').replace(/"/g, '&quot;');
+        return `<div class="theme-item ${isActive ? 'active' : ''} ${isDraft ? 'theme-item-draft' : ''}" data-slug="${t.slug}" title="${safeTitle} (/${t.slug})">
             <div class="theme-item-info">
                 <span class="theme-item-icon">${t.icon || '✨'}</span>
-                <div>
+                <div class="theme-item-text">
                     <div class="theme-item-title">${t.title}</div>
                     <div class="theme-item-slug">/${t.slug}</div>
                 </div>
             </div>
-            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.3rem;">
+            <div class="theme-item-actions">
                 <span class="${isDraft ? 'badge-draft' : 'badge-live'}">${t.status || 'live'}</span>
                 ${!isReserved ? `<button class="sidebar-delete-btn" title="Delete theme" onclick="openDeleteThemeModal('${t.slug}','${(t.title||'').replace(/'/g,"\'")}'); event.stopPropagation();">🗑️</button>` : ''}
             </div>
