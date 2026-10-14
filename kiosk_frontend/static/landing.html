@@ -108,33 +108,6 @@
                     </div>
                 </a>
 
-                <!-- Deepavali Theme Card -->
-                <a href="/deepavali" class="theme-card" id="deepavali-card">
-                    <div class="card-image-wrap">
-                        <img src="/static/landing/deepavali_card_bg.png" alt="Deepavali Experience" class="card-bg">
-                        <div class="card-overlay"></div>
-                    </div>
-                    <div class="card-inner">
-                        <div class="card-top-row">
-                            <div class="card-badge coming-soon">Festival of Lights</div>
-                            <div class="card-icon">🪔</div>
-                        </div>
-                        <div class="card-bottom-content">
-                            <h2 class="card-title">Deepavali</h2>
-                            <p class="card-description">Illuminate your presence with vibrant traditional wear and the radiant glow of oil lamps.</p>
-                            <div class="card-tags">
-                                <span class="tag">Coming Soon</span>
-                            </div>
-                            <div class="card-cta">
-                                <span>Sneak Peek</span>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <path d="M5 12h14M12 5l7 7-7 7" />
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
                 <!-- UITS Theme Card -->
                 <a href="/uits" class="theme-card" id="uits-card" style="border: 1px solid #D4AF37;">
                     <div class="card-image-wrap" style="background-color: #111;">
@@ -290,7 +263,7 @@
                     const grid = document.getElementById('theme-grid');
                     if (!grid) return;
 
-                    const builtInSlugs = ['cny', 'hariraya', 'deepavali', 'uits', 'ndp2026', 'master'];
+                    const builtInSlugs = ['cny', 'hariraya', 'uits', 'ndp2026', 'master'];
                     const customThemes = themes.filter(t => t.slug && t.status !== 'draft' && !builtInSlugs.includes(t.slug.toLowerCase()) && !document.getElementById(`${t.slug}-card`));
 
                     customThemes.forEach(t => {

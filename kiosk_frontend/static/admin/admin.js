@@ -104,7 +104,7 @@ function renderThemeSidebar() {
     const themeItemsHtml = studio.themes.map(t => {
         const isActive = isThemeView && studio.activeTheme?.slug === t.slug;
         const isDraft = t.status === 'draft';
-        const isReserved = ['cny', 'hariraya', 'deepavali', 'uits', 'ndp2026', 'master'].includes(t.slug?.toLowerCase());
+        const isReserved = ['cny', 'hariraya', 'uits', 'ndp2026', 'master'].includes(t.slug?.toLowerCase());
         return `<div class="theme-item ${isActive ? 'active' : ''} ${isDraft ? 'theme-item-draft' : ''}" data-slug="${t.slug}">
             <div class="theme-item-info">
                 <span class="theme-item-icon">${t.icon || '✨'}</span>
