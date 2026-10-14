@@ -1,0 +1,41 @@
+{
+  "backgrounds": [
+    {
+      "id": "jewel-rain-vortex",
+      "code": "B27",
+      "title": "Jewel HSBC Rain Vortex",
+      "description": "Dramatic indoor waterfall and lush tropical forest at Jewel Changi",
+      "image": "/static/themes/master/images/backgrounds/jewel-rain-vortex.png",
+      "prompt": "A cinematic, low-angle view looking up at the HSBC Rain Vortex, the world’s tallest indoor waterfall, cascades dramatically from a vaulted glass-and-steel ceiling. Surrounding the waterfall, the lush, multi-tiered indoor forest of the Shiseido Forest Valley creates a grand, tropical backdrop, with soft mist and hidden accent lights reflecting shimmering colors across the dense canopy.",
+      "prompt_modifier": "A cinematic, low-angle view looking up at the HSBC Rain Vortex, the world’s tallest indoor waterfall, cascades dramatically from a vaulted glass-and-steel ceiling. Surrounding the waterfall, the lush, multi-tiered indoor forest of the Shiseido Forest Valley creates a grand, tropical backdrop, with soft mist and hidden accent lights reflecting shimmering colors across the dense canopy.",
+      "category": "unisex",
+      "lighting": "Cinematic ambient studio lighting"
+    }
+  ],
+  "clothes": [
+    {
+      "id": "golden-prosperity-tangzhuang",
+      "code": "C02",
+      "title": "Golden Prosperity Tangzhuang",
+      "description": "A bold, contemporary jacket blending rich gold brocade with traditional scarlet accents",
+      "image": "/static/themes/master/images/clothes/golden-prosperity-tangzhuang.png",
+      "prompt": "A structured Tangzhuang jacket in metallic gold floral brocade, featuring a high mandarin collar and scarlet silk frog button closures. The sleeves are finished with folded red silk cuffs to echo airy manliness.",
+      "prompt_modifier": "A structured Tangzhuang jacket in metallic gold floral brocade, featuring a high mandarin collar and scarlet silk frog button closures. The sleeves are finished with folded red silk cuffs to echo airy manliness.",
+      "category": "male",
+      "lighting": "Golden and Scarlet"
+    }
+  ],
+  "poses": [
+    {
+      "id": "charismatic-pointing",
+      "code": "P09",
+      "title": "Charismatic Pointing",
+      "description": "Forward-pointing with captivating smile",
+      "image": "/static/themes/master/images/poses/charismatic-pointing.png",
+      "prompt": "Facing the camera with a captivating smile, one arm extended forward with the index finger pointing directly at the viewer,",
+      "prompt_modifier": "Facing the camera with a captivating smile, one arm extended forward with the index finger pointing directly at the viewer,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    }
+  ]
+}

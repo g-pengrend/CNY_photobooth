@@ -1,0 +1,8 @@
+{
+  "confidence": "benchmark_default",
+  "face_swap_node": "57",
+  "input_image_node": "65",
+  "output_node": "60",
+  "prompt_node": "45",
+  "sampler_node": "44"
+}
