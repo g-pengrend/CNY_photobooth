@@ -269,20 +269,6 @@
     },
     {
       "category": "female",
-      "code": "C42",
-      "description": "Merges structured modern tailoring with traditional draping, featuring a flowing one-shoulder cape paired with pleated dhoti pants.",
-      "gender": "female",
-      "id": "solar-eclipse-sculptural-cape-pleated-dhoti-set",
-      "image": "/static/themes/master/images/clothes/solar-eclipse-sculptural-cape-pleated-dhoti-set.png",
-      "lighting": "Cinematic ambient studio lighting",
-      "mapping_desc": "Merges structured modern tailoring with traditional draping, featuring a flowing one-shoulder cape paired with pleated dhoti pants.",
-      "name": "Solar Eclipse: Sculptural Cape & Pleated Dhoti Set",
-      "prompt": "Prompt: A dynamic, avant-garde festive Indo-western outfit in molten copper and rich jet black. The top piece is an architectural, structured asymmetric high-neck bodice with full-length fitted sleeves, connected to a long, sweeping floor-length cape that billows from one shoulder. The cape is crafted from micro-pleated metallic tissue silk that catches the light in liquid gold and copper tones. Paired with sharply draped, tulip-style black silk dhoti trousers featuring crisp, cowl-like origami folds down to the tapered ankles. Intricate geometric wirework embroidery lines the cape’s collar and outer perimeter, contrasting sharp tailoring against sweeping, fluid drapes.",
-      "prompt_modifier": "Prompt: A dynamic, avant-garde festive Indo-western outfit in molten copper and rich jet black. The top piece is an architectural, structured asymmetric high-neck bodice with full-length fitted sleeves, connected to a long, sweeping floor-length cape that billows from one shoulder. The cape is crafted from micro-pleated metallic tissue silk that catches the light in liquid gold and copper tones. Paired with sharply draped, tulip-style black silk dhoti trousers featuring crisp, cowl-like origami folds down to the tapered ankles. Intricate geometric wirework embroidery lines the cape’s collar and outer perimeter, contrasting sharp tailoring against sweeping, fluid drapes.",
-      "title": "Solar Eclipse: Sculptural Cape & Pleated Dhoti Set"
-    },
-    {
-      "category": "female",
       "code": "C41",
       "description": "Highlights heritage South Indian craftsmanship through pure mulberry silk, pairing elaborate temple-border weaving with a structured, long-sleeved silhouette.",
       "gender": "female",
@@ -367,20 +353,6 @@
     },
     {
       "category": "female",
-      "code": "C55",
-      "description": "A lively festival silhouette defined by an exaggerated peplum waist paired with dramatically flared, multi-tiered gharara pants.",
-      "gender": "female",
-      "id": "flared-peplum-pleated-gharara",
-      "image": "/static/themes/master/images/clothes/flared-peplum-pleated-gharara.png",
-      "lighting": "Cinematic ambient studio lighting",
-      "mapping_desc": "A lively festival silhouette defined by an exaggerated peplum waist paired with dramatically flared, multi-tiered gharara pants.",
-      "name": "Flared Peplum & Pleated Gharara",
-      "prompt": "A dynamic three-piece festive set in rich forest emerald and antique bronze. The top is a tailored, high-neck peplum kurti made of stiff raw silk, featuring a modest band collar, long straight sleeves, and an exaggerated flared peplum waist that swoops cleanly around the hips. Below, dramatic tiered gharara pants are fitted to the knees before bursting into voluminous, multi-layered crushed tissue silk flares that brush the floor. Draped cleanly over both shoulders is an opaque, matching silk scarf held flat across the upper chest with fine bronze foil borders.",
-      "prompt_modifier": "A dynamic three-piece festive set in rich forest emerald and antique bronze. The top is a tailored, high-neck peplum kurti made of stiff raw silk, featuring a modest band collar, long straight sleeves, and an exaggerated flared peplum waist that swoops cleanly around the hips. Below, dramatic tiered gharara pants are fitted to the knees before bursting into voluminous, multi-layered crushed tissue silk flares that brush the floor. Draped cleanly over both shoulders is an opaque, matching silk scarf held flat across the upper chest with fine bronze foil borders.",
-      "title": "Flared Peplum & Pleated Gharara"
-    },
-    {
-      "category": "female",
       "code": "C54",
       "description": "Reimagines the traditional angrakha wrap into a structured floor-length gown featuring a dramatic waterfall drape at the side.",
       "gender": "female",
@@ -419,19 +391,6 @@
       "prompt": "Looking at the camera with hands brought together at chest level, palms touching lightly (like a prayer gesture but softer), with a warm, humble smile and a slight tilt of the head,",
       "prompt_modifier": "Looking at the camera with hands brought together at chest level, palms touching lightly (like a prayer gesture but softer), with a warm, humble smile and a slight tilt of the head,",
       "title": "Humble Salam Greeting"
-    },
-    {
-      "category": "unisex",
-      "code": "P21",
-      "description": "An iconic hero victory stance standing tall with a single fist thrust high toward the sky and feet planted firmly apart.",
-      "id": "skyward-fist-of-triumph",
-      "image": "/static/themes/master/images/poses/skyward-fist-of-triumph.png",
-      "lighting": "Cinematic ambient studio lighting",
-      "mapping_desc": "An iconic hero victory stance standing tall with a single fist thrust high toward the sky and feet planted firmly apart.",
-      "name": "Skyward Fist of Triumph",
-      "prompt": "Prompt: Facing the camera with one arm raised straight up into the air with a tightly clenched fist held high, while the other arm hangs straight down at the side with a loose, relaxed hand. Feet are planted firmly shoulder-width apart in a solid, unmoving stance, chest pushed out proudly, chin raised high with eyes looking forward in quiet, exhausted triumph.",
-      "prompt_modifier": "Prompt: Facing the camera with one arm raised straight up into the air with a tightly clenched fist held high, while the other arm hangs straight down at the side with a loose, relaxed hand. Feet are planted firmly shoulder-width apart in a solid, unmoving stance, chest pushed out proudly, chin raised high with eyes looking forward in quiet, exhausted triumph.",
-      "title": "Skyward Fist of Triumph"
     },
     {
       "category": "unisex",
@@ -500,71 +459,6 @@
     },
     {
       "category": "unisex",
-      "code": "P23",
-      "description": "An encouraging pose giving a two-handed thumbs-up gesture at chest level.",
-      "id": "double-approval",
-      "image": "/static/themes/master/images/poses/double-approval.png",
-      "lighting": "Cinematic ambient studio lighting",
-      "mapping_desc": "An encouraging pose giving a two-handed thumbs-up gesture at chest level.",
-      "name": "Double Approval",
-      "prompt": "Prompt: Facing the camera with both fists held forward at chest height, sticking both thumbs straight up. Standing centered and upright with shoulders level, a broad open smile, and wide cheerful eyes.",
-      "prompt_modifier": "Prompt: Facing the camera with both fists held forward at chest height, sticking both thumbs straight up. Standing centered and upright with shoulders level, a broad open smile, and wide cheerful eyes.",
-      "title": "Double Approval"
-    },
-    {
-      "category": "unisex",
-      "code": "P22",
-      "description": "Facing the camera with both hands brought together flat against the chest",
-      "id": "joyful-clasp",
-      "image": "/static/themes/master/images/poses/joyful-clasp.png",
-      "lighting": "Cinematic ambient studio lighting",
-      "mapping_desc": "Facing the camera with both hands brought together flat against the chest",
-      "name": "Joyful Clasp",
-      "prompt": "Facing the camera with both hands brought together flat against the chest in a neat, happy clap, elbows tucked close to the torso. Head held straight with an open-mouthed, beaming smile and bright, rounded eyes.",
-      "prompt_modifier": "Facing the camera with both hands brought together flat against the chest in a neat, happy clap, elbows tucked close to the torso. Head held straight with an open-mouthed, beaming smile and bright, rounded eyes.",
-      "title": "Joyful Clasp"
-    },
-    {
-      "category": "unisex",
-      "code": "P32",
-      "description": "An eager, motivated pose holding both fists up by the chest in excitement.",
-      "id": "ready-to-go",
-      "image": "/static/themes/master/images/poses/ready-to-go.png",
-      "lighting": "Cinematic ambient studio lighting",
-      "mapping_desc": "An eager, motivated pose holding both fists up by the chest in excitement.",
-      "name": "Ready to Go",
-      "prompt": "Facing the camera with both hands balled into small fists held up near the collarbones, elbows tucked against the ribs. Standing firmly with feet slightly apart, head held high with a spirited, enthusiastic open grin.",
-      "prompt_modifier": "Facing the camera with both hands balled into small fists held up near the collarbones, elbows tucked against the ribs. Standing firmly with feet slightly apart, head held high with a spirited, enthusiastic open grin.",
-      "title": "Ready to Go"
-    },
-    {
-      "category": "unisex",
-      "code": "P31",
-      "description": "A refreshing standing pose with both arms reaching straight up into the air.",
-      "id": "sunny-stretch",
-      "image": "/static/themes/master/images/poses/sunny-stretch.png",
-      "lighting": "Cinematic ambient studio lighting",
-      "mapping_desc": "A refreshing standing pose with both arms reaching straight up into the air.",
-      "name": "Sunny Stretch",
-      "prompt": "Facing the camera with both arms stretched straight up toward the ceiling, fingers spread wide open. Standing tall on the toes, head tilted slightly back with eyes closed and a contented, happy yawn-like smile.",
-      "prompt_modifier": "Facing the camera with both arms stretched straight up toward the ceiling, fingers spread wide open. Standing tall on the toes, head tilted slightly back with eyes closed and a contented, happy yawn-like smile.",
-      "title": "Sunny Stretch"
-    },
-    {
-      "category": "unisex",
-      "code": "P30",
-      "description": "An amused pose with both hands cupped over the mouth in a bashful giggle.",
-      "id": "giggling-whisper",
-      "image": "/static/themes/master/images/poses/giggling-whisper.png",
-      "lighting": "Cinematic ambient studio lighting",
-      "mapping_desc": "An amused pose with both hands cupped over the mouth in a bashful giggle.",
-      "name": "Giggling Whisper",
-      "prompt": "Facing the camera with both small hands raised to lightly cover the mouth, elbows pointing downward close to the body. Eyes crinkled into happy crescent shapes, showing an amused, suppressed giggle.",
-      "prompt_modifier": "Facing the camera with both small hands raised to lightly cover the mouth, elbows pointing downward close to the body. Eyes crinkled into happy crescent shapes, showing an amused, suppressed giggle.",
-      "title": "Giggling Whisper"
-    },
-    {
-      "category": "unisex",
       "code": "P29",
       "description": "A playful, slightly stubborn pose with arms crossed over the chest and puffed cheeks.",
       "id": "sassy-pout",
@@ -575,19 +469,6 @@
       "prompt": "Facing the camera with both arms crossed tightly across the chest, shoulders drawn slightly back. Head turned just a fraction away from center while glancing back at the viewer with puffed-up cheeks and a playful, tiny pout.",
       "prompt_modifier": "Facing the camera with both arms crossed tightly across the chest, shoulders drawn slightly back. Head turned just a fraction away from center while glancing back at the viewer with puffed-up cheeks and a playful, tiny pout.",
       "title": "Sassy Pout"
-    },
-    {
-      "category": "unisex",
-      "code": "P28",
-      "description": "A slightly perplexed standing pose scratching the head with a tilted expression.",
-      "id": "confused-scratch",
-      "image": "/static/themes/master/images/poses/confused-scratch.png",
-      "lighting": "Cinematic ambient studio lighting",
-      "mapping_desc": "A slightly perplexed standing pose scratching the head with a tilted expression.",
-      "name": "Confused Scratch",
-      "prompt": "Facing the camera with one hand raised to scratch the top of the head, the other arm hanging relaxed at the side. Head tilted slightly to the side with one eyebrow raised, looking forward with a quizzical, slightly sheepish smile.",
-      "prompt_modifier": "Facing the camera with one hand raised to scratch the top of the head, the other arm hanging relaxed at the side. Head tilted slightly to the side with one eyebrow raised, looking forward with a quizzical, slightly sheepish smile.",
-      "title": "Confused Scratch"
     }
   ]
 }
