@@ -184,6 +184,32 @@
         </div>
     </div>
 
+    <!-- Theme Studio Access Modal -->
+    <div id="theme-studio-modal-backdrop" class="studio-auth-backdrop"></div>
+    <div id="theme-studio-auth-modal" class="studio-auth-modal">
+        <button type="button" class="studio-modal-close" id="close-studio-auth-btn" title="Close">&times;</button>
+        <div class="studio-modal-icon">🎨</div>
+        <h3>Theme Studio Access</h3>
+        <p>Enter the administrator password to customize themes, workflows, and GenAI assets.</p>
+        
+        <div class="studio-input-box">
+            <span class="studio-lock-icon">🔒</span>
+            <input type="password" id="studio-password-input" placeholder="Enter admin password" autocomplete="current-password">
+            <button type="button" id="toggle-studio-pwd-visibility" class="studio-eye-btn" title="Toggle password visibility">👁️</button>
+        </div>
+        
+        <div id="studio-auth-error" class="studio-auth-error"></div>
+
+        <div class="modal-actions" style="margin-top: 1.25rem;">
+            <button type="button" id="cancel-studio-auth-btn" class="modal-btn modal-btn-secondary">Cancel</button>
+            <button type="button" id="submit-studio-auth-btn" class="modal-btn modal-btn-primary">Unlock Studio</button>
+        </div>
+        
+        <div class="studio-auth-hint">
+            💡 Password is saved in <code>kiosk_frontend/config.py</code> (edit anytime).
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const settingsBtn = document.getElementById('settings-trigger-btn');
@@ -191,6 +217,121 @@
             const saveNetworkBtn = document.getElementById('save-network-btn');
             const cancelNetworkBtn = document.getElementById('cancel-network-btn');
             const linuxUrlInput = document.getElementById('linux-url-input');
+
+            // Theme Studio Password Protection
+            const themeStudioBtn = document.getElementById('theme-studio-btn');
+            const studioAuthModal = document.getElementById('theme-studio-auth-modal');
+            const studioAuthBackdrop = document.getElementById('theme-studio-modal-backdrop');
+            const studioPwdInput = document.getElementById('studio-password-input');
+            const submitStudioAuthBtn = document.getElementById('submit-studio-auth-btn');
+            const cancelStudioAuthBtn = document.getElementById('cancel-studio-auth-btn');
+            const closeStudioAuthBtn = document.getElementById('close-studio-auth-btn');
+            const toggleStudioPwdBtn = document.getElementById('toggle-studio-pwd-visibility');
+            const studioAuthError = document.getElementById('studio-auth-error');
+
+            function closeStudioAuthModal() {
+                studioAuthModal.style.display = 'none';
+                studioAuthBackdrop.style.display = 'none';
+                studioPwdInput.value = '';
+                studioAuthError.style.display = 'none';
+            }
+
+            if (themeStudioBtn) {
+                themeStudioBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    // First check if already authenticated in this session
+                    try {
+                        const res = await fetch('/api/admin/auth-status');
+                        const data = await res.json();
+                        if (data.authenticated) {
+                            window.location.href = '/admin';
+                            return;
+                        }
+                    } catch (err) {
+                        console.warn('Auth status check fallback:', err);
+                    }
+
+                    // Show password prompt modal
+                    studioAuthModal.style.display = 'block';
+                    studioAuthBackdrop.style.display = 'block';
+                    studioPwdInput.value = '';
+                    studioAuthError.style.display = 'none';
+                    studioPwdInput.focus();
+                });
+            }
+
+            if (cancelStudioAuthBtn) cancelStudioAuthBtn.addEventListener('click', closeStudioAuthModal);
+            if (closeStudioAuthBtn) closeStudioAuthBtn.addEventListener('click', closeStudioAuthModal);
+            if (studioAuthBackdrop) studioAuthBackdrop.addEventListener('click', closeStudioAuthModal);
+
+            if (toggleStudioPwdBtn) {
+                toggleStudioPwdBtn.addEventListener('click', () => {
+                    if (studioPwdInput.type === 'password') {
+                        studioPwdInput.type = 'text';
+                        toggleStudioPwdBtn.textContent = '🙈';
+                    } else {
+                        studioPwdInput.type = 'password';
+                        toggleStudioPwdBtn.textContent = '👁️';
+                    }
+                });
+            }
+
+            async function performStudioLogin() {
+                const password = studioPwdInput.value.trim();
+                if (!password) {
+                    studioAuthError.textContent = 'Please enter the admin password.';
+                    studioAuthError.style.display = 'block';
+                    studioPwdInput.focus();
+                    return;
+                }
+
+                submitStudioAuthBtn.disabled = true;
+                const origText = submitStudioAuthBtn.textContent;
+                submitStudioAuthBtn.textContent = 'Verifying...';
+
+                try {
+                    const res = await fetch('/api/admin/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ password })
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        submitStudioAuthBtn.style.background = '#10b981';
+                        submitStudioAuthBtn.textContent = 'Unlocked! Entering...';
+                        setTimeout(() => {
+                            window.location.href = data.redirect || '/admin';
+                        }, 300);
+                    } else {
+                        studioAuthError.textContent = data.error || 'Incorrect password. Check config.py.';
+                        studioAuthError.style.display = 'block';
+                        studioAuthModal.classList.remove('shake-error');
+                        void studioAuthModal.offsetWidth;
+                        studioAuthModal.classList.add('shake-error');
+                        submitStudioAuthBtn.disabled = false;
+                        submitStudioAuthBtn.textContent = origText;
+                        studioPwdInput.focus();
+                        studioPwdInput.select();
+                    }
+                } catch (err) {
+                    studioAuthError.textContent = 'Connection error. Please try again.';
+                    studioAuthError.style.display = 'block';
+                    submitStudioAuthBtn.disabled = false;
+                    submitStudioAuthBtn.textContent = origText;
+                }
+            }
+
+            if (submitStudioAuthBtn) submitStudioAuthBtn.addEventListener('click', performStudioLogin);
+            if (studioPwdInput) {
+                studioPwdInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        performStudioLogin();
+                    } else if (e.key === 'Escape') {
+                        closeStudioAuthModal();
+                    }
+                });
+            }
 
             // Open Modal
             settingsBtn.addEventListener('click', async () => {

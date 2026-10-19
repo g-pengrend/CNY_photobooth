@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, send_from_directory
+from flask import Flask, request, jsonify, send_file, send_from_directory, session, redirect
 from flask_cors import CORS
 import os
 import sys
@@ -6,7 +6,7 @@ import platform
 import subprocess
 import uuid
 import threading
-from datetime import datetime
+from datetime import datetime, timedelta
 import base64
 import json
 
@@ -22,11 +22,15 @@ app = Flask(__name__,
             template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static'))
 CORS(app)
 
+# Flask Session Configuration for Theme Studio password protection
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "cny-photobooth-theme-studio-auth-key-2026")
+app.permanent_session_lifetime = timedelta(days=7)
+
 # Store job status in memory (for production, use Redis or database)
 jobs = {}
 
 # Configuration & Network
-from config import LINUX_RECEIVER_URL, print_config
+from config import LINUX_RECEIVER_URL, print_config, THEME_STUDIO_PASSWORD
 CURRENT_LINUX_URL = LINUX_RECEIVER_URL
 
 UPLOAD_FOLDER = 'uploads'
@@ -728,13 +732,87 @@ def manage_linux_url():
             print(f"Update Linux Receiver URL to: {CURRENT_LINUX_URL}")
             return jsonify({'status': 'updated', 'url': CURRENT_LINUX_URL})
 # ============================================================
+# THEME STUDIO ADMIN ACCESS & AUTH
+# ============================================================
+@app.route('/api/admin/auth-status', methods=['GET'])
+def admin_auth_status():
+    """Check if the current session has authenticated access to Theme Studio."""
+    return jsonify({
+        'authenticated': bool(session.get('admin_authenticated')),
+        'configured_file': 'kiosk_frontend/config.py'
+    })
+
+
+@app.route('/api/admin/login', methods=['POST'])
+def api_admin_login():
+    """Verify admin password and create authenticated session."""
+    data = request.json or {}
+    password = data.get('password', '')
+    if password == THEME_STUDIO_PASSWORD:
+        session['admin_authenticated'] = True
+        session.permanent = True
+        return jsonify({'success': True, 'redirect': '/admin'})
+    return jsonify({
+        'success': False,
+        'error': 'Incorrect password. Check or change THEME_STUDIO_PASSWORD in kiosk_frontend/config.py'
+    }), 401
+
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    """Serve the Theme Studio login page or handle direct form submission."""
+    if session.get('admin_authenticated'):
+        return redirect('/admin')
+
+    if request.method == 'POST':
+        password = request.form.get('password', '')
+        if password == THEME_STUDIO_PASSWORD:
+            session['admin_authenticated'] = True
+            session.permanent = True
+            return redirect('/admin')
+        return redirect('/admin/login?error=1')
+
+    admin_dir = os.path.join(app.static_folder, 'admin')
+    return send_from_directory(admin_dir, 'login.html')
+
+
+@app.route('/admin/logout')
+@app.route('/api/admin/logout', methods=['GET', 'POST'])
+def admin_logout():
+    """Lock Theme Studio by clearing the admin session."""
+    session.pop('admin_authenticated', None)
+    if request.path.startswith('/api/'):
+        return jsonify({'success': True, 'message': 'Logged out successfully'})
+    return redirect('/')
+
+
+@app.before_request
+def protect_admin_api_routes():
+    """Ensure all /api/admin/* mutation & inspection endpoints require authentication."""
+    public_admin_routes = {
+        '/api/admin/auth-status',
+        '/api/admin/login',
+        '/api/admin/logout'
+    }
+    if request.path.startswith('/api/admin/'):
+        if request.path not in public_admin_routes:
+            if not session.get('admin_authenticated'):
+                return jsonify({
+                    'error': 'Unauthorized: Admin password required to access Theme Studio.',
+                    'auth_required': True
+                }), 401
+
+
+# ============================================================
 # THEME STUDIO ADMIN ROUTES
 # ============================================================
 from workflow_inspector import inspect_kiosk_workflow, inspect_video_workflow
 
 @app.route('/admin')
 def admin_panel():
-    """Serve the Theme Studio Admin SPA."""
+    """Serve the Theme Studio Admin SPA if authenticated; otherwise redirect to login."""
+    if not session.get('admin_authenticated'):
+        return redirect('/admin/login')
     admin_dir = os.path.join(app.static_folder, 'admin')
     return send_from_directory(admin_dir, 'index.html')
 

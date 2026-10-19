@@ -43,6 +43,17 @@ RECEIVER_HOST = "".join(raw_host.split()).strip()
 
 
 # ============================================================
+# THEME STUDIO ADMIN ACCESS & SECURITY
+# ============================================================
+# Password required to enter Theme Studio (/admin).
+# If the admin forgets or wants to change the password, simply
+# edit the value below. This file is tracked in source control,
+# making it easy to recover, change, push, and pull on GitHub.
+# (Can also be overridden by setting the THEME_STUDIO_PASSWORD environment variable)
+THEME_STUDIO_PASSWORD = os.environ.get("THEME_STUDIO_PASSWORD", "admin")
+
+
+# ============================================================
 # DEPLOYMENT PROFILES
 # ============================================================
 PROFILES = {

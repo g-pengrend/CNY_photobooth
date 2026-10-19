@@ -44,6 +44,17 @@ RECEIVER_HOST = "".join(raw_host.split()).strip()
 
 
 # ============================================================
+# THEME STUDIO ADMIN ACCESS & SECURITY
+# ============================================================
+# Password required to enter Theme Studio (/admin).
+# If the admin forgets or wants to change the password, simply
+# edit the value below. This file is tracked in source control,
+# making it easy to recover, change, push, and pull on GitHub.
+# (Can also be overridden by setting the THEME_STUDIO_PASSWORD environment variable)
+THEME_STUDIO_PASSWORD = os.environ.get("THEME_STUDIO_PASSWORD", "admin")
+
+
+# ============================================================
 # DEPLOYMENT PROFILES
 # ============================================================
 PROFILES = {
@@ -109,6 +120,7 @@ def print_config():
     print(f"     Receiver URL:     {LINUX_RECEIVER_URL}")
     print(f"     ComfyUI Output:   {COMFY_OUTPUT_DIR}")
     print(f"     ComfyUI Server:   {COMFY_SERVER_ADDRESS}")
+    print(f"     Studio Password:  '{THEME_STUDIO_PASSWORD}' (kiosk_frontend/config.py)")
     if DEPLOY_MODE == "remote":
         print(f"  --------------------------------------------------")
         print(f"  NOTE: Connected to remote Tailscale/Host: '{RECEIVER_HOST}'")
