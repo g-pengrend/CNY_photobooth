@@ -560,9 +560,43 @@ def download_image(job_id):
 
 
 
+# ============================================================
+# PRINT QUEUE FOR EDGE PRINT AGENTS (Direct Domain Mode)
+# ============================================================
+pending_print_jobs = {}
+
+
+def add_to_print_queue(job_id, image_url):
+    pending_print_jobs[job_id] = {
+        'job_id': job_id,
+        'image_url': image_url,
+        'timestamp': time.time()
+    }
+    print(f"🖨️ [PrintQueue] Job {job_id} added to edge print queue (Pending: {len(pending_print_jobs)})")
+
+
+@app.route('/api/print-queue/pending', methods=['GET'])
+def get_pending_print_jobs():
+    """Retrieve all pending print jobs for connected edge print agents."""
+    return jsonify({
+        'jobs': list(pending_print_jobs.values()),
+        'count': len(pending_print_jobs)
+    })
+
+
+@app.route('/api/print-queue/ack/<job_id>', methods=['POST', 'GET'])
+def ack_print_job(job_id):
+    """Acknowledge that an edge print agent has printed the job."""
+    if job_id in pending_print_jobs:
+        del pending_print_jobs[job_id]
+        print(f"✅ [PrintQueue] Job {job_id} acknowledged and removed from queue. Remaining: {len(pending_print_jobs)}")
+        return jsonify({'status': 'success', 'message': f'Job {job_id} acknowledged'})
+    return jsonify({'status': 'not_found', 'message': f'Job {job_id} not in pending queue'}), 404
+
+
 @app.route('/api/print/<job_id>', methods=['GET'])
 def print_image(job_id):
-    """Trigger print dialog on the server for the processed image"""
+    """Trigger print dialog locally or queue for remote edge print agents"""
     if job_id not in jobs:
         return jsonify({'error': 'Job not found'}), 404
     
@@ -576,29 +610,37 @@ def print_image(job_id):
     
     abs_path = os.path.abspath(output_file)
 
+    # 1. Enqueue job for any edge print agents (Direct Domain / Remote Laptop mode)
+    image_rel_url = f"/outputs/{os.path.basename(output_file)}"
+    add_to_print_queue(job_id, image_rel_url)
+
+    # 2. Also attempt direct local OS print if running on an edge device with a printer
     def run_print_job(path):
         try:
             current_os = platform.system()
-            print(f"Printing file [{current_os}]: {path}")
-            
             if current_os == "Windows":
+                print(f"🖨️ [Local Print] Dispatching to Windows spooler: {path}")
                 os.startfile(path, "print")
-            else:
-                # Linux fallback
-                cmd = ['lp', path]
-                result = subprocess.run(cmd, capture_output=True, text=True)
-                if result.returncode != 0:
-                    print(f"lp failed: {result.stderr}, trying lpr...")
-                    subprocess.run(['lpr', path], capture_output=True, text=True)
+            elif current_os in ["Linux", "Darwin"]:
+                # Only attempt lp/lpr if lp command exists on this machine
+                import shutil
+                if shutil.which('lp'):
+                    cmd = ['lp', '-o', 'fit-to-page', path]
+                    subprocess.run(cmd, capture_output=True, text=True)
         except Exception as e:
-            print(f"Print error: {e}")
+            # Non-fatal if server is purely remote/headless DGX
+            print(f"Notice: Local print dispatch skipped or failed (expected on headless DGX): {e}")
 
-    # Run in background thread to avoid blocking response
     thread = threading.Thread(target=run_print_job, args=(abs_path,))
     thread.daemon = True
     thread.start()
     
-    return jsonify({'status': 'sent_to_printer', 'message': 'Print job initiated'}), 200
+    return jsonify({
+        'status': 'sent_to_printer',
+        'message': 'Print job queued and initiated',
+        'job_id': job_id,
+        'image_url': image_rel_url
+    }), 200
 
 
 @app.route('/api/transfer/<job_id>', methods=['POST'])

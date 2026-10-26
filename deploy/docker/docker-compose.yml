@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  photobooth-dgx:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.dgx
+    image: seit-photobooth:latest
+    container_name: seit_photobooth_stack
+    restart: unless-stopped
+    shm_size: '16gb'
+
+    # NVIDIA GPU Allocation (A100)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    ports:
+      - "5000:5000"   # Frontend & Theme Studio (Domain Ingress)
+      - "5001:5001"   # Receiver Orchestrator API
+      - "8188:8188"   # ComfyUI Image Pipeline (VTON)
+      - "8189:8189"   # ComfyUI Video Pipeline (Motion)
+
+    environment:
+      - DEPLOY_MODE=local
+      - THEME_STUDIO_PASSWORD=admin
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_MODULE_LOADING=LAZY
+
+    volumes:
+      # Persistent Model Weights (Host path can be adjusted by DGX controller)
+      - /raid/photobooth/models/checkpoints:/app/ComfyUI/models/checkpoints:ro
+      - /raid/photobooth/models/loras:/app/ComfyUI/models/loras:ro
+      - /raid/photobooth/models/controlnet:/app/ComfyUI/models/controlnet:ro
+      - /raid/photobooth/models/insightface:/root/.insightface/models:ro
+      # Renders & Active Themes (Persisted across container updates)
+      - /raid/photobooth/outputs:/app/kiosk_frontend/outputs
+      - /raid/photobooth/themes:/app/kiosk_frontend/static/themes
