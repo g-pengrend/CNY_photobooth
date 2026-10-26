@@ -114,13 +114,24 @@ def send_to_physical_printer(image_path, printer_name=None):
 def resolve_server_endpoints(server_input):
     """
     Resolves input into a list of candidate endpoints to monitor.
-    If the user enters a Tailscale/LAN IP or localhost with port 5000 or 5001,
-    the agent automatically monitors BOTH ports (5000 = Frontend, 5001 = Receiver)
-    so jobs queued from either the Kiosk UI or Mobile QR view are captured.
+    Handles malformed inputs (http:ip, http:/ip, bare ip:port),
+    and sets up dual-port polling for 5000 (Frontend) and 5001 (Receiver).
     """
-    s = server_input.strip().rstrip('/')
-    if not s.startswith('http://') and not s.startswith('https://'):
-        s = f"http://{s}"
+    raw = server_input.strip().rstrip('/')
+    
+    # 1. Normalize malformed protocol prefixes
+    if raw.startswith(('http://', 'https://')):
+        s = raw
+    elif raw.startswith('http:/'):
+        s = 'http://' + raw[6:].lstrip('/')
+    elif raw.startswith('https:/'):
+        s = 'https://' + raw[7:].lstrip('/')
+    elif raw.startswith('http:'):
+        s = 'http://' + raw[5:].lstrip('/')
+    elif raw.startswith('https:'):
+        s = 'https://' + raw[6:].lstrip('/')
+    else:
+        s = f"http://{raw}"
     
     parsed = urllib.parse.urlparse(s)
     endpoints = [s]
@@ -158,6 +169,7 @@ def run_agent(server_url, poll_interval=2.0, printer_name=None, output_dir="temp
 
     # Connectivity Check across endpoints
     reachable = 0
+    had_404 = False
     for ep in endpoints:
         try:
             req = urllib.request.Request(f"{ep}/api/print-queue/pending", headers={'User-Agent': 'PhotoboothPrintAgent/1.0'})
@@ -165,8 +177,22 @@ def run_agent(server_url, poll_interval=2.0, printer_name=None, output_dir="temp
                 data = json.loads(resp.read().decode('utf-8'))
                 print(f"✅ Connected to [{ep}]! Pending jobs: {data.get('count', 0)}")
                 reachable += 1
+        except urllib.error.HTTPError as he:
+            if he.code == 404:
+                had_404 = True
+                print(f"⚠️ Notice: [{ep}] returned HTTP 404 Not Found.")
+            else:
+                print(f"⚠️ Notice: [{ep}] HTTP error: {he}")
         except Exception as e:
             print(f"⚠️ Notice: [{ep}] not reached ({e}). Will keep retrying...")
+
+    if had_404:
+        print("\n💡 [Troubleshooting Note for 404 Error]")
+        print("   If your server on DGX was already running, it may be running older code.")
+        print("   On the DGX server, please run:")
+        print("     1. git pull")
+        print("     2. tmux kill-session -t dgx_photobooth")
+        print("     3. ./deploy/linux_mac/2_dgx_server_headless.sh\n")
 
     if reachable == 0:
         print("   Agent will poll all endpoints automatically until servers come online...")
