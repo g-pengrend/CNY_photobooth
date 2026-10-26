@@ -941,18 +941,6 @@
       "lighting": "Cinematic ambient studio lighting"
     },
     {
-      "id": "giggling-whisper",
-      "code": "P30",
-      "title": "Giggling Whisper",
-      "name": "Giggling Whisper",
-      "description": "An amused pose with both hands cupped over the mouth in a bashful giggle.",
-      "image": "/static/themes/master/images/poses/giggling-whisper.png",
-      "prompt": "Facing the camera with both small hands raised to lightly cover the mouth, elbows pointing downward close to the body. Eyes crinkled into happy crescent shapes, showing an amused, suppressed giggle.",
-      "prompt_modifier": "Facing the camera with both small hands raised to lightly cover the mouth, elbows pointing downward close to the body. Eyes crinkled into happy crescent shapes, showing an amused, suppressed giggle.",
-      "mapping_desc": "An amused pose with both hands cupped over the mouth in a bashful giggle.",
-      "lighting": "Cinematic ambient studio lighting"
-    },
-    {
       "id": "sunny-stretch",
       "code": "P31",
       "title": "Sunny Stretch",
@@ -986,18 +974,6 @@
       "prompt": "Facing the camera with both hands resting neatly flat against the front of the thighs, upper body tilted forward in a slight, polite bow. Gaze directed upward toward the viewer with a friendly, welcoming smile.",
       "prompt_modifier": "Facing the camera with both hands resting neatly flat against the front of the thighs, upper body tilted forward in a slight, polite bow. Gaze directed upward toward the viewer with a friendly, welcoming smile.",
       "mapping_desc": "A respectful, welcoming pose with hands at the front of the legs and a subtle forward bow.",
-      "lighting": "Cinematic ambient studio lighting"
-    },
-    {
-      "id": "secret-whisper",
-      "code": "P34",
-      "title": "Secret Whisper",
-      "name": "Secret Whisper",
-      "description": "A playful hush gesture holding a single finger to the lips with a wink.",
-      "image": "/static/themes/master/images/poses/secret-whisper.png",
-      "prompt": "Facing the camera with one index finger held vertically against the center of closed lips, the other arm resting naturally at the side. Head tilted slightly to the side with one eye winking playfully.",
-      "prompt_modifier": "Facing the camera with one index finger held vertically against the center of closed lips, the other arm resting naturally at the side. Head tilted slightly to the side with one eye winking playfully.",
-      "mapping_desc": "A playful hush gesture holding a single finger to the lips with a wink.",
       "lighting": "Cinematic ambient studio lighting"
     },
     {
