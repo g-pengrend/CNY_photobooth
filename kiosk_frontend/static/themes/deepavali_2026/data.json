@@ -420,19 +420,6 @@
     },
     {
       "category": "unisex",
-      "code": "P26",
-      "description": "An expressive pose with both hands framing the cheeks and a pleasantly surprised expression.",
-      "id": "rosy-gasp",
-      "image": "/static/themes/master/images/poses/rosy-gasp.png",
-      "lighting": "Cinematic ambient studio lighting",
-      "mapping_desc": "An expressive pose with both hands framing the cheeks and a pleasantly surprised expression.",
-      "name": "Rosy Gasp",
-      "prompt": "Facing the camera with both hands cupping the sides of the cheeks, elbows flared gently outward. Eyes opened wide and round, with a small, rounded \"o\" mouth showing soft surprise and delight.",
-      "prompt_modifier": "Facing the camera with both hands cupping the sides of the cheeks, elbows flared gently outward. Eyes opened wide and round, with a small, rounded \"o\" mouth showing soft surprise and delight.",
-      "title": "Rosy Gasp"
-    },
-    {
-      "category": "unisex",
       "code": "P25",
       "description": "A playful standing pose making a one-handed salute to the side of the forehead.",
       "id": "crisp-salute",
@@ -469,6 +456,28 @@
       "prompt": "Facing the camera with both arms crossed tightly across the chest, shoulders drawn slightly back. Head turned just a fraction away from center while glancing back at the viewer with puffed-up cheeks and a playful, tiny pout.",
       "prompt_modifier": "Facing the camera with both arms crossed tightly across the chest, shoulders drawn slightly back. Head turned just a fraction away from center while glancing back at the viewer with puffed-up cheeks and a playful, tiny pout.",
       "title": "Sassy Arm Fold"
+    },
+    {
+      "id": "the-eye-smile",
+      "code": "P03",
+      "title": "The Eye-Smile",
+      "description": "Big smile into camera",
+      "image": "/static/themes/master/images/poses/the-eye-smile.png",
+      "prompt": "A gentle, beaming grin that makes the eyes crinkle, looking directly into the lens with a neighborly idol charm,",
+      "prompt_modifier": "A gentle, beaming grin that makes the eyes crinkle, looking directly into the lens with a neighborly idol charm,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
+    },
+    {
+      "id": "the-gentle-gaze",
+      "code": "P06",
+      "title": "The Gentle Gaze",
+      "description": "Soft expression, hands behind back",
+      "image": "/static/themes/master/images/poses/the-gentle-gaze.png",
+      "prompt": "Hands clasped behind the back, facing forward and leaning slightly into the frame with a soft, inviting expression,",
+      "prompt_modifier": "Hands clasped behind the back, facing forward and leaning slightly into the frame with a soft, inviting expression,",
+      "category": "unisex",
+      "lighting": "Warm cinematic lighting"
     }
   ]
 }
