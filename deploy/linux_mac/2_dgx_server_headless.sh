@@ -36,16 +36,28 @@ tmux send-keys -t $SESSION:0 "export CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps; ex
 
 # 2. ComfyUI Video (8189)
 tmux split-window -t $SESSION:0
+tmux select-layout -t $SESSION tiled
 tmux send-keys -t $SESSION:0.1 "sleep 3; export CUDA_MPS_PIPE_DIRECTORY=/tmp/nvidia-mps; export CUDA_MPS_CLIENT_PRIORITY=1; [ -f '$CONDA_PROFILE' ] && source '$CONDA_PROFILE' && conda activate comfy_spark 2>/dev/null || conda activate comfyui 2>/dev/null; cd '$COMFY_DIR' && python main.py --cuda-malloc --gpu-only --port 8189 --listen 0.0.0.0" C-m
 
 # 3. Receiver (5001)
 tmux split-window -t $SESSION:0
+tmux select-layout -t $SESSION tiled
 tmux send-keys -t $SESSION:0.2 "sleep 5; [ -f '$CONDA_PROFILE' ] && source '$CONDA_PROFILE' && conda activate comfy_spark 2>/dev/null || conda activate comfyui 2>/dev/null; cd '$PROJECT_DIR/dgx_photobooth' && python linux_receiver.py" C-m
 
 # 4. Frontend Web App / Studio (5000)
 tmux split-window -t $SESSION:0
+tmux select-layout -t $SESSION tiled
 tmux send-keys -t $SESSION:0.3 "sleep 6; [ -f '$CONDA_PROFILE' ] && source '$CONDA_PROFILE' && conda activate comfy_spark 2>/dev/null || conda activate comfyui 2>/dev/null; cd '$PROJECT_DIR/kiosk_frontend' && python app.py" C-m
 
-echo "✅ All DGX Services started in background tmux session: '$SESSION'"
-echo "   View logs with : tmux attach -t $SESSION"
-echo "   Detach cleanly : Press Ctrl+b, then d"
+echo ""
+echo "========================================================"
+echo "✅ All DGX Services started in tmux session: '$SESSION'"
+echo "   • To view the tiled multi-window dashboard : tmux attach -t $SESSION"
+echo "   • To detach (leave running in background)  : Press Ctrl+b, then d"
+echo "   • To stop all services                     : tmux kill-session -t $SESSION"
+echo "========================================================"
+
+# If run interactively with --attach flag, attach to dashboard immediately
+if [ "$1" = "--attach" ] || [ "$1" = "-a" ]; then
+    tmux attach-session -t $SESSION
+fi
