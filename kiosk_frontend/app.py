@@ -85,7 +85,8 @@ def process_image_async(job_id, input_path, theme='cny', gender='female', pose='
 
 @app.route('/')
 def landing():
-    """Serve the neutral VTON landing page"""
+    """Serve the neutral VTON landing page, automatically locking Theme Studio when exited."""
+    session.pop('admin_authenticated', None)
     return send_from_directory(app.static_folder, 'landing.html')
 
 
@@ -750,7 +751,7 @@ def api_admin_login():
     password = data.get('password', '')
     if password == THEME_STUDIO_PASSWORD:
         session['admin_authenticated'] = True
-        session.permanent = True
+        session.permanent = False
         return jsonify({'success': True, 'redirect': '/admin'})
     return jsonify({
         'success': False,
@@ -768,7 +769,7 @@ def admin_login():
         password = request.form.get('password', '')
         if password == THEME_STUDIO_PASSWORD:
             session['admin_authenticated'] = True
-            session.permanent = True
+            session.permanent = False
             return redirect('/admin')
         return redirect('/admin/login?error=1')
 
