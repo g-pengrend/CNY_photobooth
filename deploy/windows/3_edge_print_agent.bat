@@ -13,7 +13,7 @@ echo   physical USB photo printer with zero browser popups.
 echo ========================================================
 echo.
 
-set "DEFAULT_URL=https://photobooth.mydomain.edu.sg"
+set "DEFAULT_URL=http://100.67.79.127:5000"
 if exist ".print_server_address" (
     set /p CACHED_URL=<".print_server_address"
     if defined CACHED_URL set "DEFAULT_URL=!CACHED_URL!"
@@ -21,7 +21,7 @@ if exist ".print_server_address" (
 
 echo Target Server URL: [!DEFAULT_URL!]
 echo Press ENTER to keep, or enter the Photobooth Server URL
-echo (e.g. https://photobooth.mydomain.edu.sg, http://100.x.y.z:5000, or http://100.x.y.z:5001):
+echo (e.g. http://100.67.79.127:5000, http://breadnbiscuit:5000, or domain):
 set /p USER_SERVER="Server URL: "
 
 if defined USER_SERVER (

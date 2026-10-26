@@ -62,29 +62,28 @@ deploy/
 ---
 
 ### 🔒 Mode 2: Tailscale Remote-Hosted Mode (Private Tailnet)
-> **Goal:** DGX cluster runs headless inside your private Tailnet. Your client laptop connects via Tailscale IP (`http://100.x.y.z:5000` or `5001`). No public domain, no ComfyUI, and no heavy dependencies on the client laptop.
+> **Goal:** DGX cluster runs headless inside your private Tailnet. Your client laptop connects via Tailscale device `breadnbiscuit` or direct IP (`http://100.67.79.127:5000` or `5001`). No public domain, no ComfyUI, and no heavy dependencies on the client laptop.
 
-#### 1. On the DGX Cluster (Host Server):
-* Ensure Tailscale is running on DGX.
+#### 1. On the DGX Cluster (Host Server: `breadnbiscuit`):
+* Ensure Tailscale is running on DGX (`breadnbiscuit` / `100.67.79.127`).
 * Launch the headless server daemon:
   ```bash
   ./deploy/linux_mac/2_dgx_server_headless.sh
   ```
-* Get your DGX Tailscale IP (e.g. `100.x.y.z`).
 
 #### 2. On Your Client Laptop / PC:
 * **Web App Access:**
   * Open any browser and navigate to:
-    * **Frontend & Theme Studio**: `http://100.x.y.z:5000`
-    * **Gallery & Receiver**: `http://100.x.y.z:5001`
+    * **Frontend & Theme Studio**: `http://100.67.79.127:5000` *(or `http://breadnbiscuit:5000`)*
+    * **Gallery & Receiver**: `http://100.67.79.127:5001` *(or `http://breadnbiscuit:5001`)*
   * Full photobooth functionality is immediately accessible!
 * **Direct USB Photo Printing:**
   * Plug your USB photo printer into the client laptop.
   * Run the edge print agent:
-    * **Windows**: Double-click `deploy/windows/3_edge_print_agent.bat`
+    * **Windows**: Double-click `deploy/windows/3_edge_print_agent.bat` (defaults to `http://100.67.79.127:5000`)
     * **macOS / Linux**: Run `./deploy/linux_mac/4_edge_print_agent.sh`
-  * Enter your Tailscale IP when prompted (e.g. `http://100.x.y.z:5000` or `http://100.x.y.z:5001`).
-  * 💡 *Smart Dual-Port Polling:* The print agent automatically monitors **both** Port 5000 (Kiosk UI) and Port 5001 (Receiver & Mobile QR) so print jobs triggered from anywhere are printed immediately!
+  * Enter your server address when prompted (or simply press ENTER to keep `http://100.67.79.127:5000`).
+  * 💡 *Smart Dual-Port & Alias Polling:* The print agent automatically resolves `breadnbiscuit` to `100.67.79.127` and monitors **both** Port 5000 (Kiosk UI) and Port 5001 (Receiver & Mobile QR) so print jobs triggered from anywhere are printed immediately!
 
 ---
 

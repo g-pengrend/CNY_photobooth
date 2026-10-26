@@ -136,19 +136,45 @@ def resolve_server_endpoints(server_input):
     parsed = urllib.parse.urlparse(s)
     endpoints = [s]
     
+    # Tailscale alias mapping for breadnbiscuit / 100.67.79.127
+    KNOWN_HOST_ALIASES = {
+        "breadnbiscuit": "100.67.79.127",
+        "100.67.79.127": "breadnbiscuit"
+    }
+
     # If using IP or localhost with port 5000 or 5001, add sibling port
     if parsed.port in [5000, 5001]:
         sibling_port = 5001 if parsed.port == 5000 else 5000
         sibling_url = f"{parsed.scheme}://{parsed.hostname}:{sibling_port}"
         endpoints.append(sibling_url)
+        
+        # Also add numeric IP counterpart if hostname is breadnbiscuit
+        if parsed.hostname in KNOWN_HOST_ALIASES:
+            alt_host = KNOWN_HOST_ALIASES[parsed.hostname]
+            endpoints.append(f"{parsed.scheme}://{alt_host}:{parsed.port}")
+            endpoints.append(f"{parsed.scheme}://{alt_host}:{sibling_port}")
     elif parsed.port is None and not parsed.hostname.endswith(('.com', '.org', '.edu', '.net', '.sg', '.io')):
-        # Bare IP without port (e.g. http://100.x.y.z)
+        # Bare IP or hostname without port (e.g. breadnbiscuit or 100.67.79.127)
         endpoints = [
             f"{parsed.scheme}://{parsed.hostname}:5000",
             f"{parsed.scheme}://{parsed.hostname}:5001"
         ]
+        if parsed.hostname in KNOWN_HOST_ALIASES:
+            alt_host = KNOWN_HOST_ALIASES[parsed.hostname]
+            endpoints.extend([
+                f"{parsed.scheme}://{alt_host}:5000",
+                f"{parsed.scheme}://{alt_host}:5001"
+            ])
         
-    return endpoints
+    # Deduplicate while preserving order
+    seen = set()
+    deduped = []
+    for ep in endpoints:
+        if ep not in seen:
+            seen.add(ep)
+            deduped.append(ep)
+        
+    return deduped
 
 
 def run_agent(server_url, poll_interval=2.0, printer_name=None, output_dir="temp_prints"):
@@ -263,8 +289,8 @@ def main():
     )
     parser.add_argument(
         "--server",
-        default="http://localhost:5000",
-        help="Photobooth Server URL (e.g. https://photobooth.mydomain.edu.sg, http://100.x.y.z:5000, or http://100.x.y.z:5001)"
+        default="http://100.67.79.127:5000",
+        help="Photobooth Server URL (e.g. http://100.67.79.127:5000, http://breadnbiscuit:5000, or domain)"
     )
     parser.add_argument(
         "--printer",

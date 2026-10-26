@@ -16,7 +16,7 @@ echo "========================================================"
 echo ""
 
 CACHE_FILE=".print_server_address"
-DEFAULT_URL="https://photobooth.mydomain.edu.sg"
+DEFAULT_URL="http://100.67.79.127:5000"
 if [ -f "$CACHE_FILE" ]; then
     DEFAULT_URL=$(cat "$CACHE_FILE")
 fi
