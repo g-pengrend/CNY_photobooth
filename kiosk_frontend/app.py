@@ -979,6 +979,135 @@ def admin_delete_asset():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/api/admin/asset/update', methods=['POST'])
+def admin_update_asset():
+    """Update descriptor metadata for an asset in master library and sync installed themes."""
+    try:
+        data = request.json or {}
+        category = data.get('category')  # 'clothes', 'poses', 'backgrounds'
+        asset_id = data.get('id')
+        original_image = data.get('original_image', '') or data.get('image', '')
+
+        title = (data.get('title') or '').strip()
+        code = (data.get('code') or '').strip()
+        description = (data.get('description') or '').strip()
+        lighting = (data.get('lighting') or '').strip()
+        prompt = (data.get('prompt') or '').strip()
+        gender = (data.get('gender') or data.get('category_gender') or '').strip()
+
+        if category not in ['clothes', 'poses', 'backgrounds']:
+            return jsonify({'error': f'Invalid category: {category}'}), 400
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        master_data_path = os.path.join(base_dir, 'static', 'themes', 'master', 'data.json')
+        if not os.path.exists(master_data_path):
+            return jsonify({'error': 'Master data.json not found'}), 404
+
+        with open(master_data_path, 'r', encoding='utf-8') as f:
+            master_data = json.load(f)
+
+        original_list = master_data.get(category, [])
+        updated_item = None
+        clean_img_name = os.path.basename(original_image) if original_image else ''
+
+        for item in original_list:
+            match_id = asset_id and item.get('id') == asset_id
+            match_img = original_image and item.get('image') == original_image
+            match_img_base = clean_img_name and os.path.basename(item.get('image', '')) == clean_img_name
+            if match_id or match_img or match_img_base:
+                if title:
+                    item['title'] = title
+                    item['name'] = title
+                if code:
+                    item['code'] = code
+                if description:
+                    item['description'] = description
+                    item['mapping_desc'] = description
+                if lighting:
+                    item['lighting'] = lighting
+                if prompt:
+                    item['prompt'] = prompt
+                    item['prompt_modifier'] = prompt
+                if category == 'clothes' and gender:
+                    item['category'] = gender
+                    item['gender'] = gender
+                updated_item = item
+                break
+
+        if not updated_item:
+            return jsonify({'error': 'Asset not found in master library'}), 404
+
+        with open(master_data_path, 'w', encoding='utf-8') as f:
+            json.dump(master_data, f, indent=2, ensure_ascii=False)
+
+        # Update clothes_mapping.json if clothes
+        if category == 'clothes' and updated_item.get('code'):
+            c_code = updated_item['code']
+            mapping_text = updated_item.get('mapping_desc') or updated_item.get('description') or updated_item.get('title')
+            for m_dir in [
+                os.path.join(base_dir, 'static', 'themes', 'master'),
+                os.path.join(base_dir, '..', 'dgx_photobooth', 'templates', 'themes', 'master')
+            ]:
+                m_path = os.path.join(m_dir, 'clothes_mapping.json')
+                if os.path.exists(m_path):
+                    try:
+                        with open(m_path, 'r', encoding='utf-8') as mf:
+                            m_data = json.load(mf)
+                        m_data[c_code] = mapping_text
+                        with open(m_path, 'w', encoding='utf-8') as mf:
+                            json.dump(m_data, mf, indent=2, ensure_ascii=False)
+                    except Exception:
+                        pass
+
+        # Also sync to installed themes data.json if they reference this asset
+        themes_dir = os.path.join(base_dir, 'static', 'themes')
+        if os.path.exists(themes_dir):
+            for t_slug in os.listdir(themes_dir):
+                if t_slug in RESERVED_SLUGS:
+                    continue
+                t_data_path = os.path.join(themes_dir, t_slug, 'data.json')
+                if os.path.exists(t_data_path):
+                    try:
+                        with open(t_data_path, 'r', encoding='utf-8') as tf:
+                            t_data = json.load(tf)
+                        t_changed = False
+                        for t_item in t_data.get(category, []):
+                            if not isinstance(t_item, dict):
+                                continue
+                            m_id = asset_id and t_item.get('id') == asset_id
+                            m_img = original_image and t_item.get('image') == original_image
+                            m_base = clean_img_name and os.path.basename(t_item.get('image', '')) == clean_img_name
+                            if m_id or m_img or m_base:
+                                if title:
+                                    t_item['title'] = title
+                                    t_item['name'] = title
+                                if code:
+                                    t_item['code'] = code
+                                if description:
+                                    t_item['description'] = description
+                                    t_item['mapping_desc'] = description
+                                if lighting:
+                                    t_item['lighting'] = lighting
+                                if prompt:
+                                    t_item['prompt'] = prompt
+                                    t_item['prompt_modifier'] = prompt
+                                if category == 'clothes' and gender:
+                                    t_item['category'] = gender
+                                    t_item['gender'] = gender
+                                t_changed = True
+                        if t_changed:
+                            with open(t_data_path, 'w', encoding='utf-8') as tf:
+                                json.dump(t_data, tf, indent=2, ensure_ascii=False)
+                    except Exception as te:
+                        print(f"Notice: Could not sync updated asset to theme {t_slug}: {te}")
+
+        print(f"✏️ [Studio] Updated asset descriptors ({category}): {updated_item.get('title')}")
+        return jsonify({'status': 'success', 'asset': updated_item})
+    except Exception as e:
+        print(f"❌ [Studio] Error updating asset: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/api/admin/workflow/inspect', methods=['POST'])
 def admin_inspect_workflow():
     """Analyze an uploaded ComfyUI API workflow dictionary and return node bindings."""

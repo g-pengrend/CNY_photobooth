@@ -1550,13 +1550,16 @@ function renderClothesList() {
 
     grid.innerHTML = items.map((c, idx) => `
         <div class="asset-studio-card">
-            <img class="asset-thumb" src="${c.image}" alt="${c.title}" onerror="this.src='/static/landing/cny_card_bg.png'">
+            <img class="asset-thumb" src="${c.image}" alt="${c.title}" onerror="this.src='/static/landing/cny_card_bg.png'" style="cursor:pointer;" onclick="openAssetLightbox('clothes', studio.activeData.clothes[${idx}])" title="Click to view & edit descriptors">
             <div class="asset-card-details">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.3rem;">
                     <span class="asset-card-code">${c.code || 'O' + (idx + 1)} (${c.category || 'unisex'})</span>
-                    <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="openMasterAssetPicker('clothes', ${idx})" title="Replace from Master Library">🔄 Change</button>
+                    <div style="display:flex;gap:0.3rem;">
+                        <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.45rem; font-size: 0.7rem;" onclick="openAssetLightbox('clothes', studio.activeData.clothes[${idx}])" title="Inspect & Edit Descriptors">✏️ Edit</button>
+                        <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="openMasterAssetPicker('clothes', ${idx})" title="Replace from Master Library">🔄</button>
+                    </div>
                 </div>
-                <div class="asset-card-title">${c.title || c.name || 'Untitled Outfit'}</div>
+                <div class="asset-card-title" style="cursor:pointer;" onclick="openAssetLightbox('clothes', studio.activeData.clothes[${idx}])">${c.title || c.name || 'Untitled Outfit'}</div>
                 <div style="font-size: 0.75rem; color: var(--text-dim); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${c.description || c.prompt_modifier || ''}">
                     ${c.description || c.mapping_desc || c.prompt_modifier || c.lighting || 'Custom festive styling'}
                 </div>
@@ -1583,13 +1586,16 @@ function renderPosesList() {
 
     grid.innerHTML = items.map((p, idx) => `
         <div class="asset-studio-card">
-            <img class="asset-thumb" src="${p.image}" alt="${p.title}" onerror="this.src='/static/landing/cny_card_bg.png'">
+            <img class="asset-thumb" src="${p.image}" alt="${p.title}" onerror="this.src='/static/landing/cny_card_bg.png'" style="cursor:pointer;" onclick="openAssetLightbox('poses', studio.activeData.poses[${idx}])" title="Click to view & edit descriptors">
             <div class="asset-card-details">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.3rem;">
                     <span class="asset-card-code">${p.code || 'P' + (idx + 1)}</span>
-                    <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="openMasterAssetPicker('poses', ${idx})" title="Replace from Master Library">🔄 Change</button>
+                    <div style="display:flex;gap:0.3rem;">
+                        <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.45rem; font-size: 0.7rem;" onclick="openAssetLightbox('poses', studio.activeData.poses[${idx}])" title="Inspect & Edit Descriptors">✏️ Edit</button>
+                        <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="openMasterAssetPicker('poses', ${idx})" title="Replace from Master Library">🔄</button>
+                    </div>
                 </div>
-                <div class="asset-card-title">${p.title || p.name || 'Untitled Pose'}</div>
+                <div class="asset-card-title" style="cursor:pointer;" onclick="openAssetLightbox('poses', studio.activeData.poses[${idx}])">${p.title || p.name || 'Untitled Pose'}</div>
                 <div style="font-size: 0.75rem; color: var(--text-dim); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${p.description || p.prompt_modifier || ''}">${p.description || p.prompt_modifier || 'Pose modifier'}</div>
             </div>
             <button class="admin-btn admin-btn-danger" style="position: absolute; top: 6px; right: 6px; padding: 0.2rem 0.4rem; font-size: 0.75rem;" onclick="removePose(${idx})">×</button>
@@ -1614,13 +1620,16 @@ function renderBackgroundsList() {
 
     grid.innerHTML = items.map((b, idx) => `
         <div class="asset-studio-card">
-            <img class="asset-thumb" src="${b.image}" alt="${b.title}" onerror="this.src='/static/landing/cny_card_bg.png'">
+            <img class="asset-thumb" src="${b.image}" alt="${b.title}" onerror="this.src='/static/landing/cny_card_bg.png'" style="cursor:pointer;" onclick="openAssetLightbox('backgrounds', studio.activeData.backgrounds[${idx}])" title="Click to view & edit descriptors">
             <div class="asset-card-details">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.3rem;">
                     <span class="asset-card-code">${b.code || 'B' + (idx + 1)}</span>
-                    <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="openMasterAssetPicker('backgrounds', ${idx})" title="Replace from Master Library">🔄 Change</button>
+                    <div style="display:flex;gap:0.3rem;">
+                        <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.45rem; font-size: 0.7rem;" onclick="openAssetLightbox('backgrounds', studio.activeData.backgrounds[${idx}])" title="Inspect & Edit Descriptors">✏️ Edit</button>
+                        <button class="admin-btn admin-btn-secondary" style="padding: 0.15rem 0.4rem; font-size: 0.7rem;" onclick="openMasterAssetPicker('backgrounds', ${idx})" title="Replace from Master Library">🔄</button>
+                    </div>
                 </div>
-                <div class="asset-card-title">${b.title || b.name || 'Untitled Background'}</div>
+                <div class="asset-card-title" style="cursor:pointer;" onclick="openAssetLightbox('backgrounds', studio.activeData.backgrounds[${idx}])">${b.title || b.name || 'Untitled Background'}</div>
                 <div style="font-size: 0.75rem; color: var(--text-dim); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${b.description || b.prompt_modifier || ''}">${b.description || b.prompt_modifier || 'Atmospheric setting'}</div>
             </div>
             <button class="admin-btn admin-btn-danger" style="position: absolute; top: 6px; right: 6px; padding: 0.2rem 0.4rem; font-size: 0.75rem;" onclick="removeBackground(${idx})">×</button>
@@ -2111,14 +2120,49 @@ window.openAssetLightbox = function (category, item) {
     const modal = document.getElementById('asset-lightbox-modal');
     if (!modal) return;
 
-    document.getElementById('lightbox-title').textContent = '🔍 ' + (item.title || item.name || 'Asset Inspector');
-    document.getElementById('lightbox-img').src = item.image || '';
-    document.getElementById('lightbox-badge').textContent = (item.source_theme || 'master').toUpperCase();
-    document.getElementById('lightbox-code').textContent = item.code || '';
-    document.getElementById('lightbox-name').textContent = item.title || item.name || '';
-    document.getElementById('lightbox-desc').textContent = item.description || item.mapping_desc || '';
-    document.getElementById('lightbox-lighting').textContent = item.lighting ? '💡 ' + item.lighting : '';
-    document.getElementById('lightbox-prompt').textContent = item.prompt_modifier || item.prompt || '';
+    const title = item.title || item.name || 'Asset Inspector';
+    const titleEl = document.getElementById('lightbox-title');
+    if (titleEl) {
+        titleEl.innerHTML = `<span>✏️</span> ${escapeAttr(title)}`;
+    }
+
+    const imgEl = document.getElementById('lightbox-img');
+    if (imgEl) {
+        imgEl.src = item.image || '';
+        imgEl.alt = title;
+    }
+
+    const badgeEl = document.getElementById('lightbox-badge');
+    if (badgeEl) {
+        badgeEl.textContent = (item.source_theme || 'master').toUpperCase();
+    }
+
+    const nameInput = document.getElementById('lightbox-edit-name');
+    if (nameInput) nameInput.value = item.title || item.name || '';
+
+    const codeInput = document.getElementById('lightbox-edit-code');
+    if (codeInput) codeInput.value = item.code || '';
+
+    const genderGroup = document.getElementById('lightbox-gender-group');
+    const genderSelect = document.getElementById('lightbox-edit-gender');
+    if (genderGroup && genderSelect) {
+        if (category === 'clothes') {
+            genderGroup.style.display = 'block';
+            const rawG = (item.category || item.gender || 'unisex').toLowerCase();
+            genderSelect.value = ['female', 'male', 'unisex'].includes(rawG) ? rawG : 'unisex';
+        } else {
+            genderGroup.style.display = 'none';
+        }
+    }
+
+    const descInput = document.getElementById('lightbox-edit-desc');
+    if (descInput) descInput.value = item.description || item.mapping_desc || '';
+
+    const lightingInput = document.getElementById('lightbox-edit-lighting');
+    if (lightingInput) lightingInput.value = item.lighting || '';
+
+    const promptInput = document.getElementById('lightbox-edit-prompt');
+    if (promptInput) promptInput.value = item.prompt_modifier || item.prompt || '';
 
     const selectBtn = document.getElementById('lightbox-select-btn');
     if (selectBtn) {
@@ -2127,7 +2171,6 @@ window.openAssetLightbox = function (category, item) {
                 selectMasterAsset(category, item);
                 closeAssetLightbox();
                 switchToThemeEditor();
-                // Switch to the relevant asset subtab
                 const subtabMap = { clothes: 'clothes', poses: 'poses', backgrounds: 'backgrounds' };
                 switchAssetSubtab(subtabMap[category] || category);
             } else {
@@ -2144,6 +2187,220 @@ window.closeAssetLightbox = function () {
     const modal = document.getElementById('asset-lightbox-modal');
     if (modal) modal.classList.remove('open');
     studio.activeLightboxAsset = null;
+};
+
+window.saveAssetDescriptors = async function () {
+    if (!studio.activeLightboxAsset) return;
+    const { category, item } = studio.activeLightboxAsset;
+
+    const saveBtn = document.getElementById('lightbox-save-btn');
+    const origText = saveBtn ? saveBtn.innerHTML : '💾 Save Descriptors';
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '⏳ Saving Descriptors...';
+    }
+
+    try {
+        const title = (document.getElementById('lightbox-edit-name')?.value || '').trim();
+        const code = (document.getElementById('lightbox-edit-code')?.value || '').trim();
+        const gender = (document.getElementById('lightbox-edit-gender')?.value || 'unisex').trim();
+        const description = (document.getElementById('lightbox-edit-desc')?.value || '').trim();
+        const lighting = (document.getElementById('lightbox-edit-lighting')?.value || '').trim();
+        const prompt = (document.getElementById('lightbox-edit-prompt')?.value || '').trim();
+
+        const payload = {
+            category: category,
+            id: item.id || '',
+            original_image: item.image || '',
+            title: title,
+            code: code,
+            gender: gender,
+            description: description,
+            lighting: lighting,
+            prompt: prompt
+        };
+
+        const res = await fetch('/api/admin/asset/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Failed to update asset descriptors');
+        }
+
+        const data = await res.json();
+        const updated = data.asset || {};
+
+        // Update active modal reference
+        Object.assign(item, updated);
+
+        // Update studio master assets list
+        if (studio.masterAssets && studio.masterAssets[category]) {
+            const mList = studio.masterAssets[category];
+            const found = mList.find(x => (item.id && x.id === item.id) || (item.image && x.image === item.image));
+            if (found) Object.assign(found, updated);
+        }
+
+        // Update active theme data if currently referencing this asset
+        if (studio.activeData && studio.activeData[category]) {
+            const tList = studio.activeData[category];
+            const found = tList.find(x => (item.id && x.id === item.id) || (item.image && x.image === item.image));
+            if (found) {
+                Object.assign(found, updated);
+                renderAssetsList();
+            }
+        }
+
+        showToast('✅ Asset descriptors saved successfully across all themes!', 'success');
+
+        // Update title bar in lightbox
+        const titleEl = document.getElementById('lightbox-title');
+        if (titleEl) {
+            titleEl.innerHTML = `<span>✏️</span> ${escapeAttr(title || 'Asset Inspector')}`;
+        }
+
+        filterMasterGallery();
+    } catch (err) {
+        console.error('Save descriptor error:', err);
+        showToast('Save error: ' + err.message, 'error');
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = origText;
+        }
+    }
+};
+
+window.sanitizeAssetPromptClient = function (promptText, assetType = 'backdrop') {
+    if (!promptText) return '';
+    let text = String(promptText).trim();
+
+    // Backdrop template boilerplates
+    text = text.replace(/^A professional studio asset of a background environment,\s*featuring\s*/i, '');
+    text = text.replace(/Wide-angle cinematic perspective,\s*daylight atmospheric lighting,\s*high-detail textures,\s*centered composition.*$/i, '');
+
+    // Clothes template boilerplates
+    text = text.replace(/^A professional studio product shot of a standalone\s+\w+\s+outfit,\s*featuring\s*/i, '');
+    text = text.replace(/^A professional studio product shot of an?\s+outfit,\s*featuring\s*/i, '');
+    text = text.replace(/The outfit is displayed to maintain a 3D shape.*$/i, '');
+    text = text.replace(/No human hands.*$/i, '');
+    text = text.replace(/isolated on a solid black background.*$/i, '');
+
+    // Pose template boilerplates
+    text = text.replace(/^A high-quality 3D Chibi-style character asset with a large head and small,\s*rounded body\.\s*/i, '');
+    text = text.replace(/Soft studio lighting with clean ambient occlusion,\s*centered composition,\s*isolated on a solid white background.*$/i, '');
+    text = text.replace(/isolated on a solid white background for easy transparency masking\.*$/i, '');
+
+    return text.trim();
+};
+
+window.openActiveAssetInAICreator = function () {
+    if (!studio.activeLightboxAsset) return;
+    const { category, item } = studio.activeLightboxAsset;
+
+    // Map library category to ComfyUI asset generator type
+    let genType = 'backdrop';
+    if (category === 'clothes') genType = 'clothes';
+    else if (category === 'poses' || category === 'pose') genType = 'pose';
+    else if (category === 'backgrounds' || category === 'backdrop') genType = 'backdrop';
+
+    closeAssetLightbox();
+    switchToAICreator();
+    selectGeneratorType(genType);
+
+    // Extract prompt from asset or modal inputs and strip boilerplate
+    const currentPromptVal = document.getElementById('lightbox-edit-prompt')?.value?.trim();
+    const rawPrompt = currentPromptVal || item.prompt_modifier || item.prompt || item.description || item.mapping_desc || '';
+    const cleanPrompt = sanitizeAssetPromptClient(rawPrompt, genType);
+
+    const middleInput = document.getElementById('gen-middle-prompt');
+    if (middleInput) {
+        middleInput.value = cleanPrompt || rawPrompt;
+    }
+
+    // Set Asset Name (suffix with remix indicator for clarity)
+    const baseTitle = (document.getElementById('lightbox-edit-name')?.value?.trim()) || item.title || item.name || '';
+    const nameInput = document.getElementById('gen-asset-name');
+    if (nameInput) {
+        nameInput.value = baseTitle ? `${baseTitle} (Remix)` : '';
+        if (typeof updateFilenamePreview === 'function') updateFilenamePreview();
+    }
+
+    // Set short description
+    const descInput = document.getElementById('gen-asset-desc');
+    const currentDescVal = document.getElementById('lightbox-edit-desc')?.value?.trim();
+    if (descInput) {
+        descInput.value = currentDescVal || item.description || item.mapping_desc || '';
+    }
+
+    // If clothes, set target gender
+    if (genType === 'clothes') {
+        const genderSelect = document.getElementById('gen-clothes-gender');
+        if (genderSelect) {
+            const currentGenderVal = document.getElementById('lightbox-edit-gender')?.value;
+            const g = (currentGenderVal || item.category || item.gender || 'female').toLowerCase();
+            genderSelect.value = ['female', 'male', 'unisex'].includes(g) ? g : 'female';
+        }
+    }
+
+    // Display the clone banner showing original asset name
+    const banner = document.getElementById('ai-creator-clone-banner');
+    const bannerTitle = document.getElementById('clone-banner-title');
+    if (banner) {
+        banner.style.display = 'flex';
+        if (bannerTitle) bannerTitle.textContent = baseTitle || 'Selected Asset';
+    }
+
+    updateGeneratorPreview();
+
+    // Scroll workspace view to top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    showToast(`Loaded "${baseTitle || 'Asset'}" into AI Studio. Edits will generate a NEW asset!`, 'success');
+};
+
+window.clearAICreatorCloneBanner = function () {
+    const banner = document.getElementById('ai-creator-clone-banner');
+    if (banner) banner.style.display = 'none';
+    const nameInput = document.getElementById('gen-asset-name');
+    if (nameInput) nameInput.value = '';
+    const descInput = document.getElementById('gen-asset-desc');
+    if (descInput) descInput.value = '';
+    loadGeneratorExamplePrompt();
+    if (typeof updateFilenamePreview === 'function') updateFilenamePreview();
+};
+
+window.switchToMasterGalleryAndInspect = async function (genType, filename) {
+    const catMap = {
+        backdrop: 'backgrounds',
+        backgrounds: 'backgrounds',
+        pose: 'poses',
+        poses: 'poses',
+        clothes: 'clothes'
+    };
+    const cat = catMap[genType] || 'clothes';
+
+    switchToMasterGallery();
+    setMasterGalleryCategory(cat);
+
+    // Refresh master assets from backend to ensure new file is loaded
+    await loadMasterAssets();
+    filterMasterGallery();
+
+    // Find the newly created asset
+    const allItems = studio.masterAssets[cat] || [];
+    const cleanFilename = filename ? filename.split('/').pop().toLowerCase() : '';
+    const found = allItems.find(it => {
+        const itImg = (it.image || '').split('/').pop().toLowerCase();
+        return cleanFilename && itImg === cleanFilename;
+    }) || allItems[allItems.length - 1];
+
+    if (found) {
+        openAssetLightbox(cat, found);
+    }
 };
 
 window.openDeleteActiveLightboxAsset = function () {
@@ -2753,15 +3010,25 @@ window.acceptGeneratedAsset = async function () {
             statusMsg.style.border = '1px solid #10b981';
             statusMsg.style.color = '#34d399';
             statusMsg.innerHTML = `
-                <strong>Saved Successfully!</strong><br>
-                File: <code>${data.filename}</code><br>
-                Description: <em>${description || '(auto-extracted)'}</em><br>
-                Library: <strong>Asset Library (Shared across all themes)</strong>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.8rem;">
+                    <div>
+                        <strong style="font-size: 0.95rem; color: #4ade80;">Saved Successfully as New Asset!</strong><br>
+                        File: <code>${data.filename}</code><br>
+                        Description: <em>${description || '(auto-extracted)'}</em><br>
+                        Library: <strong>Asset Library (Shared across all themes)</strong>
+                    </div>
+                    <button type="button" class="admin-btn admin-btn-primary" style="padding: 0.45rem 0.95rem; font-size: 0.82rem; display: flex; align-items: center; gap: 0.4rem;" onclick="switchToMasterGalleryAndInspect('${type}', '${data.filename}')">
+                        📦 View & Edit in Asset Viewer →
+                    </button>
+                </div>
             `;
         }
 
         // Refresh master assets so it's instantly pickable
         await loadMasterAssets();
+
+        // Clear clone banner if it was set
+        clearAICreatorCloneBanner();
 
         // Clear the desc field ready for next generation
         const descInput = document.getElementById('gen-asset-desc');

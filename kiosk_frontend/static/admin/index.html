@@ -1187,9 +1187,14 @@
                         <h2 style="font-size:1.6rem;font-weight:700;letter-spacing:-0.01em;">🤖 AI Asset Creator</h2>
                         <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.3rem;">Generate new AI assets and save them to the Master Library.</p>
                     </div>
-                    <button type="button" class="admin-btn admin-btn-secondary" onclick="openTutorialCenter('asset-creator')" style="display: flex; align-items: center; gap: 0.45rem; border-color: rgba(16, 185, 129, 0.45); background: rgba(16, 185, 129, 0.12); color: #34d399; font-weight: 600;" title="Open Asset Creator Guide">
-                        <span>📖</span> Asset Creator Guide
-                    </button>
+                    <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+                        <button type="button" class="admin-btn admin-btn-secondary" onclick="switchToMasterGallery()" style="display: flex; align-items: center; gap: 0.45rem;" title="View all library assets">
+                            <span>📦</span> Asset Viewer
+                        </button>
+                        <button type="button" class="admin-btn admin-btn-secondary" onclick="openTutorialCenter('asset-creator')" style="display: flex; align-items: center; gap: 0.45rem; border-color: rgba(16, 185, 129, 0.45); background: rgba(16, 185, 129, 0.12); color: #34d399; font-weight: 600;" title="Open Asset Creator Guide">
+                            <span>📖</span> Asset Creator Guide
+                        </button>
+                    </div>
                 </div>
                 <!-- Tab: AI Asset Creator -->
                 <div style="padding: 1.5rem 2rem;">
@@ -1223,6 +1228,24 @@
                         <!-- Prompt Builder Form -->
                         <div class="prompt-builder-container"
                             style="background: rgba(0,0,0,0.35); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem;">
+                            <!-- Cloned from Asset Banner (Shown when opened from Asset Viewer) -->
+                            <div id="ai-creator-clone-banner" style="display: none; justify-content: space-between; align-items: center; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.4); border-radius: var(--radius-sm); padding: 0.75rem 1rem; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 0.6rem;">
+                                <div style="display: flex; align-items: center; gap: 0.65rem;">
+                                    <span style="font-size: 1.3rem;">🔄</span>
+                                    <div>
+                                        <div style="font-size: 0.85rem; font-weight: 700; color: #fff;">
+                                            Loaded from Library: <span id="clone-banner-title" style="color: #fde047;">Asset Name</span>
+                                        </div>
+                                        <div style="font-size: 0.75rem; color: #cbd5e1; margin-top: 0.1rem;">
+                                            Modifications will be generated and saved as a <strong style="color:#4ade80;">NEW asset</strong> in the library (the original remains untouched).
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="admin-btn admin-btn-secondary" style="padding: 0.25rem 0.65rem; font-size: 0.75rem; border-color: rgba(255,255,255,0.2);" onclick="clearAICreatorCloneBanner()">
+                                    ✕ Start Fresh
+                                </button>
+                            </div>
+
                             <!-- Gender Selection (for Clothes only) -->
                             <div id="gen-gender-group" class="form-group" style="display: none; margin-bottom: 1rem;">
                                 <label for="gen-clothes-gender">Target Outfit Type / Gender</label>
@@ -1486,27 +1509,93 @@
         </div>
     </div>
 
-    <!-- Asset Lightbox Modal -->
+    <!-- Asset Lightbox Modal / Descriptor Editor -->
     <div id="asset-lightbox-modal" class="modal-overlay">
-        <div class="asset-picker-dialog" style="max-width:780px;flex-direction:row;max-height:88vh;">
-            <div style="flex:1;min-width:0;background:#000;border-radius:var(--radius-lg) 0 0 var(--radius-lg);overflow:hidden;display:flex;align-items:center;justify-content:center;">
-                <img id="lightbox-img" src="" alt="Asset Preview" style="width:100%;max-height:88vh;object-fit:contain;">
+        <div class="asset-picker-dialog" style="max-width:960px;width:94vw;flex-direction:row;max-height:90vh;height:90vh;background:#0d0e17;border:1px solid rgba(99,102,241,0.35);box-shadow:0 25px 70px rgba(0,0,0,0.9);overflow:hidden;">
+            <!-- Left Column: Full-Height Image Showcase -->
+            <div style="flex:1.1;min-width:0;background:#05050a;border-radius:var(--radius-lg) 0 0 var(--radius-lg);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;border-right:1px solid rgba(255,255,255,0.08);padding:1rem;">
+                <img id="lightbox-img" src="" alt="Asset Preview" style="width:100%;max-height:76vh;object-fit:contain;border-radius:var(--radius-sm);filter:drop-shadow(0 10px 25px rgba(0,0,0,0.7));">
+                <div style="display:flex;gap:0.5rem;align-items:center;margin-top:0.75rem;flex-wrap:wrap;justify-content:center;">
+                    <span id="lightbox-badge" class="badge-live" style="font-size:0.72rem;letter-spacing:0.5px;">MASTER</span>
+                    <span id="lightbox-category-badge" class="modal-asset-theme-tag" style="background:rgba(99,102,241,0.2);color:#a5b4fc;border:1px solid rgba(99,102,241,0.35);">OUTFIT</span>
+                    <span id="lightbox-code-badge" class="modal-asset-code" style="background:#1e1b4b;color:#fde047;border:1px solid rgba(250,204,21,0.35);padding:2px 8px;border-radius:4px;font-weight:700;">C01</span>
+                </div>
             </div>
-            <div style="width:300px;flex-shrink:0;display:flex;flex-direction:column;padding:1.5rem;gap:0.8rem;overflow-y:auto;">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-                    <h3 id="lightbox-title" style="font-size:1rem;font-weight:700;">Asset Inspector</h3>
-                    <button class="modal-close-btn" onclick="closeAssetLightbox()">&times;</button>
+
+            <!-- Right Column: Editable Descriptors Form & Generator Bridge -->
+            <div style="flex:1.2;min-width:340px;display:flex;flex-direction:column;padding:1.5rem 1.8rem;gap:0.9rem;overflow-y:auto;background:rgba(18,20,34,0.65);">
+                <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:0.75rem;">
+                    <div>
+                        <h3 id="lightbox-title" style="font-size:1.15rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:0.4rem;">
+                            <span>✏️</span> Edit Asset Descriptors
+                        </h3>
+                        <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.2rem;">Update booth subtitle, lighting, and prompts, or remix in Asset Creation.</p>
+                    </div>
+                    <button class="modal-close-btn" onclick="closeAssetLightbox()" title="Close">&times;</button>
                 </div>
-                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-                    <span id="lightbox-badge" class="badge-live">MASTER</span>
-                    <span id="lightbox-code" class="modal-asset-code"></span>
+
+                <!-- Form Inputs -->
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div>
+                        <label for="lightbox-edit-name" style="font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:0.25rem;">Asset Title / Name</label>
+                        <input id="lightbox-edit-name" type="text" class="modal-search-input" style="width:100%;font-size:0.95rem;font-weight:600;color:#fff;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.15);padding:0.55rem 0.8rem;border-radius:var(--radius-sm);" placeholder="Asset Title">
+                    </div>
+
+                    <div style="display:flex;gap:0.75rem;">
+                        <div style="width:110px;">
+                            <label for="lightbox-edit-code" style="font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:0.25rem;">Code</label>
+                            <input id="lightbox-edit-code" type="text" class="modal-search-input" style="width:100%;font-size:0.9rem;font-weight:700;color:#fde047;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.15);padding:0.55rem 0.8rem;border-radius:var(--radius-sm);" placeholder="C01">
+                        </div>
+                        <div id="lightbox-gender-group" style="flex:1;">
+                            <label for="lightbox-edit-gender" style="font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:0.25rem;">Target Gender / Profile</label>
+                            <select id="lightbox-edit-gender" class="modal-filter-select" style="width:100%;padding:0.55rem 0.8rem;background:#0d0e18;border:1px solid rgba(255,255,255,0.15);color:#fff;border-radius:var(--radius-sm);">
+                                <option value="female">Female Outfit</option>
+                                <option value="male">Male Outfit</option>
+                                <option value="unisex">Unisex / Standalone</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.25rem;">
+                            <label for="lightbox-edit-desc" style="font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;display:block;">Short Description <span style="font-weight:normal;color:var(--text-muted);">(Booth Card Subtitle)</span></label>
+                        </div>
+                        <textarea id="lightbox-edit-desc" rows="2" class="modal-search-input" style="width:100%;font-size:0.85rem;color:#93c5fd;line-height:1.4;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.15);padding:0.55rem 0.8rem;border-radius:var(--radius-sm);resize:vertical;" placeholder="Subtitle displayed on kiosk selection card"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="lightbox-edit-lighting" style="font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:0.25rem;">Lighting Style Descriptor</label>
+                        <input id="lightbox-edit-lighting" type="text" class="modal-search-input" style="width:100%;font-size:0.85rem;color:var(--accent);background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.15);padding:0.55rem 0.8rem;border-radius:var(--radius-sm);" placeholder="e.g. Cinematic ambient studio lighting">
+                    </div>
+
+                    <div>
+                        <label for="lightbox-edit-prompt" style="font-size:0.78rem;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:0.25rem;">Prompt Formula (ComfyUI)</label>
+                        <textarea id="lightbox-edit-prompt" rows="3" class="modal-search-input" style="width:100%;font-size:0.8rem;color:#e2e8f0;font-family:monospace;line-height:1.45;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.15);padding:0.55rem 0.8rem;border-radius:var(--radius-sm);resize:vertical;" placeholder="Detailed visual description / diffusion prompt"></textarea>
+                    </div>
                 </div>
-                <div id="lightbox-name" style="font-size:1rem;font-weight:600;color:var(--text-main);"></div>
-                <div id="lightbox-desc" style="font-size:0.85rem;color:#93c5fd;line-height:1.5;"></div>
-                <div id="lightbox-lighting" style="font-size:0.82rem;color:var(--accent);font-weight:600;"></div>
-                <div id="lightbox-prompt" style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;border-top:1px solid var(--border-subtle);padding-top:0.8rem;margin-top:0.3rem;"></div>
-                <button id="lightbox-select-btn" class="admin-btn admin-btn-primary" style="margin-top:auto;width:100%;padding:0.8rem;">➕ Add to Active Theme</button>
-                <button id="lightbox-delete-btn" class="admin-btn admin-btn-danger" style="width:100%;padding:0.6rem;margin-top:0.4rem;" onclick="openDeleteActiveLightboxAsset()">🗑️ Delete from Library</button>
+
+                <!-- Primary Action Buttons -->
+                <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:auto;padding-top:0.9rem;border-top:1px solid rgba(255,255,255,0.08);">
+                    <button id="lightbox-save-btn" type="button" class="admin-btn admin-btn-primary" style="width:100%;padding:0.75rem 1.2rem;font-size:0.95rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:0.5rem;" onclick="saveAssetDescriptors()">
+                        💾 Save Descriptors
+                    </button>
+
+                    <button id="lightbox-remix-btn" type="button" class="admin-btn admin-btn-accent" style="width:100%;padding:0.75rem 1.2rem;font-size:0.95rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:0.5rem;background:linear-gradient(135deg, #6366f1, #a855f7);border-color:#818cf8;" onclick="openActiveAssetInAICreator()">
+                        🤖 Open in Asset Creation
+                    </button>
+                    <span style="font-size:0.73rem;color:#94a3b8;text-align:center;margin-top:-0.2rem;">
+                        Loads metadata into AI Studio. Edits will <strong>always save as a new asset</strong>.
+                    </span>
+
+                    <div style="display:flex;gap:0.6rem;margin-top:0.4rem;">
+                        <button id="lightbox-select-btn" type="button" class="admin-btn admin-btn-secondary" style="flex:1.3;padding:0.6rem 0.8rem;font-size:0.85rem;">
+                            ➕ Add to Theme
+                        </button>
+                        <button id="lightbox-delete-btn" type="button" class="admin-btn admin-btn-danger" style="flex:1;padding:0.6rem 0.8rem;font-size:0.85rem;" onclick="openDeleteActiveLightboxAsset()">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
