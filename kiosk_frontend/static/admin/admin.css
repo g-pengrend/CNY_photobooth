@@ -611,6 +611,12 @@ select:focus {
     box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
+select option {
+    background-color: #0f111a !important;
+    color: #ffffff !important;
+    padding: 8px 12px;
+}
+
 textarea {
     resize: vertical;
     min-height: 80px;
@@ -1166,7 +1172,22 @@ input[type="color"]::-webkit-color-swatch {
     border-color: var(--accent);
 }
 
-.modal-filter-select,
+.modal-filter-select {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    background: #0f111a;
+    border: 1px solid var(--border-subtle);
+    color: #ffffff;
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.modal-filter-select option {
+    background-color: #0f111a !important;
+    color: #ffffff !important;
+    padding: 8px 12px;
+}
+
 .modal-search-input {
     padding: 0.5rem 1rem;
     border-radius: var(--radius-md);
@@ -1175,9 +1196,6 @@ input[type="color"]::-webkit-color-swatch {
     color: #fff;
     font-size: 0.85rem;
     outline: none;
-}
-
-.modal-search-input {
     flex: 1;
     min-width: 200px;
 }
