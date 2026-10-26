@@ -363,11 +363,11 @@ function bindEventHandlers() {
         showScreen('background');
     });
 
-    // Camera Capture (Both top and bottom capture buttons)
+    // Camera Capture (Both top and bottom capture buttons) - Instant "Press and Go"
     ['capture-btn', 'capture-btn-top'].forEach(id => {
         const btn = document.getElementById(id);
         if (btn) {
-            btn.addEventListener('click', triggerCountdown);
+            btn.addEventListener('click', capturePhoto);
         }
     });
 
@@ -703,6 +703,10 @@ function capturePhoto() {
     const canvas = document.getElementById('camera-canvas') || document.createElement('canvas');
     const flash = document.getElementById('camera-flash');
     if (!video) return;
+
+    // Disable capture buttons immediately to prevent double-clicks
+    const captureBtns = document.querySelectorAll('.btn-capture');
+    captureBtns.forEach(b => b.disabled = true);
 
     // Flash visual
     if (flash) {
