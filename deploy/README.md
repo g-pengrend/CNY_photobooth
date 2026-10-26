@@ -58,16 +58,21 @@ deploy/
 
 ---
 
-### Mode 3: Browser-Only / Digital Kiosk via Tailscale (Zero Install, No Printing)
-> **Goal:** You want to access Theme Studio, test themes, or run a digital-only photobooth from ANY laptop, iPad, or Mac connected to Tailscale without installing anything locally.
+### Mode 3: Tailscale Remote IP Access (Zero-Install on Laptop)
+> **Goal:** The photobooth is hosted on a remote DGX/Linux machine connected to Tailscale. You want to access and run the booth or Theme Studio from ANY laptop (Mac, Windows, Linux, or iPad) without installing ComfyUI, PyTorch, or cloudflared on your laptop!
 
-* **On the DGX Cluster**: Run `./deploy/linux_mac/2_dgx_server_headless.sh` (or Docker).
+* **On the DGX / Host Machine**: Run `./deploy/linux_mac/2_dgx_server_headless.sh` (or Docker).
 * **On your Laptop / Mac / Tablet**:
-  * Ensure Tailscale is connected.
-  * Open any browser and navigate to:
-    `http://<DGX-Tailscale-IP>:5000` (e.g. `http://100.x.y.z:5000`)
-  * **Result:** Full Theme Studio and Photobooth work immediately! Guests can download photos/videos to their phones via on-screen QR codes.
-  * *(Optional: If you later decide to plug a physical printer into this laptop, simply run `python print_agent.py --server http://100.x.y.z:5000`)*.
+  1. Make sure Tailscale is connected to your Tailnet.
+  2. Open any web browser and go to:
+     `http://<DGX-Tailscale-IP>:5000` (e.g. `http://100.x.y.z:5000` or `http://breadnbiscuit:5000`).
+  3. **No Printing Needed?** That's it! You have 100% full access to the Photobooth and Theme Studio. Guests can download photos/videos to their phones via on-screen QR codes.
+  4. **Want Physical USB Printing from this Laptop?**
+     * You do **NOT** need to install ComfyUI, PyTorch, or cloudflared on this laptop!
+     * Just plug your USB photo printer into the laptop and run the lightweight print agent:
+       * **Windows**: Double-click `deploy/windows/3_edge_print_agent.bat` and enter `http://100.x.y.z:5000`
+       * **macOS / Linux**: Run `./deploy/linux_mac/4_edge_print_agent.sh` and enter `http://100.x.y.z:5000`
+     * **Result:** The print agent fetches finished photos over Tailscale and prints directly to your physical USB printer!
 
 ---
 
