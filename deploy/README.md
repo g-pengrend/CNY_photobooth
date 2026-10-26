@@ -14,15 +14,15 @@ deploy/
 ├── DGX_ADMIN_SETUP_GUIDE.md       <- Technical briefing document for DGX cluster administrators
 │
 ├── windows/                       <- Windows launchers (.bat)
-│   ├── 1_standalone_full_system.bat   (Everything runs on 1 local Windows PC)
-│   ├── 2_kiosk_client_tailscale.bat   (Windows Kiosk Client connected to DGX over Tailscale + local USB printing)
-│   └── 3_edge_print_agent.bat         (Domain Mode: runs lightweight print agent on laptop with USB printer)
+│   ├── 1_standalone_full_system.bat   (Everything runs on 1 local Windows PC for dev/testing)
+│   ├── 2_kiosk_client_tailscale.bat   (Legacy hybrid: runs local Flask on client PC)
+│   └── 3_edge_print_agent.bat         (Client laptop: runs print agent connected to USB printer)
 │
 ├── linux_mac/                     <- Linux and macOS launchers (.sh)
-│   ├── 1_standalone_full_system.sh    (Everything runs on 1 desktop Linux workstation with GUI)
-│   ├── 2_dgx_server_headless.sh       (Headless DGX server daemon running 8188 + 8189 + 5001 + 5000 in background)
-│   ├── 3_kiosk_client_tailscale.sh    (Kiosk Client on Mac/Linux connecting to DGX over Tailscale + USB printing)
-│   ├── 4_edge_print_agent.sh          (Domain Mode: runs lightweight print agent on Mac/Linux with USB printer)
+│   ├── 1_standalone_full_system.sh    (Single desktop Linux workstation with live multi-window GUI)
+│   ├── 2_dgx_server_headless.sh       (Headless DGX daemon running 8188 + 8189 + 5001 + 5000 in background)
+│   ├── 3_kiosk_client_tailscale.sh    (Legacy hybrid client for Mac/Linux)
+│   ├── 4_edge_print_agent.sh          (Client laptop: runs print agent on Mac/Linux connected to USB printer)
 │   └── gpu_reset.sh                   (Emergency NVIDIA MPS daemon reset)
 │
 └── docker/                        <- DGX Cluster Containerization
@@ -35,53 +35,54 @@ deploy/
 
 ## 🎯 Which Setup Should I Use?
 
-### Mode 1: Pure Domain-Hosted Setup (Zero-Install on Laptops)
-> **Goal:** The photobooth is hosted on a DGX cluster under a domain name (`https://photobooth.mydomain.edu.sg`). You walk up with a laptop connected to the USB dye-sub photo printer.
+### 🌟 Mode 1: DGX-Hosted Stack (Primary Production Mode)
+> **Goal:** The entire photobooth stack runs on your DGX A100 cluster. You access the photobooth and Theme Studio from any client device (laptop, Mac, PC, iPad) either via **Custom Domain Name** or **Tailscale IP**.
 
-* **On the DGX Cluster**: Run Docker (`docker compose -f deploy/docker/docker-compose.yml up -d`) or `./deploy/linux_mac/2_dgx_server_headless.sh`.
-* **On the Laptop with the USB Printer**:
-  * **Windows**: Double-click `deploy/windows/3_edge_print_agent.bat`
-  * **macOS / Linux**: Run `./deploy/linux_mac/4_edge_print_agent.sh`
-  * Enter your domain name when prompted.
-  * **Result:** Direct photo-to-printer printing with zero browser popups. No Tailscale required on the laptop!
+#### 1. On the DGX Cluster (Host Server):
+* Run with Docker:
+  ```bash
+  docker compose -f deploy/docker/docker-compose.yml up -d
+  ```
+  *OR* run bare-metal in Conda:
+  ```bash
+  ./deploy/linux_mac/2_dgx_server_headless.sh
+  ```
+* 💡 **Does the DGX host run `print_agent.py`?** **NO.** The DGX in the server room has no physical USB printer attached. It only hosts the web app, ComfyUI, and the job queues.
+
+#### 2. On Your Client Laptop / PC / Tablet:
+* **Step A (Open Web App):**
+  * Open any browser (Chrome, Safari, Edge) and go to your server address:
+    * **Via Public Domain**: `https://photobooth.mydomain.edu.sg` *(No Tailscale needed!)*
+    * **Via Tailscale Network**: `http://<DGX-Tailscale-IP>:5000` *(e.g. `http://100.x.y.z:5000`)*
+  * You now have 100% full access to the Photobooth and Theme Studio with zero local installations!
+* **Step B (Optional - If you want physical USB Photo Printing):**
+  * Plug your USB photo printer into that laptop.
+  * Run the lightweight edge print agent (no ComfyUI, no cloudflared, no Conda required on the laptop!):
+    * **Windows**: Double-click `deploy/windows/3_edge_print_agent.bat`
+    * **macOS / Linux**: Run `./deploy/linux_mac/4_edge_print_agent.sh`
+  * Enter your server URL when prompted (`https://photobooth.mydomain.edu.sg` or `http://100.x.y.z:5000`).
+  * **Result:** The agent listens to the server queue, downloads the high-res composite image, and prints edge-to-edge glossy photos directly through your native OS photo print driver with zero browser popups.
 
 ---
 
-### Mode 2: Hybrid Kiosk Setup (Connected to DGX via Tailscale with Local Printing)
-> **Goal:** You want to run the full interactive kiosk frontend and local camera on your on-site PC/laptop, while offloading AI rendering to the remote DGX over Tailscale.
+### 💻 Mode 2: Local Standalone Setup (Single PC for Dev & Testing)
+> **Goal:** You are developing, designing themes, or testing everything offline on a single Windows or Linux workstation that has its own NVIDIA GPU.
 
-* **On the DGX Cluster**: Run `./deploy/linux_mac/2_dgx_server_headless.sh` (or Docker).
-* **On the On-Site Kiosk PC**:
+* **On the Local Workstation**:
+  * **Windows**: Double-click `deploy/windows/1_standalone_full_system.bat`
+  * **Linux**: Run `./deploy/linux_mac/1_standalone_full_system.sh`
+* 💡 **Does this use the DGX?** **NO.** Everything runs locally on one machine on `http://localhost:5000`.
+
+---
+
+### ⚙️ Mode 3: Legacy Hybrid Setup (Optional / Developer Legacy)
+> **Goal:** Running the Flask web server locally on your on-site PC while routing raw ComfyUI node workflows over Tailscale to the remote Linux machine.
+
+* **On the Remote Machine**: Run ComfyUI on `8188` & `8189`.
+* **On the Client PC**:
   * **Windows**: Double-click `deploy/windows/2_kiosk_client_tailscale.bat`
   * **macOS / Linux**: Run `./deploy/linux_mac/3_kiosk_client_tailscale.sh`
-  * **Result:** Native USB photo printing and local camera capture run directly on your PC; compute runs remotely on DGX.
-
----
-
-### Mode 3: Tailscale Remote IP Access (Zero-Install on Laptop)
-> **Goal:** The photobooth is hosted on a remote DGX/Linux machine connected to Tailscale. You want to access and run the booth or Theme Studio from ANY laptop (Mac, Windows, Linux, or iPad) without installing ComfyUI, PyTorch, or cloudflared on your laptop!
-
-* **On the DGX / Host Machine**: Run `./deploy/linux_mac/2_dgx_server_headless.sh` (or Docker).
-* **On your Laptop / Mac / Tablet**:
-  1. Make sure Tailscale is connected to your Tailnet.
-  2. Open any web browser and go to:
-     `http://<DGX-Tailscale-IP>:5000` (e.g. `http://100.x.y.z:5000` or `http://breadnbiscuit:5000`).
-  3. **No Printing Needed?** That's it! You have 100% full access to the Photobooth and Theme Studio. Guests can download photos/videos to their phones via on-screen QR codes.
-  4. **Want Physical USB Printing from this Laptop?**
-     * You do **NOT** need to install ComfyUI, PyTorch, or cloudflared on this laptop!
-     * Just plug your USB photo printer into the laptop and run the lightweight print agent:
-       * **Windows**: Double-click `deploy/windows/3_edge_print_agent.bat` and enter `http://100.x.y.z:5000`
-       * **macOS / Linux**: Run `./deploy/linux_mac/4_edge_print_agent.sh` and enter `http://100.x.y.z:5000`
-     * **Result:** The print agent fetches finished photos over Tailscale and prints directly to your physical USB printer!
-
----
-
-### Mode 4: Local Standalone Setup (All on One Workstation)
-> **Goal:** You are developing or testing everything on a single Windows or Linux workstation with its own NVIDIA GPU.
-
-* **Windows**: Double-click `deploy/windows/1_standalone_full_system.bat`
-* **Linux**: Run `./deploy/linux_mac/1_standalone_full_system.sh`
-* **Result:** Boots ComfyUI, Receiver, Frontend, and browser on `localhost:5000`.
+* *(Note: Mode 1 with the lightweight print agent is much faster and lighter since you don't need a local Conda environment on the client PC).*
 
 ---
 
