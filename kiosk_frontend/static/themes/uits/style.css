@@ -821,9 +821,13 @@ body::before {
 }
 
 .pose-grid,
-.clothes-grid,
-.background-grid {
+.clothes-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    max-width: 100%;
+}
+
+.background-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     max-width: 100%;
 }
 
@@ -1627,7 +1631,7 @@ body::before {
     overflow: hidden;
     flex-shrink: 0;
     position: relative;
-    cursor: zoom-in;
+    cursor: pointer;
     border: 1px solid rgba(212, 175, 55, 0.3);
     transition: transform var(--transition-fast);
     background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05) 0%, rgba(15, 15, 15, 0.8) 100%);
@@ -1637,8 +1641,8 @@ body::before {
 }
 
 .background-grid .card-thumbnail {
-    width: 130px;
-    height: 90px;
+    width: 155px;
+    height: 110px;
 }
 
 .card-thumbnail:hover {
@@ -1654,14 +1658,28 @@ body::before {
 
 .expand-icon {
     position: absolute;
-    bottom: 2px;
-    right: 2px;
-    background: rgba(0, 0, 0, 0.6);
+    bottom: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
-    border-radius: 4px;
-    padding: 2px;
-    font-size: 10px;
-    pointer-events: none;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    pointer-events: auto;
+    cursor: zoom-in;
+    transition: transform 0.2s ease, background 0.2s ease;
+    z-index: 2;
+}
+
+.expand-icon:hover {
+    transform: scale(1.15);
+    background: var(--cny-gold, #d4af37);
+    color: #000;
 }
 
 /* Image Modal */

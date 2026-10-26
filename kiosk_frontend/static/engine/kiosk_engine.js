@@ -450,7 +450,7 @@ function renderSelectionGrids(data) {
         poseGrid.innerHTML = data.poses.map((p, idx) => `
             <div class="selection-card ${idx === 0 ? 'selected' : ''}" 
                  data-code="${p.code}" data-prompt="${escapeAttr(p.prompt)}">
-                <div class="card-image-wrap" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(p.image)}')" title="Click to enlarge">
+                <div class="card-image-wrap">
                     <img src="${p.image}" alt="${p.title}" loading="lazy">
                     <button class="expand-card-btn" type="button" title="View full picture" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(p.image)}')">🔍</button>
                 </div>
@@ -492,7 +492,7 @@ function renderSelectionGrids(data) {
         bgGrid.innerHTML = data.backgrounds.map((b, idx) => `
             <div class="selection-card ${idx === 0 ? 'selected' : ''}" 
                  data-code="${b.code}" data-prompt="${escapeAttr(b.prompt)}">
-                <div class="card-image-wrap" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(b.image)}')" title="Click to enlarge">
+                <div class="card-image-wrap">
                     <img src="${b.image}" alt="${b.title}" loading="lazy">
                     <button class="expand-card-btn" type="button" title="View full picture" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(b.image)}')">🔍</button>
                 </div>
@@ -533,7 +533,7 @@ function renderClothesGrid(clothesList) {
     grid.innerHTML = clothesList.map((c, idx) => `
         <div class="selection-card ${idx === 0 ? 'selected' : ''}" 
              data-code="${c.code}" data-category="${c.category || 'unisex'}" data-prompt="${escapeAttr(c.prompt)}">
-            <div class="card-image-wrap" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(c.image)}')" title="Click to enlarge">
+            <div class="card-image-wrap">
                 <img src="${c.image}" alt="${c.title}" loading="lazy">
                 <button class="expand-card-btn" type="button" title="View full picture" onclick="event.stopPropagation(); window.expandImage('${escapeAttr(c.image)}')">🔍</button>
             </div>

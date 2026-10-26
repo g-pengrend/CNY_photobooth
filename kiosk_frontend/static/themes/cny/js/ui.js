@@ -39,9 +39,9 @@ export async function renderSelections() {
     renderGrid('pose-grid', activePoses, (item) => `
         <button class="selection-card" data-pose="${escapeHtml(item.prompt || item.prompt_modifier || '')}" data-code="${item.code}">
             <div class="card-content-wrapper">
-                <div class="card-thumbnail" onclick="event.stopPropagation(); expandImage('${item.image}')">
+                <div class="card-thumbnail">
                     <img src="${item.image}" alt="${escapeHtml(item.title || item.name || '')}" onerror="this.style.display='none'">
-                    <div class="expand-icon">🔍</div>
+                    <div class="expand-icon" onclick="event.stopPropagation(); expandImage('${item.image}')" title="Preview image">🔍</div>
                 </div>
                 <div class="card-text">
                     <div class="card-title">${escapeHtml(item.title || item.name || '')}</div>
@@ -55,9 +55,9 @@ export async function renderSelections() {
         <button class="selection-card" data-clothes="${escapeHtml(item.prompt || item.prompt_modifier || '')}" data-code="${item.code}" data-category="${item.category}">
             <span class="category-badge ${item.category}">${capitalize(item.category)}</span>
             <div class="card-content-wrapper">
-                <div class="card-thumbnail" onclick="event.stopPropagation(); expandImage('${item.image}')">
+                <div class="card-thumbnail">
                     <img src="${item.image}" alt="${escapeHtml(item.title || item.name || '')}" onerror="this.style.display='none'">
-                    <div class="expand-icon">🔍</div>
+                    <div class="expand-icon" onclick="event.stopPropagation(); expandImage('${item.image}')" title="Preview image">🔍</div>
                 </div>
                 <div class="card-text">
                     <div class="card-title">${escapeHtml(item.title || item.name || '')}</div>
@@ -70,9 +70,9 @@ export async function renderSelections() {
     renderGrid('background-grid', activeBackgrounds, (item) => `
         <button class="selection-card" data-background="${escapeHtml(item.prompt || item.prompt_modifier || '')}" data-code="${item.code}">
             <div class="card-content-wrapper">
-                <div class="card-thumbnail" onclick="event.stopPropagation(); expandImage('${item.image}')">
+                <div class="card-thumbnail">
                     <img src="${item.image}" alt="${escapeHtml(item.title || item.name || '')}" onerror="this.style.display='none'">
-                    <div class="expand-icon">🔍</div>
+                    <div class="expand-icon" onclick="event.stopPropagation(); expandImage('${item.image}')" title="Preview image">🔍</div>
                 </div>
                 <div class="card-text">
                     <div class="card-title">${escapeHtml(item.title || item.name || '')}</div>
