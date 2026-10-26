@@ -35,62 +35,83 @@ deploy/
 
 ## 🎯 Which Setup Should I Use?
 
-### 🌟 Mode 1: DGX-Hosted Stack (Primary Production Mode)
-> **Goal:** The entire photobooth stack runs on your DGX A100 cluster. You access the photobooth and Theme Studio from any client device (laptop, Mac, PC, iPad) either via **Custom Domain Name** or **Tailscale IP**.
+### 🌐 Mode 1: Domain-Hosted Mode (Public Domain / Cloudflare Tunnel)
+> **Goal:** The full stack runs on your DGX cluster. Any client laptop, tablet, or kiosk connects via a custom domain (e.g. `https://photobooth.mydomain.edu.sg`). **Zero Tailscale or software installations required on client devices!**
 
 #### 1. On the DGX Cluster (Host Server):
 * Run with Docker:
   ```bash
   docker compose -f deploy/docker/docker-compose.yml up -d
   ```
-  *OR* run bare-metal in Conda:
+  *OR* bare-metal in Conda:
   ```bash
   ./deploy/linux_mac/2_dgx_server_headless.sh
   ```
-* 💡 **Does the DGX host run `print_agent.py`?** **NO.** The DGX in the server room has no physical USB printer attached. It only hosts the web app, ComfyUI, and the job queues.
+* 💡 **Does the DGX host run `print_agent.py`?** **NO.** The DGX has no physical USB printer attached. It only hosts the web app, ComfyUI, and job queues.
 
-#### 2. On Your Client Laptop / PC / Tablet:
-* **Step A (Open Web App):**
-  * Open any browser (Chrome, Safari, Edge) and go to your server address:
-    * **Via Public Domain**: `https://photobooth.mydomain.edu.sg` *(No Tailscale needed!)*
-    * **Via Tailscale Network**: `http://<DGX-Tailscale-IP>:5000` *(e.g. `http://100.x.y.z:5000`)*
-  * You now have 100% full access to the Photobooth and Theme Studio with zero local installations!
-* **Step B (Optional - If you want physical USB Photo Printing):**
+#### 2. On Your Client Laptop / PC (With USB Photo Printer):
+* **Web App Access:** Open any browser and go to `https://photobooth.mydomain.edu.sg`.
+* **Direct USB Photo Printing:**
   * Plug your USB photo printer into that laptop.
-  * Run the lightweight edge print agent (no ComfyUI, no cloudflared, no Conda required on the laptop!):
+  * Run the lightweight edge print agent:
     * **Windows**: Double-click `deploy/windows/3_edge_print_agent.bat`
     * **macOS / Linux**: Run `./deploy/linux_mac/4_edge_print_agent.sh`
-  * Enter your server URL when prompted (`https://photobooth.mydomain.edu.sg` or `http://100.x.y.z:5000`).
-  * **Result:** The agent listens to the server queue, downloads the high-res composite image, and prints edge-to-edge glossy photos directly through your native OS photo print driver with zero browser popups.
+  * Enter your server URL when prompted (e.g. `https://photobooth.mydomain.edu.sg`).
+  * **Result:** The agent monitors the server queue, downloads photos, and prints edge-to-edge glossy photos directly through your native OS photo print driver with zero browser popups.
 
 ---
 
-### 💻 Mode 2: Local Standalone Setup (Single PC for Dev & Testing)
-> **Goal:** You are developing, designing themes, or testing everything offline on a single Windows or Linux workstation that has its own NVIDIA GPU.
+### 🔒 Mode 2: Tailscale Remote-Hosted Mode (Private Tailnet)
+> **Goal:** DGX cluster runs headless inside your private Tailnet. Your client laptop connects via Tailscale IP (`http://100.x.y.z:5000` or `5001`). No public domain, no ComfyUI, and no heavy dependencies on the client laptop.
+
+#### 1. On the DGX Cluster (Host Server):
+* Ensure Tailscale is running on DGX.
+* Launch the headless server daemon:
+  ```bash
+  ./deploy/linux_mac/2_dgx_server_headless.sh
+  ```
+* Get your DGX Tailscale IP (e.g. `100.x.y.z`).
+
+#### 2. On Your Client Laptop / PC:
+* **Web App Access:**
+  * Open any browser and navigate to:
+    * **Frontend & Theme Studio**: `http://100.x.y.z:5000`
+    * **Gallery & Receiver**: `http://100.x.y.z:5001`
+  * Full photobooth functionality is immediately accessible!
+* **Direct USB Photo Printing:**
+  * Plug your USB photo printer into the client laptop.
+  * Run the edge print agent:
+    * **Windows**: Double-click `deploy/windows/3_edge_print_agent.bat`
+    * **macOS / Linux**: Run `./deploy/linux_mac/4_edge_print_agent.sh`
+  * Enter your Tailscale IP when prompted (e.g. `http://100.x.y.z:5000` or `http://100.x.y.z:5001`).
+  * 💡 *Smart Dual-Port Polling:* The print agent automatically monitors **both** Port 5000 (Kiosk UI) and Port 5001 (Receiver & Mobile QR) so print jobs triggered from anywhere are printed immediately!
+
+---
+
+### 💻 Mode 3: Local Standalone Setup (All-in-One Single Workstation)
+> **Goal:** Everything (ComfyUI, Web UI, print spooler) runs locally on a single Windows or Linux PC/laptop with its own NVIDIA GPU (e.g. RTX 4090 laptop for offline events or testing).
 
 * **On the Local Workstation**:
   * **Windows**: Double-click `deploy/windows/1_standalone_full_system.bat`
   * **Linux**: Run `./deploy/linux_mac/1_standalone_full_system.sh`
-* 💡 **Does this use the DGX?** **NO.** Everything runs locally on one machine on `http://localhost:5000`.
+* 💡 **Does this use the DGX?** **NO.** Everything runs locally on one machine at `http://localhost:5000` with the USB printer directly connected.
 
 ---
 
-### ⚙️ Mode 3: Legacy Hybrid Setup (Optional / Developer Legacy)
+### 🛠️ Legacy / Developer Hybrid Mode (Optional)
 > **Goal:** Running the Flask web server locally on your on-site PC while routing raw ComfyUI node workflows over Tailscale to the remote Linux machine.
-
-* **On the Remote Machine**: Run ComfyUI on `8188` & `8189`.
-* **On the Client PC**:
-  * **Windows**: Double-click `deploy/windows/2_kiosk_client_tailscale.bat`
-  * **macOS / Linux**: Run `./deploy/linux_mac/3_kiosk_client_tailscale.sh`
-* *(Note: Mode 1 with the lightweight print agent is much faster and lighter since you don't need a local Conda environment on the client PC).*
+* **Client PC**: Run `deploy/windows/2_kiosk_client_tailscale.bat` or `deploy/linux_mac/3_kiosk_client_tailscale.sh`.
+* *(Note: Mode 1 and Mode 2 are recommended over this legacy mode because they require zero local Conda environments on the client PC).*
 
 ---
 
-## ⚙️ Core Ports Reference
+## ⚙️ Core Ports & Print Agent Routing Reference
 
-| Port | Service | Purpose |
-| :--- | :--- | :--- |
-| **`5000`** | Frontend & Theme Studio | User interface, booth experience, and theme manager |
-| **`5001`** | Receiver API | Workflow dispatcher, prompt injection, and queue manager |
-| **`8188`** | ComfyUI Image Server | Still photo VTON try-on and Theme Studio asset generation (Priority 0) |
-| **`8189`** | ComfyUI Video Server | Motion portrait and video animation pipeline (Priority 1) |
+| Port | Service | Purpose | Print Agent Support |
+| :--- | :--- | :--- | :--- |
+| **`5000`** | Frontend & Theme Studio | User interface, booth experience, and theme manager | ✅ Supported (`/api/print-queue/pending`) |
+| **`5001`** | Receiver API & Mobile QR | Workflow dispatcher, prompt injection, and gallery | ✅ Supported (`/api/print-queue/pending`) |
+| **`8188`** | ComfyUI Image Server | Still photo VTON try-on and Theme Studio asset generation | N/A (Internal AI pipeline) |
+| **`8189`** | ComfyUI Video Server | Motion portrait and video animation pipeline | N/A (Internal AI pipeline) |
+
+> 💡 **Print Agent Tip:** When running `print_agent.py`, you can enter `http://<IP>:5000` or `http://<IP>:5001` or just `http://<IP>`. The print agent automatically checks both ports on that host, ensuring print jobs sent from the Kiosk screen (port 5000) or from the mobile QR gallery (port 5001) are both received and printed seamlessly.

@@ -1,15 +1,15 @@
 @echo off
-TITLE Photobooth Edge Print Agent (Domain Hosted Mode)
+setlocal enabledelayedexpansion
+TITLE Photobooth Edge Print Agent (Domain & Tailscale Mode)
 
 cd /d "%~dp0..\.."
 
 echo ========================================================
 echo   PHOTOBOOTH EDGE PRINT AGENT (Windows)
 echo.
-echo   Use this when accessing Photobooth via a Domain Name
-echo   or remote server. This script catches print jobs from
-echo   the cloud and sends them directly to your USB printer.
-echo   (No Tailscale needed if using public domain!)
+echo   Connects to Domain Name, Tailscale IP, or Localhost.
+echo   Listens for print jobs and prints directly to your
+echo   physical USB photo printer with zero browser popups.
 echo ========================================================
 echo.
 
@@ -21,7 +21,7 @@ if exist ".print_server_address" (
 
 echo Target Server URL: [!DEFAULT_URL!]
 echo Press ENTER to keep, or enter the Photobooth Server URL
-echo (e.g. https://photobooth.mydomain.edu.sg or http://100.x.y.z:5000):
+echo (e.g. https://photobooth.mydomain.edu.sg, http://100.x.y.z:5000, or http://100.x.y.z:5001):
 set /p USER_SERVER="Server URL: "
 
 if defined USER_SERVER (

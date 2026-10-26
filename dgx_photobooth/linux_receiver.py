@@ -515,10 +515,47 @@ def receive_print_only():
     with JOBS_LOCK:
         JOBS.append(new_job)
 
+    # Enqueue for edge print agents (Mode 1 & Mode 2)
+    add_to_print_queue(new_job["id"], f"/uploads/{gen_filename}")
+
     return jsonify({
         "status": "received",
-        "message": "Images received for printing"
+        "message": "Images received for printing",
+        "job_id": new_job["id"]
     }), 200
+
+# ============================================================
+# PRINT QUEUE FOR EDGE PRINT AGENTS (Modes 1 & 2)
+# ============================================================
+pending_print_jobs = {}
+
+
+def add_to_print_queue(job_id, image_url):
+    pending_print_jobs[job_id] = {
+        'job_id': job_id,
+        'image_url': image_url,
+        'timestamp': time.time()
+    }
+    print(f"🖨️ [PrintQueue-5001] Job {job_id} added to edge print queue (Pending: {len(pending_print_jobs)})")
+
+
+@app.route('/api/print-queue/pending', methods=['GET'])
+def get_pending_print_jobs():
+    """Retrieve all pending print jobs for connected edge print agents."""
+    return jsonify({
+        'jobs': list(pending_print_jobs.values()),
+        'count': len(pending_print_jobs)
+    })
+
+
+@app.route('/api/print-queue/ack/<job_id>', methods=['POST', 'GET'])
+def ack_print_job(job_id):
+    """Acknowledge that an edge print agent has printed the job."""
+    if job_id in pending_print_jobs:
+        del pending_print_jobs[job_id]
+        print(f"✅ [PrintQueue-5001] Job {job_id} acknowledged and removed from queue. Remaining: {len(pending_print_jobs)}")
+        return jsonify({'status': 'success', 'message': f'Job {job_id} acknowledged'})
+    return jsonify({'status': 'not_found', 'message': f'Job {job_id} not in pending queue'}), 404
 
 # --- QR Code & Mobile View Logic ---
 
@@ -580,11 +617,15 @@ def print_image(job_id):
     image_path = os.path.join(UPLOAD_FOLDER, gen_filename)
     if not os.path.exists(image_path):
         return jsonify({"error": f"Image file not found: {gen_filename}"}), 404
+
+    # 1. Enqueue job for connected edge print agents (Mode 1 & Mode 2)
+    image_rel_url = f"/uploads/{gen_filename}"
+    add_to_print_queue(job_id, image_rel_url)
         
     def run_print_task(path):
         try:
             current_os = platform.system()
-            print(f"🖨️  Initiating print job [{current_os}]: {path}")
+            print(f"🖨️  Initiating local print attempt [{current_os}]: {path}")
             
             if current_os == "Windows":
                 os.startfile(path, "print")
@@ -592,32 +633,31 @@ def print_image(job_id):
             else:
                 # Linux: Try lp first, then lpr as fallback
                 # Targeting G500USB specifically
-                print(f"🔍 Attempting to print to G500USB...")
-                
-                # We use capture_output to see why it might be failing
-                cmd = ['lp', '-d', 'G500USB', path]
-                result = subprocess.run(cmd, capture_output=True, text=True)
-                
-                if result.returncode == 0:
-                    print(f"✅ Print job successfully queued: {result.stdout.strip()}")
-                else:
+                import shutil
+                if shutil.which('lp'):
+                    print(f"🔍 Attempting to print to G500USB via lp...")
+                    cmd = ['lp', '-d', 'G500USB', path]
+                    result = subprocess.run(cmd, capture_output=True, text=True)
+                    if result.returncode == 0:
+                        print(f"✅ Print job successfully queued: {result.stdout.strip()}")
+                        return
                     print(f"⚠️  'lp' failed, trying 'lpr' fallback...")
                     result_lpr = subprocess.run(['lpr', '-P', 'G500USB', path], capture_output=True, text=True)
                     if result_lpr.returncode == 0:
                         print(f"✅ Print job sent via lpr fallback.")
-                    else:
-                        print(f"❌ Both lp and lpr failed.")
-                        print(f"   lp error: {result.stderr.strip()}")
-                        print(f"   lpr error: {result_lpr.stderr.strip()}")
+                        return
+                    print(f"Notice: Local print commands failed (expected on headless DGX).")
+                else:
+                    print(f"Notice: Local CUPS lp command not found (expected on headless DGX).")
                 
         except Exception as e:
-            print(f"❌ Print logic exception: {e}")
+            print(f"Notice: Local print dispatch skipped or failed: {e}")
 
     # Run in background thread
     thread = threading.Thread(target=run_print_task, args=(image_path,), daemon=True)
     thread.start()
     
-    return jsonify({"status": "success", "message": "Print job initiated"})
+    return jsonify({"status": "success", "message": "Print job initiated and queued for edge agents"})
 
 if __name__ == '__main__':
     print_config()
