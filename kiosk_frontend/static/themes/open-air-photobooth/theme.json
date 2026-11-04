@@ -1,0 +1,92 @@
+{
+  "slug": "open-air-photobooth",
+  "title": "The Open-Air Photobooth",
+  "subtitle": "Smile bright. Step in. Leave with a memory.",
+  "badge": "Snap & Smile",
+  "icon": "📷",
+  "description": "A bright, playful photo booth with drifting polaroids, falling confetti, and a spinning aperture ring. Step into the frame and let the shutter do its thing.",
+  "cta": "Take My Photo",
+  "status": "live",
+  "isUnsavedDraft": false,
+  "features": {
+    "luckyNumber": false,
+    "filmStrip": false,
+    "genderFilter": true
+  },
+  "background": {
+    "type": "particles",
+    "floatingIcons": [
+      "✨",
+      "⭐",
+      "🎉",
+      "✦"
+    ],
+    "filmStrip": false
+  },
+  "style": {
+    "fontFamily": "'Space Grotesk', system-ui, sans-serif",
+    "googleFontUrl": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap",
+    "colors": {
+      "background": "#fdf6e9",
+      "accent": "#ff6b6b",
+      "text": "#111111",
+      "primary": "#ffffff",
+      "accentGlow": "rgba(255, 107, 107, 0.25)",
+      "surface": "rgba(255, 255, 255, 0.05)",
+      "surfaceBorder": "rgba(255, 107, 107, 0.3)"
+    },
+    "gradients": {
+      "radialBackground": "radial-gradient(circle at 50% 50%, rgba(255, 107, 107, 0.25) 0%, transparent 70%)",
+      "primaryButton": "linear-gradient(135deg, #ffffff 0%, #ff6b6b 100%)"
+    }
+  },
+  "waitingExperience": {
+    "title": "Charging the Flash…",
+    "subtitle": "Working a little photographic magic on your shot",
+    "sequence": [
+      {
+        "text": "Charging the flash…",
+        "delay": 500,
+        "color": "#ff6b6b"
+      },
+      {
+        "text": "Focusing the lens…",
+        "delay": 3500,
+        "color": "#fdf6e9"
+      },
+      {
+        "text": "Click! Capturing the moment…",
+        "delay": 7000,
+        "color": "#ff6b6b"
+      },
+      {
+        "text": "Developing your photo…",
+        "delay": 10500,
+        "color": "#fdf6e9"
+      },
+      {
+        "text": "Adding the finishing touches…",
+        "delay": 14000,
+        "color": "#ff6b6b"
+      }
+    ],
+    "completionMessage": "Ready to smile!"
+  },
+  "promptTemplate": {
+    "framing": "Medium shot, waist up shot of",
+    "maleStyle": "generic casual wear",
+    "femaleStyle": "generic casual wear",
+    "borderStyle": "A classic, clean Polaroid-style photo frame overlay designed for a digital photobooth. Thick pure white paper border with a large bottom margin and thinner top/side margins. Softly rounded corners and a subtle realistic drop shadow. The central photo area is a transparent rectangle. Text is strictly contained within the white borders with ample padding, never overlapping the photo window.",
+    "topTitle": "Photobooth",
+    "topTitleStyle": "Clean, bold, modern sans-serif typeface in solid charcoal grey, centered horizontally in the top white border with generous padding.",
+    "subtitle": "Date: 2026",
+    "subtitleStyle": "Smaller, minimalist sans-serif font directly below the main title, perfectly spaced and balanced.",
+    "bottomTitle": "Smile!",
+    "bottomTitleStyle": "Casual, rounded sans-serif font in soft charcoal grey, perfectly centered within the large thick bottom white border.",
+    "typoStyle": "Typography is flat, clean, and solid, integrated perfectly into the top and bottom white Polaroid borders with zero text overlapping the photo cutout.",
+    "atmosphere": "Flat, 2D UI/UX graphic overlay. Clean studio lighting. Palette focuses on pure white Polaroid paper and solid charcoal text. Sharp focus, 8k resolution, vector-style crispness, realistic paper texture with subtle drop shadow.",
+    "includeLuckyNum": false,
+    "rawPrompt": "Medium shot, waist up shot of a \"gender\" \"gender_style\" with \"pose\" for a concept photo, dressed in \"clothes_style\". The setting is \"background\". A classic, clean Polaroid-style photo frame overlay designed for a digital photobooth. Thick pure white paper border with a large bottom margin and thinner top/side margins. Softly rounded corners and a subtle realistic drop shadow. The central photo area is a transparent rectangle. Text is strictly contained within the white borders with ample padding, never overlapping the photo window. At the top-center apex, the title \"Photobooth\" is Clean, bold, modern sans-serif typeface in solid charcoal grey, centered horizontally in the top white border with generous padding., followed by the years \"Date: 2026\" Smaller, minimalist sans-serif font directly below the main title, perfectly spaced and balanced.. At the bottom-center, overlayed above the image, anchored within the ornate border, the title \"Smile!\" is Casual, rounded sans-serif font in soft charcoal grey, perfectly centered within the large thick bottom white border.. Typography is flat, clean, and solid, integrated perfectly into the top and bottom white Polaroid borders with zero text overlapping the photo cutout. Flat, 2D UI/UX graphic overlay. Clean studio lighting. Palette focuses on pure white Polaroid paper and solid charcoal text. Sharp focus, 8k resolution, vector-style crispness, realistic paper texture with subtle drop shadow."
+  },
+  "atmosphereMode": "advanced"
+}

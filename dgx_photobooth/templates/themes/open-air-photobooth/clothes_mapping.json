@@ -1,0 +1,54 @@
+{
+  "C64": {
+    "desc": "A rugged yet refined men's everyday look combining a classic button-down with tailored patterned trousers.",
+    "lighting": "Cinematic ambient studio lighting"
+  },
+  "C63": {
+    "desc": "An effortlessly cool, masculine everyday pairing of crisp white cotton, a rugged denim jacket, and tailored pants.",
+    "lighting": "Cinematic ambient studio lighting"
+  },
+  "C62": {
+    "desc": "A playful yet elegant women's everyday look combining a feminine top with tailored wide-leg trousers.",
+    "lighting": "Cinematic ambient studio lighting"
+  },
+  "C60": {
+    "desc": "A relaxed, nautical-inspired smart-casual staple featuring a feminine silhouette and tailored pants.",
+    "lighting": "Cinematic ambient studio lighting"
+  },
+  "C61": {
+    "desc": "A cozy, earthy women's sweater paired with textured trousers for a warm, classic winter silhouette.",
+    "lighting": "Cinematic ambient studio lighting"
+  },
+  "C19": {
+    "desc": "retro multi-tone striped knit polo in beige",
+    "lighting": "Silver and Golden"
+  },
+  "C18": {
+    "desc": "white casual shirt and grey trousers with leather suspenders",
+    "lighting": "Silver and Golden"
+  },
+  "C22": {
+    "desc": "A modern, tailored 3-piece tuxedo in deep midnight blue wool",
+    "lighting": "Blue and Golden"
+  },
+  "C23": {
+    "desc": "A modern, slim-fit black suit with a slight sheen",
+    "lighting": "Silver and Golden"
+  },
+  "C36": {
+    "desc": "scholar robe in crimson velvet with silver cloud embroidery",
+    "lighting": "Warm Golden and Scarlet"
+  },
+  "C01": {
+    "desc": "Men's contemporary short-sleeve button-up in vibrant Singapore red with a white tonal abstract skyline pattern, paired with white tailored chinos",
+    "lighting": "Red and Crisp White"
+  },
+  "C02": {
+    "desc": "Women's stylish sleeveless A-line dress with a structured white bodice, deep red skirt, and cascading white Vanda Miss Joaquim orchid motifs",
+    "lighting": "Red and Crisp White"
+  },
+  "C38": {
+    "desc": "tailored contemporary suit in champagne silk with peak lapels",
+    "lighting": "Crisp Editorial Studio"
+  }
+}
