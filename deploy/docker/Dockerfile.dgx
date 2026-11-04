@@ -1,6 +1,6 @@
 # ========================================================
 # SEIT Photobooth - DGX A100 Full-Stack Dockerfile
-# Ubuntu 22.04 + CUDA 12.4 + PyTorch 2.4 + ComfyUI
+# Ubuntu 22.04 + CUDA 12.4 + PyTorch 2.4 + ComfyUI Stack
 # ========================================================
 FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
 
@@ -25,9 +25,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libsm6 \
     libxext6 \
     libxrender-dev \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip
+# Upgrade pip and packaging tools
 RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel
 
 # Install PyTorch with CUDA 12.4
@@ -35,15 +36,33 @@ RUN pip3 install --no-cache-dir \
     torch torchvision torchaudio \
     --index-url https://download.pytorch.org/whl/cu124
 
-# Clone ComfyUI repository
+# Clone ComfyUI repository & install requirements
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git /app/ComfyUI \
     && pip3 install --no-cache-dir -r /app/ComfyUI/requirements.txt
 
-# Copy Photobooth requirements and install
+# Pre-install Essential ComfyUI Custom Nodes
+RUN mkdir -p /app/ComfyUI/custom_nodes && \
+    git clone https://github.com/yolain/ComfyUI-Easy-Use.git /app/ComfyUI/custom_nodes/ComfyUI-Easy-Use && \
+    git clone https://github.com/Gourieff/comfyui-reactor-node.git /app/ComfyUI/custom_nodes/comfyui-reactor-node && \
+    git clone https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite.git /app/ComfyUI/custom_nodes/ComfyUI-VideoHelperSuite && \
+    git clone https://github.com/rgthree/rgthree-comfy.git /app/ComfyUI/custom_nodes/rgthree-comfy
+
+# Install Face Swap & InsightFace runtime dependencies
+RUN pip3 install --no-cache-dir \
+    onnx \
+    onnxruntime-gpu \
+    insightface \
+    opencv-python-headless
+
+# Install Cloudflare Tunnel CLI (optional fallback for mobile QR code access when no domain is configured)
+RUN wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -O /usr/local/bin/cloudflared \
+    && chmod +x /usr/local/bin/cloudflared
+
+# Install Photobooth Web & Receiver requirements
+COPY requirements_full.txt /app/requirements_full.txt
 COPY requirements_server.txt /app/requirements_server.txt
 COPY requirements_client.txt /app/requirements_client.txt
-RUN pip3 install --no-cache-dir -r /app/requirements_server.txt || true
-RUN pip3 install --no-cache-dir -r /app/requirements_client.txt || true
+RUN pip3 install --no-cache-dir -r /app/requirements_full.txt || true
 
 # Copy project source files
 COPY kiosk_frontend /app/kiosk_frontend
@@ -54,7 +73,7 @@ COPY deploy/docker/entrypoint.sh /app/entrypoint.sh
 
 RUN chmod +x /app/entrypoint.sh
 
-# Expose all 4 core ports
+# Expose core ports
 EXPOSE 5000 5001 8188 8189
 
 ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]

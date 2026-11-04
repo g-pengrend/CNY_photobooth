@@ -24,13 +24,13 @@ if sys.stderr and hasattr(sys.stderr, 'reconfigure'):
 from config import COMFY_OUTPUT_DIR, COMFY_SERVER_ADDRESS, print_config, get_local_ip
 
 # --- Configuration ---
-LISTEN_PORT = 5001
+LISTEN_PORT = int(os.environ.get("LISTEN_PORT", 5001))
 base_dir = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(base_dir, 'remote_received_files')
 OUTPUT_FOLDER = os.path.join(base_dir, 'remote_outputs')
 
 # Global Settings
-PUBLIC_URL = "http://localhost:5001" 
+PUBLIC_URL = os.environ.get("PUBLIC_URL", "http://localhost:5001").rstrip('/') 
 
 # Ensure directories exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -389,13 +389,15 @@ def get_jobs():
 
 @app.route('/uploads/<path:filename>')
 def serve_uploads(filename):
-    return send_from_directory(UPLOAD_FOLDER, filename)
+    as_attachment = request.args.get('download', '0') == '1'
+    return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=as_attachment)
 
 @app.route('/videos/<path:filename>')
 def serve_videos(filename):
     # This serves from the ComfyUI output directory if it exists locally
     if os.path.exists(COMFY_OUTPUT_DIR):
-        return send_from_directory(COMFY_OUTPUT_DIR, filename)
+        as_attachment = request.args.get('download', '0') == '1'
+        return send_from_directory(COMFY_OUTPUT_DIR, filename, as_attachment=as_attachment)
     
     # Fallback: Stream/Proxy the file from the remote ComfyUI server
     # ComfyUI serves output files via /view?filename=...&subfolder=...&type=output

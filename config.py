@@ -53,6 +53,16 @@ RECEIVER_HOST = "".join(raw_host.split()).strip()
 THEME_STUDIO_PASSWORD = os.environ.get("THEME_STUDIO_PASSWORD", "admin")
 
 
+def _detect_comfy_output_dir():
+    if os.environ.get("COMFY_OUTPUT_DIR"):
+        return os.environ.get("COMFY_OUTPUT_DIR").strip()
+    if os.path.exists("/app/ComfyUI/output"):
+        return "/app/ComfyUI/output"
+    if platform.system() == "Linux":
+        return "/home/ai-cc/Documents/projects/ComfyUI/output"
+    return "C:/Users/Brandon/Documents/comfy/ComfyUI/output"
+
+
 # ============================================================
 # DEPLOYMENT PROFILES
 # ============================================================
@@ -61,8 +71,8 @@ PROFILES = {
         # Receiver runs on the same machine
         "LINUX_RECEIVER_URL": "http://localhost:5001/receive_workflow_data",
         
-        # ComfyUI output on Windows
-        "COMFY_OUTPUT_DIR": "C:/Users/Brandon/Documents/comfy/ComfyUI/output",
+        # ComfyUI output
+        "COMFY_OUTPUT_DIR": _detect_comfy_output_dir(),
 
         # ComfyUI API address (same machine)
         "COMFY_SERVER_ADDRESS": "127.0.0.1:8188",
@@ -72,7 +82,7 @@ PROFILES = {
         "LINUX_RECEIVER_URL": f"http://{RECEIVER_HOST}:5001/receive_workflow_data",
         
         # ComfyUI output on Linux
-        "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output",
+        "COMFY_OUTPUT_DIR": _detect_comfy_output_dir(),
 
         # ComfyUI API address (same machine as receiver)
         "COMFY_SERVER_ADDRESS": f"{RECEIVER_HOST}:8188",

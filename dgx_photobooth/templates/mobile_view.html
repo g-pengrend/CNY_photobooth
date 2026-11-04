@@ -1,87 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photobooth Moment</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Your Photobooth Moment ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: #0f0f13;
-            color: #ffffff;
+        :root {
+            --primary: #ec4899;
+            --secondary: #8b5cf6;
+            --accent: #f59e0b;
+            --bg: #0b0c10;
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --border: rgba(255, 255, 255, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 24px 16px 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            text-align: center;
         }
 
-        h1 {
-            background: linear-gradient(to right, #a855f7, #ec4899);
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f472b6, #c084fc, #60a5fa);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            margin-bottom: 6px;
         }
 
-        .media-container {
+        .header p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        .media-card {
             width: 100%;
-            max-width: 400px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px;
+            max-width: 440px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .media-card-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 4px 10px;
             border-radius: 12px;
-        }
-
-        img,
-        video {
-            width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-        }
-
-        .btn {
-            display: inline-block;
-            background: linear-gradient(to right, #a855f7, #ec4899);
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 25px;
-            margin-top: 10px;
+            background: rgba(139, 92, 246, 0.2);
+            color: #c084fc;
             font-weight: 600;
         }
 
-        p {
-            color: #aaa;
+        .media-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .media-wrapper img,
+        .media-wrapper video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 14px;
+        }
+
+        .action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            color: white;
+            padding: 13px 20px;
+            border: none;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.35);
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            color: #cbd5e1;
+            padding: 11px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            font-family: inherit;
             font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s ease;
+        }
+
+        .btn-secondary:active {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .save-tip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+
+        .footer {
+            margin-top: auto;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.8rem;
+            padding-top: 20px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
-
 <body>
-    <h1>✨ Your Photobooth Moment ✨</h1>
 
-    <div class="media-container">
-        <p>Generated Photo</p>
-        <img src="/uploads/{{ job.generated_filename }}" alt="Generated Photo">
-        <a href="/uploads/{{ job.generated_filename }}" download class="btn">Download Photo</a>
+    <div class="header">
+        <h1>✨ Your Photobooth Moment</h1>
+        <p>Save directly to your phone's photo library</p>
     </div>
 
+    <!-- 1. PHOTO CARD -->
+    <div class="media-card">
+        <div class="media-card-title">
+            <span>📸 Portrait Photo</span>
+            <span class="badge">High-Res</span>
+        </div>
+        <div class="media-wrapper">
+            <img id="photo-img" src="/uploads/{{ job.generated_filename }}" alt="Generated Portrait" loading="eager">
+        </div>
+        <div class="action-group">
+            <!-- Native Share / Save Sheet Button (Triggers iOS / Android Save Image) -->
+            <button class="btn-primary" onclick="shareMedia('/uploads/{{ job.generated_filename }}', 'photobooth_photo.png', 'image/png')">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <span>Save to Photos / Share</span>
+            </button>
+            <!-- Direct Download Fallback -->
+            <a href="/uploads/{{ job.generated_filename }}?download=1" download="photobooth_photo.png" class="btn-secondary">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span>Direct Download File</span>
+            </a>
+        </div>
+        <div class="save-tip">
+            💡 <span>Tip: Tap & hold image to "Save to Photos"</span>
+        </div>
+    </div>
+
+    <!-- 2. VIDEO CARD (If motion generation completed) -->
     {% if job.video_filename %}
-    <div class="media-container">
-        <p>Your Video</p>
-        <video controls loop autoplay playsinline>
-            <source src="/videos/{{ job.video_filename }}" type="video/mp4">
-        </video>
-        <a href="/videos/{{ job.video_filename }}" download class="btn">Download Video</a>
+    <div class="media-card">
+        <div class="media-card-title">
+            <span>🎬 Motion Portrait</span>
+            <span class="badge">Live Video</span>
+        </div>
+        <div class="media-wrapper">
+            <video id="motion-video" controls loop autoplay playsinline muted>
+                <source src="/videos/{{ job.video_filename }}" type="video/mp4">
+            </video>
+        </div>
+        <div class="action-group">
+            <button class="btn-primary" onclick="shareMedia('/videos/{{ job.video_filename }}', 'photobooth_motion.mp4', 'video/mp4')">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                <span>Save Video to Photos / Share</span>
+            </button>
+            <a href="/videos/{{ job.video_filename }}?download=1" download="photobooth_motion.mp4" class="btn-secondary">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                <span>Direct Download Video</span>
+            </a>
+        </div>
     </div>
     {% endif %}
 
-    <p style="margin-top: 30px;">Long press images to save manually if download fails.</p>
-</body>
+    <div class="footer">
+        Powered by SEIT AI Photobooth Engine
+    </div>
 
+    <div id="toast" class="toast">
+        <span id="toast-text">Preparing media...</span>
+    </div>
+
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3500);
+        }
+
+        async function shareMedia(url, filename, mimeType) {
+            showToast("Opening share sheet...");
+
+            try {
+                // Fetch the asset as a binary blob
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Network fetch failed");
+                const blob = await response.blob();
+                const file = new File([blob], filename, { type: mimeType });
+
+                // Check for Web Share API Level 2 (files sharing support)
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'My Photobooth Moment',
+                        text: 'Created at SEIT AI Photobooth!'
+                    });
+                } else if (navigator.share) {
+                    // Fallback to URL share if files not supported
+                    await navigator.share({
+                        title: 'My Photobooth Moment',
+                        url: window.location.href
+                    });
+                } else {
+                    // Desktop or unsupported browser fallback: trigger standard download link
+                    triggerDownload(url, filename);
+                }
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    console.log('Share error, falling back to download:', err);
+                    triggerDownload(url, filename);
+                }
+            }
+        }
+
+        function triggerDownload(url, filename) {
+            const a = document.createElement('a');
+            a.href = url + (url.includes('?') ? '&' : '?') + 'download=1';
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast("Download started!");
+        }
+    </script>
+</body>
 </html>

@@ -95,7 +95,7 @@ PROFILES = {
         "LINUX_RECEIVER_URL": "http://localhost:5001/receive_workflow_data",
         
         # ComfyUI output
-        "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output" if platform.system() == "Linux" else "C:/Users/Brandon/Documents/comfy/ComfyUI/output",
+        "COMFY_OUTPUT_DIR": os.environ.get("COMFY_OUTPUT_DIR", "/app/ComfyUI/output" if os.path.exists("/app/ComfyUI") else ("/home/ai-cc/Documents/projects/ComfyUI/output" if platform.system() == "Linux" else "C:/Users/Brandon/Documents/comfy/ComfyUI/output")),
 
         # ComfyUI API address (same machine)
         "COMFY_SERVER_ADDRESS": _detect_local_comfy_port(),
@@ -107,7 +107,7 @@ PROFILES = {
         "LINUX_RECEIVER_URL": f"http://{os.environ.get('RECEIVER_IP', '172.20.162.63')}:5001/receive_workflow_data",
         
         # ComfyUI output on Linux
-        "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output",
+        "COMFY_OUTPUT_DIR": os.environ.get("COMFY_OUTPUT_DIR", "/app/ComfyUI/output" if os.path.exists("/app/ComfyUI") else "/home/ai-cc/Documents/projects/ComfyUI/output"),
 
         # ComfyUI API address (same machine as receiver)
         "COMFY_SERVER_ADDRESS": "127.0.0.1:8189",
@@ -117,7 +117,7 @@ PROFILES = {
         "LINUX_RECEIVER_URL": "http://localhost:5001/receive_workflow_data",
         
         # ComfyUI output on Linux
-        "COMFY_OUTPUT_DIR": "/home/ai-cc/Documents/projects/ComfyUI/output",
+        "COMFY_OUTPUT_DIR": os.environ.get("COMFY_OUTPUT_DIR", "/app/ComfyUI/output" if os.path.exists("/app/ComfyUI") else "/home/ai-cc/Documents/projects/ComfyUI/output"),
 
         # ComfyUI API address (remote Linux machine)
         "COMFY_SERVER_ADDRESS": f"{RECEIVER_HOST}:8189",

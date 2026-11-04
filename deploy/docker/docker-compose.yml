@@ -20,23 +20,37 @@ services:
               capabilities: [gpu]
 
     ports:
-      - "5000:5000"   # Frontend & Theme Studio (Domain Ingress)
-      - "5001:5001"   # Receiver Orchestrator API
-      - "8188:8188"   # ComfyUI Image Pipeline (VTON)
-      - "8189:8189"   # ComfyUI Video Pipeline (Motion)
+      - "${PORT_FRONTEND:-5000}:5000"   # Frontend & Theme Studio (Domain Ingress)
+      - "${PORT_RECEIVER:-5001}:5001"   # Receiver Orchestrator API
+      - "${PORT_COMFY_IMAGE:-8188}:8188"   # ComfyUI Image Pipeline (VTON)
+      - "${PORT_COMFY_VIDEO:-8189}:8189"   # ComfyUI Video Pipeline (Motion)
 
     environment:
       - DEPLOY_MODE=local
-      - THEME_STUDIO_PASSWORD=admin
+      - THEME_STUDIO_PASSWORD=${THEME_STUDIO_PASSWORD:-admin}
       - NVIDIA_VISIBLE_DEVICES=all
       - CUDA_MODULE_LOADING=LAZY
+      - GPU_IMAGE_DEVICE=${GPU_IMAGE_DEVICE:-}
+      - GPU_VIDEO_DEVICE=${GPU_VIDEO_DEVICE:-}
+      - COMFY_OUTPUT_DIR=/app/ComfyUI/output
+      - PUBLIC_URL=${PUBLIC_URL:-}
 
     volumes:
-      # Persistent Model Weights (Host path can be adjusted by DGX controller)
-      - /raid/photobooth/models/checkpoints:/app/ComfyUI/models/checkpoints:ro
-      - /raid/photobooth/models/loras:/app/ComfyUI/models/loras:ro
-      - /raid/photobooth/models/controlnet:/app/ComfyUI/models/controlnet:ro
-      - /raid/photobooth/models/insightface:/root/.insightface/models:ro
-      # Renders & Active Themes (Persisted across container updates)
-      - /raid/photobooth/outputs:/app/kiosk_frontend/outputs
-      - /raid/photobooth/themes:/app/kiosk_frontend/static/themes
+      # ====================================================================
+      # UNIFIED MIRROR VOLUMES (Host <-> Container Synchronized)
+      # ====================================================================
+      
+      # 1. Models Mirror: Parent mount handles ALL existing and future model subfolders
+      # (checkpoints, loras, vae, clip, unet, controlnet, facerestore_models, etc.)
+      - ${DATA_DIR:-/raid/photobooth}/models:/app/ComfyUI/models
+      
+      # 2. Custom Nodes Mirror: Drop any new/future custom node here to auto-link
+      - ${DATA_DIR:-/raid/photobooth}/custom_nodes:/app/ComfyUI/custom_nodes_external
+      
+      # 3. Themes & Workflows Mirror: Theme Studio edits and JSON workflows
+      - ${DATA_DIR:-/raid/photobooth}/themes:/app/kiosk_frontend/static/themes
+      
+      # 4. Outputs & Renders Mirror: Guest photos, motion videos, and raw uploads
+      - ${DATA_DIR:-/raid/photobooth}/outputs:/app/kiosk_frontend/outputs
+      - ${DATA_DIR:-/raid/photobooth}/remote_outputs:/app/dgx_photobooth/remote_outputs
+      - ${DATA_DIR:-/raid/photobooth}/remote_received_files:/app/dgx_photobooth/remote_received_files
