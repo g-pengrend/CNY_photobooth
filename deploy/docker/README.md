@@ -108,3 +108,4 @@ curl http://localhost:8188/system_stats
 curl http://localhost:8189/system_stats
 # Expected: JSON containing GPU device name and VRAM stats
 ```
+

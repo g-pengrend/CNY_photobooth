@@ -2,7 +2,7 @@
 
 This directory organizes all launch scripts by **Operating System** and **Deployment Mode**.
 
-> 📖 **DGX Cluster Administrators**: See the complete hardware quotas, volume mounts, and Docker instructions in [deploy/docker/README.md](file:///c:/Users/Brandon/Desktop/Projects/CNY_photobooth/deploy/docker/README.md) or [DGX_ADMIN_SETUP_GUIDE.md](file:///c:/Users/Brandon/Desktop/Projects/CNY_photobooth/deploy/DGX_ADMIN_SETUP_GUIDE.md).
+> 📖 **DGX Cluster Administrators**: See the complete hardware quotas, volume mounts, and Docker instructions in [deploy/docker/README.md](file:///c:/Users/Brandon/Desktop/Projects/CNY_photobooth/deploy/docker/README.md).
 
 ---
 
@@ -11,7 +11,6 @@ This directory organizes all launch scripts by **Operating System** and **Deploy
 ```
 deploy/
 ├── README.md                      <- This deployment matrix guide
-├── DGX_ADMIN_SETUP_GUIDE.md       <- Technical briefing document for DGX cluster administrators
 │
 ├── windows/                       <- Windows launchers (.bat)
 │   ├── 1_standalone_full_system.bat   (Everything runs on 1 local Windows PC for dev/testing)
