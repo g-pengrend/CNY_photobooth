@@ -728,17 +728,32 @@ def check_server_qwen21_models(target_server, timeout=2.5):
 
 
 def resolve_qwen_swap_server():
-    """Choose the ComfyUI server hosting Qwen 2.1 head-swap weights."""
+    """Choose the ComfyUI server hosting Qwen 2.1 head-swap weights.
+
+    Prefers a dedicated Spark 1 Qwen 2.1 port (:8190) when running so ZIT (:8188)
+    and Qwen 2.1 (:8190) stay resident in separate processes without evicting each other.
+    """
     if QWEN_SWAP_SERVER_ADDRESS:
         return _norm_server_host(QWEN_SWAP_SERVER_ADDRESS), "env"
 
     primary_host = _norm_server_host(server_address)
+    base_hostname = primary_host.split(":")[0]
+    dedicated_candidates = [f"{base_hostname}:8190", "127.0.0.1:8190"]
+    seen_dedicated = set()
+    for d_host in dedicated_candidates:
+        if d_host in seen_dedicated or d_host == primary_host:
+            continue
+        seen_dedicated.add(d_host)
+        ok_ded, _ = check_server_qwen21_models(d_host, timeout=0.6)
+        if ok_ded:
+            return d_host, "dedicated"
+
     ok_primary, missing_primary = check_server_qwen21_models(primary_host)
     if ok_primary:
         return primary_host, "primary"
 
     candidates = [QWEN_SWAP_FALLBACK_ADDRESS, "192.168.200.2:8189", "100.88.106.76:8189"]
-    seen = {primary_host}
+    seen = {primary_host} | seen_dedicated
     for cand in candidates:
         c_host = _norm_server_host(cand) if cand else ""
         if not c_host or c_host in seen:

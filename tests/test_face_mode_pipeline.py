@@ -159,6 +159,18 @@ class TestFaceModePipeline(unittest.TestCase):
         self.assertEqual(fallback_resp.status_code, 200)
         self.assertTrue(fallback_resp.get_json()["features"]["faceModeSelection"])
 
+    def test_resolve_qwen_swap_server_prefers_dedicated_8190(self):
+        with mock.patch.object(comfy_processor, "QWEN_SWAP_SERVER_ADDRESS", ""), mock.patch.object(
+            comfy_processor, "server_address", "breadnbiscuit:8188"
+        ), mock.patch.object(
+            comfy_processor,
+            "check_server_qwen21_models",
+            side_effect=lambda host, timeout=2.5: (host.endswith(":8190"), []),
+        ):
+            srv, mode = comfy_processor.resolve_qwen_swap_server()
+            self.assertEqual(srv, "breadnbiscuit:8190")
+            self.assertEqual(mode, "dedicated")
+
 
 if __name__ == "__main__":
     unittest.main()
