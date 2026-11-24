@@ -869,11 +869,35 @@ function playManifestationSequence() {
 
 function pollJobStatus(jobId) {
     if (state.pollInterval) clearInterval(state.pollInterval);
+    let consecutiveErrors = 0;
 
     state.pollInterval = setInterval(async () => {
         try {
             const res = await fetch(`/api/status/${jobId}`);
-            if (!res.ok) return;
+            if (res.status === 404) {
+                clearInterval(state.pollInterval);
+                state.pollInterval = null;
+                alert('Processing session expired (server restarted). Please click "Looks Good!" to retry.');
+                if (state.photoBlob) {
+                    showScreen('preview');
+                } else {
+                    showScreen('camera');
+                    startCamera();
+                }
+                return;
+            }
+            if (!res.ok) {
+                consecutiveErrors++;
+                if (consecutiveErrors >= 5) {
+                    clearInterval(state.pollInterval);
+                    state.pollInterval = null;
+                    alert(`Lost connection to processing server (HTTP ${res.status}). Please retry.`);
+                    showScreen(state.photoBlob ? 'preview' : 'camera');
+                    if (!state.photoBlob) startCamera();
+                }
+                return;
+            }
+            consecutiveErrors = 0;
             const data = await res.json();
 
             // Update loading message from backend if available
