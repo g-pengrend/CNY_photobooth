@@ -946,6 +946,40 @@
                                 <textarea id="prompt-inp-atmosphere" class="admin-input" rows="2" placeholder="e.g. Volumetric lighting, liquid gold accents, glassmorphism, sharp fashion photography style, sophisticated depth of field." style="width: 100%; font-size: 0.82rem; line-height: 1.45;"></textarea>
                             </div>
 
+                            <!-- Block 6: Video Morph VFX & Audio (MiniMax H3) -->
+                            <div style="background: rgba(18, 14, 34, 0.75); border: 1px solid rgba(168, 85, 247, 0.35); border-radius: var(--radius-sm); padding: 0.85rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; flex-wrap: wrap; gap: 0.4rem;">
+                                    <label style="font-size: 0.82rem; font-weight: 700; color: #e9d5ff; margin: 0;">
+                                        🎬 Block 6: Video Morph VFX &amp; Audio (MiniMax H3)
+                                    </label>
+                                    <span style="font-size: 0.7rem; color: #c084fc;">Powers non-linear 3-phase transformation + custom SFX</span>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 0.55rem;">
+                                    <div>
+                                        <label for="prompt-inp-morph-vfx" style="font-size: 0.72rem; color: #cbd5e1; display: block; margin-bottom: 0.2rem;">Signature Morph VFX &amp; Particles</label>
+                                        <textarea id="prompt-inp-morph-vfx" class="admin-input" rows="2" placeholder="e.g. swirling crimson-and-gold silk light ribbons, rising lucky lantern embers, and sparkling gold-leaf dust trails" style="width: 100%; font-size: 0.8rem; line-height: 1.4;"></textarea>
+                                    </div>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem;">
+                                        <div>
+                                            <label for="prompt-inp-morph-lighting" style="font-size: 0.72rem; color: #cbd5e1; display: block; margin-bottom: 0.2rem;">Theme Morph Color Palette</label>
+                                            <input type="text" id="prompt-inp-morph-lighting" class="admin-input" placeholder="e.g. Molten Gold, Warm Saffron, and Neon Magenta" style="width: 100%; font-size: 0.8rem;">
+                                        </div>
+                                        <div>
+                                            <label for="prompt-inp-morph-style" style="font-size: 0.72rem; color: #cbd5e1; display: block; margin-bottom: 0.2rem;">Morph Energy Profile</label>
+                                            <select id="prompt-inp-morph-style" class="admin-input" style="width: 100%; font-size: 0.8rem;">
+                                                <option value="flashy">✨ Flashy Dynamic (M2 Recommended)</option>
+                                                <option value="showstopper">💥 Showstopper Whip-Burst (M3)</option>
+                                                <option value="generic">🎬 Auto-Match Generic (M1)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="prompt-inp-morph-audio" style="font-size: 0.72rem; color: #cbd5e1; display: block; margin-bottom: 0.2rem;">Morph Soundscape / SFX</label>
+                                        <input type="text" id="prompt-inp-morph-audio" class="admin-input" placeholder="e.g. crisp winter frost shimmer building into a soaring sleigh-bell magical whoosh" style="width: 100%; font-size: 0.8rem;">
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Typography Backlight (Hidden / Advanced integration) -->
                             <textarea id="prompt-inp-typo-style" style="display: none;">All typography is softly backlit with a warm amber glow and seamlessly integrated into the sweeping, neo-classical architecture of the borders.</textarea>
 
@@ -1378,6 +1412,11 @@
                                         </div>
                                         <textarea id="gen-asset-desc" rows="2" placeholder="e.g. Traditional red lantern skyline at dusk" style="width:100%;padding:0.7rem 1rem;border-radius:var(--radius-sm);background:rgba(0,0,0,0.4);border:1px solid var(--border-subtle);color:#fff;font-size:0.9rem;font-family:inherit;line-height:1.45;outline:none;resize:vertical;"></textarea>
                                         <span style="font-size:0.75rem;color:var(--text-muted);">This appears as the card subtitle in the booth selection screen.</span>
+                                    </div>
+
+                                    <div class="form-group" id="gen-asset-lighting-group" style="display: none;">
+                                        <label for="gen-asset-lighting">Morph Accent Lighting <span style="color: var(--text-muted); font-weight: normal; font-size: 0.82rem;">(auto-detected from outfit colors)</span></label>
+                                        <input id="gen-asset-lighting" type="text" placeholder="e.g. Crimson and Warm Gold" style="width: 100%; font-size: 0.9rem;">
                                     </div>
 
                                     <input type="hidden" id="gen-target-theme" value="master">

@@ -1280,14 +1280,35 @@ def admin_save_theme():
                     print(f"Warning: Could not update prompt in {wf_file}: {we}")
 
 
-        # 5. Sync clothes_mapping.json for FLF workflow across theme and master
+        # 5. Sync morph_config.json + clothes_mapping.json for FLF workflow across theme and master
+        morph_profile = theme_cfg.get('morphProfile') or {}
+        if isinstance(morph_profile, dict) and any(str(v).strip() for v in morph_profile.values()):
+            for m_cfg_dir in [theme_dir, dgx_theme_dir]:
+                os.makedirs(m_cfg_dir, exist_ok=True)
+                with open(os.path.join(m_cfg_dir, 'morph_config.json'), 'w', encoding='utf-8') as mcf:
+                    json.dump(morph_profile, mcf, indent=2, ensure_ascii=False)
+
+        _generic_lights = {
+            '',
+            'cinematic ambient studio lighting',
+            'warm cinematic lighting',
+            'cinematic lighting',
+            'crisp editorial studio',
+        }
+        theme_morph_lighting = str(morph_profile.get('morphLighting', '')).strip() if isinstance(morph_profile, dict) else ''
+
         theme_mapping = {}
         for item in asset_data.get('clothes', []):
             code = item.get('code')
             if code:
+                item_light = str(item.get('lighting', '')).strip()
+                if item_light.lower() in _generic_lights and theme_morph_lighting:
+                    item_light = theme_morph_lighting
+                elif not item_light:
+                    item_light = 'Warm cinematic lighting'
                 theme_mapping[code] = {
                     'desc': item.get('mapping_desc') or item.get('description', '') or item.get('title', ''),
-                    'lighting': item.get('lighting', 'Warm cinematic lighting')
+                    'lighting': item_light
                 }
 
         # Write to theme dir & dgx theme dir
@@ -1486,6 +1507,7 @@ def admin_asset_generator_accept():
         target_theme = data.get('target_theme', 'master')
         prompt_desc = data.get('prompt_desc', '')
         gender = data.get('gender', 'unisex')
+        lighting = data.get('lighting', '').strip()
 
         if not preview_filename:
             return jsonify({'error': 'Missing preview_filename'}), 400
@@ -1497,7 +1519,8 @@ def admin_asset_generator_accept():
             target_theme=target_theme,
             prompt_desc=prompt_desc,
             gender=gender,
-            description=description
+            description=description,
+            lighting=lighting
         )
         if not res.get('success'):
             return jsonify({'error': res.get('error', 'Failed to store asset')}), 500

@@ -458,7 +458,64 @@ A luxurious art deco border with geometric stepped chevron arches and frosted ch
     console.log('✅ PASSED: Portrait framing & persona-only rules verified across studio helpers');
 }
 
+// Test 14: Block 6 MiniMax H3 Morph VFX/Lighting/Audio fields & outfit color lighting extraction
+{
+    const framePrompt = windowMock.buildComfyFramePrompt('Neon Lantern Cyberpunk Gala');
+    assert(framePrompt.includes('### [MORPH_VFX]'), 'buildComfyFramePrompt should include [MORPH_VFX] block');
+    assert(framePrompt.includes('### [MORPH_LIGHTING]'), 'buildComfyFramePrompt should include [MORPH_LIGHTING] block');
+    assert(framePrompt.includes('"morphVfx":'), 'buildComfyFramePrompt JSON schema should include morphVfx');
+    assert(framePrompt.includes('"morphAudio":'), 'buildComfyFramePrompt JSON schema should include morphAudio');
+
+    const jsonReply = `
+\`\`\`json
+{
+  "border": "Holographic neon lantern border.",
+  "topTitle": "Cyber Lanterns",
+  "atmosphere": "Upper body shot, shallow depth of field.",
+  "morphVfx": "swirling cyan and crimson dragon ribbons",
+  "morphLighting": "Electric Cyan, Crimson, and Gold",
+  "morphAudio": "cyber synth shimmer bursting into festive gong",
+  "morphStyle": "showstopper"
+}
+\`\`\`
+`;
+    const appliedJson = windowMock.applyComfyFrameAiPaste(jsonReply);
+    assert.strictEqual(appliedJson, true, 'Block 6 JSON paste should succeed');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-morph-vfx').value, 'swirling cyan and crimson dragon ribbons');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-morph-lighting').value, 'Electric Cyan, Crimson, and Gold');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-morph-audio').value, 'cyber synth shimmer bursting into festive gong');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-morph-style').value, 'showstopper');
+
+    const blockReply = `
+### [FRAME_STYLE]
+Gilded emerald archways.
+
+### [MORPH_VFX]
+glimmering emerald arabesque sparks
+
+### [MORPH_LIGHTING]
+Emerald Green and Champagne Gold
+
+### [MORPH_AUDIO]
+soft tropical chime whoosh
+
+### [MORPH_STYLE]
+flashy
+`;
+    const appliedBlocks = windowMock.applyComfyFrameAiPaste(blockReply);
+    assert.strictEqual(appliedBlocks, true, 'Block 6 markdown paste should succeed');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-morph-vfx').value, 'glimmering emerald arabesque sparks');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-morph-lighting').value, 'Emerald Green and Champagne Gold');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-morph-audio').value, 'soft tropical chime whoosh');
+    assert.strictEqual(documentMock.getElementById('prompt-inp-morph-style').value, 'flashy');
+
+    const light = windowMock.extractOutfitLightingClient('A tailored crimson velvet jacket with antique bronze buttons and ivory trim.');
+    assert.strictEqual(light, 'Crimson, Antique Bronze, and Crisp Ivory');
+
+    console.log('✅ PASSED: Block 6 MiniMax H3 morph profile & outfit accent lighting verified');
+}
+
 console.log('\n================================================================');
-console.log('ALL 13 COMFYUI FRAME, TYPOGRAPHY & NODE BINDING TESTS PASSED CLEANLY!');
+console.log('ALL 14 COMFYUI FRAME, TYPOGRAPHY & MORPH STUDIO TESTS PASSED CLEANLY!');
 console.log('================================================================');
 process.exit(0);

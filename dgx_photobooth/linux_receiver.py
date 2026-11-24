@@ -185,7 +185,9 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
     
     base_dir = os.path.dirname(os.path.abspath(__file__))
     theme_clean = (theme or "cny").strip().lower()
-    
+    video_engine = os.environ.get("VIDEO_ENGINE", "minimax_h3").strip().lower()
+    h3_template = os.path.join(base_dir, "templates", "FLF_MiniMax_H3_API.json")
+
     theme_workflow_map = {
         "hariraya": "FLF_workflowAPI(HR).json",
         "uits": "FLF_workflowAPI(UITS).json",
@@ -194,7 +196,9 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
     }
 
     workflow_file = None
-    if theme_clean in theme_workflow_map:
+    if video_engine != "wan" and os.path.exists(h3_template):
+        workflow_file = h3_template
+    elif theme_clean in theme_workflow_map:
         wf_path = os.path.join(base_dir, "templates", "themes", theme_clean, theme_workflow_map[theme_clean])
         if os.path.exists(wf_path):
             workflow_file = wf_path
@@ -250,6 +254,8 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
             except Exception as e:
                 print(f"⚠️ Error reading master mapping: {e}")
 
+        style_desc = ""
+        lighting_desc = ""
         if style_match:
             raw_code = style_match.group(1).upper()
             # Try exact code, then normalized zero-padded code (e.g. C1 -> C01)
@@ -271,23 +277,52 @@ def trigger_linux_workflow(uploaded_path, generated_path, orig_filename, gen_fil
                 print(f"  - Detected Style Code: {raw_code} (Resolved as {padded_code})")
                 print(f"    -> Desc: '{style_desc}'")
                 print(f"    -> Lighting: '{lighting_desc}'")
-                
-                # Dynamically find the prompt node containing placeholders
-                injected = False
-                for node_id, node_data in workflow.items():
-                    if node_data.get("class_type") == "CLIPTextEncode" and "inputs" in node_data and "text" in node_data["inputs"]:
-                        text = node_data["inputs"]["text"]
-                        if '"style_type"' in text or '"lighting"' in text:
-                            text = text.replace('"style_type"', style_desc)
-                            text = text.replace('"lighting"', lighting_desc)
-                            workflow[node_id]["inputs"]["text"] = text
-                            print(f"  - Injected style & lighting description into Node #{node_id}")
-                            injected = True
-                
-                if not injected:
-                    print("  - No Style placeholders found in any CLIPTextEncode node.")
         else:
-            print("  - No Style Code (C01-C12) found in filename. Using default prompt.")
+            print("  - No Style Code (C01-C12) found in filename. Using theme morph defaults.")
+
+        is_h3_workflow = any(
+            isinstance(nd, dict) and nd.get("class_type") == "MiniMaxH3ImageToVideo"
+            for nd in workflow.values()
+        )
+        if is_h3_workflow:
+            from morph_prompt_builder import (
+                load_theme_morph_config,
+                build_minimax_h3_morph_prompt,
+                inject_prompt_into_workflow,
+            )
+
+            h3_length = 90
+            for nd in workflow.values():
+                if isinstance(nd, dict) and nd.get("class_type") == "MiniMaxH3ImageToVideo":
+                    h3_length = int(nd.get("inputs", {}).get("length", 90) or 90)
+                    break
+
+            duration_sec = round(h3_length / 24.0, 2)
+            theme_morph_cfg = load_theme_morph_config(base_dir, theme_clean)
+            h3_prompt = build_minimax_h3_morph_prompt(
+                theme_morph_cfg,
+                style_desc=style_desc,
+                outfit_lighting=lighting_desc,
+                duration_sec=duration_sec,
+            )
+            seed = random.randint(1, 2**31 - 1)
+            injected, h3_node_id = inject_prompt_into_workflow(workflow, h3_prompt, seed=seed)
+            print(f"  - Injected MiniMax H3 morph prompt ({theme_morph_cfg.get('morphStyle')}) into Node #{h3_node_id} (seed={seed})")
+        elif style_desc or lighting_desc:
+            # Dynamically find the Wan CLIPTextEncode node containing placeholders
+            injected = False
+            for node_id, node_data in workflow.items():
+                if node_data.get("class_type") == "CLIPTextEncode" and "inputs" in node_data and "text" in node_data["inputs"]:
+                    text = node_data["inputs"]["text"]
+                    if '"style_type"' in text or '"lighting"' in text:
+                        text = text.replace('"style_type"', style_desc)
+                        text = text.replace('"lighting"', lighting_desc)
+                        workflow[node_id]["inputs"]["text"] = text
+                        print(f"  - Injected style & lighting description into Node #{node_id}")
+                        injected = True
+
+            if not injected:
+                print("  - No Style placeholders found in any CLIPTextEncode node.")
 
         # Node #106: Original
         if "106" in workflow and "inputs" in workflow["106"]:
@@ -395,7 +430,8 @@ def serve_uploads(filename):
 @app.route('/videos/<path:filename>')
 def serve_videos(filename):
     # This serves from the ComfyUI output directory if it exists locally
-    if os.path.exists(COMFY_OUTPUT_DIR):
+    local_path = os.path.join(COMFY_OUTPUT_DIR, filename) if COMFY_OUTPUT_DIR else None
+    if local_path and os.path.exists(local_path):
         as_attachment = request.args.get('download', '0') == '1'
         return send_from_directory(COMFY_OUTPUT_DIR, filename, as_attachment=as_attachment)
     

@@ -288,6 +288,12 @@ function createNewTheme() {
             atmosphere: 'Upper body shot, large clear face positioned cleanly below the top title banner, shallow depth of field, 8k.',
             maleStyle: 'asian, fit and charismatic',
             femaleStyle: 'charismatic, radiant and photogenic'
+        },
+        morphProfile: {
+            morphVfx: 'dazzling color-matched energy ribbons, swirling luminous stardust trails, and sparkling bokeh particles',
+            morphLighting: 'Warm Festive Gold and Radiant Ambient Light',
+            morphAudio: 'shimmering energy buildup into a crisp magical whoosh, dazzling sparkle cascade, and warm festive ambience',
+            morphStyle: 'flashy'
         }
     };
 
@@ -456,8 +462,9 @@ function readFormFields() {
     theme.waitingExperience.subtitle = theme.waitingExperience.subtitle || 'Processing your photo';
     theme.waitingExperience.sequence = collectWaitingSequence();
 
-    // Prompt Designer
+    // Prompt Designer & Morph VFX Profile
     theme.promptTemplate = readPromptDesigner();
+    theme.morphProfile = readMorphProfile();
 
     return theme;
 }
@@ -701,6 +708,51 @@ window.autoBindStandardComfyNodes = function() {
 const DEFAULT_PORTRAIT_FRAMING = 'Extreme Close up shot of';
 const DEFAULT_PORTRAIT_CLOSER = 'Upper body shot, large clear face positioned cleanly below the top title banner, shallow depth of field.';
 
+const DEFAULT_MORPH_PROFILES = {
+    cny: {
+        morphVfx: 'swirling crimson-and-gold silk light ribbons, rising lucky lantern embers, and sparkling gold-leaf dust trails',
+        morphLighting: 'Crimson Red, Warm Gold, and Amber',
+        morphAudio: 'warm lantern shimmer building into a brisk celebratory silk whoosh and auspicious gong-chime burst',
+        morphStyle: 'flashy'
+    },
+    hariraya: {
+        morphVfx: 'glimmering emerald-and-gold arabesque light filigree, floating pelita oil-lamp sparks, and crescent moonbeam ribbons',
+        morphLighting: 'Emerald Green, Champagne Gold, and Warm Ivory',
+        morphAudio: 'gentle tropical breeze and warm lantern chime swelling into a luminous festive whoosh',
+        morphStyle: 'flashy'
+    },
+    deepavali_2026: {
+        morphVfx: 'rising diya-flame fireflies igniting into a spinning molten-gold rangoli mandala ring and saffron-magenta sparkler trails',
+        morphLighting: 'Molten Gold, Warm Saffron, and Neon Magenta',
+        morphAudio: 'warm glowing firefly hum erupting into a bright celebratory sparkler crackle, deep cinematic sub-whoosh, and luminous festive chime',
+        morphStyle: 'flashy'
+    },
+    'merry-christmas-toy-theatre': {
+        morphVfx: 'swirling peppermint-gold ribbon tornado, glowing fairy-wand starlight trails, and sparkling frosted snow-globe crystals',
+        morphLighting: 'Emerald Green, Crimson Red, and Warm Gold',
+        morphAudio: 'crisp winter frost shimmer building into a soaring sleigh-bell magical whoosh and glittering holiday chime burst',
+        morphStyle: 'flashy'
+    },
+    ndp2026: {
+        morphVfx: 'soaring crimson-and-white light streamers, sparkling star fireworks arcs, and crisp prism light flares',
+        morphLighting: 'Crimson Red, Crisp White, and Warm Gold',
+        morphAudio: 'energetic rising shimmer bursting into a bright firework sparkle whoosh and triumphant chime',
+        morphStyle: 'flashy'
+    },
+    uits: {
+        morphVfx: 'sweeping liquid-gold architectural light arcs, warm amber dust motes, and crystal prism glints',
+        morphLighting: 'Liquid Gold, Deep Obsidian, and Warm Amber',
+        morphAudio: 'prestigious warm crystalline shimmer swelling into a smooth golden chime flourish',
+        morphStyle: 'flashy'
+    },
+    default: {
+        morphVfx: 'dazzling color-matched energy ribbons, swirling luminous stardust trails, and sparkling bokeh particles',
+        morphLighting: 'Warm Festive Gold and Radiant Ambient Light',
+        morphAudio: 'shimmering energy buildup into a crisp magical whoosh, dazzling sparkle cascade, and warm festive ambience',
+        morphStyle: 'flashy'
+    }
+};
+
 const PROMPT_THEME_PRESETS = {
     uits: {
         framing: DEFAULT_PORTRAIT_FRAMING,
@@ -894,11 +946,32 @@ function populatePromptDesigner(theme) {
     const assembled = tpl.rawPrompt || assembleModularPrompt(tpl);
     setValue('raw-prompt-textarea', assembled);
     renderPromptLivePreview(assembled);
+    populateMorphProfile(theme);
 
     // Synchronize ComfyUI GenAI Frame Studio titles with current theme
     if (typeof window.syncComfyTitlesFromActiveTheme === 'function') {
         window.syncComfyTitlesFromActiveTheme(false);
     }
+}
+
+function populateMorphProfile(theme) {
+    const slug = (theme && theme.slug ? theme.slug : 'default').toLowerCase();
+    const preset = DEFAULT_MORPH_PROFILES[slug] || DEFAULT_MORPH_PROFILES.default;
+    const mp = (theme && theme.morphProfile) || preset;
+    setValue('prompt-inp-morph-vfx', mp.morphVfx || preset.morphVfx);
+    setValue('prompt-inp-morph-lighting', mp.morphLighting || preset.morphLighting);
+    setValue('prompt-inp-morph-audio', mp.morphAudio || preset.morphAudio);
+    setValue('prompt-inp-morph-style', mp.morphStyle || preset.morphStyle || 'flashy');
+}
+
+function readMorphProfile() {
+    const def = DEFAULT_MORPH_PROFILES.default;
+    return {
+        morphVfx: getValue('prompt-inp-morph-vfx').trim() || def.morphVfx,
+        morphLighting: getValue('prompt-inp-morph-lighting').trim() || def.morphLighting,
+        morphAudio: getValue('prompt-inp-morph-audio').trim() || def.morphAudio,
+        morphStyle: getValue('prompt-inp-morph-style').trim() || 'flashy'
+    };
 }
 
 function readPromptDesigner() {
@@ -993,6 +1066,8 @@ window.loadThemePromptPreset = function (presetKey) {
     setValue('prompt-inp-typo-style', preset.typoStyle || '');
     setValue('prompt-inp-atmosphere', preset.atmosphere || '');
 
+    populateMorphProfile({ slug: presetKey });
+
     const assembled = assembleModularPrompt(preset);
     setValue('raw-prompt-textarea', assembled);
     renderPromptLivePreview(assembled);
@@ -1064,6 +1139,7 @@ Specific Requirements:
 4. **Typography Styling**: Describe how each suggested title is physically rendered and illuminated in the 3D scene (materials, typeface archetype, liquid gold leaf, neon backlight, luminous calligraphy, etc.).
 5. **Atmosphere & Finishers**: Specify volumetric lighting, color palette, glassmorphism, depth of field, and 8k photorealistic finish.
 6. **Persona Styling Only (NO Outfits)**: For maleStyle and femaleStyle, describe grooming, facial energy, and charisma ONLY — NEVER include suits, dresses, gowns, or garments (outfits are injected separately via "clothes_style").
+7. **Video Morph VFX & Audio (MiniMax H3)**: Invent a non-linear signature transformation effect (\`morphVfx\`), cohesive accent color palette (\`morphLighting\`), soundscape (\`morphAudio\`), and energy mode (\`morphStyle\`: \`"flashy"\` or \`"showstopper"\`).
 
 Format your response clearly into the EXACT BLOCKS below so the user can easily copy and paste each part into the system blocks, followed by the JSON block for 1-click auto-import:
 
@@ -1094,6 +1170,18 @@ ${DEFAULT_PORTRAIT_FRAMING}
 ### [ATMOSPHERE]
 (Upper body shot, shallow depth of field, volumetric lighting, lens characteristics, color palette, glassmorphism, 8k resolution, photorealistic finish.)
 
+### [MORPH_VFX]
+(Signature non-linear transformation particles/ribbons around torso & background tailored to "${themeConcept}", e.g. "swirling peppermint-gold ribbon tornado and sparkling snow-globe starlight crystals".)
+
+### [MORPH_LIGHTING]
+(3-color accent light palette matching "${themeConcept}", e.g. "Molten Gold, Warm Saffron, and Neon Magenta".)
+
+### [MORPH_AUDIO]
+(Dynamic morph soundscape SFX, e.g. "warm glowing shimmer building into a soaring celebratory chime whoosh".)
+
+### [MORPH_STYLE]
+flashy
+
 \`\`\`json
 {
   "framing": "${DEFAULT_PORTRAIT_FRAMING}",
@@ -1113,7 +1201,11 @@ ${DEFAULT_PORTRAIT_FRAMING}
   "typoIntegration": "All typography is softly backlit with warm glow and seamlessly integrated into the frame borders.",
   "atmosphere": "Upper body shot, large clear face positioned cleanly below the top title banner, shallow depth of field, volumetric lighting, color palette, glassmorphism, 8k resolution, photorealistic finish.",
   "maleStyle": "charismatic, sharp and photogenic leading man",
-  "femaleStyle": "charismatic, radiant and photogenic leading lady"
+  "femaleStyle": "charismatic, radiant and photogenic leading lady",
+  "morphVfx": "Signature dynamic transformation ribbons and particles around the torso tailored to the concept",
+  "morphLighting": "3-color festive light palette matching the theme",
+  "morphAudio": "Dynamic shimmering transformation soundscape and celebratory chime whoosh",
+  "morphStyle": "flashy"
 }
 \`\`\`
 
@@ -1342,7 +1434,11 @@ window.parseComfyFrameAiResponse = function (rawText) {
         atmosphere: '',
         maleStyle: '',
         femaleStyle: '',
-        framing: ''
+        framing: '',
+        morphVfx: '',
+        morphLighting: '',
+        morphAudio: '',
+        morphStyle: ''
     };
 
     if (parsedJson && typeof parsedJson === 'object' && !Array.isArray(parsedJson)) {
@@ -1358,6 +1454,10 @@ window.parseComfyFrameAiResponse = function (rawText) {
         result.maleStyle = parsedJson.maleStyle || parsedJson.malePersona || parsedJson.male_style || '';
         result.femaleStyle = parsedJson.femaleStyle || parsedJson.femalePersona || parsedJson.female_style || '';
         result.framing = parsedJson.framing || parsedJson.cameraFraming || parsedJson.camera_framing || '';
+        result.morphVfx = parsedJson.morphVfx || parsedJson.morph_vfx || '';
+        result.morphLighting = parsedJson.morphLighting || parsedJson.morph_lighting || '';
+        result.morphAudio = parsedJson.morphAudio || parsedJson.morph_audio || '';
+        result.morphStyle = parsedJson.morphStyle || parsedJson.morph_style || '';
     } else {
         const extractBlock = (name) => {
             const escaped = name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -1396,6 +1496,10 @@ window.parseComfyFrameAiResponse = function (rawText) {
         result.maleStyle = extractBlock('MALE_STYLE') || extractBlock('Male Style') || extractField(['male style', 'male persona', 'male']);
         result.femaleStyle = extractBlock('FEMALE_STYLE') || extractBlock('Female Style') || extractField(['female style', 'female persona', 'female']);
         result.framing = extractBlock('FRAMING') || extractBlock('Framing') || extractField(['framing', 'camera framing', 'shot']);
+        result.morphVfx = extractBlock('MORPH_VFX') || extractBlock('Morph VFX') || extractField(['morph vfx', 'morph_vfx']);
+        result.morphLighting = extractBlock('MORPH_LIGHTING') || extractBlock('Morph Lighting') || extractField(['morph lighting', 'morph_lighting', 'morph palette']);
+        result.morphAudio = extractBlock('MORPH_AUDIO') || extractBlock('Morph Audio') || extractField(['morph audio', 'morph_audio', 'morph soundscape']);
+        result.morphStyle = extractBlock('MORPH_STYLE') || extractBlock('Morph Style') || extractField(['morph style', 'morph_style']);
     }
 
     // BULLETPROOF FALLBACK:
@@ -1451,6 +1555,15 @@ window.applyComfyFrameAiPaste = function (rawInputText) {
     applyField('prompt-inp-framing', parsed.framing);
     applyField('prompt-inp-male-style', parsed.maleStyle);
     applyField('prompt-inp-female-style', parsed.femaleStyle);
+    applyField('prompt-inp-morph-vfx', parsed.morphVfx);
+    applyField('prompt-inp-morph-lighting', parsed.morphLighting);
+    applyField('prompt-inp-morph-audio', parsed.morphAudio);
+    if (parsed.morphStyle) {
+        const ms = String(parsed.morphStyle).trim().toLowerCase();
+        if (['flashy', 'showstopper', 'generic'].includes(ms)) {
+            applyField('prompt-inp-morph-style', ms);
+        }
+    }
 
     if (parsed.topTitle) setValue('comfy-genai-top-title', parsed.topTitle);
     if (parsed.subtitle) setValue('comfy-genai-subtitle', parsed.subtitle);
@@ -2973,6 +3086,36 @@ window.clearGeneratorPrompt = function () {
     if (middleInput) middleInput.value = '';
 };
 
+window.extractOutfitLightingClient = function (promptText) {
+    const tokens = [
+        ['crimson', 'Crimson'], ['ruby', 'Ruby Red'], ['scarlet', 'Scarlet'], ['burgundy', 'Burgundy'],
+        ['emerald', 'Emerald Green'], ['jade', 'Jade Green'], ['forest green', 'Forest Green'], ['evergreen', 'Evergreen'],
+        ['gold', 'Warm Gold'], ['golden', 'Warm Gold'], ['amber', 'Warm Amber'], ['copper', 'Copper'],
+        ['terracotta', 'Terracotta'], ['bronze', 'Antique Bronze'], ['saffron', 'Saffron'], ['magenta', 'Magenta'],
+        ['royal blue', 'Royal Blue'], ['sapphire', 'Sapphire Blue'], ['navy', 'Midnight Navy'],
+        ['turquoise', 'Turquoise'], ['teal', 'Midnight Teal'], ['violet', 'Violet'], ['amethyst', 'Amethyst'],
+        ['lavender', 'Lavender'], ['ivory', 'Crisp Ivory'], ['champagne', 'Champagne Gold'],
+        ['silver', 'Silver'], ['pearl', 'Pearl White'], ['peach', 'Soft Peach'], ['cyan', 'Electric Cyan'],
+        ['white', 'Crisp White'], ['red', 'Festive Red']
+    ];
+    const text = (promptText || '').toLowerCase();
+    const hits = [];
+    for (const [kw, label] of tokens) {
+        const idx = text.search(new RegExp(`\\b${kw.replace(/\s+/g, '\\s+')}\\b`, 'i'));
+        if (idx !== -1) hits.push({ idx, label });
+    }
+    hits.sort((a, b) => a.idx - b.idx);
+    const picked = [];
+    for (const h of hits) {
+        if (!picked.includes(h.label)) picked.push(h.label);
+        if (picked.length === 3) break;
+    }
+    if (picked.length === 2) return `${picked[0]} and ${picked[1]}`;
+    if (picked.length === 3) return `${picked[0]}, ${picked[1]}, and ${picked[2]}`;
+    if (picked.length === 1) return picked[0] === 'Warm Gold' ? 'Warm Gold and Amber' : `${picked[0]} and Warm Gold`;
+    return 'Warm Festive Gold';
+};
+
 window.triggerAssetGeneration = async function () {
     const type = studio.currentGenType || 'backdrop';
     const middlePrompt = document.getElementById('gen-middle-prompt')?.value.trim();
@@ -3036,6 +3179,15 @@ window.triggerAssetGeneration = async function () {
             themeSelect.value = 'master';
         }
 
+        const lightingGroup = document.getElementById('gen-asset-lighting-group');
+        const lightingInput = document.getElementById('gen-asset-lighting');
+        if (lightingGroup) {
+            lightingGroup.style.display = type === 'clothes' ? 'block' : 'none';
+        }
+        if (lightingInput) {
+            lightingInput.value = type === 'clothes' ? window.extractOutfitLightingClient(middlePrompt) : '';
+        }
+
         if (statusMsg) statusMsg.style.display = 'none';
 
         showToast('🎉 Asset generated successfully! Review below.', 'success');
@@ -3079,6 +3231,7 @@ window.acceptGeneratedAsset = async function () {
     const description = document.getElementById('gen-asset-desc')?.value.trim() || '';
     const targetTheme = document.getElementById('gen-target-theme')?.value || 'master';
     const gender = document.getElementById('gen-clothes-gender')?.value || 'unisex';
+    const lighting = document.getElementById('gen-asset-lighting')?.value.trim() || '';
     const btn = document.getElementById('gen-accept-btn');
     const statusMsg = document.getElementById('gen-status-msg');
 
@@ -3101,7 +3254,8 @@ window.acceptGeneratedAsset = async function () {
                 description: description,
                 target_theme: targetTheme,
                 prompt_desc: cleanPrompt,
-                gender: gender
+                gender: gender,
+                lighting: lighting
             })
         });
 

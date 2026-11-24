@@ -211,7 +211,68 @@ def sanitize_asset_prompt(prompt_text, asset_type="backdrop"):
 
     return text.strip()
 
-def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_theme="master", prompt_desc="", gender="unisex", description=""):
+_OUTFIT_LIGHTING_COLOR_TOKENS = [
+    ("crimson", "Crimson"),
+    ("ruby", "Ruby Red"),
+    ("scarlet", "Scarlet"),
+    ("burgundy", "Burgundy"),
+    ("emerald", "Emerald Green"),
+    ("jade", "Jade Green"),
+    ("forest green", "Forest Green"),
+    ("evergreen", "Evergreen"),
+    ("gold", "Warm Gold"),
+    ("golden", "Warm Gold"),
+    ("amber", "Warm Amber"),
+    ("copper", "Copper"),
+    ("terracotta", "Terracotta"),
+    ("bronze", "Antique Bronze"),
+    ("saffron", "Saffron"),
+    ("magenta", "Magenta"),
+    ("royal blue", "Royal Blue"),
+    ("sapphire", "Sapphire Blue"),
+    ("navy", "Midnight Navy"),
+    ("turquoise", "Turquoise"),
+    ("teal", "Midnight Teal"),
+    ("violet", "Violet"),
+    ("amethyst", "Amethyst"),
+    ("lavender", "Lavender"),
+    ("ivory", "Crisp Ivory"),
+    ("champagne", "Champagne Gold"),
+    ("silver", "Silver"),
+    ("pearl", "Pearl White"),
+    ("peach", "Soft Peach"),
+    ("cyan", "Electric Cyan"),
+    ("white", "Crisp White"),
+    ("red", "Festive Red"),
+]
+
+
+def extract_outfit_lighting_from_prompt(prompt_text: str, theme_slug: str = "master") -> str:
+    """Extract up to 3 color/metallic accent tones from an outfit prompt for MiniMax H3 lighting."""
+    text = (prompt_text or "").lower()
+    found: list[str] = []
+    matches: list[tuple[int, str]] = []
+    for token, label in _OUTFIT_LIGHTING_COLOR_TOKENS:
+        m = re.search(rf'\b{re.escape(token)}\b', text)
+        if m:
+            matches.append((m.start(), label))
+    matches.sort(key=lambda x: x[0])
+    for _, label in matches:
+        if label not in found:
+            found.append(label)
+        if len(found) == 3:
+            break
+
+    if len(found) >= 2:
+        if len(found) == 2:
+            return f"{found[0]} and {found[1]}"
+        return f"{found[0]}, {found[1]}, and {found[2]}"
+    if len(found) == 1:
+        return f"{found[0]} and Warm Gold" if found[0] != "Warm Gold" else "Warm Gold and Amber"
+    return "Warm Golden and Scarlet" if "cny" in (theme_slug or "").lower() else "Warm Festive Gold"
+
+
+def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_theme="master", prompt_desc="", gender="unisex", description="", lighting=""):
     """
     Accept a generated preview image, autogenerate clean filename, and store into the target theme or master library.
     """
@@ -286,9 +347,17 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
     item_id = file_slug
 
     # Extract concise description for the FLF workflow / card subtitle
+    desc_source = clean_prompt
+    if asset_type == "clothes":
+        try:
+            from comfy_processor import sanitize_clothes_for_portrait
+            desc_source = sanitize_clothes_for_portrait(clean_prompt) or clean_prompt
+        except Exception:
+            pass
+
     final_desc = (description or "").strip()
     if not final_desc:
-        clean_text = clean_prompt
+        clean_text = desc_source
         clean_text = re.sub(r'^(A |An |The )', '', clean_text.strip(), flags=re.IGNORECASE)
         first_clause = re.split(r'[.;\n]', clean_text.strip())[0].strip()
         words = first_clause.split()
@@ -297,7 +366,10 @@ def accept_and_store_asset(preview_filename, asset_type, asset_name="", target_t
         final_desc = first_clause if first_clause else resolved_title
 
     mapping_desc = final_desc
-    lighting_desc = "Warm Golden and Scarlet" if "cny" in theme_slug else "Cinematic ambient studio lighting"
+    if asset_type == "clothes":
+        lighting_desc = (lighting or "").strip() or extract_outfit_lighting_from_prompt(clean_prompt, theme_slug)
+    else:
+        lighting_desc = "Warm Golden and Scarlet" if "cny" in theme_slug else "Cinematic ambient studio lighting"
 
     # 1. Full Master Asset Definition
     master_item = {
