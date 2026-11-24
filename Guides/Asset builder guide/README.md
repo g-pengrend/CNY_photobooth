@@ -94,21 +94,22 @@ Open **ChatGPT** (or Gemini / Claude). Always request three specific outputs:
 
 ### Ready-to-Use Prompt Templates:
 
-#### Template A: Backdrop (Creative Prompt Designer - Deepavali Locations)
+#### Template A: Backdrop (Creative Prompt Designer - Portrait Scenery)
 ```text
-Act as a creative prompt designer. Generate [number] descriptive prompts for Deepavali (Diwali) festival locations, inspired by the following sample format and add a bit of people:
+Act as a creative prompt designer. Generate [number] descriptive backdrop prompts for Deepavali (Diwali) festival locations, inspired by the following sample format and add a bit of distant atmosphere:
 
 Sample Reference:
-"A cinematic, mid-distance view at night focusing on the iconic Merlion statue, brilliantly illuminated as a stream of water spouts into the dark bay. In the background, the glowing Marina Bay city skyline creates a grand, luminous backdrop, with vibrant night lights and architecture reflecting shimmering colors across the water's surface."
+"The iconic Merlion statue brilliantly illuminated at night as a stream of water spouts into the dark bay, with the glowing Marina Bay city skyline and vibrant festive lights shimmering softly across the water in the background."
 
 Requirements:
 1. Subject & Theme: Focus strictly on iconic festive locations, streetscapes, architecture, light installations, or sacred outdoor/indoor spaces decorated for Deepavali.
-2. People & Atmosphere: Include a bit of people in the background (such as soft-focus festival celebrants, distant silhouettes enjoying the lights, or families admiring rangoli) to add lively cultural warmth, scale, and ambiance, while keeping the main central foreground open for the photo booth subject. (Note: If you prefer empty streetscapes, specify 'No People').
-3. Format per item:
+2. People & Atmosphere: Optionally include soft-focus distant silhouettes in the background for lively warmth, while keeping the central midground calm and uncluttered behind the guest and leaving clean visual space at the top for the banner title.
+3. CRITICAL Framing Guardrail: Write 2-3 concise sentences describing scenery, lighting (dusk, amber glow, fairy lights), decor (diyas, rangoli, arches, marigolds), and environmental atmosphere. NEVER write camera-distance commands ("wide shot", "mid-distance view", "low-angle", "panoramic", "vanishing point") or foreground empty stages ("clear stage for a photobooth subject", "sharp focus from foreground to background") — they force the portrait generator to zoom out to full-body and shrink the guest's face.
+4. Format per item:
    - A bolded, evocative Title.
-   - Prompt: A detailed, sensory-rich paragraph specifying camera angle/framing (e.g., wide shot, low-angle, vanishing perspective), lighting conditions (dusk, night, warm amber uplighting, micro-LED glow), key cultural decor (diyas, rangoli, arches, marigolds), and environmental atmosphere (festive streets, damp pavements, incense haze, soft distant crowd).
+   - Variable Description: 2-3 concise atmospheric sentences following the rules above.
    - Description: A concise 1-sentence summary highlighting the core mood, setting, and visual appeal.
-4. Output: Text prompts only (do not generate actual images).
+5. Output: Text prompts only (do not generate actual images).
 ```
 
 #### Template B: Outfit (Male or Female Festive Wear)
@@ -116,22 +117,26 @@ Requirements:
 help me generate a detailed festive outfit prompt for Deepavali traditional wear (female or male).
 
 Requirements:
-- Describe the garment details (embroidery, fabric textures, colors, drape, traditional festive ornaments).
+- Focus strictly on knee-up / upper-body garments: neckline, collar, jacket/bodice, sleeves, waist, sash, embroidery, and fabric textures.
+- NEVER mention shoes, boots, heels, sandals, trousers, ankles, feet, or floor-length hems (these cause the photobooth camera to zoom out to full-body and shrink the guest's face).
 - Keep it focused only on the standalone outfit garment.
 
 Please provide:
-1. Asset Title (e.g. "Royal Maroon Silk Sherwani" or "Golden Zari Silk Saree")
+1. Asset Title (e.g. "Royal Maroon Silk Sherwani" or "Golden Zari Silk Kurta")
 2. Short Description (1 concise sentence)
 3. Variable Description (the detailed description of the outfit to be generated)
 ```
 
-#### Template C: 3D Chibi Pose (Camera-Facing Constraint)
+#### Template C: 3D Chibi Pose (Camera-Facing & Portrait Framing Constraints)
 ```text
 help me generate a 3D chibi avatar pose for our photo booth studio.
 
-IMPORTANT CONSTRAINT: You MUST explicitly start the pose description with:
-"Facing the camera with [pose details]"
-Do NOT cut off or remove "Facing the camera with", because the kiosk try-on system strictly requires front-facing alignment.
+IMPORTANT CONSTRAINTS:
+1. You MUST explicitly start the pose description with:
+   "Facing the camera with [pose details]"
+   Do NOT cut off or remove "Facing the camera with", because the kiosk try-on system strictly requires front-facing alignment.
+2. Keep the pose waist-to-head focused: facial expression, head tilt, shoulders, and chest-to-waist hand gestures.
+3. NEVER describe feet, toes, leg stances, or arms stretched straight up above the head toward the ceiling (these force full-body zoom-out or collide with the top banner).
 
 Here is the example reference:
 "Facing the camera with one hand resting firmly on the waist, the other hand resting naturally at the side. Chin slightly up, projecting confidence."

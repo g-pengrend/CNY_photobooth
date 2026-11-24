@@ -425,7 +425,40 @@ A luxurious art deco border with geometric stepped chevron arches and frosted ch
     console.log('✅ PASSED: ComfyUI node bindings interactively update and auto-bind benchmark nodes');
 }
 
+// Test 13: Portrait framing & persona-only rules in Frame Architect, assembleModularPrompt, and sanitizeAssetPromptClient
+{
+    const framePrompt = windowMock.buildComfyFramePrompt('Winter Masquerade Ball');
+    assert(framePrompt.includes('waist/thighs up'), 'buildComfyFramePrompt should enforce waist/thighs-up framing');
+    assert(framePrompt.includes('top 15-18% banner zone'), 'buildComfyFramePrompt should enforce top-banner headroom');
+    assert(framePrompt.includes('Upper body shot, shallow depth of field'), 'buildComfyFramePrompt should reinforce closing Upper body shot anchor');
+    assert(framePrompt.includes('"framing":'), 'buildComfyFramePrompt JSON schema should include framing');
+    assert(!framePrompt.includes('"evening gown"'), 'buildComfyFramePrompt JSON schema should not include evening gown');
+    assert(!framePrompt.includes('"tailored dinner suit"'), 'buildComfyFramePrompt JSON schema should not include dinner suit');
+
+    const assembled = windowMock.assembleModularPrompt({});
+    assert(
+        assembled.startsWith('Extreme Close up shot of'),
+        'assembleModularPrompt({}) should default to Extreme Close up shot of opener'
+    );
+    assert(
+        assembled.includes('Upper body shot, large clear face positioned cleanly below the top title banner'),
+        'assembleModularPrompt({}) should append Upper body shot closing anchor'
+    );
+
+    const cnyAssembled = windowMock.assembleModularPrompt({
+        framing: 'Extreme Close up shot of',
+        includeLuckyNum: true,
+        atmosphere: 'High-key cinematic lighting, vibrant CNY color palette.'
+    });
+    assert(!cnyAssembled.includes('Upper body shot'), 'CNY preset should remain untouched');
+
+    const cleanedPose = windowMock.sanitizeAssetPromptClient('Summary\nPrompt: Facing the camera with a confident smile.', 'pose');
+    assert.strictEqual(cleanedPose, 'Facing the camera with a confident smile.', 'sanitizeAssetPromptClient should strip preamble and Prompt: prefix');
+
+    console.log('✅ PASSED: Portrait framing & persona-only rules verified across studio helpers');
+}
+
 console.log('\n================================================================');
-console.log('ALL 12 COMFYUI FRAME, TYPOGRAPHY & NODE BINDING TESTS PASSED CLEANLY!');
+console.log('ALL 13 COMFYUI FRAME, TYPOGRAPHY & NODE BINDING TESTS PASSED CLEANLY!');
 console.log('================================================================');
 process.exit(0);

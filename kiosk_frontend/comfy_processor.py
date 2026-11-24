@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import re
 import urllib.request
 import base64
 import io
@@ -8,6 +9,301 @@ from PIL import Image
 import websocket
 from face_analysis import generate_lucky_number_from_face
 from workflow_inspector import load_theme_bindings
+
+DEFAULT_PORTRAIT_FRAMING = "Extreme Close up shot of"
+DEFAULT_PORTRAIT_CLOSER = (
+    "Upper body shot, large clear face positioned cleanly below the top title banner, shallow depth of field."
+)
+
+
+def _cleanup_prompt_punctuation(text: str, capitalize_start: bool = False) -> str:
+    text = re.sub(r'\s+([,.;])', r'\1', text)
+    text = re.sub(r',\s*,+', ',', text)
+    text = re.sub(r'\(\s*\)', '', text)
+    text = re.sub(r',\s*\.', '.', text)
+    text = re.sub(r'\.\s*\.', '.', text)
+    text = re.sub(r'\b(?:and|with)\s*\.', '.', text, flags=re.IGNORECASE)
+    text = re.sub(r'^\s*[,.;]\s*', '', text)
+    text = re.sub(r'\s{2,}', ' ', text).strip()
+    if text:
+        text = re.sub(r'(?<=\.\s)([a-z])', lambda m: m.group(1).upper(), text)
+        if capitalize_start:
+            text = text[0].upper() + text[1:]
+    return text
+
+
+def sanitize_background_for_portrait(background: str) -> str:
+    """Strip wide-shot camera-distance and empty-stage directives that pull Z-Image Turbo into full-body framing."""
+    if not background:
+        return ""
+    orig = str(background).strip()
+    text = orig
+    stripped_start = False
+
+    # If multi-line pasted asset prompt contains "Prompt:", keep only the prompt body
+    m_prompt = re.search(r'(?:^|\n)\s*Prompt\s*:\s*([\s\S]+)$', text, flags=re.IGNORECASE)
+    if m_prompt:
+        text = m_prompt.group(1).strip()
+        stripped_start = True
+
+    text_no_prefix = re.sub(r'^(?:prompt|variable description)\s*:\s*', '', text, flags=re.IGNORECASE)
+    if text_no_prefix != text:
+        text = text_no_prefix
+        stripped_start = True
+
+    # Strip leading camera-distance openers ("A cinematic, mid-distance view at night of ...")
+    text_no_cam = re.sub(
+        r'^(?:A|An)\s+(?:cinematic,?\s+)?(?:clean,?\s+|epic,?\s+|straight-on,?\s+|symmetrical,?\s+|ultra-realistic\s+)?'
+        r'(?:wide-angle,?\s+|wide\s+|mid-distance\s+|medium-distance\s+|eye-level\s+|low-angle\s+|panoramic\s+|street-level\s+)+'
+        r'(?:cinematic\s+)?(?:view|shot|perspective|street\s+shot|street\s+landscape|architectural\s+shot)\s+'
+        r'(?:at\s+(?:night|dusk|twilight|dawn)\s+)?'
+        r'(?:of|across|from|along|down(?:\s+the\s+dead-center\s+median\s+of)?|looking\s+(?:down|up\s+at)|focusing\s+on|framing)\s+',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+    if text_no_cam != text:
+        text = text_no_cam
+        stripped_start = True
+
+    # Strip marketing imperatives at start ("Step into ...", "Capture your ... in ...")
+    text_no_imp = re.sub(r'^(?:Step\s+into|Capture\s+your\s+[\w\s]+?in)\s+', '', text, flags=re.IGNORECASE)
+    if text_no_imp != text:
+        text = text_no_imp
+        stripped_start = True
+
+    # Strip/soften open-stage & foreground-platform directives
+    text = re.sub(
+        r'The\s+foreground\s+and\s+center\s+feature\s+an?\s+[^.;]*?(?:platform|stage|floor)[^.;]*?'
+        r'(?:photobooth\s+subject|portrait|subjects?)\s*,?\s*(?:elegantly\s+)?',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'The\s+central\s+(?:stage|platform)\s+remains\s+[^.;]*?(?:subjects?|portrait)\s*,?\s*',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(r'The\s+open,?\s+softly\s+lit\s+central\s+(?:stage|platform)\s+is\s+', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'designed\s+as\s+(?:a\s+clear|the\s+perfect)\s+photobooth\s+stage\.?', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'with\s+a\s+beautifully\s+lit,?\s+open\s+central\s+platform\.?', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'where\s+a\s+pristine,?\s+snow-dusted\s+stage\s+awaits,?\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(
+        r'The\s+foreground\s+features\s+a\s+spacious,?\s+[^.]*?clear\s+stage\s+for\s+a\s+portrait[^.]*\.',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(r',?\s*while\s+leaving\s+the\s+wide\s+foreground\s+spacious[^.]*', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'\btoy\s+theatre\s+stage\b', 'toy theatre backdrop', text, flags=re.IGNORECASE)
+
+    # Strip/soften wide-shot & deep-focus directives
+    text = re.sub(
+        r'Ultra-detailed,?\s*cinematic\s+wide\s+shot,?\s*sharp\s+focus\s+from\s+foreground\s+to\s+background\.?',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(r'\bsharp\s+focus\s+from\s+foreground\s+to\s+background\b', 'softly blurred background depth', text, flags=re.IGNORECASE)
+    text = re.sub(r'\b(?:cinematic\s+)?wide[- ]angle\s+(?:cinematic\s+)?(?:shot|view|perspective)\b', 'scenic backdrop', text, flags=re.IGNORECASE)
+    text = re.sub(r'\bcinematic\s+wide\s+shot\b', 'scenic backdrop', text, flags=re.IGNORECASE)
+    text = re.sub(r'\bvanishing\s+into\s+a\s+single\s+point\s+on\s+the\s+horizon\b', 'receding softly into the bokeh distance', text, flags=re.IGNORECASE)
+
+    # Preserve untouched prompts (e.g., CNY B01-B10, Hari Raya B01-B05) 100% verbatim
+    if not stripped_start and text.strip() == orig:
+        return orig
+
+    return _cleanup_prompt_punctuation(text, capitalize_start=stripped_start)
+
+
+def sanitize_pose_for_portrait(pose: str) -> str:
+    """Remove full-body feet/stance/ceiling cues that shrink faces or collide with top banners."""
+    if not pose:
+        return ""
+    text = str(pose).strip()
+    text = re.sub(r'^(?:prompt|variable description)\s*:\s*', '', text, flags=re.IGNORECASE)
+
+    # Soften overhead arms that force zoom-out or collide with the top title banner
+    text = re.sub(
+        r'\bone arm raised straight up,\s*index finger pointing upward to make a number\s*["\']?one["\']?\s*sign\b',
+        'one hand held near shoulder height with index finger raised to make a cheerful number "one" sign',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'\bboth arms stretched straight up toward the ceiling\b',
+        'both arms raised cheerfully near shoulder height',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'\bone arm raised straight up into the air\b',
+        'one arm raised cheerfully near shoulder height',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'\bone arm raised straight up\b',
+        'one arm raised cheerfully near shoulder height',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'\bpointing high into the upper diagonal\b',
+        'pointing outward cheerfully to the side',
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    # Keep hand placement waist/hip-level instead of thighs
+    text = re.sub(r'\bagainst the outer thigh\b', 'naturally at the waist', text, flags=re.IGNORECASE)
+    text = re.sub(r'\bagainst the front of the thighs\b', 'near the waist', text, flags=re.IGNORECASE)
+
+    # Strip lower-body feet, toes, and wide-stance instructions
+    text = re.sub(
+        r'\bFeet are set shoulder-width apart with\s+',
+        'Looking forward with ',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'\bFeet are planted firmly shoulder-width apart in a solid,\s*unmoving stance,\s*',
+        'Confident upright posture, ',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r',?\s*\bstanding upright with feet shoulder-width apart\s*,?',
+        ', confident posture,',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'\bstanding in a grounded wide stance\b',
+        'with confident upright posture',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(r'\bStanding tall on the toes,\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(
+        r'\bStanding balanced with feet (?:slightly apart|shoulder-width apart|planted firmly),\s*',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(r'\bStanding tall with\s+', 'With ', text, flags=re.IGNORECASE)
+    text = re.sub(r'\bStanding tall\b\s*,?\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'\bStanding firmly\b\s*,?\s*', '', text, flags=re.IGNORECASE)
+    text = re.sub(
+        r'\bwith feet (?:slightly apart|shoulder-width apart|planted firmly)\s*,?\s*',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(r'\bon the toes\s*,?\s*', '', text, flags=re.IGNORECASE)
+
+    return _cleanup_prompt_punctuation(text)
+
+
+def sanitize_clothes_for_portrait(clothes_style: str) -> str:
+    """Strip full-body gown/trouser/footwear triggers so Z-Image Turbo holds waist/knee-up framing."""
+    if not clothes_style:
+        return ""
+    text = str(clothes_style).strip()
+    text = re.sub(r'^(?:prompt|variable description)\s*:\s*', '', text, flags=re.IGNORECASE)
+
+    text = re.sub(r'\bfloor-length\b', 'tailored', text, flags=re.IGNORECASE)
+    text = re.sub(
+        r'\bfull-length(?=\s+(?:[\w-]+\s+){0,3}(?:skirt|gown|dress|robe|portrait|silhouette|outfit|look|ensemble)\b)',
+        'tailored',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(r'\b(?:ankle-length|mid-calf|knee-length)\b', 'tailored', text, flags=re.IGNORECASE)
+    text = re.sub(r'\bvoluminous,\s*(?:tailored|floor-length)\b', 'high-waisted', text, flags=re.IGNORECASE)
+    text = re.sub(r'\bballerina\b', 'holiday princess', text, flags=re.IGNORECASE)
+    text = re.sub(r'\b(?:straight|down) to the floor\b', 'gracefully', text, flags=re.IGNORECASE)
+    text = re.sub(
+        r',?\s*(?:cropped neatly just above the ankles|tailored precisely to break cleanly at the instep)\b',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    # Strip full-body lower-garment trouser/churidar triggers (Config B)
+    text = re.sub(r'\bThe look is grounded with\s+[^.]*?\b(?:trousers|churidar)\b[^.]*\.', '', text, flags=re.IGNORECASE)
+    text = re.sub(
+        r'\b(is|are)\s+(?:elegantly\s+)?paired\s+with\s+[^.;]*?\b(?:trousers|churidar)\b(?:\s+and\s+(?=finished|completed|paired))?',
+        r'\1 ',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'(?:,?\s*\band\s+|,\s*|\s+)?(?:elegantly\s+)?paired\s+with\s+(?:(?!\band\s+(?:finished|completed)\b)[^.;])*?\b(?:trousers|churidar)\b(?:\s*,?\s*tailored\s+(?:cleanly\s+over|precisely)[^.;]*)?(?:\s+and\s+(?=finished|completed))?',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(
+        r'\b(?:He|She|Subject)\s+wears\s+[^.;]*?\b(?:trousers|churidar)\b(?:\s+and\s+[^,.;]*)?,?\s*',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(r',?\s*\btailored cleanly over[^.]*', '', text, flags=re.IGNORECASE)
+
+    # Strip footwear mentions
+    text = re.sub(
+        r'(?:\s*,?\s*\band\s+(?:paired\s+with\s+|finished\s+with\s+)?|\s*,?\s*(?:paired|finished)\s+with\s+|\s+)(?:(?!\band\b|\bwith\b)[\w-]+\s+){0,3}(?:ankle\s+boots|leather\s+boots|dress\s+shoes|boots|shoes|sandals|heels|juttis|mojaris|loafers?|sneakers?|slippers?)\b',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    )
+
+    return _cleanup_prompt_punctuation(text, capitalize_start=True)
+
+
+def sanitize_gender_style(gender_style: str, gender: str = "female") -> str:
+    """Keep gender_style focused on persona/charisma rather than garments that clash with clothes_style."""
+    fallback = "asian, fit and charismatic" if str(gender).lower() == "male" else "charismatic, radiant and photogenic"
+    if not gender_style:
+        return fallback
+    text = str(gender_style).strip()
+    text = re.sub(
+        r'\s+in\s+(?:a\s+|an\s+)?(?:[\w-]+\s+){0,3}(?:dinner\s+suit|evening\s+gown|suit|gown|dress|outfit)\b.*$',
+        '',
+        text,
+        flags=re.IGNORECASE,
+    ).strip()
+
+    has_garment = bool(
+        re.search(r'\b(?:sweater|shirt|dress|gown|suit|jacket|blazer|trousers|skirt|vest|cardigan)\b', text, re.IGNORECASE)
+    )
+    has_persona = bool(
+        re.search(r'\b(?:man|woman|lady|idol|gentleman|person|model|asian|charismatic|executive|male|female|radiant|photogenic)\b', text, re.IGNORECASE)
+    )
+    if not text or (has_garment and not has_persona):
+        return fallback
+    return text
+
+
+def normalize_framing_in_prompt(prompt_text: str) -> str:
+    """Upgrade legacy 'Medium shot, waist up shot of' framing + append Upper body anchor without altering CNY/HR."""
+    if not prompt_text:
+        return ""
+    text = str(prompt_text)
+    if re.search(r'\bMedium shot,\s*waist up shot of\b', text, flags=re.IGNORECASE):
+        text = re.sub(
+            r'\bMedium shot,\s*waist up shot of\b',
+            DEFAULT_PORTRAIT_FRAMING,
+            text,
+            flags=re.IGNORECASE,
+        )
+        if "upper body shot" not in text.lower():
+            text = f"{text.rstrip()} {DEFAULT_PORTRAIT_CLOSER}"
+    return text
 
 # Configuration
 from config import COMFY_SERVER_ADDRESS
@@ -63,10 +359,16 @@ def update_workflow_with_image(workflow, image_path, gender="female", pose="", c
     except Exception:
         pass
 
+    # Enforce portrait-friendly framing & strip full-body zoom triggers
+    gender_style = sanitize_gender_style(gender_style, gender)
+    pose = sanitize_pose_for_portrait(pose)
+    clothes_style = sanitize_clothes_for_portrait(clothes_style)
+    background = sanitize_background_for_portrait(background)
+
     # Update prompt text with all variable syntax forms:
     # Supports ComfyUI JSON escaped syntax: \"pose\", literal \"pose\", \"gender\", and {pose}
     if prompt_node in workflow and "inputs" in workflow[prompt_node] and "text" in workflow[prompt_node]["inputs"]:
-        current_text = workflow[prompt_node]["inputs"]["text"]
+        current_text = normalize_framing_in_prompt(workflow[prompt_node]["inputs"]["text"])
         token_map = [
             ("gender", gender),
             ("gender_style", gender_style),

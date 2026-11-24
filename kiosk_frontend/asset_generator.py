@@ -20,8 +20,9 @@ ASSET_TEMPLATES = {
         "category": "backgrounds",
         "code_prefix": "B",
         "static_prefix": "A professional studio asset of a background environment, featuring \n\n",
-        "default_middle": "A cinematic, mid-distance view at night focusing on the iconic Merlion statue, brilliantly illuminated as a stream of water spouts into the dark bay. In the background, the glowing Marina Bay city skyline creates a grand, luminous backdrop, with vibrant night lights and architecture reflecting shimmering colors across the water's surface.",
+        "default_middle": "The iconic Merlion statue brilliantly illuminated at night as a stream of water spouts into the dark bay, with the glowing Marina Bay city skyline and vibrant festive lights shimmering softly across the water in the background.",
         "static_suffix": "\n\nWide-angle cinematic perspective, daylight atmospheric lighting, high-detail textures, centered composition",
+        "prompt_guidelines": "Describe scenery, lighting, and festive atmosphere in 2-3 sentences. NEVER write camera-distance commands ('wide shot', 'mid-distance view', 'panoramic') or empty foreground platforms ('clear stage for a photobooth subject', 'sharp focus from foreground to background') — they zoom the portrait camera out to full body.",
         "prompt_node": "45",
         "sampler_node": "44"
     },
@@ -31,8 +32,9 @@ ASSET_TEMPLATES = {
         "category": "clothes",
         "code_prefix": "C",
         "static_prefix_template": "A professional studio product shot of a standalone {gender} outfit, featuring \n\n",
-        "default_middle": "a stylish sleeveless A-line dress that integrates a clean white bodice with a deep Singapore red skirt. The slightly flared skirt is adorned with an elegant, flowing white Vanda Miss Joaquim orchid motif pattern across its surface, balanced against the white bodice for an aesthetically pleasing mix of both colors.",
+        "default_middle": "a tailored crimson velvet jacket with bold gold embroidery and a structured mandarin collar, worn over a rich silk inner tunic with an ornate waist sash.",
         "static_suffix": "\n\nThe outfit is displayed to maintain a 3D shape, centered composition, high-quality fabric textures, cinematic lighting, isolated on a solid black background for easy transparency masking.\n\nNo human hands",
+        "prompt_guidelines": "Describe knee-up / upper-body garments only (neckline, collar, bodice/jacket, sleeves, waist, sash). Never mention shoes, boots, heels, sandals, trousers, ankles, or floor-length hems.",
         "prompt_node": "45",
         "sampler_node": "44"
     },
@@ -44,6 +46,7 @@ ASSET_TEMPLATES = {
         "static_prefix": "A high-quality 3D Chibi-style character asset with a large head and small, rounded body.\n\n",
         "default_middle": "Facing the camera with one hand resting firmly on the waist, the other hand resting naturally at the side. Chin slightly up, projecting confidence.",
         "static_suffix": "\n\nSoft studio lighting with clean ambient occlusion, centered composition, isolated on a solid white background for easy transparency masking.",
+        "prompt_guidelines": "Start with 'Facing the camera with...'. Focus on facial expression, head tilt, shoulders, and chest-to-waist hand gestures. Never describe feet, toes, leg stances, or arms raised high above the head.",
         "prompt_node": "45",
         "sampler_node": "44"
     }
@@ -60,7 +63,8 @@ def get_template_configs():
             "category": v["category"],
             "static_prefix": prefix,
             "default_middle": v["default_middle"],
-            "static_suffix": v["static_suffix"]
+            "static_suffix": v["static_suffix"],
+            "prompt_guidelines": v.get("prompt_guidelines", "")
         }
     return configs
 
@@ -184,6 +188,10 @@ def sanitize_asset_prompt(prompt_text, asset_type="backdrop"):
     if not prompt_text:
         return ""
     text = str(prompt_text).strip()
+    m_prompt = re.search(r'(?:^|\n)\s*Prompt\s*:\s*([\s\S]+)$', text, flags=re.IGNORECASE)
+    if m_prompt:
+        text = m_prompt.group(1).strip()
+    text = re.sub(r'^(?:prompt|variable description)\s*:\s*', '', text, flags=re.IGNORECASE)
     
     # Backdrop prefixes/suffixes
     text = re.sub(r'^A professional studio asset of a background environment,\s*featuring\s*', '', text, flags=re.IGNORECASE)

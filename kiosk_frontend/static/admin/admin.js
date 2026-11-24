@@ -276,7 +276,7 @@ function createNewTheme() {
             completionMessage: 'Calculations Complete! Ready to manifest.'
         },
         promptTemplate: {
-            framing: 'Medium shot, waist up shot of',
+            framing: 'Extreme Close up shot of',
             border: '',
             topTitle: '',
             topTitleStyle: '',
@@ -285,9 +285,9 @@ function createNewTheme() {
             bottomTitle: '',
             bottomTitleStyle: '',
             typoIntegration: '',
-            atmosphere: 'Volumetric cinematic lighting, vibrant depth of field, 8k.',
-            maleStyle: 'executive leading man in tailored dinner suit',
-            femaleStyle: 'charismatic elegant leading lady in evening gown'
+            atmosphere: 'Upper body shot, large clear face positioned cleanly below the top title banner, shallow depth of field, 8k.',
+            maleStyle: 'asian, fit and charismatic',
+            femaleStyle: 'charismatic, radiant and photogenic'
         }
     };
 
@@ -698,9 +698,12 @@ window.autoBindStandardComfyNodes = function() {
 // ==========================================================================
 // Prompt Formula Designer & Live Assembly
 // ==========================================================================
+const DEFAULT_PORTRAIT_FRAMING = 'Extreme Close up shot of';
+const DEFAULT_PORTRAIT_CLOSER = 'Upper body shot, large clear face positioned cleanly below the top title banner, shallow depth of field.';
+
 const PROMPT_THEME_PRESETS = {
     uits: {
-        framing: 'Medium shot, waist up shot of',
+        framing: DEFAULT_PORTRAIT_FRAMING,
         maleStyle: 'executive leading man',
         femaleStyle: 'charismatic k-pop idol',
         borderStyle: 'The image features a modern graphic overlay with a translucent frosted-glass border forming a frame.',
@@ -730,7 +733,7 @@ const PROMPT_THEME_PRESETS = {
         includeLuckyNum: true
     },
     ndp2026: {
-        framing: 'Medium shot, waist up shot of',
+        framing: DEFAULT_PORTRAIT_FRAMING,
         maleStyle: 'asian, fit and charismatic',
         femaleStyle: 'charismatic k-pop idol',
         borderStyle: 'Overlayed smoothly on top of the scene, the photo is framed by a playful, translucent graphic border featuring bold crimson red and crisp white festive banners, translucent star fireworks, and a sleek glassmorphic overlay.',
@@ -764,7 +767,7 @@ const PROMPT_THEME_PRESETS = {
 let rawPromptMode = false;
 
 function assembleModularPrompt(tpl) {
-    const framing = (tpl.framing || 'Medium shot, waist up shot of').trim();
+    const framing = (tpl.framing || DEFAULT_PORTRAIT_FRAMING).trim();
     let prompt = `${framing} a "gender" "gender_style" with "pose" for a concept photo, dressed in "clothes_style". The setting is "background".`;
 
     if (tpl.borderStyle && tpl.borderStyle.trim()) {
@@ -822,8 +825,13 @@ function assembleModularPrompt(tpl) {
         prompt += ` ${tpl.atmosphere.trim()}`;
     }
 
+    if (!tpl.includeLuckyNum && !/upper body shot/i.test(prompt)) {
+        prompt += ` ${DEFAULT_PORTRAIT_CLOSER}`;
+    }
+
     return prompt.replace(/\s+/g, ' ').trim();
 }
+window.assembleModularPrompt = assembleModularPrompt;
 
 function renderPromptLivePreview(rawText) {
     const previewEl = document.getElementById('prompt-live-preview');
@@ -870,9 +878,9 @@ function populatePromptDesigner(theme) {
         tpl = PROMPT_THEME_PRESETS[slug] ? { ...PROMPT_THEME_PRESETS[slug] } : { ...PROMPT_THEME_PRESETS.uits };
     }
 
-    setValue('prompt-inp-framing', tpl.framing || 'Medium shot, waist up shot of');
-    setValue('prompt-inp-male-style', tpl.maleStyle || 'executive leading man');
-    setValue('prompt-inp-female-style', tpl.femaleStyle || 'charismatic k-pop idol');
+    setValue('prompt-inp-framing', tpl.framing || DEFAULT_PORTRAIT_FRAMING);
+    setValue('prompt-inp-male-style', tpl.maleStyle || 'asian, fit and charismatic');
+    setValue('prompt-inp-female-style', tpl.femaleStyle || 'charismatic, radiant and photogenic');
     setValue('prompt-inp-border', tpl.borderStyle !== undefined ? tpl.borderStyle : 'The image features a modern graphic overlay with a translucent frosted-glass border forming a frame.');
     setValue('prompt-inp-top-title', tpl.topTitle || '');
     setValue('prompt-inp-top-title-style', tpl.topTitleStyle || '');
@@ -1048,14 +1056,19 @@ Based on the visual concept "${themeConcept}", invent bespoke, cohesive prompt s
 
 Specific Requirements:
 1. **Graphic Border Frame**: Describe an ornate, natural border overlay (materials, contours, transparency/glassmorphism, corner accents) that frames the photobooth guest without obscuring the central face or body.
-2. **Suggest Bespoke Titles & Subtitles**:
+2. **Portrait Framing & Top-Banner Headroom (CRITICAL)**: Keep the guest framed from the waist/thighs up with a large, clearly recognizable face (avoid full-body head-to-toe framing). Reserve generous clean headroom inside the top 15-18% banner zone so top titles sit neatly above the head without covering the face. In \`atmosphere\`, include \`Upper body shot, shallow depth of field\` and NEVER use \`sharp focus from foreground to background\`.
+3. **Suggest Bespoke Titles & Subtitles**:
    - **Top Apex Title**: Suggest a grand, evocative apex title tailored to "${themeConcept}" (e.g. for a gala: prestigious golden jubilee/gala title; for cyberpunk: high-tech night title; for festive holidays: festive greetings).
    - **Subtitle / Years**: Suggest a fitting subtitle, edition, or year that complements the apex title.
    - **Bottom Badge Title**: Suggest an impactful bottom crest, badge, or celebration motto that anchors the lower border.
-3. **Typography Styling**: Describe how each suggested title is physically rendered and illuminated in the 3D scene (materials, typeface archetype, liquid gold leaf, neon backlight, luminous calligraphy, etc.).
-4. **Atmosphere & Finishers**: Specify volumetric lighting, color palette, glassmorphism, depth of field, and 8k photorealistic finish.
+4. **Typography Styling**: Describe how each suggested title is physically rendered and illuminated in the 3D scene (materials, typeface archetype, liquid gold leaf, neon backlight, luminous calligraphy, etc.).
+5. **Atmosphere & Finishers**: Specify volumetric lighting, color palette, glassmorphism, depth of field, and 8k photorealistic finish.
+6. **Persona Styling Only (NO Outfits)**: For maleStyle and femaleStyle, describe grooming, facial energy, and charisma ONLY — NEVER include suits, dresses, gowns, or garments (outfits are injected separately via "clothes_style").
 
 Format your response clearly into the EXACT BLOCKS below so the user can easily copy and paste each part into the system blocks, followed by the JSON block for 1-click auto-import:
+
+### [FRAMING]
+${DEFAULT_PORTRAIT_FRAMING}
 
 ### [FRAME_STYLE]
 (Detailed graphic design & border overlay prompt. Describe the frame borders, architectural contours, transparency/glassmorphism, materials, and corner accents framing the subject naturally.)
@@ -1079,10 +1092,11 @@ Format your response clearly into the EXACT BLOCKS below so the user can easily 
 (Style description for your suggested bottom badge, e.g. "displayed in bold, luminous calligraphy anchored within the lower crest".)
 
 ### [ATMOSPHERE]
-(Volumetric lighting, lens characteristics, color palette, glassmorphism, depth of field, 8k resolution, photorealistic finish.)
+(Upper body shot, shallow depth of field, volumetric lighting, lens characteristics, color palette, glassmorphism, 8k resolution, photorealistic finish.)
 
 \`\`\`json
 {
+  "framing": "${DEFAULT_PORTRAIT_FRAMING}",
   "frame_style": "Detailed graphic design & border overlay prompt. Describe frame borders and contours.",
   "border": "Detailed graphic design & border overlay prompt. Describe frame borders and contours.",
   "top_title": "${topTitle || 'Your suggested Top Apex Title'}",
@@ -1097,9 +1111,9 @@ Format your response clearly into the EXACT BLOCKS below so the user can easily 
   "bottom_title_style": "displayed in luminous calligraphy anchored within the lower crest",
   "bottomTitleStyle": "displayed in luminous calligraphy anchored within the lower crest",
   "typoIntegration": "All typography is softly backlit with warm glow and seamlessly integrated into the frame borders.",
-  "atmosphere": "Volumetric lighting, lens characteristics, color palette, glassmorphism, depth of field, 8k resolution, photorealistic finish.",
-  "maleStyle": "executive leading man in tailored dinner suit",
-  "femaleStyle": "charismatic elegant leading lady in evening gown"
+  "atmosphere": "Upper body shot, large clear face positioned cleanly below the top title banner, shallow depth of field, volumetric lighting, color palette, glassmorphism, 8k resolution, photorealistic finish.",
+  "maleStyle": "charismatic, sharp and photogenic leading man",
+  "femaleStyle": "charismatic, radiant and photogenic leading lady"
 }
 \`\`\`
 
@@ -2278,6 +2292,13 @@ window.sanitizeAssetPromptClient = function (promptText, assetType = 'backdrop')
     if (!promptText) return '';
     let text = String(promptText).trim();
 
+    // Strip accidental LLM copy-paste preambles & prefixes
+    const multiPromptMatch = text.match(/(?:^|\n)\s*Prompt\s*:\s*([\s\S]+)$/i);
+    if (multiPromptMatch) {
+        text = multiPromptMatch[1].trim();
+    }
+    text = text.replace(/^(?:prompt|variable description)\s*:\s*/i, '');
+
     // Backdrop template boilerplates
     text = text.replace(/^A professional studio asset of a background environment,\s*featuring\s*/i, '');
     text = text.replace(/Wide-angle cinematic perspective,\s*daylight atmospheric lighting,\s*high-detail textures,\s*centered composition.*$/i, '');
@@ -2748,6 +2769,8 @@ function initEventListeners() {
         jsonArea.addEventListener('input', () => window.autoApplyIdentityJsonOnInput(true));
         jsonArea.addEventListener('paste', () => setTimeout(() => window.autoApplyIdentityJsonOnInput(true), 50));
     }
+
+    document.getElementById('gen-middle-prompt')?.addEventListener('input', window.checkAssetPromptFramingWarnings);
 }
 
 // Card size toggle for picker modal
@@ -2825,6 +2848,85 @@ window.selectGeneratorType = function (type) {
     updateGeneratorPreview();
 };
 
+const ASSET_FRAMING_GUARDRAILS = {
+    clothes: '👕 Knee-Up Outfit Rule: Describe upper-body to knee-up tailoring only (neckline, collar, bodice/jacket, sleeves, waist, sash). Avoid shoes, boots, heels, sandals, trousers, ankles, ballerina/floor-length hems — they force full-body zoom-out and shrink the guest\'s face.',
+    pose: '🕺 Portrait Pose Rule: Must start with "Facing the camera with...". Focus on facial expression, head tilt, shoulders, and chest/waist-height hand gestures. Avoid standing stances, feet, toes, or arms/fingers raised high above the head.',
+    backdrop: '🏞️ Backdrop Rule: Describe scenery & festive lighting in 2–3 sentences. NEVER include camera-distance commands ("wide shot", "mid-distance view") or empty foreground platforms ("clear stage for", "sharp focus from foreground") — they zoom portraits out to full body.'
+};
+
+window.checkAssetPromptFramingWarnings = function () {
+    const type = studio.currentGenType || 'backdrop';
+    const text = document.getElementById('gen-middle-prompt')?.value || '';
+    const warnEl = document.getElementById('gen-framing-warning');
+    if (!warnEl) return;
+
+    const triggers = [];
+    if (type === 'clothes') {
+        if (/\b(?:floor[- ]length|ankle[- ]length)\b/i.test(text)) triggers.push('"floor-length / ankle-length"');
+        if (/\bfull[- ]length\s+(?:[\w-]+\s+){0,3}(?:skirt|gown|dress|robe|silhouette|outfit)\b/i.test(text)) triggers.push('"full-length skirt/gown/silhouette"');
+        if (/\b(?:trousers|churidar|instep|ankles)\b/i.test(text)) triggers.push('lower-body leg/trouser cues ("trousers/instep/ankles")');
+        if (/\bballerina\b/i.test(text)) triggers.push('"ballerina" (implies full-length tutu)');
+        if (/\b(?:shoes|boots|ankle boots|dress shoes|sandals|heels|footwear|juttis|mojaris)\b/i.test(text)) triggers.push('footwear ("shoes/boots")');
+    } else if (type === 'pose') {
+        if (/\b(?:feet|toes|wide stance|shoulder-width|standing tall)\b/i.test(text)) triggers.push('feet/stance ("feet/toes/stance/standing tall")');
+        if (/\b(?:ceiling|above the head|straight up into the air|pointing upward|pointing high)\b/i.test(text)) triggers.push('overhead arms ("ceiling/pointing upward")');
+        if (text.trim() && !/^facing the camera with/i.test(text.trim())) triggers.push('missing "Facing the camera with..." opener');
+    } else if (type === 'backdrop') {
+        if (/\b(?:wide[- ]angle|wide\s+shot|mid[- ]distance|medium[- ]distance|panoramic|vanishing\s+point)\b/i.test(text)) triggers.push('camera-distance override ("wide shot/mid-distance/panoramic")');
+        if (/\b(?:open\s+central\s+(?:stage|platform)|clear\s+stage\s+for|photobooth\s+stage|sharp\s+focus\s+from\s+foreground)\b/i.test(text)) triggers.push('foreground stage / deep-focus directive');
+    }
+
+    if (triggers.length > 0) {
+        warnEl.style.display = 'block';
+        warnEl.textContent = `⚠️ Portrait Framing Warning (${triggers.join(', ')}): These terms can force Z-Image Turbo to zoom out to full-body (shrinking the face) or overlap the top banner.`;
+    } else {
+        warnEl.style.display = 'none';
+        warnEl.textContent = '';
+    }
+};
+
+window.copyAssetLlmHelperPrompt = async function () {
+    const type = studio.currentGenType || 'backdrop';
+    let template = '';
+    if (type === 'clothes') {
+        template = `Help me generate a detailed festive outfit prompt for a portrait photobooth (waist/knee-up framing).
+
+IMPORTANT PORTRAIT FRAMING RULES:
+- Focus strictly on upper-body to knee-up garments: neckline, collar, jacket/bodice, sleeves, embroidery, waist/sash, and fabric textures.
+- NEVER mention shoes, boots, heels, sandals, trousers, ankles, ballerina, or floor-length hems (these cause the image model to zoom out to full-body and shrink the guest's face).
+
+Provide:
+1. Asset Title (2-4 words)
+2. Short Description (1 concise sentence)
+3. Variable Description (garment details only, no model/background/footwear/trousers)`;
+    } else if (type === 'pose') {
+        template = `Help me generate a 3D chibi avatar pose for our portrait photobooth studio.
+
+IMPORTANT FRAMING RULES:
+- MUST start strictly with: "Facing the camera with [pose details]"
+- Keep the pose waist-to-head focused: facial expression, head tilt, shoulders, and chest-to-waist hand gestures.
+- NEVER describe standing stances, feet, toes, or arms/fingers raised high toward the ceiling (these shrink the face or collide with the top banner).
+
+Provide:
+1. Asset Title (2-4 words)
+2. Short Description (1 concise sentence)
+3. Variable Description (starting with "Facing the camera with...")`;
+    } else {
+        template = `Help me generate a concise festive backdrop prompt for a portrait photobooth.
+
+IMPORTANT PORTRAIT FRAMING RULES:
+- Write 2-3 concise sentences describing festive scenery, lighting, architecture/decor, and background bokeh depth.
+- Leave clean visual atmosphere at the top for the banner title and keep the central midground calm behind the subject.
+- NEVER write camera-distance commands ("wide shot", "mid-distance view", "panoramic", "vanishing point") or foreground open stages ("clear stage for a photobooth subject", "sharp focus from foreground to background") — these zoom portraits out to full body.
+
+Provide:
+1. Asset Title (2-4 words)
+2. Short Description (1 concise sentence)
+3. Variable Description (2-3 atmospheric sentences, no camera-distance commands)`;
+    }
+    await window.copyTextToClipboard(template, `📋 Copied framing-safe ${type.toUpperCase()} AI prompt template!`);
+};
+
 window.updateGeneratorPreview = function () {
     const type = studio.currentGenType || 'backdrop';
     const cfg = studio.assetGenConfigs[type];
@@ -2833,6 +2935,11 @@ window.updateGeneratorPreview = function () {
     const prefixEl = document.getElementById('gen-static-prefix');
     const suffixEl = document.getElementById('gen-static-suffix');
     const middleInput = document.getElementById('gen-middle-prompt');
+    const guardrailEl = document.getElementById('gen-framing-guardrail');
+
+    if (guardrailEl) {
+        guardrailEl.textContent = ASSET_FRAMING_GUARDRAILS[type] || '';
+    }
 
     if (type === 'clothes') {
         const gender = document.getElementById('gen-clothes-gender')?.value || 'female';
@@ -2847,6 +2954,8 @@ window.updateGeneratorPreview = function () {
     if (middleInput && !middleInput.value.trim()) {
         middleInput.value = cfg.default_middle || '';
     }
+
+    window.checkAssetPromptFramingWarnings();
 };
 
 window.loadGeneratorExamplePrompt = function () {

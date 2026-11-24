@@ -957,15 +957,18 @@
                                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.6rem; margin-top: 0.65rem;">
                                     <div>
                                         <label for="prompt-inp-framing" style="font-size: 0.73rem; color: #cbd5e1; display: block; margin-bottom: 0.2rem;">Camera Framing</label>
-                                        <input type="text" id="prompt-inp-framing" class="admin-input" value="Medium shot, waist up shot of" style="font-size: 0.78rem;">
+                                        <input type="text" id="prompt-inp-framing" class="admin-input" value="Extreme Close up shot of" style="font-size: 0.78rem;">
+                                        <span style="font-size: 0.68rem; color: #94a3b8; display: block; margin-top: 0.2rem;">Pairs with "Upper body shot" in Z-Image Turbo to keep waist/knee-up framing, large face, and banner headroom.</span>
                                     </div>
                                     <div>
                                         <label for="prompt-inp-male-style" style="font-size: 0.73rem; color: #cbd5e1; display: block; margin-bottom: 0.2rem;">Male Persona Style</label>
-                                        <input type="text" id="prompt-inp-male-style" class="admin-input" value="executive leading man" style="font-size: 0.78rem;">
+                                        <input type="text" id="prompt-inp-male-style" class="admin-input" value="asian, fit and charismatic" style="font-size: 0.78rem;">
+                                        <span style="font-size: 0.68rem; color: #94a3b8; display: block; margin-top: 0.2rem;">Persona/charisma only — do NOT describe suits or garments here.</span>
                                     </div>
                                     <div>
                                         <label for="prompt-inp-female-style" style="font-size: 0.73rem; color: #cbd5e1; display: block; margin-bottom: 0.2rem;">Female Persona Style</label>
-                                        <input type="text" id="prompt-inp-female-style" class="admin-input" value="charismatic k-pop idol" style="font-size: 0.78rem;">
+                                        <input type="text" id="prompt-inp-female-style" class="admin-input" value="charismatic, radiant and photogenic" style="font-size: 0.78rem;">
+                                        <span style="font-size: 0.68rem; color: #94a3b8; display: block; margin-top: 0.2rem;">Persona/charisma only — do NOT describe dresses or gowns here.</span>
                                     </div>
                                 </div>
                             </details>
@@ -1269,12 +1272,21 @@
 
                             <!-- Middle Variable Textarea -->
                             <div style="margin-bottom: 1rem;">
+                                <div id="gen-framing-guardrail"
+                                    style="margin-bottom: 0.65rem; padding: 0.65rem 0.9rem; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); font-size: 0.78rem; color: #a7f3d0; line-height: 1.4;">
+                                    🏞️ Backdrop Rule: Describe scenery &amp; festive lighting in 2–3 sentences. NEVER include camera-distance commands ("wide shot", "mid-distance view") or empty foreground platforms ("clear stage for", "sharp focus from foreground") — they zoom portraits out to full body.
+                                </div>
                                 <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.5rem;">
                                     <span
                                         style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: #4ade80; letter-spacing: 0.5px;">✏️
                                         Variable Description (Editable Middle Portion)</span>
-                                    <div style="display: flex; gap: 0.5rem;">
+                                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                        <button type="button" class="admin-btn admin-btn-secondary"
+                                            style="padding: 0.2rem 0.6rem; font-size: 0.75rem; border-color: rgba(99, 102, 241, 0.45); color: #a5b4fc;"
+                                            onclick="copyAssetLlmHelperPrompt()">
+                                            📋 Copy AI Prompt Template
+                                        </button>
                                         <button type="button" class="admin-btn admin-btn-secondary"
                                             style="padding: 0.2rem 0.6rem; font-size: 0.75rem;"
                                             onclick="loadGeneratorExamplePrompt()">
@@ -1290,6 +1302,9 @@
                                 <textarea id="gen-middle-prompt" rows="5"
                                     placeholder="Enter your custom description for this asset..."
                                     style="width: 100%; padding: 1rem; border-radius: var(--radius-sm); background: rgba(0,0,0,0.5); border: 1px solid var(--accent); color: #fff; font-size: 0.95rem; font-family: inherit; line-height: 1.5; outline: none;"></textarea>
+                                <div id="gen-framing-warning"
+                                    style="display: none; margin-top: 0.5rem; padding: 0.6rem 0.85rem; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.45); border-radius: var(--radius-sm); font-size: 0.78rem; color: #fde68a; line-height: 1.4;">
+                                </div>
                             </div>
 
                             <!-- Static Suffix Box -->
