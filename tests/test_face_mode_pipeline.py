@@ -72,6 +72,12 @@ class TestFaceModePipeline(unittest.TestCase):
         self.assertEqual(enc["inputs"]["images.image_1"], ["7r", 0])
         self.assertEqual(enc["inputs"]["images.image_2"], ["8r", 0])
         self.assertNotIn("images.image_0", enc["inputs"])
+        self.assertNotIn("eyeglasses", enc["inputs"]["prompt"].lower())
+        self.assertNotIn("glasses", enc["inputs"]["prompt"].lower())
+        self.assertIn(
+            "strictly preserving the hair, eye color, nose structure from <image2>",
+            enc["inputs"]["prompt"],
+        )
 
         self.assertEqual(wf["11"]["inputs"]["steps"], 8)
         self.assertEqual(wf["11"]["inputs"]["seed"], 999)

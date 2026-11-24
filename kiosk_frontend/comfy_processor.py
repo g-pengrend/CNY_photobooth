@@ -326,7 +326,7 @@ QWEN21_HEAD_LORA = "bfs_head_v1.1_qwen_2.1.safetensors"
 QWEN21_HEAD_SWAP_PROMPT = (
     "head_swap: start with <image1> as the base image, keeping its lighting, environment, and background. "
     "remove the head of the person from <image1> completely and replace it with the head from <image2>, "
-    "strictly preserving the hair, eye color, nose structure, and eyeglasses from <image2>. "
+    "strictly preserving the hair, eye color, nose structure from <image2>. "
     "copy the direction of the eye, head rotation, micro expressions from <image1>. "
     "keep everyone else in <image1> exactly the same, high quality, sharp details, 4k"
 )
@@ -923,7 +923,7 @@ def process_image(
                 return False, None, "Failed to generate base portrait before Qwen 2.1 head swap."
 
             if status_callback:
-                status_callback("Preserving your true face & glasses (Step 2/2)...")
+                status_callback("Preserving your true facial features (Step 2/2)...")
             buf = io.BytesIO()
             base_img.save(buf, format="PNG")
             base_b64 = base64.b64encode(buf.getvalue()).decode('utf-8')
