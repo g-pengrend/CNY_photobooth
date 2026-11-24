@@ -245,7 +245,7 @@ function createNewTheme() {
         cta: 'Start Experience',
         status: 'draft',
         isUnsavedDraft: true,
-        features: { luckyNumber: false, filmStrip: false, genderFilter: true },
+        features: { luckyNumber: false, filmStrip: false, genderFilter: true, faceModeSelection: true },
         background: { type: 'particles', floatingIcons: ['✨', '⭐', '🎉', '✦'], filmStrip: false },
         style: {
             fontFamily: "'Outfit', sans-serif",
@@ -371,6 +371,8 @@ function populateFormFields(theme) {
     setChecked('chk-film-strip-adv', theme.features?.filmStrip || false);
     setChecked('chk-gender-filter', theme.features?.genderFilter !== false);
     setChecked('chk-gender-filter-adv', theme.features?.genderFilter !== false);
+    setChecked('chk-face-mode', theme.features?.faceModeSelection !== false);
+    setChecked('chk-face-mode-adv', theme.features?.faceModeSelection !== false);
 
     // Atmosphere
     const bg = theme.background || {};
@@ -440,11 +442,13 @@ function readFormFields() {
     const filmVal = isAdv ? getChecked('chk-film-strip-adv') : getChecked('chk-film-strip');
     const luckyVal = isAdv ? getChecked('chk-lucky-number-adv') : getChecked('chk-lucky-number');
     const genderVal = isAdv ? getChecked('chk-gender-filter-adv') : getChecked('chk-gender-filter');
+    const faceModeVal = isAdv ? getChecked('chk-face-mode-adv') : getChecked('chk-face-mode');
 
     theme.features = {
         luckyNumber: luckyVal,
         filmStrip: filmVal,
-        genderFilter: genderVal
+        genderFilter: genderVal,
+        faceModeSelection: faceModeVal
     };
 
     // Background
@@ -4009,6 +4013,9 @@ window.syncThemeBasicIdentity = function (field, val) {
     } else if (field === 'genderFilter') {
         const el = document.getElementById('chk-gender-filter-adv');
         if (el && el.checked !== val) el.checked = val;
+    } else if (field === 'faceModeSelection') {
+        const el = document.getElementById('chk-face-mode-adv');
+        if (el && el.checked !== val) el.checked = val;
     }
     window.updateFullSystematicGenAiPrompt();
 };
@@ -4061,6 +4068,9 @@ window.syncThemeAdvancedIdentity = function (field, val) {
         if (el && el.checked !== val) el.checked = val;
     } else if (field === 'genderFilter') {
         const el = document.getElementById('chk-gender-filter');
+        if (el && el.checked !== val) el.checked = val;
+    } else if (field === 'faceModeSelection') {
+        const el = document.getElementById('chk-face-mode');
         if (el && el.checked !== val) el.checked = val;
     }
     window.updateFullSystematicGenAiPrompt();
@@ -4142,6 +4152,7 @@ Provide a short <design_thinking> architectural rationale (detailing chosen layo
   "icon": "Single representative emoji",
   "cta": "Start button label",
   "description": "2-sentence inspiring experience description.",
+  "features": { "luckyNumber": false, "filmStrip": false, "genderFilter": true, "faceModeSelection": true },
   "style": {
     "fontFamily": "'Chosen Font', sans-serif",
     "googleFontUrl": "https://fonts.googleapis.com/css2?family=...",
@@ -5229,6 +5240,10 @@ window.applyConfigToThemeFields = function (config, silent = true) {
         if (typeof config.features.genderFilter === 'boolean') {
             setChecked('chk-gender-filter-adv', config.features.genderFilter);
             setChecked('chk-gender-filter', config.features.genderFilter);
+        }
+        if (typeof config.features.faceModeSelection === 'boolean') {
+            setChecked('chk-face-mode-adv', config.features.faceModeSelection);
+            setChecked('chk-face-mode', config.features.faceModeSelection);
         }
     }
 

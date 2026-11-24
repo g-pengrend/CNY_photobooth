@@ -122,6 +122,37 @@ class TestFaceModePipeline(unittest.TestCase):
             for p in created_files:
                 p.unlink(missing_ok=True)
 
+    def test_all_themes_and_universal_engine_have_face_mode_screen(self):
+        engine_html = (KIOSK_DIR / "static" / "engine" / "kiosk.html").read_text(encoding="utf-8")
+        self.assertIn('id="face-mode-screen"', engine_html)
+
+        themes_dir = KIOSK_DIR / "static" / "themes"
+        theme_dirs = [p for p in themes_dir.iterdir() if p.is_dir()]
+        self.assertGreater(len(theme_dirs), 0)
+        for tdir in theme_dirs:
+            custom_idx = tdir / "index.html"
+            if custom_idx.exists():
+                html = custom_idx.read_text(encoding="utf-8")
+                self.assertIn(
+                    'id="face-mode-screen"',
+                    html,
+                    f"Custom theme index.html missing #face-mode-screen: {tdir.name}",
+                )
+
+    def test_theme_builder_enables_face_mode_selection_by_default(self):
+        admin_html = (KIOSK_DIR / "static" / "admin" / "index.html").read_text(encoding="utf-8")
+        self.assertIn('id="chk-face-mode" type="checkbox" checked', admin_html)
+        self.assertIn('id="chk-face-mode-adv" type="checkbox" checked', admin_html)
+
+        admin_js = (KIOSK_DIR / "static" / "admin" / "admin.js").read_text(encoding="utf-8")
+        self.assertIn("faceModeSelection: true", admin_js)
+        self.assertIn('"faceModeSelection": true', admin_js)
+
+        client = kiosk_app.app.test_client()
+        fallback_resp = client.get("/api/theme/__unit_nonexistent_draft__")
+        self.assertEqual(fallback_resp.status_code, 200)
+        self.assertTrue(fallback_resp.get_json()["features"]["faceModeSelection"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -288,6 +288,10 @@
                                     <input id="chk-gender-filter" type="checkbox" checked onchange="syncThemeBasicIdentity('genderFilter', this.checked)">
                                     <span>Enable Gender Filter Tabs on Clothes</span>
                                 </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                    <input id="chk-face-mode" type="checkbox" checked onchange="syncThemeBasicIdentity('faceModeSelection', this.checked)">
+                                    <span>Enable Face Style Screen (Preserve Full Face / Playful De-Aging)</span>
+                                </label>
                             </div>
                             <div class="form-group full-width" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.85rem; margin-top: 0.4rem;">
                                 <div style="font-size: 0.78rem; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.4rem;">
@@ -749,6 +753,10 @@
                                     <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
                                         <input id="chk-gender-filter-adv" type="checkbox" checked onchange="syncThemeAdvancedIdentity('genderFilter', this.checked)">
                                         <span>Gender Tabs</span>
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                                        <input id="chk-face-mode-adv" type="checkbox" checked onchange="syncThemeAdvancedIdentity('faceModeSelection', this.checked)">
+                                        <span>Face Style Screen</span>
                                     </label>
                                 </div>
                             </div>

@@ -297,6 +297,10 @@ function showScreen(screenId) {
     }
 }
 
+function isFaceModeEnabled() {
+    return state.theme?.features?.faceModeSelection !== false;
+}
+
 function bindEventHandlers() {
     // Welcome -> Options
     document.getElementById('start-btn')?.addEventListener('click', () => {
@@ -315,9 +319,15 @@ function bindEventHandlers() {
             // Filter clothes by selected gender automatically
             filterClothes(gender);
 
-            // Immediate transition to face style selection (280ms delay for feedback)
+            // Immediate transition to face style selection (or settings/pose if explicitly disabled)
             setTimeout(() => {
-                showScreen('face-mode');
+                if (isFaceModeEnabled()) {
+                    showScreen('face-mode');
+                } else if (state.theme?.features?.luckyNumber) {
+                    showScreen('settings');
+                } else {
+                    showScreen('pose');
+                }
             }, 280);
         });
     });
@@ -346,7 +356,9 @@ function bindEventHandlers() {
     document.getElementById('back-to-gender-from-face-btn')?.addEventListener('click', () => showScreen('options'));
 
     // Settings (Lucky Number) -> Pose
-    document.getElementById('back-to-gender-btn')?.addEventListener('click', () => showScreen('face-mode'));
+    document.getElementById('back-to-gender-btn')?.addEventListener('click', () => {
+        showScreen(isFaceModeEnabled() ? 'face-mode' : 'options');
+    });
     document.getElementById('continue-to-pose-btn')?.addEventListener('click', () => {
         const toggle = document.getElementById('lucky-number-toggle');
         state.selections.enableLuckyNumber = toggle ? toggle.checked : true;
@@ -357,8 +369,10 @@ function bindEventHandlers() {
     document.getElementById('pose-back-btn')?.addEventListener('click', () => {
         if (state.theme?.features?.luckyNumber) {
             showScreen('settings');
-        } else {
+        } else if (isFaceModeEnabled()) {
             showScreen('face-mode');
+        } else {
+            showScreen('options');
         }
     });
 

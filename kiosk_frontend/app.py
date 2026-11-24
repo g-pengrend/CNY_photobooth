@@ -128,7 +128,7 @@ def list_themes():
                         "badge": "Experience",
                         "description": f"Celebrate with the {clean_title} experience.",
                         "cta": "Start Experience",
-                        "features": { "luckyNumber": False, "filmStrip": False, "genderFilter": True },
+                        "features": { "luckyNumber": False, "filmStrip": False, "genderFilter": True, "faceModeSelection": True },
                         "style": { "colors": { "background": "#0a0a12", "text": "#ffffff", "accent": "#6366f1" } }
                     }
                     with open(theme_json_path, 'w', encoding='utf-8') as f:
@@ -173,7 +173,7 @@ def manage_theme_config(theme_slug):
         "title": theme_slug.replace('_', ' ').title(),
         "status": "draft",
         "atmosphereMode": "advanced",
-        "features": { "luckyNumber": False, "filmStrip": False, "genderFilter": True },
+        "features": { "luckyNumber": False, "filmStrip": False, "genderFilter": True, "faceModeSelection": True },
         "style": { "colors": { "background": "#0a0a12", "text": "#ffffff", "accent": "#6366f1" } }
     }), 200
 
