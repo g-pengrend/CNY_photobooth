@@ -4,6 +4,7 @@ export const state = {
     lastPhotoBlob: null,
     selections: {
         gender: null,
+        faceMode: 'reactor',
         pose: null,
         poseCode: null,
         clothesStyle: null,
@@ -19,6 +20,7 @@ export function resetState() {
     state.lastPhotoBlob = null;
     state.selections = {
         gender: null,
+        faceMode: 'reactor',
         pose: null,
         poseCode: null,
         clothesStyle: null,
@@ -27,6 +29,9 @@ export function resetState() {
         backgroundCode: null,
         enableLuckyNumber: true
     };
+    if (typeof document !== 'undefined') {
+        document.querySelectorAll('.face-mode-option').forEach(btn => btn.classList.remove('selected'));
+    }
 
     // Reset buttons
     const animateBtn = document.getElementById('animate-btn');

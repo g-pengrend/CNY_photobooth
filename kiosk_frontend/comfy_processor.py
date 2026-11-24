@@ -1,10 +1,15 @@
+import base64
+import copy
+import io
 import json
+import math
 import os
 import random
 import re
+import time
+import urllib.error
+import urllib.parse
 import urllib.request
-import base64
-import io
 from PIL import Image
 import websocket
 from face_analysis import generate_lucky_number_from_face
@@ -306,8 +311,25 @@ def normalize_framing_in_prompt(prompt_text: str) -> str:
     return text
 
 # Configuration
+import config as _kiosk_config
 from config import COMFY_SERVER_ADDRESS
 server_address = COMFY_SERVER_ADDRESS
+QWEN_SWAP_SERVER_ADDRESS = getattr(_kiosk_config, "QWEN_SWAP_SERVER_ADDRESS", "")
+QWEN_SWAP_FALLBACK_ADDRESS = getattr(_kiosk_config, "QWEN_SWAP_FALLBACK_ADDRESS", "")
+
+QWEN21_UNET = "qwen_image_2.1_int8_convrot.safetensors"
+QWEN21_CLIP = "qwen3vl_8b_int8_convrot.safetensors"
+QWEN21_VAE = "qwen_image_2.1_vae_bf16.safetensors"
+QWEN21_TURBO_LORA = "p_qwen_image_2.1_8step_v0.1-comfyui-T8.safetensors"
+QWEN21_HEAD_LORA = "bfs_head_v1.1_qwen_2.1.safetensors"
+
+QWEN21_HEAD_SWAP_PROMPT = (
+    "head_swap: start with <image1> as the base image, keeping its lighting, environment, and background. "
+    "remove the head of the person from <image1> completely and replace it with the head from <image2>, "
+    "strictly preserving the hair, eye color, nose structure, and eyeglasses from <image2>. "
+    "copy the direction of the eye, head rotation, micro expressions from <image1>. "
+    "keep everyone else in <image1> exactly the same, high quality, sharp details, 4k"
+)
 
 def load_workflow(filename):
     with open(filename, 'r', encoding='utf-8') as file:
@@ -431,24 +453,326 @@ def update_workflow_with_lucky_number(workflow, enable_lucky_number=True, image_
         workflow[prompt_node]["inputs"]["text"] = current_text
     return workflow
 
-def queue_prompt(prompt, workflow=None):
+def _norm_server_host(target_server):
+    host = str(target_server or server_address).strip()
+    host = re.sub(r'^https?://', '', host, flags=re.IGNORECASE).rstrip('/')
+    return host
+
+
+def normalize_face_mode(face_mode):
+    """Map UI/API face mode aliases to canonical 'reactor' or 'qwen21'."""
+    raw = str(face_mode or "").strip().lower()
+    if raw in {"qwen21", "qwen", "preserve", "preserve_full_face", "full_face"}:
+        return "qwen21"
+    return "reactor"
+
+
+def aspect_size_32(width, height, target_mp=0.59):
+    """Return aspect-matched dimensions rounded to multiples of 32 (>= 256px)."""
+    w = max(1, int(width))
+    h = max(1, int(height))
+    scale = math.sqrt((target_mp * 1_000_000) / (w * h))
+    rw = max(256, int(round((w * scale) / 32.0)) * 32)
+    rh = max(256, int(round((h * scale) / 32.0)) * 32)
+    return rw, rh
+
+
+def strip_reactor_from_workflow(workflow, bindings=None, save_prefix="zit_base_qwen"):
+    """Return a ZIT workflow copy with ReActor removed and VAE output routed to SaveImage."""
+    wf = copy.deepcopy(workflow)
+    b = bindings or {}
+    face_swap_node = str(b.get("face_swap_node", "57"))
+    output_node = str(b.get("output_node", "60"))
+    input_image_node = str(b.get("input_image_node", "65"))
+
+    if face_swap_node not in wf:
+        for nid, nd in wf.items():
+            if isinstance(nd, dict) and nd.get("class_type") == "ReActorFaceSwap":
+                face_swap_node = str(nid)
+                break
+
+    vae_src = None
+    if face_swap_node in wf and isinstance(wf[face_swap_node], dict):
+        vae_src = wf[face_swap_node].get("inputs", {}).get("input_image")
+        wf.pop(face_swap_node, None)
+
+    if not vae_src:
+        for nid, nd in wf.items():
+            if isinstance(nd, dict) and nd.get("class_type") == "VAEDecode":
+                vae_src = [str(nid), 0]
+                break
+
+    if not vae_src:
+        raise RuntimeError("Could not locate VAEDecode image link when stripping ReActor")
+
+    if input_image_node in wf:
+        referenced = any(
+            isinstance(val, list) and len(val) >= 1 and str(val[0]) == input_image_node
+            for nd in wf.values()
+            if isinstance(nd, dict)
+            for val in nd.get("inputs", {}).values()
+        )
+        if not referenced:
+            wf.pop(input_image_node, None)
+
+    wf[output_node] = {
+        "class_type": "SaveImage",
+        "inputs": {"images": vae_src, "filename_prefix": save_prefix},
+    }
+    return wf
+
+
+def build_qwen21_head_swap_workflow(
+    base_image_b64,
+    guest_image_b64,
+    base_size,
+    guest_size,
+    seed=None,
+    save_prefix="qwen21_headswap",
+):
+    """Build 8-step AusBoss Qwen Image 2.1 + BFS Head LoRA workflow preserving exact likeness."""
+    bw = max(256, (int(base_size[0]) // 32) * 32)
+    bh = max(256, (int(base_size[1]) // 32) * 32)
+    gw, gh = aspect_size_32(guest_size[0], guest_size[1], target_mp=0.59)
+    resolved_seed = int(seed if seed is not None else random.randint(1, 1000000000000000))
+
+    return {
+        "1": {
+            "class_type": "UNETLoader",
+            "inputs": {"unet_name": QWEN21_UNET, "weight_dtype": "default"},
+        },
+        "2": {
+            "class_type": "LoraLoaderModelOnly",
+            "inputs": {
+                "model": ["1", 0],
+                "lora_name": QWEN21_TURBO_LORA,
+                "strength_model": 1.0,
+            },
+        },
+        "3": {
+            "class_type": "LoraLoaderModelOnly",
+            "inputs": {
+                "model": ["2", 0],
+                "lora_name": QWEN21_HEAD_LORA,
+                "strength_model": 1.0,
+            },
+        },
+        "4": {
+            "class_type": "QwenImage21Cache",
+            "inputs": {"model": ["3", 0], "device": "auto", "dtype": "default"},
+        },
+        "5": {
+            "class_type": "CLIPLoader",
+            "inputs": {"clip_name": QWEN21_CLIP, "type": "qwen_image", "device": "default"},
+        },
+        "6": {
+            "class_type": "VAELoader",
+            "inputs": {"vae_name": QWEN21_VAE},
+        },
+        "7": {
+            "class_type": "easy loadImageBase64",
+            "inputs": {"base64_data": base_image_b64, "image_output": "Hide", "save_prefix": "qwen_b1"},
+        },
+        "7r": {
+            "class_type": "Image Resize (rgthree)",
+            "inputs": {
+                "image": ["7", 0],
+                "measurement": "pixels",
+                "width": bw,
+                "height": bh,
+                "fit": "crop",
+                "method": "lanczos",
+            },
+        },
+        "8": {
+            "class_type": "easy loadImageBase64",
+            "inputs": {"base64_data": guest_image_b64, "image_output": "Hide", "save_prefix": "qwen_g2"},
+        },
+        "8r": {
+            "class_type": "Image Resize (rgthree)",
+            "inputs": {
+                "image": ["8", 0],
+                "measurement": "pixels",
+                "width": gw,
+                "height": gh,
+                "fit": "crop",
+                "method": "lanczos",
+            },
+        },
+        "10": {
+            "class_type": "TextEncodeQwenImage21",
+            "inputs": {
+                "clip": ["5", 0],
+                "vae": ["6", 0],
+                "prompt": QWEN21_HEAD_SWAP_PROMPT,
+                "negative_prompt": "",
+                "resolution": 0,
+                "images.image_1": ["7r", 0],
+                "images.image_2": ["8r", 0],
+            },
+        },
+        "11": {
+            "class_type": "KSampler",
+            "inputs": {
+                "model": ["4", 0],
+                "positive": ["10", 0],
+                "negative": ["10", 1],
+                "latent_image": ["10", 2],
+                "seed": resolved_seed,
+                "steps": 8,
+                "cfg": 1.0,
+                "sampler_name": "euler",
+                "scheduler": "simple",
+                "denoise": 1.0,
+            },
+        },
+        "12": {
+            "class_type": "VAEDecode",
+            "inputs": {"samples": ["11", 0], "vae": ["6", 0]},
+        },
+        "13": {
+            "class_type": "SaveImage",
+            "inputs": {"images": ["12", 0], "filename_prefix": save_prefix},
+        },
+    }
+
+
+def queue_prompt_on(target_server, prompt, workflow=None):
+    """Queue a ComfyUI prompt on a specific server host:port."""
+    host = _norm_server_host(target_server)
     payload = {"prompt": prompt}
     if workflow:
         payload["extra_data"] = {"extra_pnginfo": {"workflow": workflow}}
-        
+
     data = json.dumps(payload).encode('utf-8')
-    req = urllib.request.Request(f"http://{server_address}/prompt", data=data, headers={'Content-Type': 'application/json'})
+    req = urllib.request.Request(f"http://{host}/prompt", data=data, headers={'Content-Type': 'application/json'})
     try:
-        with urllib.request.urlopen(req) as response:
-            return json.loads(response.read())
+        with urllib.request.urlopen(req, timeout=60) as response:
+            res = json.loads(response.read())
+            if res.get("node_errors"):
+                raise RuntimeError(f"ComfyUI node_errors on {host}: {json.dumps(res['node_errors'])}")
+            return res
     except urllib.error.HTTPError as e:
-        print(f"HTTP Error {e.code}: {e.reason}")
+        print(f"HTTP Error {e.code} on {host}: {e.reason}")
         print(f"Response body: {e.read().decode('utf-8')}")
         raise
     except urllib.error.URLError as e:
-        msg = f"Cannot reach ComfyUI backend at http://{server_address} ({e.reason}). Make sure the backend server is running and Tailscale is CONNECTED on this PC (or enter the host's direct IP in .receiver_address)."
+        msg = f"Cannot reach ComfyUI backend at http://{host} ({e.reason}). Make sure the backend server is running and Tailscale is CONNECTED on this PC (or enter the host's direct IP in .receiver_address)."
         print(f"[ERROR] {msg}")
         raise RuntimeError(msg) from e
+
+
+def wait_for_saved_image(target_server, prompt_id, timeout=240):
+    """Poll ComfyUI /history/{prompt_id} and download the generated image via /view."""
+    host = _norm_server_host(target_server)
+    start_time = time.time()
+    while time.time() - start_time <= timeout:
+        with urllib.request.urlopen(f"http://{host}/history/{prompt_id}", timeout=30) as resp:
+            hist = json.loads(resp.read().decode('utf-8'))
+        if prompt_id in hist:
+            entry = hist[prompt_id]
+            status = entry.get("status", {})
+            if status.get("status_str") == "error":
+                raise RuntimeError(f"ComfyUI execution error on {host}: {json.dumps(status)}")
+            outputs = entry.get("outputs", {})
+            finfo = None
+            for pref_nid in ("13", "60"):
+                node_out = outputs.get(pref_nid)
+                if isinstance(node_out, dict) and node_out.get("images"):
+                    finfo = node_out["images"][0]
+                    break
+            if not finfo:
+                for node_out in outputs.values():
+                    if isinstance(node_out, dict) and node_out.get("images"):
+                        finfo = node_out["images"][0]
+                        break
+            if finfo:
+                qs = urllib.parse.urlencode({
+                    "filename": finfo["filename"],
+                    "subfolder": finfo.get("subfolder", ""),
+                    "type": finfo.get("type", "output"),
+                })
+                with urllib.request.urlopen(f"http://{host}/view?{qs}", timeout=60) as img_resp:
+                    raw = img_resp.read()
+                img = Image.open(io.BytesIO(raw))
+                img.load()
+                return img
+            if status.get("completed", False):
+                raise RuntimeError(f"Prompt {prompt_id} on {host} completed without SaveImage output")
+        time.sleep(0.75)
+    print(f"Timeout waiting for saved image {prompt_id} on {host}")
+    return None
+
+
+def check_server_qwen21_models(target_server, timeout=2.5):
+    """Verify all 5 Qwen 2.1 model files exist in a ComfyUI instance's loaders."""
+    host = _norm_server_host(target_server)
+    checks = [
+        ("UNETLoader", "unet_name", [QWEN21_UNET]),
+        ("CLIPLoader", "clip_name", [QWEN21_CLIP]),
+        ("VAELoader", "vae_name", [QWEN21_VAE]),
+        ("LoraLoaderModelOnly", "lora_name", [QWEN21_TURBO_LORA, QWEN21_HEAD_LORA]),
+    ]
+    missing = []
+    for loader, field, required_files in checks:
+        try:
+            with urllib.request.urlopen(f"http://{host}/object_info/{loader}", timeout=timeout) as resp:
+                info = json.loads(resp.read().decode('utf-8'))
+            available = set(info[loader]["input"]["required"][field][0])
+            for fname in required_files:
+                if fname not in available:
+                    missing.append(fname)
+        except Exception:
+            missing.extend(required_files)
+    return (len(missing) == 0), missing
+
+
+def resolve_qwen_swap_server():
+    """Choose the ComfyUI server hosting Qwen 2.1 head-swap weights."""
+    if QWEN_SWAP_SERVER_ADDRESS:
+        return _norm_server_host(QWEN_SWAP_SERVER_ADDRESS), "env"
+
+    primary_host = _norm_server_host(server_address)
+    ok_primary, missing_primary = check_server_qwen21_models(primary_host)
+    if ok_primary:
+        return primary_host, "primary"
+
+    candidates = [QWEN_SWAP_FALLBACK_ADDRESS, "192.168.200.2:8189", "100.88.106.76:8189"]
+    seen = {primary_host}
+    for cand in candidates:
+        c_host = _norm_server_host(cand) if cand else ""
+        if not c_host or c_host in seen:
+            continue
+        seen.add(c_host)
+        ok_cand, _ = check_server_qwen21_models(c_host)
+        if ok_cand:
+            print(
+                f"[WARN] Qwen 2.1 models missing on Spark 1 ({primary_host}: {missing_primary}); "
+                f"falling back to {c_host}. Copy the 5 Qwen 2.1 model files to Spark 1 so "
+                f"Spark 2 stays warm for MiniMax H3 video."
+            )
+            return c_host, "fallback"
+
+    return None, ", ".join(missing_primary)
+
+
+def _save_generated_image(image):
+    output_dir = "outputs"
+    os.makedirs(output_dir, exist_ok=True)
+    output_filename = os.path.join(output_dir, "generated_image.png")
+    counter = 1
+    while os.path.exists(output_filename):
+        output_filename = os.path.join(output_dir, f"generated_image_{counter}.png")
+        counter += 1
+    image.save(output_filename)
+    print(f"Image saved as {output_filename}")
+    print(f"Image size: {image.size}")
+    print(f"Image mode: {image.mode}")
+    return output_filename
+
+
+def queue_prompt(prompt, workflow=None):
+    return queue_prompt_on(server_address, prompt, workflow=workflow)
 
 def get_image(prompt_id):
     import time
@@ -501,7 +825,17 @@ def get_image(prompt_id):
     ws.close()
     return None
 
-def process_image(input_image_path, theme="cny", gender="female", pose="", clothes_style="", background="", enable_lucky_number=True):
+def process_image(
+    input_image_path,
+    theme="cny",
+    gender="female",
+    pose="",
+    clothes_style="",
+    background="",
+    enable_lucky_number=True,
+    face_mode="reactor",
+    status_callback=None,
+):
     """
     Process an image through the ComfyUI workflow.
     
@@ -513,11 +847,25 @@ def process_image(input_image_path, theme="cny", gender="female", pose="", cloth
         clothes_style: Clothes style description
         background: Background description
         enable_lucky_number: Whether to include lucky number in output (default: True)
+        face_mode: 'reactor' (Playful De-Aging) or 'qwen21' (Preserve Full Face)
+        status_callback: Optional callable(msg) for multi-step progress updates
         
     Returns:
         tuple: (success: bool, output_filename: str or None, error_message: str or None)
     """
     try:
+        resolved_face_mode = normalize_face_mode(face_mode)
+        qwen_server = None
+        if resolved_face_mode == "qwen21":
+            qwen_server, qwen_info = resolve_qwen_swap_server()
+            if not qwen_server:
+                return (
+                    False,
+                    None,
+                    "Preserve Full Face (Qwen 2.1) models not found on ComfyUI server. "
+                    f"Copy the 5 Qwen 2.1 model files ({qwen_info}) to Spark 1 or switch to Playful De-Aging mode.",
+                )
+
         base_dir = os.path.dirname(os.path.abspath(__file__))
         theme_dir = os.path.join(base_dir, "static", "themes", theme)
         workflow_file = None
@@ -554,17 +902,50 @@ def process_image(input_image_path, theme="cny", gender="female", pose="", cloth
         workflow = update_workflow_with_image(workflow, input_image_path, gender, pose, clothes_style, background, bindings=bindings, theme_dir=theme_dir)
         workflow = update_workflow_with_lucky_number(workflow, enable_lucky_number, input_image_path, bindings=bindings)
 
-
-        
         print(f"Workflow updated with:")
         print(f"  - Input image")
         print(f"  - Gender: {gender} ({gender_style})")
+        print(f"  - Face mode: {resolved_face_mode}")
         print(f"  - Pose: {pose[:50]}..." if len(pose) > 50 else f"  - Pose: {pose}")
         print(f"  - Clothes: {clothes_style[:50]}..." if len(clothes_style) > 50 else f"  - Clothes: {clothes_style}")
         print(f"  - Background: {background[:50]}..." if len(background) > 50 else f"  - Background: {background}")
         print(f"  - Lucky number")
 
-        # Generate image
+        if resolved_face_mode == "qwen21":
+            if status_callback:
+                status_callback("Crafting your styled portrait (Step 1/2)...")
+            base_wf = strip_reactor_from_workflow(workflow, bindings=bindings)
+            base_resp = queue_prompt_on(server_address, base_wf, base_wf)
+            base_pid = base_resp['prompt_id']
+            print(f"Queued ZIT base portrait (ReActor bypassed): {base_pid}")
+            base_img = wait_for_saved_image(server_address, base_pid)
+            if not base_img:
+                return False, None, "Failed to generate base portrait before Qwen 2.1 head swap."
+
+            if status_callback:
+                status_callback("Preserving your true face & glasses (Step 2/2)...")
+            buf = io.BytesIO()
+            base_img.save(buf, format="PNG")
+            base_b64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+            guest_b64 = encode_image_to_base64(input_image_path)
+            with Image.open(input_image_path) as g_img:
+                guest_size = g_img.size
+
+            qwen_wf = build_qwen21_head_swap_workflow(
+                base_image_b64=base_b64,
+                guest_image_b64=guest_b64,
+                base_size=base_img.size,
+                guest_size=guest_size,
+            )
+            qwen_resp = queue_prompt_on(qwen_server, qwen_wf, qwen_wf)
+            qwen_pid = qwen_resp['prompt_id']
+            print(f"Queued Qwen 2.1 head swap on {qwen_server}: {qwen_pid}")
+            image = wait_for_saved_image(qwen_server, qwen_pid)
+            if image:
+                return True, _save_generated_image(image), None
+            return False, None, "Failed to run Qwen 2.1 head swap."
+
+        # Default Playful De-Aging path (ZIT + ReActor)
         response = queue_prompt(workflow, workflow)
         prompt_id = response['prompt_id']
         print(f"Prompt queued with ID: {prompt_id}")
@@ -572,26 +953,7 @@ def process_image(input_image_path, theme="cny", gender="female", pose="", cloth
         # Get generated image
         image = get_image(prompt_id)
         if image:
-            output_dir = "outputs"
-            os.makedirs(output_dir, exist_ok=True)
-            
-            base_filename = "generated_image"
-            extension = ".png"
-            output_filename = os.path.join(output_dir, f"{base_filename}{extension}")
-            
-            counter = 1
-            while os.path.exists(output_filename):
-                output_filename = os.path.join(output_dir, f"{base_filename}_{counter}{extension}")
-                counter += 1
-
-            image.save(output_filename)
-            print(f"Image saved as {output_filename}")
-            print(f"Image size: {image.size}")
-            print(f"Image mode: {image.mode}")
-            
-
-
-            return True, output_filename, None
+            return True, _save_generated_image(image), None
         else:
             return False, None, "Failed to generate image."
     except Exception as e:

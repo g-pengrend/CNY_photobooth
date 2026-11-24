@@ -12,6 +12,7 @@ const state = {
     selections: {
         theme: 'cny',
         gender: 'female',
+        faceMode: 'reactor',
         pose: '',
         poseCode: '',
         clothesStyle: '',
@@ -314,7 +315,24 @@ function bindEventHandlers() {
             // Filter clothes by selected gender automatically
             filterClothes(gender);
 
-            // Immediate transition matching previous themes (280ms delay for feedback)
+            // Immediate transition to face style selection (280ms delay for feedback)
+            setTimeout(() => {
+                showScreen('face-mode');
+            }, 280);
+        });
+    });
+
+    document.getElementById('back-to-welcome-btn')?.addEventListener('click', () => showScreen('welcome'));
+
+    // Face Style Selection
+    document.querySelectorAll('.face-mode-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const mode = btn.dataset.faceMode || 'reactor';
+            state.selections.faceMode = mode;
+
+            document.querySelectorAll('.face-mode-option').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
             setTimeout(() => {
                 if (state.theme?.features?.luckyNumber) {
                     showScreen('settings');
@@ -325,10 +343,10 @@ function bindEventHandlers() {
         });
     });
 
-    document.getElementById('back-to-welcome-btn')?.addEventListener('click', () => showScreen('welcome'));
+    document.getElementById('back-to-gender-from-face-btn')?.addEventListener('click', () => showScreen('options'));
 
     // Settings (Lucky Number) -> Pose
-    document.getElementById('back-to-gender-btn')?.addEventListener('click', () => showScreen('options'));
+    document.getElementById('back-to-gender-btn')?.addEventListener('click', () => showScreen('face-mode'));
     document.getElementById('continue-to-pose-btn')?.addEventListener('click', () => {
         const toggle = document.getElementById('lucky-number-toggle');
         state.selections.enableLuckyNumber = toggle ? toggle.checked : true;
@@ -340,7 +358,7 @@ function bindEventHandlers() {
         if (state.theme?.features?.luckyNumber) {
             showScreen('settings');
         } else {
-            showScreen('options');
+            showScreen('face-mode');
         }
     });
 
@@ -779,6 +797,7 @@ async function startProcessing() {
     formData.append('theme', state.slug);
     formData.append('image', state.photoBlob, 'capture.jpg');
     formData.append('gender', state.selections.gender);
+    formData.append('face_mode', state.selections.faceMode || 'reactor');
     formData.append('pose', state.selections.pose);
     formData.append('pose_code', state.selections.poseCode);
     formData.append('clothes_style', state.selections.clothesStyle);
@@ -961,6 +980,8 @@ function resetKiosk() {
     if (state.pollInterval) clearInterval(state.pollInterval);
     state.jobId = null;
     state.photoBlob = null;
+    state.selections.faceMode = 'reactor';
+    document.querySelectorAll('.face-mode-option').forEach(b => b.classList.remove('selected'));
     showScreen('welcome');
 }
 

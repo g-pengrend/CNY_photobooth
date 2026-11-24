@@ -343,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
             state.selections.gender = button.dataset.gender;
 
             // Update UI to show selection
-            document.querySelectorAll('.gender-option').forEach(btn => {
+            document.querySelectorAll('.gender-option[data-gender]').forEach(btn => {
                 btn.classList.remove('selected');
             });
             button.classList.add('selected');
@@ -355,14 +355,30 @@ document.addEventListener('DOMContentLoaded', () => {
             if (toggle) toggle.checked = true; // Default to checked
             updateClothesFilter();
 
-            // Proceed to pose screen
+            // Proceed to face mode selection screen
+            showScreen('faceMode');
+        });
+    });
+
+    // Face Mode Selection
+    document.getElementById('back-to-gender-from-face-btn')?.addEventListener('click', () => {
+        showScreen('options');
+    });
+
+    document.querySelectorAll('.face-mode-option[data-face-mode]').forEach(button => {
+        button.addEventListener('click', () => {
+            state.selections.faceMode = button.dataset.faceMode || 'reactor';
+            document.querySelectorAll('.face-mode-option[data-face-mode]').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            button.classList.add('selected');
             showScreen('pose');
         });
     });
 
     // Pose Selection Handlers (Event Delegation)
     document.getElementById('back-to-gender-btn').addEventListener('click', () => {
-        showScreen('options');
+        showScreen('faceMode');
     });
 
 

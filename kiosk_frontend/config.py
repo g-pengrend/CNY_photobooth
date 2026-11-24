@@ -110,6 +110,8 @@ _cfg = get_config()
 LINUX_RECEIVER_URL = _cfg["LINUX_RECEIVER_URL"]
 COMFY_OUTPUT_DIR   = _cfg["COMFY_OUTPUT_DIR"]
 COMFY_SERVER_ADDRESS = _cfg["COMFY_SERVER_ADDRESS"]
+QWEN_SWAP_SERVER_ADDRESS = os.environ.get("QWEN_SWAP_SERVER_ADDRESS", "").strip()
+QWEN_SWAP_FALLBACK_ADDRESS = os.environ.get("QWEN_SWAP_FALLBACK_ADDRESS", "").strip()
 
 
 def print_config():

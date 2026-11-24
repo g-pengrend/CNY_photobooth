@@ -26,8 +26,8 @@
     "inputs": {
       "image": ["106", 0],
       "measurement": "pixels",
-      "width": 384,
-      "height": 576,
+      "width": 512,
+      "height": 768,
       "fit": "crop",
       "method": "lanczos"
     },
@@ -40,8 +40,8 @@
     "inputs": {
       "image": ["107", 0],
       "measurement": "pixels",
-      "width": 384,
-      "height": 576,
+      "width": 512,
+      "height": 768,
       "fit": "crop",
       "method": "lanczos"
     },
@@ -70,10 +70,20 @@
       "title": "Load H3 FL2V Turbo LoRA"
     }
   },
+  "21": {
+    "class_type": "ModelAttentionBackend",
+    "inputs": {
+      "model": ["2", 0],
+      "attention": "comfy kitchen attention"
+    },
+    "_meta": {
+      "title": "Kitchen Attention (INT8)"
+    }
+  },
   "20": {
     "class_type": "MiniMaxH3SigmaShift",
     "inputs": {
-      "model": ["2", 0],
+      "model": ["21", 0],
       "shift_video": 12.0,
       "shift_audio": 3.0
     },
@@ -115,10 +125,10 @@
     "inputs": {
       "clip": ["3", 0],
       "vae": ["4", 0],
-      "prompt": "How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with the 0.00-second mark of the target video; Picture 2 (from Shot 1) aligns with the 3.75-second mark of the target video.\n\nintegrated_multimodal_description: [Shot 1] Photorealistic live-action portrait transformation starting on <Picture 1>. 00:00.000-00:00.940: Starts locked on <Picture 1>. The subject keeps their authentic face and natural expression from <Picture 1> as shimmering luminous energy motes gather around the shoulders and the camera begins a slow anticipation pull-back. Then at 00:00.940-00:02.700: Non-linear speed-ramped transformation surge — dazzling energy ribbons and sparkling ember trails sweep dynamically around the torso without covering facial features, borrowing the exact palette, lighting, and festive attire of <Picture 2>. Then at 00:02.700-00:03.750: The burst scatters into crisp floating bokeh, the ornamental border and title typography flash sharply into place without distortion, and the camera decelerates into a steady hero hold on <Picture 2>. No speech or talking; the subject's original face from <Picture 1> stays genuine at the start and blends gradually and continuously in lighting, grooming, and expression into <Picture 2> across the full transition rather than snapping abruptly.\n\noverall_soundscape: Shimmering energy buildup into a crisp magical whoosh, dazzling sparkle cascade, and warm festive ambience.\n\nnon_diegetic_music: Uplifting celebratory chime swell fading smoothly into warm sparkle.",
-      "width": 384,
-      "height": 576,
-      "length": 90,
+      "prompt": "How the reference pictures align with the target video — Picture 1 (from Shot 1) aligns with the 0.00-second mark of the target video; Picture 2 (from Shot 1) aligns with the 3.04-second mark of the target video.\n\nintegrated_multimodal_description: [Shot 1] Photorealistic live-action portrait transformation starting on <Picture 1>. 00:00.000-00:00.760: Starts locked on <Picture 1>. The subject keeps their authentic face and natural expression from <Picture 1> as shimmering luminous energy motes gather around the shoulders and the camera begins a slow anticipation pull-back. Then at 00:00.760-00:02.190: Non-linear speed-ramped transformation surge — dazzling energy ribbons and sparkling ember trails sweep dynamically around the torso without covering facial features, borrowing the exact palette, lighting, and festive attire of <Picture 2>. Then at 00:02.190-00:03.040: The burst scatters into crisp floating bokeh, the ornamental border and title typography flash sharply into place without distortion, and the camera decelerates into a steady hero hold on <Picture 2>. No speech or talking; the subject's original face from <Picture 1> stays genuine at the start and blends gradually and continuously in lighting, grooming, and expression into <Picture 2> across the full transition rather than snapping abruptly.\n\noverall_soundscape: Shimmering energy buildup into a crisp magical whoosh, dazzling sparkle cascade, and warm festive ambience.\n\nnon_diegetic_music: Uplifting celebratory chime swell fading smoothly into warm sparkle.",
+      "width": 512,
+      "height": 768,
+      "length": 73,
       "first_frame": ["117", 0],
       "last_frame": ["119", 0]
     },

@@ -6,6 +6,7 @@ export async function uploadAndProcess(photoBlob, selections) {
     formData.append('theme', selections.theme || apiTheme);
     formData.append('image', photoBlob, 'photo.jpg');
     formData.append('gender', selections.gender || 'female');
+    formData.append('face_mode', selections.faceMode || 'reactor');
     formData.append('pose', selections.pose || '');
     formData.append('pose_code', selections.poseCode || '');
     formData.append('clothes_style', selections.clothesStyle || '');

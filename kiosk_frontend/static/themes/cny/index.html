@@ -145,6 +145,38 @@
         </div>
     </div>
 
+    <!-- Face Mode Screen -->
+    <div id="face-mode-screen" class="screen">
+        <div class="content-wrapper">
+            <div class="options-container">
+                <h2 class="screen-title">Face Style</h2>
+                <p class="options-subtitle">Choose how your face is blended into the portrait</p>
+
+                <div class="gender-selection">
+                    <button class="gender-option face-mode-option" data-face-mode="qwen21">
+                        <div class="gender-icon">🎯</div>
+                        <div class="gender-text-wrapper">
+                            <div class="gender-label">Preserve Full Face</div>
+                            <div class="gender-description">True likeness &amp; glasses (~30s)</div>
+                        </div>
+                    </button>
+
+                    <button class="gender-option face-mode-option" data-face-mode="reactor">
+                        <div class="gender-icon">✨</div>
+                        <div class="gender-text-wrapper">
+                            <div class="gender-label">Playful De-Aging</div>
+                            <div class="gender-description">Youthful glow-up (~15s)</div>
+                        </div>
+                    </button>
+                </div>
+
+                <button id="back-to-gender-from-face-btn" class="btn btn-secondary">
+                    <span class="btn-text">Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Screen (Lucky Number Toggle) -->
     <div id="settings-screen" class="screen">
         <div class="content-wrapper">

@@ -124,6 +124,17 @@ class TestMorphPromptBuilder(unittest.TestCase):
         self.assertIn("dazzling energy ribbons", p_gen)
         self.assertNotIn("ignored in generic", p_gen)
 
+        p_304 = mpb.build_minimax_h3_morph_prompt(
+            cfg,
+            style_desc="tailored deep emerald velvet blazer",
+            outfit_lighting="Emerald Green and Warm Gold",
+            duration_sec=3.04,
+        )
+        self.assertIn("3.04-second mark", p_304)
+        self.assertIn("00:00.000-00:00.760", p_304)
+        self.assertIn("Then at 00:00.760-00:02.190", p_304)
+        self.assertIn("Then at 00:02.190-00:03.040", p_304)
+
     def test_inject_prompt_into_h3_workflow_template(self):
         tpl_path = DGX_DIR / "templates" / "FLF_MiniMax_H3_API.json"
         self.assertTrue(tpl_path.exists())
@@ -132,15 +143,23 @@ class TestMorphPromptBuilder(unittest.TestCase):
             mpb.THEME_MORPH_PRESETS["cny"],
             style_desc="crimson velvet jacket",
             outfit_lighting="Crimson and Gold",
+            duration_sec=3.04,
         )
         ok, nid = mpb.inject_prompt_into_workflow(wf, prompt, seed=123456)
         self.assertTrue(ok)
         self.assertEqual(nid, "6")
         self.assertEqual(wf["6"]["inputs"]["prompt"], prompt)
         self.assertEqual(wf["7"]["inputs"]["noise_seed"], 123456)
-        self.assertEqual(wf["6"]["inputs"]["length"], 90)
-        self.assertEqual(wf["6"]["inputs"]["width"], 384)
-        self.assertEqual(wf["6"]["inputs"]["height"], 576)
+        self.assertEqual(wf["6"]["inputs"]["length"], 73)
+        self.assertEqual(wf["6"]["inputs"]["width"], 512)
+        self.assertEqual(wf["6"]["inputs"]["height"], 768)
+        self.assertEqual(wf["117"]["inputs"]["width"], 512)
+        self.assertEqual(wf["117"]["inputs"]["height"], 768)
+        self.assertEqual(wf["119"]["inputs"]["width"], 512)
+        self.assertEqual(wf["119"]["inputs"]["height"], 768)
+        self.assertEqual(wf["21"]["class_type"], "ModelAttentionBackend")
+        self.assertEqual(wf["21"]["inputs"]["attention"], "comfy kitchen attention")
+        self.assertEqual(wf["20"]["inputs"]["model"], ["21", 0])
 
 
 if __name__ == "__main__":

@@ -66,6 +66,29 @@
         </div>
     </div>
 
+    <!-- Screen 2b: Face Blend Style Selection -->
+    <div id="face-mode-screen" class="screen">
+        <div class="content-wrapper">
+            <h2 class="screen-title">Choose Face Style</h2>
+            <p class="screen-subtitle">Pick how your face is blended into the portrait</p>
+            <div class="face-mode-selection">
+                <button class="face-mode-option" data-face-mode="qwen21">
+                    <div class="gender-icon">🎯</div>
+                    <div class="gender-label">Preserve Full Face</div>
+                    <div class="face-mode-desc">True-to-life face, hair &amp; glasses</div>
+                    <div class="face-mode-badge">~30s • High Likeness</div>
+                </button>
+                <button class="face-mode-option" data-face-mode="reactor">
+                    <div class="gender-icon">✨</div>
+                    <div class="gender-label">Playful De-Aging</div>
+                    <div class="face-mode-desc">Youthful glam glow-up look</div>
+                    <div class="face-mode-badge">~15s • Fastest</div>
+                </button>
+            </div>
+            <button id="back-to-gender-from-face-btn" class="btn btn-secondary">← Back</button>
+        </div>
+    </div>
+
     <!-- Screen 3: Settings / Lucky Number (Conditional) -->
     <div id="settings-screen" class="screen">
         <div class="content-wrapper">

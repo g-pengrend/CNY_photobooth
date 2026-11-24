@@ -362,6 +362,70 @@ body::before {
 }
 
 /* ==========================================================================
+   Screen 2b: Face Style Selection
+   ========================================================================== */
+.face-mode-selection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 640px;
+    margin-bottom: 2rem;
+}
+
+.face-mode-option {
+    background: var(--theme-surface);
+    border: 2px solid var(--theme-surface-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    backdrop-filter: blur(12px);
+    color: var(--theme-text);
+}
+
+.face-mode-option:hover {
+    transform: translateY(-4px);
+    border-color: var(--theme-accent);
+    background: var(--theme-surface-active);
+}
+
+.face-mode-option.selected {
+    border-color: var(--theme-accent);
+    background: var(--theme-surface-active);
+    box-shadow: 0 0 30px var(--theme-accent-glow);
+}
+
+.face-mode-desc {
+    font-size: 0.92rem;
+    opacity: 0.78;
+    margin-top: 0.45rem;
+    line-height: 1.35;
+}
+
+.face-mode-badge {
+    margin-top: 0.75rem;
+    padding: 0.28rem 0.85rem;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--theme-accent);
+}
+
+@media (max-width: 640px) {
+    .face-mode-selection {
+        grid-template-columns: 1fr;
+        max-width: 360px;
+    }
+}
+
+/* ==========================================================================
    Screen 3: Settings / Lucky Number (Conditional)
    ========================================================================== */
 .settings-container {

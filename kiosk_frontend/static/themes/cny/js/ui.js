@@ -3,6 +3,7 @@ import { poses, clothes, backgrounds } from './data.js';
 const screens = {
     welcome: document.getElementById('welcome-screen'),
     options: document.getElementById('options-screen'),
+    faceMode: document.getElementById('face-mode-screen'),
     settings: document.getElementById('settings-screen'),
     pose: document.getElementById('pose-screen'),
     clothes: document.getElementById('clothes-screen'),

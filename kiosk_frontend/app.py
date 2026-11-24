@@ -39,7 +39,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 
-def process_image_async(job_id, input_path, theme='cny', gender='female', pose='', clothes_style='', background='', enable_lucky_number=True):
+def process_image_async(job_id, input_path, theme='cny', gender='female', pose='', clothes_style='', background='', enable_lucky_number=True, face_mode='reactor'):
     """Process image in background thread"""
     try:
         jobs[job_id]['status'] = 'processing'
@@ -62,7 +62,9 @@ def process_image_async(job_id, input_path, theme='cny', gender='female', pose='
             pose=pose,
             clothes_style=clothes_style,
             background=background,
-            enable_lucky_number=enable_lucky_number
+            enable_lucky_number=enable_lucky_number,
+            face_mode=face_mode,
+            status_callback=lambda msg: jobs[job_id].__setitem__('message', msg)
         )
         
         if success:
@@ -466,9 +468,11 @@ def process():
         background = request.form.get('background', '')
         background_code = request.form.get('background_code', '')
         enable_lucky_number = request.form.get('enable_lucky_number', 'true').lower() == 'true'
+        face_mode = request.form.get('face_mode', 'reactor')
         
         print(f"Received selections:")
         print(f"  Gender: {gender}")
+        print(f"  Face mode: {face_mode}")
         print(f"  Pose ({pose_code}): {pose[:30]}...")
         print(f"  Clothes ({clothes_code}): {clothes_style[:30]}...")
         print(f"  Background ({background_code}): {background[:30]}...")
@@ -490,6 +494,7 @@ def process():
             'input_file': input_path,
             'theme': theme,
             'gender': gender,
+            'face_mode': face_mode,
             'pose': pose,
             'pose_code': pose_code,
             'clothes_style': clothes_style,
@@ -500,7 +505,7 @@ def process():
         }
         
         # Start processing in background thread
-        thread = threading.Thread(target=process_image_async, args=(job_id, input_path, theme, gender, pose, clothes_style, background, enable_lucky_number))
+        thread = threading.Thread(target=process_image_async, args=(job_id, input_path, theme, gender, pose, clothes_style, background, enable_lucky_number, face_mode))
         thread.daemon = True
         thread.start()
         
