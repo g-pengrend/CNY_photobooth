@@ -4,8 +4,10 @@ import io
 import json
 import math
 import os
+import platform
 import random
 import re
+import subprocess
 import time
 import urllib.error
 import urllib.parse
@@ -771,6 +773,54 @@ def resolve_qwen_swap_server():
     return None, ", ".join(missing_primary)
 
 
+def _read_linux_meminfo_gb(meminfo_path="/proc/meminfo"):
+    """Return (mem_free_gb, mem_available_gb) from /proc/meminfo, or (None, None)."""
+    try:
+        vals_kb = {}
+        with open(meminfo_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if line.startswith(("MemFree:", "MemAvailable:")):
+                    parts = line.split()
+                    if len(parts) >= 2:
+                        vals_kb[parts[0].rstrip(":")] = int(parts[1])
+        if "MemFree" in vals_kb and "MemAvailable" in vals_kb:
+            return vals_kb["MemFree"] / (1024 * 1024), vals_kb["MemAvailable"] / (1024 * 1024)
+    except Exception:
+        pass
+    return None, None
+
+
+def ensure_cuda_headroom(min_free_gb=20.0, min_reclaimable_gb=4.0):
+    """Drop Linux page cache when low MemFree would trigger ComfyUI unified-memory offloading."""
+    if platform.system() != "Linux":
+        return False
+    mem_free_gb, mem_avail_gb = _read_linux_meminfo_gb()
+    if mem_free_gb is None or mem_avail_gb is None:
+        return False
+    reclaimable_gb = mem_avail_gb - mem_free_gb
+    if mem_free_gb >= min_free_gb or reclaimable_gb < min_reclaimable_gb:
+        return False
+    try:
+        print(
+            f"[VRAM Guard] MemFree={mem_free_gb:.1f} GiB < {min_free_gb:.1f} GiB "
+            f"(reclaimable cache={reclaimable_gb:.1f} GiB); dropping Linux page cache..."
+        )
+        res = subprocess.run(
+            ["sudo", "-n", "sh", "-c", "sync; echo 3 > /proc/sys/vm/drop_caches"],
+            capture_output=True,
+            text=True,
+            timeout=5,
+        )
+        if res.returncode == 0:
+            new_free_gb, _ = _read_linux_meminfo_gb()
+            if new_free_gb is not None:
+                print(f"[VRAM Guard] Page cache flushed; MemFree is now {new_free_gb:.1f} GiB.")
+            return True
+    except Exception as e:
+        print(f"[VRAM Guard] Skipped page cache flush: {e}")
+    return False
+
+
 def _save_generated_image(image):
     output_dir = "outputs"
     os.makedirs(output_dir, exist_ok=True)
@@ -871,6 +921,7 @@ def process_image(
     try:
         resolved_face_mode = normalize_face_mode(face_mode)
         qwen_server = None
+
         if resolved_face_mode == "qwen21":
             qwen_server, qwen_info = resolve_qwen_swap_server()
             if not qwen_server:
@@ -925,6 +976,8 @@ def process_image(
         print(f"  - Clothes: {clothes_style[:50]}..." if len(clothes_style) > 50 else f"  - Clothes: {clothes_style}")
         print(f"  - Background: {background[:50]}..." if len(background) > 50 else f"  - Background: {background}")
         print(f"  - Lucky number")
+
+        ensure_cuda_headroom(min_free_gb=20.0 if resolved_face_mode == "qwen21" else 12.0)
 
         if resolved_face_mode == "qwen21":
             if status_callback:

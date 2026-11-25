@@ -171,6 +171,20 @@ class TestFaceModePipeline(unittest.TestCase):
             self.assertEqual(srv, "breadnbiscuit:8190")
             self.assertEqual(mode, "dedicated")
 
+    def test_ensure_cuda_headroom_flushes_only_when_cache_hogs_memfree(self):
+        with mock.patch("comfy_processor.platform.system", return_value="Linux"), mock.patch(
+            "comfy_processor._read_linux_meminfo_gb", return_value=(48.0, 54.0)
+        ), mock.patch("comfy_processor.subprocess.run") as mock_run:
+            self.assertFalse(comfy_processor.ensure_cuda_headroom(min_free_gb=20.0))
+            mock_run.assert_not_called()
+
+        with mock.patch("comfy_processor.platform.system", return_value="Linux"), mock.patch(
+            "comfy_processor._read_linux_meminfo_gb", side_effect=[(4.2, 54.0), (50.1, 54.0)]
+        ), mock.patch("comfy_processor.subprocess.run") as mock_run:
+            mock_run.return_value = mock.Mock(returncode=0)
+            self.assertTrue(comfy_processor.ensure_cuda_headroom(min_free_gb=20.0))
+            mock_run.assert_called_once()
+
 
 if __name__ == "__main__":
     unittest.main()
